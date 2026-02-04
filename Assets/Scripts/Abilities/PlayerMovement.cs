@@ -7,11 +7,12 @@ public class PlayerMovement : MovementSO
     {
         abCont.isGrounded =
             Physics.CheckSphere(
-                abCont.entity.feet.transform.position, 
+                abCont.entity.feet.center + abCont.entity.feet.transform.position, 
                 abCont.entity.feet.radius, 
                 groundLayers) 
                 && (abCont.fallSpeed <= 0);
         abCont.fallSpeed += -gravity * Time.deltaTime;
+        Debug.Log(abCont.isGrounded);
 
         abCont.testCube.position = abCont.entity.feet.transform.position;
         if (abCont.isGrounded)
@@ -47,12 +48,14 @@ public class PlayerMovement : MovementSO
                 abCont.currentDirection = Vector3.zero;
             }
         }
-
+        
+        abCont.currentDirection.y = 0;
         if (abCont.currentDirection != Vector3.zero) {
-            abCont.entity.body.transform.forward = new Vector3(abCont.currentDirection.x, 0, abCont.currentDirection.z);
+            abCont.entity.body.transform.forward = abCont.currentDirection;
         }
-
-        abCont.currentDirection.y = FallSpeed(abCont, moveInput.y == 1);
+        
+        FallSpeed(abCont, moveInput.y == 1);
+        abCont.currentDirection.y = Mathf.Clamp(abCont.fallSpeed, -maxFallSpeed, maxFallSpeed);
 
         abCont.entity.controller.Move(abCont.currentDirection);
     }

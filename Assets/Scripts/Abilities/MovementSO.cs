@@ -13,6 +13,7 @@ public abstract class MovementSO : ScriptableObject
     [SerializeField, Min(0)] internal float jumpSpeed = 0.07f;
     [SerializeField] internal bool isGrounded = false;
     [SerializeField, Min(0)] internal float gravity = 0.2f;
+    [SerializeField, Min(0)] internal float maxFallSpeed = 10f;
     [SerializeField] internal LayerMask groundLayers;
     internal abstract float FallSpeed(AbilityController absum, bool isJumping);
     internal abstract void Move(AbilityController absum, Vector3 move);
