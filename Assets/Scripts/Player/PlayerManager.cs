@@ -99,6 +99,7 @@ public class PlayerManager : MonoBehaviour, ICamera
     {
         Gizmos.color = Color.red;
         Gizmos.DrawCube(cameraHolder.transform.position, Vector3.one * 0.1f);
+        Gizmos.DrawSphere(Abilities.entity.feet.center + Abilities.entity.feet.transform.position, Abilities.entity.feet.radius);
     }
     #endregion
 }
