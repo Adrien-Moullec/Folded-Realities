@@ -34,8 +34,9 @@ public class AbilityController {
     }
 
     #region Ability Functions
-    public void Move(Vector3 moveInput)
-        => Ability.movement.Move(this, moveInput);
+    public void Move(Vector3 moveInput) { 
+        Ability?.movement.Move(this, moveInput);
+    }
     #endregion
 }
 
