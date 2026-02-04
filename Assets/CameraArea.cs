@@ -17,9 +17,4 @@ public class CameraArea : MonoBehaviour
         other.TryGetComponent(out player);
         player.OnCameraAreaExit();
     }
-
-    void OnDrawGizmos()
-    {
-        Gizmos.DrawCube(cameraLocation + transform.position, Vector3.one * 2);
-    }
 }
