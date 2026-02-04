@@ -13,6 +13,7 @@ public class AbilityController {
     [Header("Abilities")]
     [SerializeField] List<AbilitySummary> AbilityList;
     internal AbilitySummary Ability;
+    [SerializeField] public Transform testCube;
 
     #region Private Variables
     [HideInInspector] internal Vector3 currentDirection;
@@ -24,37 +25,28 @@ public class AbilityController {
     public void Setup(GameObject original)
     {
         entity.controller = original.GetComponent<CharacterController>();
-        if (AbilityList.Count > 1)
+        if (AbilityList.Count >= 1){
             Ability = AbilityList[0];
+        }
     }
     public void SetAbility(string name) {
         if (AbilityList.Any(x => x.abilitySetName == name))
             Ability = AbilityList.First(x => x.abilitySetName == name);
         else Debug.LogWarning("No ability to set");
     }
+    public void SetGroundedStatus(bool state) => isGrounded = state;
 
     #region Ability Functions
-    public void Move(Vector3 moveInput) { 
+    public void Move(Vector3 moveInput) {
         Ability?.movement.Move(this, moveInput);
     }
     #endregion
-}
-
-
-[CreateAssetMenu(fileName = "Ability Summary", menuName = "Origami/Ability Summary/Player Movement", order = 0)]
-public class AbilitySummary : ScriptableObject
-{
-    [SerializeField] internal string abilitySetName;
-    [SerializeField] internal MovementSO movement;
-    [SerializeField] internal DashSO dash;
-    [SerializeField] internal FirstAttackSO firstAttack;
-    [SerializeField] internal PrimaryAbilitySO primaryAbility;
 }
 
 [Serializable]
 public class EntityBody
 {
     public GameObject body;
-    public GameObject feet;
+    public SphereCollider feet;
     public CharacterController controller;
 }

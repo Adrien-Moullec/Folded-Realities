@@ -14,7 +14,6 @@ public class PlayerManager : MonoBehaviour, ICamera
         get => camArea != null ? camArea.cameraLocation + camArea.transform.position : cameraHolder.position;
     }
     CameraArea camArea;
-    float deltaCameraLerp = 1;
 
     #region Variables
     [Space]
@@ -30,8 +29,6 @@ public class PlayerManager : MonoBehaviour, ICamera
     [Space]
     [Header("Inputs")]
     InputAction moveInput;
-    Vector3 moveDir;
-    Vector3 currentDirection = Vector3.zero;
     Vector2 deltaMove;
     InputAction lookInput;
     Vector2 deltaLook;
@@ -40,7 +37,7 @@ public class PlayerManager : MonoBehaviour, ICamera
     InputAction dashInput;
     bool isDashing;
 
-    private Vector3 camDir;
+    [SerializeField] private Vector3 camDir;
     #endregion
 
     private void OnEnable()
@@ -69,9 +66,10 @@ public class PlayerManager : MonoBehaviour, ICamera
 
     private void Update()
     {
-        camDir = (Camera.main.transform.right * deltaMove.x + Camera.main.transform.forward * deltaMove.y).normalized;
-        camDir.y = isJumping ? 1 : 0;
-        Abilities.Move(camDir);
+        camDir = Camera.main.transform.right * deltaMove.x + Camera.main.transform.forward * deltaMove.y;
+        camDir.y = 0;
+        camDir.Normalize();
+        Abilities.Move(new Vector3(camDir.x, isJumping ? 1 : 0, camDir.z));
         cameraHolderCentre.eulerAngles = cameraHolderCentre.eulerAngles + new Vector3(0, deltaLook.x, 0);
         CameraSettings();
     }
