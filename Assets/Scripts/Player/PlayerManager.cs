@@ -50,6 +50,7 @@ public class PlayerManager : MonoBehaviour, ICamera
         moveInput = _playerInput.actions["Move"];
         lookInput = _playerInput.actions["Look"];
         jumpInput = _playerInput.actions["Jump"];
+        dashInput = _playerInput.actions["Sprint"];
 
         moveInput.performed += input => deltaMove = input.ReadValue<Vector2>();
         moveInput.canceled += input => deltaMove = input.ReadValue<Vector2>();
