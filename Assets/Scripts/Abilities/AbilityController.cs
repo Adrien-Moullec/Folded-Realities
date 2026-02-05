@@ -37,9 +37,8 @@ public class AbilityController {
     public void SetGroundedStatus(bool state) => isGrounded = state;
 
     #region Ability Functions
-    public void Move(Vector3 moveInput) {
-        Ability?.movement.Move(this, moveInput);
-    }
+    public void Move(Vector3 moveInput) => Ability?.movement.Move(this, moveInput);    
+    public void Dash(Vector3 dirInput) => Ability?.dash.Dash(this, dirInput);
     #endregion
 }
 
