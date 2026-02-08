@@ -5,10 +5,12 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(AbilityController))]
 public class PlayerManager : MonoBehaviour, ICamera
 {
+    #region Variables
     [Space]
     [Header("Camera Settings")]
     [SerializeField] GameplayCamera gameplayCamera;
     [SerializeField] Transform cameraHolder;
+    [SerializeField] Transform cameraHolderCentre;
     [SerializeField, Min(0.01f)] float lerpSpeed = 100;
     private Vector3 GetCameraPosition
     {
@@ -17,15 +19,9 @@ public class PlayerManager : MonoBehaviour, ICamera
     CameraArea camArea;
     private Vector3 camDir;
 
-    #region Variables
-    [Space]
-    [Header("Abilities")]
-    [SerializeField] AbilityController AbilityController;
-    [SerializeField] Transform cameraHolderCentre;
-
-
     [Space]
     [Header("Script Managers")]
+    [SerializeField] AbilityController AbilityController;
     private PlayerInput _playerInput;
 
     [Space]
@@ -40,8 +36,10 @@ public class PlayerManager : MonoBehaviour, ICamera
     bool isDashing;
     #endregion
 
+    #region On Start
     private void OnEnable()
     {
+        AbilityController = GetComponent<AbilityController>();
         _playerInput = GetComponent<PlayerInput>();
 
         moveInput = _playerInput.actions["Move"];
@@ -50,20 +48,28 @@ public class PlayerManager : MonoBehaviour, ICamera
         dashInput = _playerInput.actions["Sprint"];
 
         moveInput.performed += input => deltaMove = input.ReadValue<Vector2>();
-        moveInput.canceled += input => deltaMove = input.ReadValue<Vector2>();
+        moveInput.canceled  += input => deltaMove = input.ReadValue<Vector2>();
         lookInput.performed += input => deltaLook = input.ReadValue<Vector2>();
-        lookInput.canceled += input => deltaLook = input.ReadValue<Vector2>();
+        lookInput.canceled  += input => deltaLook = input.ReadValue<Vector2>();
         jumpInput.performed += input => isJumping = true;
-        jumpInput.canceled += input => isJumping = false;
+        jumpInput.canceled  += input => isJumping = false;
         dashInput.performed += input => isDashing = true;
-        dashInput.canceled += input => isDashing = false;
+        dashInput.canceled  += input => isDashing = false;
     }
-
-    void Awake()
+    void OnDisable()
     {
-        AbilityController.GetComponent<AbilityController>();
+        moveInput.performed -= input => deltaMove = input.ReadValue<Vector2>();
+        moveInput.canceled  -= input => deltaMove = input.ReadValue<Vector2>();
+        lookInput.performed -= input => deltaLook = input.ReadValue<Vector2>();
+        lookInput.canceled  -= input => deltaLook = input.ReadValue<Vector2>();
+        jumpInput.performed -= input => isJumping = true;
+        jumpInput.canceled  -= input => isJumping = false;
+        dashInput.performed -= input => isDashing = true;
+        dashInput.canceled  -= input => isDashing = false;
     }
+    #endregion
 
+    #region Update Functions
     private void Update()
     {
         camDir = Camera.main.transform.right * deltaMove.x + Camera.main.transform.forward * deltaMove.y;
@@ -92,5 +98,6 @@ public class PlayerManager : MonoBehaviour, ICamera
     {
         camArea = null;
     }
+    #endregion
     #endregion
 }
