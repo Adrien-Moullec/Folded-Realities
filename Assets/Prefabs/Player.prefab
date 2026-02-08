@@ -94,7 +94,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1225429674322778145}
-  - component: {fileID: 2405929085682986793}
+  - component: {fileID: 4765679296051737577}
+  - component: {fileID: 6552002042681570147}
   - component: {fileID: 4601957020910338640}
   - component: {fileID: 3061592385069726717}
   - component: {fileID: 8335411899817543335}
@@ -120,10 +121,9 @@ Transform:
   m_Children:
   - {fileID: 1726812301455353388}
   - {fileID: 8570415290911176380}
-  - {fileID: 8541139259458153781}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2405929085682986793
+--- !u!114 &4765679296051737577
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -137,17 +137,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameplayCamera: {fileID: 0}
   cameraHolder: {fileID: 5148424032271712414}
-  lerpSpeed: 50
-  Abilities:
-    entity:
-      body: {fileID: 7211196813232357869}
-      feet: {fileID: 1768793327603475908}
-      controller: {fileID: 4601957020910338640}
-    AbilityList:
-    - {fileID: 0}
-    testCube: {fileID: 0}
+  lerpSpeed: 0.01
+  AbilityController: {fileID: 6552002042681570147}
   cameraHolderCentre: {fileID: 8570415290911176380}
-  camDir: {x: 0, y: 0, z: 0}
+--- !u!114 &6552002042681570147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5710287258573495793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ff8c1c2fad136644ba2498d566b823a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entity:
+    body: {fileID: 7211196813232357869}
+    feet: {fileID: 6536683569106103474}
+    controller: {fileID: 0}
+  abilitySetSO:
+  - {fileID: 11400000, guid: 2e417aba74ec54441b9b591a31db43e0, type: 2}
 --- !u!143 &4601957020910338640
 CharacterController:
   m_ObjectHideFlags: 0
@@ -296,6 +306,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8541139259458153781}
   - {fileID: 3280997533145751887}
   m_Father: {fileID: 1225429674322778145}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -336,7 +347,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1225429674322778145}
+    m_TransformParent: {fileID: 1726812301455353388}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 3ddf6a290a7f3e64a83ebf9e6555fdd9, type: 3}
       propertyPath: m_LocalPosition.x
