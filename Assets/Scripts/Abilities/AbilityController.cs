@@ -4,41 +4,43 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public class AbilityController {
+[RequireComponent(typeof(CharacterController))]
+public class AbilityController : MonoBehaviour {
 
     [Header("Body Components")]
     [SerializeField] public EntityBody entity;
 
     [Space]
     [Header("Abilities")]
-    [SerializeField] List<AbilitySummary> AbilityList;
-    internal AbilitySummary Ability;
-    [SerializeField] public Transform testCube;
+    [SerializeField] List<AbilitySetSO> abilitySetSO;
+    [HideInInspector] List<AbilitySet> abilitySetList = new();
+    [HideInInspector] internal AbilitySet currentAbilitySet;
 
-    #region Private Variables
-    [HideInInspector] internal Vector3 currentDirection;
-    [HideInInspector] internal float fallSpeed = 0;
-    [HideInInspector] internal float decelerationDelta = 0;
-    [HideInInspector] internal bool isGrounded = false;
-    #endregion
-
-    public void Setup(GameObject original)
+    void Awake()
     {
-        entity.controller = original.GetComponent<CharacterController>();
-        if (AbilityList.Count >= 1){
-            Ability = AbilityList[0];
+        Setup();
+        entity.controller = GetComponent<CharacterController>();
+    }
+    public void Setup()
+    {
+        if (abilitySetSO.Count < 1) return;
+
+        foreach (var n in abilitySetSO) {
+            if (n == null) continue;
+            AbilitySet ab = new AbilitySet(n);            
+            abilitySetList.Add(ab);
         }
+
+        currentAbilitySet = abilitySetList[0];
     }
     public void SetAbility(string name) {
-        if (AbilityList.Any(x => x.abilitySetName == name))
-            Ability = AbilityList.First(x => x.abilitySetName == name);
+        if (abilitySetList.Any(x => x.abilitySetName == name))
+            currentAbilitySet = abilitySetList.First(x => x.abilitySetName == name);
         else Debug.LogWarning("No ability to set");
     }
-    public void SetGroundedStatus(bool state) => isGrounded = state;
 
     #region Ability Functions
-    public void Move(Vector3 moveInput) => Ability?.movement.Move(this, moveInput);    
-    public void Dash(Vector3 dirInput) => Ability?.dash.Dash(this, dirInput);
+    public void Move(Vector3 moveInput, bool dash) => currentAbilitySet?.movement.movementSO.Move(this, currentAbilitySet?.movement.AbilityData, moveInput, dash);
     #endregion
 }
 
@@ -47,5 +49,5 @@ public class EntityBody
 {
     public GameObject body;
     public SphereCollider feet;
-    public CharacterController controller;
+    [HideInInspector] public CharacterController controller;
 }

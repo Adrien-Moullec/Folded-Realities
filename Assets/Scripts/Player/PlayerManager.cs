@@ -2,23 +2,25 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(AbilityController))]
 public class PlayerManager : MonoBehaviour, ICamera
 {
     [Space]
     [Header("Camera Settings")]
     [SerializeField] GameplayCamera gameplayCamera;
     [SerializeField] Transform cameraHolder;
-    [SerializeField, Min(0.01f)] float lerpSpeed = 0.01f;
+    [SerializeField, Min(0.01f)] float lerpSpeed = 100;
     private Vector3 GetCameraPosition
     {
         get => camArea != null ? camArea.cameraLocation + camArea.transform.position : cameraHolder.position;
     }
     CameraArea camArea;
+    private Vector3 camDir;
 
     #region Variables
     [Space]
     [Header("Abilities")]
-    [SerializeField] AbilityController Abilities;
+    [SerializeField] AbilityController AbilityController;
     [SerializeField] Transform cameraHolderCentre;
 
 
@@ -36,8 +38,6 @@ public class PlayerManager : MonoBehaviour, ICamera
     bool isJumping;
     InputAction dashInput;
     bool isDashing;
-
-    [SerializeField] private Vector3 camDir;
     #endregion
 
     private void OnEnable()
@@ -61,22 +61,20 @@ public class PlayerManager : MonoBehaviour, ICamera
 
     void Awake()
     {
-        Abilities.Setup(gameObject);
+        AbilityController.GetComponent<AbilityController>();
     }
 
     private void Update()
     {
         camDir = Camera.main.transform.right * deltaMove.x + Camera.main.transform.forward * deltaMove.y;
-        camDir.y = 0;
-        camDir.Normalize();
-        Abilities.Move(new Vector3(camDir.x, isJumping ? 1 : 0, camDir.z));
-        cameraHolderCentre.eulerAngles = cameraHolderCentre.eulerAngles + new Vector3(0, deltaLook.x, 0);
+        AbilityController.Move(new Vector3(camDir.x, isJumping ? 1 : 0, camDir.z), isDashing);
         CameraSettings();
     }
 
     #region Camera
     void CameraSettings()
     {
+        cameraHolderCentre.eulerAngles = cameraHolderCentre.eulerAngles + new Vector3(0, deltaLook.x, 0);
         gameplayCamera.transform.position = Vector3.MoveTowards(
             gameplayCamera.transform.position,
             GetCameraPosition,
@@ -93,13 +91,6 @@ public class PlayerManager : MonoBehaviour, ICamera
     public void OnCameraAreaExit()
     {
         camArea = null;
-    }
-
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawCube(cameraHolder.transform.position, Vector3.one * 0.1f);
-        Gizmos.DrawSphere(Abilities.entity.feet.center + Abilities.entity.feet.transform.position, Abilities.entity.feet.radius);
     }
     #endregion
 }
