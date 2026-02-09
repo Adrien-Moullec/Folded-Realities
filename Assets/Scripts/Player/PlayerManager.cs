@@ -84,7 +84,7 @@ public class PlayerManager : MonoBehaviour, ICamera
         gameplayCamera.transform.position = Vector3.MoveTowards(
             gameplayCamera.transform.position,
             GetCameraPosition,
-            lerpSpeed * Time.deltaTime
+            100 * Time.deltaTime
         );
         gameplayCamera.transform.forward = (transform.position - GetCameraPosition).normalized;
     }
