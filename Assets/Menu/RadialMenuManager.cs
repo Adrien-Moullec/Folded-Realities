@@ -8,14 +8,13 @@ public class RadialMenuManager : MonoBehaviour
     public GameObject radialMenuRoot;
 
     [Header("Radial Settings")]
-    [SerializeField]
-    private int segmentCount = 6;
-
-    [SerializeField]
-    private float spriteRotationOffset = -120f;
+    [SerializeField] private int segmentCount = 6;
+    [SerializeField] private float spriteRotationOffset = -120f;
 
     private float segmentAngle;
     private bool isRadialMenuActive = false;
+
+    private int currentIndex = -1;
 
     void Start()
     {
@@ -28,20 +27,17 @@ public class RadialMenuManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             isRadialMenuActive = !isRadialMenuActive;
-
-            if (isRadialMenuActive)
-            {
-                radialMenuRoot.SetActive(true);
-            }
-            else
-            {
-                radialMenuRoot.SetActive(false);
-            }
+            radialMenuRoot.SetActive(isRadialMenuActive);
         }
 
         if (isRadialMenuActive)
         {
             UpdateSelection();
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                OnSegmentClicked(currentIndex);
+            }
         }
     }
 
@@ -50,29 +46,34 @@ public class RadialMenuManager : MonoBehaviour
         Vector2 centerScreenPosition =
             RectTransformUtility.WorldToScreenPoint(null, center.position);
 
-        Vector2 mousePos = (Vector2)Input.mousePosition;
+        Vector2 mousePos = Input.mousePosition;
         Vector2 delta = mousePos - centerScreenPosition;
 
         float angle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
 
         if (angle < 0f)
-        {
             angle += 360f;
-        }
 
         angle += segmentAngle / 2f;
 
         if (angle >= 360f)
-        {
             angle -= 360f;
-        }
 
-        int index = Mathf.FloorToInt(angle / segmentAngle);
+        currentIndex = Mathf.FloorToInt(angle / segmentAngle);
 
-        float finalRotation =
-            (index * segmentAngle) + spriteRotationOffset;
+        float finalRotation = (currentIndex * segmentAngle) + spriteRotationOffset;
 
-        selectObject.localRotation =
-            Quaternion.Euler(0f, 0f, finalRotation);
+        selectObject.localRotation = Quaternion.Euler(0f, 0f, finalRotation);
+    }
+
+    private void OnSegmentClicked(int index)
+    {
+        Debug.Log("Clicked segment: " + index);
+
+       
+        radialMenuRoot.SetActive(false);
+        isRadialMenuActive = false;
+
+        
     }
 }

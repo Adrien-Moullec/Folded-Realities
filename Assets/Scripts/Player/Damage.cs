@@ -9,11 +9,12 @@ public class Damage : MonoBehaviour
         Environment
     }
 
+    [Header("Damage Settings")]
     public int damageAmount = 10;
     public DamageType damageType = DamageType.Hazard;
     public float damageCooldown = 1f;
 
-    private float lastDamageTime;
+    float lastDamageTime;
 
     void OnCollisionEnter(Collision collision)
     {
@@ -27,22 +28,19 @@ public class Damage : MonoBehaviour
 
     void TryDealDamage(GameObject other)
     {
-        if (!other.CompareTag("Player"))
-        {
-            return;
-        }
-
         if (Time.time - lastDamageTime < damageCooldown)
         {
             return;
         }
 
-        PlayerHealth health = other.GetComponent<PlayerHealth>();
+        iDamageable damageable = other.GetComponent<iDamageable>();
 
-        if (health != null)
+        if (damageable != null)
         {
-            health.TakeDamage(damageAmount);
+            damageable.TakeDamage(damageAmount);
             lastDamageTime = Time.time;
+
+            Debug.Log($"{damageType} dealt {damageAmount} damage");
         }
     }
 }

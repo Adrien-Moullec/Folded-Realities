@@ -23,10 +23,17 @@ public class AbilityController : MonoBehaviour {
     }
     public void Setup()
     {
-        if (abilitySetSO.Count < 1) return;
+        if (abilitySetSO.Count < 1)
+        {
+            return;
+        }
 
         foreach (var n in abilitySetSO) {
-            if (n == null) continue;
+            if (n == null)
+            {
+                continue;
+            }
+
             AbilitySet ab = new AbilitySet(n);            
             abilitySetList.Add(ab);
         }
@@ -35,8 +42,13 @@ public class AbilityController : MonoBehaviour {
     }
     public void SetAbility(string name) {
         if (abilitySetList.Any(x => x.abilitySetName == name))
+        {
             currentAbilitySet = abilitySetList.First(x => x.abilitySetName == name);
-        else Debug.LogWarning("No ability to set");
+        }
+        else
+        {
+            Debug.LogWarning("No ability to set");
+        }
     }
 
     #region Ability Functions

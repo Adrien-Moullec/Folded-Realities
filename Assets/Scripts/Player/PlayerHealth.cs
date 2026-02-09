@@ -1,46 +1,84 @@
+using System.Data.SqlTypes;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour, iDamageable, IHealable, IKillable, IHasHealth
 {
     [Header("Health Settings")]
-    public int maxHealth = 100;
-    public int currentHealth;
+    [SerializeField] private float maxHealth = 100f;
+    public float MaxHealth => maxHealth;
+
+    public float CurrentHealth { get; private set; }
 
     [Header("UI")]
-    public Slider healthBar;
+    [SerializeField] private Slider healthSlider;
 
-    void Start()
+    void Awake()
     {
-        currentHealth = maxHealth;
+        CurrentHealth = maxHealth;
 
-        if (healthBar != null)
+        if (healthSlider != null)
         {
-            healthBar.maxValue = maxHealth;
-            healthBar.value = currentHealth;
+            healthSlider.maxValue = maxHealth;
+            healthSlider.value = CurrentHealth;
         }
     }
 
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(float amount)
     {
-        currentHealth -= damageAmount;
-
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-
-        if (healthBar != null)
+        if (CurrentHealth <= 0)
         {
-            healthBar.value = currentHealth;
+            return;
         }
 
-        if (currentHealth <= 0)
+        CurrentHealth -= amount;
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0, maxHealth);
+
+        UpdateUI();
+
+        if (CurrentHealth <= 0)
         {
             Die();
         }
     }
 
-    void Die()
+    public void Heal(float amount)
+    {
+        if (CurrentHealth <= 0)
+        {
+            return;
+        }
+
+        CurrentHealth += amount;
+        CurrentHealth = Mathf.Clamp(CurrentHealth, 0, maxHealth);
+
+        UpdateUI();
+    }
+
+    public void Die()
     {
         Debug.Log("Player died");
-       
+        // Disable movement, play animation, trigger event, etc.
+    }
+
+    private void UpdateUI()
+    {
+        if (healthSlider != null)
+        {
+            healthSlider.value = CurrentHealth;
+        }
     }
 }
+
+internal interface IHasHealth
+{
+}
+
+internal interface IKillable
+{
+}
+
+internal interface IHealable
+{
+}
+
