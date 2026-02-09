@@ -94,13 +94,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1225429674322778145}
-  - component: {fileID: 4765679296051737577}
+  - component: {fileID: 8864288301208540776}
   - component: {fileID: 6552002042681570147}
   - component: {fileID: 4601957020910338640}
   - component: {fileID: 3061592385069726717}
   - component: {fileID: 8335411899817543335}
   m_Layer: 0
-  m_Name: Player
+  m_Name: BaseEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -123,7 +123,7 @@ Transform:
   - {fileID: 8570415290911176380}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4765679296051737577
+--- !u!114 &8864288301208540776
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -132,14 +132,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5710287258573495793}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 404e4c537b6cc3441a44ee27130107ae, type: 3}
+  m_Script: {fileID: 11500000, guid: e31e42d7d769653428d4acd5bdd26a1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameplayCamera: {fileID: 0}
-  cameraHolder: {fileID: 5148424032271712414}
-  lerpSpeed: 0.01
-  AbilityController: {fileID: 6552002042681570147}
-  cameraHolderCentre: {fileID: 8570415290911176380}
 --- !u!114 &6552002042681570147
 MonoBehaviour:
   m_ObjectHideFlags: 0
