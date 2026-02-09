@@ -2,28 +2,26 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(AbilityController))]
 public class PlayerManager : MonoBehaviour, ICamera
 {
+    #region Variables
     [Space]
     [Header("Camera Settings")]
     [SerializeField] GameplayCamera gameplayCamera;
     [SerializeField] Transform cameraHolder;
-    [SerializeField, Min(0.01f)] float lerpSpeed = 0.01f;
+    [SerializeField] Transform cameraHolderCentre;
+    [SerializeField, Min(0.01f)] float lerpSpeed = 100;
     private Vector3 GetCameraPosition
     {
         get => camArea != null ? camArea.cameraLocation + camArea.transform.position : cameraHolder.position;
     }
     CameraArea camArea;
-
-    #region Variables
-    [Space]
-    [Header("Abilities")]
-    [SerializeField] AbilityController Abilities;
-    [SerializeField] Transform cameraHolderCentre;
-
+    private Vector3 camDir;
 
     [Space]
     [Header("Script Managers")]
+    [SerializeField] AbilityController AbilityController;
     private PlayerInput _playerInput;
 
     [Space]
@@ -36,12 +34,12 @@ public class PlayerManager : MonoBehaviour, ICamera
     bool isJumping;
     InputAction dashInput;
     bool isDashing;
-
-    [SerializeField] private Vector3 camDir;
     #endregion
 
+    #region On Start
     private void OnEnable()
     {
+        AbilityController = GetComponent<AbilityController>();
         _playerInput = GetComponent<PlayerInput>();
 
         moveInput = _playerInput.actions["Move"];
@@ -50,33 +48,39 @@ public class PlayerManager : MonoBehaviour, ICamera
         dashInput = _playerInput.actions["Sprint"];
 
         moveInput.performed += input => deltaMove = input.ReadValue<Vector2>();
-        moveInput.canceled += input => deltaMove = input.ReadValue<Vector2>();
+        moveInput.canceled  += input => deltaMove = input.ReadValue<Vector2>();
         lookInput.performed += input => deltaLook = input.ReadValue<Vector2>();
-        lookInput.canceled += input => deltaLook = input.ReadValue<Vector2>();
+        lookInput.canceled  += input => deltaLook = input.ReadValue<Vector2>();
         jumpInput.performed += input => isJumping = true;
-        jumpInput.canceled += input => isJumping = false;
+        jumpInput.canceled  += input => isJumping = false;
         dashInput.performed += input => isDashing = true;
-        dashInput.canceled += input => isDashing = false;
+        dashInput.canceled  += input => isDashing = false;
     }
-
-    void Awake()
+    void OnDisable()
     {
-        Abilities.Setup(gameObject);
+        moveInput.performed -= input => deltaMove = input.ReadValue<Vector2>();
+        moveInput.canceled  -= input => deltaMove = input.ReadValue<Vector2>();
+        lookInput.performed -= input => deltaLook = input.ReadValue<Vector2>();
+        lookInput.canceled  -= input => deltaLook = input.ReadValue<Vector2>();
+        jumpInput.performed -= input => isJumping = true;
+        jumpInput.canceled  -= input => isJumping = false;
+        dashInput.performed -= input => isDashing = true;
+        dashInput.canceled  -= input => isDashing = false;
     }
+    #endregion
 
+    #region Update Functions
     private void Update()
     {
         camDir = Camera.main.transform.right * deltaMove.x + Camera.main.transform.forward * deltaMove.y;
-        camDir.y = 0;
-        camDir.Normalize();
-        Abilities.Move(new Vector3(camDir.x, isJumping ? 1 : 0, camDir.z));
-        cameraHolderCentre.eulerAngles = cameraHolderCentre.eulerAngles + new Vector3(0, deltaLook.x, 0);
+        AbilityController.Move(new Vector3(camDir.x, isJumping ? 1 : 0, camDir.z), isDashing);
         CameraSettings();
     }
 
     #region Camera
     void CameraSettings()
     {
+        cameraHolderCentre.eulerAngles = cameraHolderCentre.eulerAngles + new Vector3(0, deltaLook.x, 0);
         gameplayCamera.transform.position = Vector3.MoveTowards(
             gameplayCamera.transform.position,
             GetCameraPosition,
@@ -94,12 +98,6 @@ public class PlayerManager : MonoBehaviour, ICamera
     {
         camArea = null;
     }
-
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawCube(cameraHolder.transform.position, Vector3.one * 0.1f);
-        Gizmos.DrawSphere(Abilities.entity.feet.center + Abilities.entity.feet.transform.position, Abilities.entity.feet.radius);
-    }
+    #endregion
     #endregion
 }
