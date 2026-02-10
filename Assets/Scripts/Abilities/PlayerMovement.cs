@@ -48,7 +48,11 @@ public class PlayerMovement : MovementSO
         {
             if (pmd.decelerationDelta < 1f)
             {
-                pmd.currentDirection = Vector3.ClampMagnitude(pmd.currentDirection, pmd.currentDirection.magnitude - deceleration * Time.deltaTime);
+                if ((pmd.currentDirection.magnitude - deceleration * Time.deltaTime) > 0)
+                    pmd.currentDirection = Vector3.ClampMagnitude(pmd.currentDirection, pmd.currentDirection.magnitude - deceleration * Time.deltaTime);
+                else
+                    pmd.currentDirection = Vector3.zero;
+
             }
             else
             {
