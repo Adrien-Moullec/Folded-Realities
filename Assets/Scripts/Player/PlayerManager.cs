@@ -11,7 +11,10 @@ public class PlayerManager : MonoBehaviour, ICamera
     [SerializeField] GameplayCamera gameplayCamera;
     [SerializeField] Transform cameraHolder;
     [SerializeField] Transform cameraHolderCentre;
-    [SerializeField, Min(0.01f)] float lerpSpeed = 100;
+    [SerializeField, Range(-100,0)] float cameraTiltMin;
+    [SerializeField, Range(0,100)] float cameraTiltMax;
+    float camYTilt = 30;
+    float lerpSpeed = 100;
     private Vector3 GetCameraPosition
     {
         get => camArea != null ? camArea.cameraLocation + camArea.transform.position : cameraHolder.position;
@@ -80,7 +83,11 @@ public class PlayerManager : MonoBehaviour, ICamera
     #region Camera
     void CameraSettings()
     {
-        cameraHolderCentre.eulerAngles = cameraHolderCentre.eulerAngles + new Vector3(0, deltaLook.x, 0);
+        camYTilt = Mathf.Clamp(camYTilt - deltaLook.y,cameraTiltMin,cameraTiltMax);
+        cameraHolderCentre.eulerAngles = new Vector3(
+            camYTilt, 
+            cameraHolderCentre.eulerAngles.y + deltaLook.x, 
+            cameraHolderCentre.eulerAngles.x);
         gameplayCamera.transform.position = Vector3.MoveTowards(
             gameplayCamera.transform.position,
             GetCameraPosition,
@@ -97,6 +104,10 @@ public class PlayerManager : MonoBehaviour, ICamera
     public void OnCameraAreaExit()
     {
         camArea = null;
+    }
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(cameraHolder.transform.position,cameraHolderCentre.transform.position);
     }
     #endregion
     #endregion
