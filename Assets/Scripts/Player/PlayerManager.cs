@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInput))]
-[RequireComponent(typeof(AbilityController))]
+[RequireComponent(typeof(PlayerAbilityController))]
 public class PlayerManager : MonoBehaviour, ICamera
 {
     #region Variables
@@ -24,7 +24,7 @@ public class PlayerManager : MonoBehaviour, ICamera
 
     [Space]
     [Header("Script Managers")]
-    [SerializeField] AbilityController AbilityController;
+    [SerializeField] PlayerAbilityController AbilityController;
     private PlayerInput _playerInput;
 
     [Space]
@@ -42,7 +42,7 @@ public class PlayerManager : MonoBehaviour, ICamera
     #region On Start
     private void OnEnable()
     {
-        AbilityController = GetComponent<AbilityController>();
+        AbilityController = GetComponent<PlayerAbilityController>();
         _playerInput = GetComponent<PlayerInput>();
 
         moveInput = _playerInput.actions["Move"];
