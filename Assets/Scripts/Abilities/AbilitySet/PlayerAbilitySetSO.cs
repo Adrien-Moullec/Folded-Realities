@@ -1,8 +1,6 @@
 using System;
 using UnityEngine;
 
-
-
 [CreateAssetMenu(fileName = "Ability Set", menuName = "Origami/Ability Sets/Player Ability Set", order = 0)]
 public class PlayerAbilitySetSO : AbilitySetSO
 {

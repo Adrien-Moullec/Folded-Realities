@@ -6,5 +6,5 @@ public class EntityBody
 {
     public GameObject body;
     public SphereCollider feet;
-    [HideInInspector] public CharacterController controller;
+    [HideInInspector] public IMovement iMovement;
 }

@@ -16,13 +16,14 @@ MonoBehaviour:
   charges: 0
   speedMultiplier: 1
   acceleration: 1
-  deceleration: 0.1
+  deceleration: 1.53
+  fallingDeceleration: 2
   dashSpeedMultiplier: 1.5
   dashAccelerationMultiplier: 1
+  canJump: 1
   jumpSpeed: 0.07
-  isGrounded: 0
   gravity: 0.2
-  maxFallSpeed: 10
+  maxFallSpeed: 4
   groundLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
