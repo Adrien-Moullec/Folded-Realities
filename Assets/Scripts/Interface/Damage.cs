@@ -9,7 +9,6 @@ public class Damage : MonoBehaviour
         Environment
     }
 
-    [Header("Damage Settings")]
     public int damageAmount = 10;
     public DamageType damageType = DamageType.Hazard;
     public float damageCooldown = 1f;
@@ -33,14 +32,12 @@ public class Damage : MonoBehaviour
             return;
         }
 
-        iDamageable damageable = other.GetComponent<iDamageable>();
+        IHealth health = other.GetComponent<IHealth>();
 
-        if (damageable != null)
+        if (health != null)
         {
-            damageable.TakeDamage(damageAmount);
+            health.TakeDamage(damageAmount);
             lastDamageTime = Time.time;
-
-            Debug.Log($"{damageType} dealt {damageAmount} damage");
         }
     }
 }
