@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerAbilityController))]
 public class PlayerManager : MonoBehaviour, ICamera
 {
+    public static PlayerManager player;
     #region Variables
     [Space]
     [Header("Camera Settings")]
@@ -39,6 +40,10 @@ public class PlayerManager : MonoBehaviour, ICamera
     bool isDashing;
     #endregion
 
+    void Awake()
+    {
+        player = this;
+    }
     #region On Start
     private void OnEnable()
     {
