@@ -80,12 +80,16 @@ public class PlayerManager : MonoBehaviour, ICamera
     #region Update Functions
     private void Update()
     {
-        camDir = Camera.main.transform.right * deltaMove.x + Camera.main.transform.forward * deltaMove.y;
-        AbilityController.Move(new Vector3(camDir.x, isJumping ? 1 : 0, camDir.z), isDashing);
+        Movement();
         CameraSettings();
     }
 
     #region Camera
+    void Movement()
+    {        
+        camDir = Camera.main.transform.right * deltaMove.x + Camera.main.transform.forward * deltaMove.y;
+        AbilityController.Move(new Vector3(camDir.x, isJumping ? 1 : 0, camDir.z), isDashing);
+    }
     void CameraSettings()
     {
         camYTilt = Mathf.Clamp(camYTilt - deltaLook.y,cameraTiltMin,cameraTiltMax);
@@ -96,7 +100,7 @@ public class PlayerManager : MonoBehaviour, ICamera
         gameplayCamera.transform.position = Vector3.MoveTowards(
             gameplayCamera.transform.position,
             GetCameraPosition,
-            100 * Time.deltaTime
+            lerpSpeed * Time.deltaTime
         );
         gameplayCamera.transform.forward = (transform.position - GetCameraPosition).normalized;
     }

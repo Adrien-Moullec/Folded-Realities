@@ -3,9 +3,27 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Player Movement", menuName = "Origami/Movement/Player Movement", order = -1)]
 public class GenericMovement : MovementSO {    
     
+    [Header("Speed Settings")]
+    internal static float baseSpeed = 0.01f;
+    [SerializeField] protected float speedMultiplier = 1;
+    protected float speed { get => baseSpeed * speedMultiplier; }
+    [SerializeField, Min(0)] protected float acceleration = 1;
+    [SerializeField, Min(0)] protected float deceleration = 0.1f;
+    [SerializeField, Min(0)] protected float fallingDeceleration = 2f;
+
+    [Header("Dash Settings")]
+    [SerializeField] protected float dashSpeedMultiplier = 1.5f;
+    [SerializeField] protected float dashAccelerationMultiplier = 1;
+
+    [Header("Vertical Settings")]
+    [SerializeField] protected bool canJump = false;
+    [SerializeField, Min(0)] protected float jumpSpeed = 0.07f;
+    [SerializeField, Min(0)] protected float gravity = 0.2f;
+    [SerializeField, Min(0)] protected float maxFallSpeed = 10f;
+    [SerializeField] protected LayerMask groundLayers;
     public override AbilityData Setup() => new GenericMovementData();
 
-    internal override float FallSpeed(AbilityData data, EntityBody entityBody, bool isJumping)
+    internal float FallSpeed(AbilityData data, EntityBody entityBody, bool isJumping)
     {
         GenericMovementData pmd = (GenericMovementData)data;
         pmd.isGrounded =

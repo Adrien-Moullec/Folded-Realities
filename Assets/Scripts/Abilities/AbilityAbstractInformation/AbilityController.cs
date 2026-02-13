@@ -15,10 +15,12 @@ public abstract class AbilityController : MonoBehaviour, IMovement
 
     public abstract void IMoveEntity(Vector3 direction);
 
-    void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         if (entityBody.feet == null || !drawGizmos) return;
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(entityBody.feet.transform.position + entityBody.feet.center, entityBody.feet.radius);
     }
+
+    public abstract void IRotateEntity(Vector3 movement);
 }

@@ -45,5 +45,10 @@ public class PlayerAbilityController : AbilityController
 
     #region Ability Functions
     public void Move(Vector3 moveInput, bool dash) => currentAbilitySet?.movement.movementSO.Move(entityBody, currentAbilitySet?.movement.AbilityData, moveInput, dash);
+
+    public override void IRotateEntity(Vector3 movement)
+    {
+        throw new NotImplementedException();
+    }
     #endregion
 }

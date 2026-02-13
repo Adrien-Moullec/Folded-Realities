@@ -96,11 +96,9 @@ GameObject:
   - component: {fileID: 1225429674322778145}
   - component: {fileID: 8864288301208540776}
   - component: {fileID: 6866967023358552067}
-  - component: {fileID: 4601957020910338640}
-  - component: {fileID: 3061592385069726717}
   - component: {fileID: 3769690474327977817}
   m_Layer: 0
-  m_Name: BaseEnemy
+  m_Name: FollowEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,66 +146,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59b5a05e5a29d6d41966c9f63439b1b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entity:
-    body: {fileID: 0}
-    feet: {fileID: 0}
-    controller: {fileID: 0}
-  abilitySetSO: {fileID: 0}
---- !u!143 &4601957020910338640
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5710287258573495793}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3061592385069726717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5710287258573495793}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 35845fe01580c41289b024647b1d1c53, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
+  drawGizmos: 1
+  entityBody:
+    body: {fileID: 7211196813232357869}
+    feet: {fileID: 6536683569106103474}
+  playerDist: 3
+  abilitySetSO: {fileID: 11400000, guid: c629a897cbeedc944a16b070e04af81a, type: 2}
 --- !u!195 &3769690474327977817
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -227,7 +171,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0
+  m_BaseOffset: 1.05
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!1 &6975155188400979986
@@ -371,11 +315,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3ddf6a290a7f3e64a83ebf9e6555fdd9, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3ddf6a290a7f3e64a83ebf9e6555fdd9, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3ddf6a290a7f3e64a83ebf9e6555fdd9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -383,7 +327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3ddf6a290a7f3e64a83ebf9e6555fdd9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3ddf6a290a7f3e64a83ebf9e6555fdd9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -392,7 +336,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 3ddf6a290a7f3e64a83ebf9e6555fdd9, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 12d16cb4cb9f52549bfdc4ea61bf594b, type: 2}
+      objectReference: {fileID: 2100000, guid: 1542243d1e9610349a1ddb4e4d3f5d1d, type: 2}
     - target: {fileID: 919132149155446097, guid: 3ddf6a290a7f3e64a83ebf9e6555fdd9, type: 3}
       propertyPath: m_Name
       value: KuharuModel_test
