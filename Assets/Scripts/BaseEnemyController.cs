@@ -1,4 +1,5 @@
 using UnityEngine;
+using AbilitySystem;
 
 public class BaseEnemyController : MonoBehaviour
 {
