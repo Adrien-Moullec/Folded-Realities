@@ -1,10 +1,15 @@
 using System;
 using UnityEngine;
 
-[Serializable]
-public class EntityBody
+
+namespace AbilitySystem
 {
-    public GameObject body;
-    public SphereCollider feet;
-    [HideInInspector] public IMovement iMovement;
+    [Serializable]
+    public class EntityBody
+    {
+        public GameObject body;
+        public SphereCollider feet;
+        [HideInInspector] public IMovement iMovement;
+        [HideInInspector] public IAbilityCooldown iAbilityCooldown;
+    }
 }
