@@ -3,13 +3,15 @@ using UnityEngine;
 using UnityEngine.Splines;
 
 [RequireComponent(typeof(SplineContainer))]
-public class CameraSplineSystem : CameraArea
+public class PlayerPathCameraRailSpline : CameraArea
 {
     [SerializeField] GameObject playObj;
     [SerializeField] float cameraLerp = 1;
 
-    [Tooltip("Control where the camera transitions between player and spline point. Positive value makes camera transition before the curve, negative value makes camera transition after entering the curve.")]
-    [SerializeField] float cameraBoundaryTransition = 0.3f;
+    [Tooltip("Distance to spline when camera starts lerp to destination.")]
+    [SerializeField, Min(0)] float cameraBoundaryTransitionStart = 5f;
+    [Tooltip("Distance to spline when camera ends lerp to destination.")]
+    [SerializeField, Min(0)] float cameraBoundaryTransitionEnd = 5f;
     SplineContainer splineContainer;
     Spline playerPath;
     Spline cameraPath;
@@ -17,7 +19,9 @@ public class CameraSplineSystem : CameraArea
 
     Vector3 camTargetPos;
     Vector3 playerPathPoint;
+    float splineDistance;
     float tPoint;
+    float deltaLerp;
 
     void Awake()
     {
@@ -26,7 +30,7 @@ public class CameraSplineSystem : CameraArea
         cameraPath = splineContainer.Splines[1];
     }
 
-    public override Vector3 GetCameraPosition(Camera camera)
+    public override Vector3 GetCameraPosition(Camera camera, Vector3 cameraHolderPos)
     {
         if (!ValidSplines()) return camera.transform.position;
 
@@ -36,32 +40,37 @@ public class CameraSplineSystem : CameraArea
             cameraPath,
             (float3)PlayerManager.player.transform.position,
             out playerPathPoint,
-            out tPoint
+            out tPoint,
+            out splineDistance
         );
-        Debug.Log(tPoint);
+
+        deltaLerp = Mathf.InverseLerp(cameraBoundaryTransitionEnd, cameraBoundaryTransitionStart + cameraBoundaryTransitionEnd, splineDistance);
+        
         playObj.transform.position = playerPathPoint;
         return Vector3.MoveTowards(
             camera.transform.position,
-            camTargetPos,
+            Vector3.Lerp(camTargetPos,cameraHolderPos,deltaLerp),
             cameraLerp * Time.deltaTime * Vector3.Distance(camTargetPos, camera.transform.position)
         );
     }
-    public static Vector3 GetCameraPosition(SplineContainer container, Spline playerPath, Spline cameraPath, float3 worldPlayer, out Vector3 playerPathPos, out float TPoint)
+    public static Vector3 GetCameraPosition(SplineContainer container, Spline playerPath, Spline cameraPath, float3 worldPlayer, out Vector3 playerPathPos, out float TPoint, out float splineDistance)
     {
-        Debug.Log("Container: "+container+", playerPath: "+(playerPath!=null)+", camPath: "+(cameraPath!=null)+".");
         if (container == null || container.Splines.Count < 2) { 
             Debug.LogWarning("SplineContainer Error");
             playerPathPos = Vector3.zero;
             TPoint = 0;
+            splineDistance = 0;
             return Vector3.zero;
         }
 
         SplineUtility.GetNearestPoint(playerPath, worldPlayer, out float3 nearest, out TPoint);
+        splineDistance = Vector3.Distance(nearest, worldPlayer);
         playerPathPos = (Vector3)nearest;
         
         float3 camPos = playerPath == null
             ? float3.zero
             : cameraPath.EvaluatePosition(TPoint);
+
 
         return (Vector3)camPos;
     }

@@ -15,15 +15,12 @@ public class PlayerManager : MonoBehaviour, ICamera
     [SerializeField] Transform cameraHolderCentre;
     [SerializeField, Range(-100,0)] float cameraTiltMin;
     [SerializeField, Range(0,100)] float cameraTiltMax;
+    [SerializeField, Min(5)] float lerpSpeed = 10;
     float camYTilt = 30;
-    float lerpSpeed = 100;
     private Vector3 GetCameraPosition
     {
         get => camArea != null ? 
-        camArea.GetCameraPosition(
-            gameplayCamera) + 
-        camArea.transform.position : 
-        cameraHolder.position;
+        camArea.GetCameraPosition(gameplayCamera, cameraHolder.position) + camArea.transform.position : cameraHolder.position;
     }
     CameraArea camArea;
     private Vector3 camDir;
@@ -122,6 +119,12 @@ public class PlayerManager : MonoBehaviour, ICamera
             gameplayCamera.transform.position,
             GetCameraPosition,
             lerpSpeed * Time.deltaTime
+        );
+        Vector3 target = GetCameraPosition;
+        gameplayCamera.transform.position = Vector3.MoveTowards(
+            gameplayCamera.transform.position,
+            target,
+            lerpSpeed * Time.deltaTime * Vector3.Distance(target, gameplayCamera.transform.position)
         );
         gameplayCamera.transform.forward = (transform.position - GetCameraPosition).normalized;
     }
