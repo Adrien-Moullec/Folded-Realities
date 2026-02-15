@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour, ICamera
     #region Variables
     [Space]
     [Header("Camera Settings")]
-    [SerializeField] GameplayCamera gameplayCamera;
+    [SerializeField] Camera gameplayCamera;
     [SerializeField] Transform cameraHolder;
     [SerializeField] Transform cameraHolderCentre;
     [SerializeField, Range(-100,0)] float cameraTiltMin;
@@ -19,7 +19,11 @@ public class PlayerManager : MonoBehaviour, ICamera
     float lerpSpeed = 100;
     private Vector3 GetCameraPosition
     {
-        get => camArea != null ? camArea.cameraLocation + camArea.transform.position : cameraHolder.position;
+        get => camArea != null ? 
+        camArea.GetCameraPosition(
+            gameplayCamera) + 
+        camArea.transform.position : 
+        cameraHolder.position;
     }
     CameraArea camArea;
     private Vector3 camDir;
