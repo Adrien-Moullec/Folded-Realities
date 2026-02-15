@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.InputSystem.Interactions;
 
 
 namespace AbilitySystem
@@ -8,30 +9,22 @@ namespace AbilitySystem
     public abstract class CooldownAbilitySO : AbilitySO
     {
         [Header("Ability Settings")]
-        [SerializeField] internal float cooldown;
-        [SerializeField] internal int charges;
-        public virtual void Activate(EntityBody entityBody, AbilityData data)
+        [SerializeField, Range(1,20)] internal float cooldown;
+        [SerializeField, Range(1,5)] internal int charges;
+        public virtual bool TryUseAbility(EntityBody entityBody, CooldownData data)
         {
-            if (data.currentCharges <= 0) return;
-            entityBody.iAbilityCooldown.OnAbilityUsed(data);
+            if (data.currentCharges <= 0) return false;
+            data.currentCharges--;
+            entityBody.iAbility.OnActivateCooldownAbility(Ability(entityBody,data), data, cooldown, charges);
+            return true;
         }
-        public static IEnumerator Cooldown(AbilityData data, int maxCharges, float cooldown)
+        public abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
+        public override AbilityData Setup()
         {
-            data.isRecharging = true;
-            data.cooldownDelta = cooldown;
-
-            while (data.currentCharges < maxCharges)
-            {
-                yield return null;
-                data.cooldownDelta -= Time.deltaTime;
-
-                if (data.cooldownDelta <= 0)
-                {
-                    data.currentCharges = Mathf.Min(maxCharges, data.currentCharges + 1);
-                    data.cooldownDelta = cooldown;
-                }
-            }
-            data.isRecharging = false;
+            CooldownData ad = new(charges, cooldown);
+            ad.currentCharges = charges;
+            ad.cooldownDelta = cooldown;
+            return ad;
         }
     }
 
@@ -39,6 +32,15 @@ namespace AbilitySystem
     public class ActivatedAbilitySummary : AbilitySummary
     {
         [SerializeField] internal CooldownAbilitySO abilitySO;
-        internal void Activate(EntityBody entityBody, AbilityData data) => abilitySO.Activate(entityBody, data);
+
+        internal bool Activate(EntityBody entityBody) {
+            return abilitySO.TryUseAbility(entityBody, (CooldownData)AbilityData);
+        }
+        
+        public ActivatedAbilitySummary(CooldownAbilitySO m)
+        {
+            abilitySO = m;
+            AbilityData = m.Setup();
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace AbilitySystem
             Vector3 dir = moveInput;
             dir.y = 0;
             dir.Normalize();
-            entityBody.body.transform.forward = dir;
+            entityBody.bodyHolder.transform.forward = dir;
         }
     }
 }

@@ -76,11 +76,11 @@ namespace AbilitySystem
 
             moveData.currentDirection.y = 0;
             if (moveData.currentDirection != Vector3.zero)
-                entityBody.body.transform.forward = moveData.currentDirection;
+                entityBody.bodyHolder.transform.forward = moveData.currentDirection;
             FallSpeed(moveData, entityBody, moveInput.y == 1);
             moveData.currentDirection.y = Mathf.Clamp(moveData.fallSpeed, -maxFallSpeed, maxFallSpeed);
 
-            entityBody.iMovement.IMoveEntity(moveData.currentDirection);
+            entityBody.iAbility.OnMoveEntity(moveData.currentDirection);
         }
 
         public class GenericMovementData : AbilityData

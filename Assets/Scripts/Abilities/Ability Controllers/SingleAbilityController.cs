@@ -6,7 +6,7 @@ using UnityEngine.AI;
 namespace AbilitySystem
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    public class EnemyAbilityController : AbilityController
+    public class SingleAbilityController : AbilityController
     {
         [Space]
         [Header("Settings")]
@@ -26,24 +26,34 @@ namespace AbilitySystem
         }
         private void Update()
         {
-            Move(PlayerManager.player.transform.position - this.transform.position, false);
+            InputMove(PlayerManager.player.transform.position - transform.position, false);
         }
-
-        public void Move(Vector3 moveInput, bool dash)
-        {
-            abilitySetList?.movement.movementSO.Move(
-                entityBody,
-                abilitySetList?.movement.AbilityData,
-                Vector3.Distance(PlayerManager.player.transform.position, transform.position) > playerDist ? moveInput : Vector3.zero,
-                dash);
-        }
-
-        public override void IMoveEntity(Vector3 direction)
+        
+        public override void OnMoveEntity(Vector3 direction)
         {
             navMeshAgent.Move(direction);
         }
 
-        public override void IRotateEntity(Vector3 movement)
+        public override void OnRotateEntity(Vector3 movement)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void InputMove(Vector3 direction, bool isDashing)
+        {
+            abilitySetList?.movement.movementSO.Move(
+                entityBody,
+                abilitySetList?.movement.AbilityData,
+                Vector3.Distance(PlayerManager.player.transform.position, transform.position) > playerDist ? direction : Vector3.zero,
+                isDashing);
+        }
+
+        public override void InputPrimaryAttack()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void InputPrimaryAbility()
         {
             throw new NotImplementedException();
         }

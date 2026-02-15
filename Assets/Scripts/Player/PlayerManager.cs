@@ -26,7 +26,7 @@ public class PlayerManager : MonoBehaviour, ICamera
 
     [Space]
     [Header("Script Managers")]
-    [SerializeField] PlayerAbilityController AbilityController;
+    [SerializeField] IAbility iAbility;
     private PlayerInput _playerInput;
 
     [Space]
@@ -39,22 +39,27 @@ public class PlayerManager : MonoBehaviour, ICamera
     bool isJumping;
     InputAction dashInput;
     bool isDashing;
+
+    InputAction primaryAttackInput;
+    bool holdPrimaryAttack;
     #endregion
 
     void Awake()
     {
         player = this;
+        iAbility = GetComponent<IAbility>();
     }
     #region On Start
     private void OnEnable()
     {
-        AbilityController = GetComponent<PlayerAbilityController>();
+        iAbility = GetComponent<PlayerAbilityController>();
         _playerInput = GetComponent<PlayerInput>();
 
         moveInput = _playerInput.actions["Move"];
         lookInput = _playerInput.actions["Look"];
         jumpInput = _playerInput.actions["Jump"];
         dashInput = _playerInput.actions["Sprint"];
+        primaryAttackInput = _playerInput.actions["PrimaryAttack"];
 
         moveInput.performed += input => deltaMove = input.ReadValue<Vector2>();
         moveInput.canceled  += input => deltaMove = input.ReadValue<Vector2>();
@@ -64,6 +69,9 @@ public class PlayerManager : MonoBehaviour, ICamera
         jumpInput.canceled  += input => isJumping = false;
         dashInput.performed += input => isDashing = true;
         dashInput.canceled  += input => isDashing = false;
+
+        primaryAttackInput.performed += input => Attack();
+        primaryAttackInput.canceled += input => holdPrimaryAttack = false;
     }
     void OnDisable()
     {
@@ -75,6 +83,9 @@ public class PlayerManager : MonoBehaviour, ICamera
         jumpInput.canceled  -= input => isJumping = false;
         dashInput.performed -= input => isDashing = true;
         dashInput.canceled  -= input => isDashing = false;
+
+        primaryAttackInput.performed -= input => Attack();
+        primaryAttackInput.canceled -= input => holdPrimaryAttack = false;
     }
     #endregion
 
@@ -89,7 +100,12 @@ public class PlayerManager : MonoBehaviour, ICamera
     void Movement()
     {        
         camDir = Camera.main.transform.right * deltaMove.x + Camera.main.transform.forward * deltaMove.y;
-        AbilityController.Move(new Vector3(camDir.x, isJumping ? 1 : 0, camDir.z), isDashing);
+        iAbility.InputMove(new Vector3(camDir.x, isJumping ? 1 : 0, camDir.z), isDashing);
+    }
+    void Attack()
+    {
+        iAbility.InputPrimaryAttack();
+        holdPrimaryAttack = true;
     }
     void CameraSettings()
     {

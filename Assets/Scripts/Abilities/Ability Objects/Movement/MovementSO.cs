@@ -6,18 +6,18 @@ namespace AbilitySystem
 {
     public abstract class MovementSO : AbilitySO
     {
-
         internal abstract void Move(EntityBody entityBody, AbilityData data, Vector3 moveInput, bool dashInput);
     }
-
 
     [Serializable]
     public class MovementAbilitySummary : AbilitySummary
     {
         [SerializeField] internal MovementSO movementSO;
-        internal void Activate(PlayerAbilityController absum, Vector3 move, bool dashInput)
+        internal void Activate(EntityBody entityBody, Vector3 move, bool dashInput) => movementSO.Move(entityBody, AbilityData, move, dashInput);
+        public MovementAbilitySummary(MovementSO m)
         {
-            movementSO.Move(absum.entityBody, AbilityData, move, dashInput);
+            movementSO = m;
+            AbilityData = m.Setup();
         }
     }
 }

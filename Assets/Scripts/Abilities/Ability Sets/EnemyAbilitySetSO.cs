@@ -13,15 +13,12 @@ namespace AbilitySystem
     [Serializable]
     public class EnemyAbilitySet : AbilitySet
     {
-        [SerializeField] internal ActivatedAbilitySummary attack = new();
+        [SerializeField] internal ActivatedAbilitySummary attack;
 
         public EnemyAbilitySet(EnemyAbilitySetSO abilitySet) : base(abilitySet.name, abilitySet.movement)
         {
             if (abilitySet.attack != null)
-            {
-                attack.AbilityData = abilitySet.attack.Setup();
-                attack.abilitySO = abilitySet.attack;
-            }
+                attack = new(abilitySet.attack);
         }
     }
 }

@@ -7,9 +7,9 @@ namespace AbilitySystem
     [Serializable]
     public class EntityBody
     {
-        public GameObject body;
+        public GameObject bodyHolder;
+        public GameObject model;
         public SphereCollider feet;
-        [HideInInspector] public IMovement iMovement;
-        [HideInInspector] public IAbilityCooldown iAbilityCooldown;
+        [HideInInspector] public IAbility iAbility;
     }
 }
