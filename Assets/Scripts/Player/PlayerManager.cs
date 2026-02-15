@@ -97,7 +97,7 @@ public class PlayerManager : MonoBehaviour, ICamera
     private void Update()
     {
         Movement();
-        CameraSettings();
+        if (gameplayCamera!=null) CameraSettings();
     }
 
     #region Camera
