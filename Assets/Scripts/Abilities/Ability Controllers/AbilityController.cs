@@ -41,7 +41,6 @@ namespace AbilitySystem
             data.isUsing = true;
             Debug.Log("Start using ability");
             yield return StartCoroutine(ability);
-            Debug.Log("Cooldown End");
             data.isUsing = false;
         }
         #endregion
@@ -56,7 +55,8 @@ namespace AbilitySystem
 
                 if (data.cooldownDelta <= 0)
                 {
-                    data.currentCharges = Mathf.Min(maxCharges, data.currentCharges + 1);
+                    data.currentCharges++;
+                    Debug.Log("COOLDOWN FINISHED ");
                     data.cooldownDelta = cooldown;
                 }
             }

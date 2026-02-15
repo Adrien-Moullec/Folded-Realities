@@ -13,7 +13,7 @@ public class CameraArea : MonoBehaviour
         player.OnCameraAreaEnter(this);
     }
     void OnTriggerExit(Collider other)
-    {        
+    {
         other.TryGetComponent(out player);
         player.OnCameraAreaExit();
     }
