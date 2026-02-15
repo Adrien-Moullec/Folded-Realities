@@ -8,17 +8,14 @@ namespace AbilitySystem
     public abstract class AbilitySet
     {
         [SerializeField] internal string abilitySetName;
-        [SerializeField] internal MovementAbilitySummary movement = new();
+        [SerializeField] internal MovementAbilitySummary movement;
 
         public AbilitySet(string name, MovementSO movementSO)
         {
             abilitySetName = name;
 
             if (movementSO != null)
-            {
-                movement.AbilityData = movementSO.Setup();
-                movement.movementSO = movementSO;
-            }
+                movement = new(movementSO);
         }
         public AbilitySet(AbilitySetSO abilitySet)
         {

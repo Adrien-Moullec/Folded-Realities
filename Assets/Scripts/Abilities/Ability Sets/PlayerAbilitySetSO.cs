@@ -15,29 +15,20 @@ namespace AbilitySystem
     [Serializable]
     public class PlayerAbilitySet : AbilitySet
     {
-        [SerializeField] internal ActivatedAbilitySummary light = new();
-        [SerializeField] internal ActivatedAbilitySummary heavy = new();
-        [SerializeField] internal ActivatedAbilitySummary primary = new();
+        [SerializeField] internal ActivatedAbilitySummary light;
+        [SerializeField] internal ActivatedAbilitySummary heavy;
+        [SerializeField] internal ActivatedAbilitySummary primary;
 
         public PlayerAbilitySet(PlayerAbilitySetSO abilitySet) : base(abilitySet.name, abilitySet.movement)
         {
             if (abilitySet.light != null)
-            {
-                light.AbilityData = abilitySet.light.Setup();
-                light.abilitySO = abilitySet.light;
-            }
+                light = new(abilitySet.light);
 
             if (abilitySet.heavy != null)
-            {
-                heavy.AbilityData = abilitySet.heavy.Setup();
-                heavy.abilitySO = abilitySet.heavy;
-            }
+                heavy = new(abilitySet.heavy);
 
             if (abilitySet.primary != null)
-            {
-                primary.AbilityData = abilitySet.primary.Setup();
-                primary.abilitySO = abilitySet.primary;
-            }
+            primary = new(abilitySet.primary);
         }
     }
 }

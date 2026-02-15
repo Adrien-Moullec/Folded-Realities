@@ -5,5 +5,5 @@ public class BaseEnemyController : MonoBehaviour
 {
     [Space]
     [Header("Script Managers")]
-    [SerializeField] EnemyAbilityController AbilityController;
+    [SerializeField] SingleAbilityController AbilityController;
 }
