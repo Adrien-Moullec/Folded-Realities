@@ -1,14 +1,16 @@
+using AbilitySystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInput))]
-[RequireComponent(typeof(AbilityController))]
+[RequireComponent(typeof(PlayerAbilityController))]
 public class PlayerManager : MonoBehaviour, ICamera
 {
+    public static PlayerManager player;
     #region Variables
     [Space]
     [Header("Camera Settings")]
-    [SerializeField] GameplayCamera gameplayCamera;
+    [SerializeField] Camera gameplayCamera;
     [SerializeField] Transform cameraHolder;
     [SerializeField] Transform cameraHolderCentre;
     [SerializeField, Range(-100,0)] float cameraTiltMin;
@@ -17,14 +19,18 @@ public class PlayerManager : MonoBehaviour, ICamera
     float lerpSpeed = 100;
     private Vector3 GetCameraPosition
     {
-        get => camArea != null ? camArea.cameraLocation + camArea.transform.position : cameraHolder.position;
+        get => camArea != null ? 
+        camArea.GetCameraPosition(
+            gameplayCamera) + 
+        camArea.transform.position : 
+        cameraHolder.position;
     }
     CameraArea camArea;
     private Vector3 camDir;
 
     [Space]
     [Header("Script Managers")]
-    [SerializeField] AbilityController AbilityController;
+    [SerializeField] IAbility iAbility;
     private PlayerInput _playerInput;
 
     [Space]
@@ -37,18 +43,27 @@ public class PlayerManager : MonoBehaviour, ICamera
     bool isJumping;
     InputAction dashInput;
     bool isDashing;
+
+    InputAction primaryAttackInput;
+    bool holdPrimaryAttack;
     #endregion
 
+    void Awake()
+    {
+        player = this;
+        iAbility = GetComponent<IAbility>();
+    }
     #region On Start
     private void OnEnable()
     {
-        AbilityController = GetComponent<AbilityController>();
+        iAbility = GetComponent<PlayerAbilityController>();
         _playerInput = GetComponent<PlayerInput>();
 
         moveInput = _playerInput.actions["Move"];
         lookInput = _playerInput.actions["Look"];
         jumpInput = _playerInput.actions["Jump"];
         dashInput = _playerInput.actions["Sprint"];
+        primaryAttackInput = _playerInput.actions["PrimaryAttack"];
 
         moveInput.performed += input => deltaMove = input.ReadValue<Vector2>();
         moveInput.canceled  += input => deltaMove = input.ReadValue<Vector2>();
@@ -58,6 +73,9 @@ public class PlayerManager : MonoBehaviour, ICamera
         jumpInput.canceled  += input => isJumping = false;
         dashInput.performed += input => isDashing = true;
         dashInput.canceled  += input => isDashing = false;
+
+        primaryAttackInput.performed += input => Attack();
+        primaryAttackInput.canceled += input => holdPrimaryAttack = false;
     }
     void OnDisable()
     {
@@ -69,18 +87,30 @@ public class PlayerManager : MonoBehaviour, ICamera
         jumpInput.canceled  -= input => isJumping = false;
         dashInput.performed -= input => isDashing = true;
         dashInput.canceled  -= input => isDashing = false;
+
+        primaryAttackInput.performed -= input => Attack();
+        primaryAttackInput.canceled -= input => holdPrimaryAttack = false;
     }
     #endregion
 
     #region Update Functions
     private void Update()
     {
-        camDir = Camera.main.transform.right * deltaMove.x + Camera.main.transform.forward * deltaMove.y;
-        AbilityController.Move(new Vector3(camDir.x, isJumping ? 1 : 0, camDir.z), isDashing);
+        Movement();
         CameraSettings();
     }
 
     #region Camera
+    void Movement()
+    {        
+        camDir = Camera.main.transform.right * deltaMove.x + Camera.main.transform.forward * deltaMove.y;
+        iAbility.InputMove(new Vector3(camDir.x, isJumping ? 1 : 0, camDir.z), isDashing);
+    }
+    void Attack()
+    {
+        iAbility.InputPrimaryAttack();
+        holdPrimaryAttack = true;
+    }
     void CameraSettings()
     {
         camYTilt = Mathf.Clamp(camYTilt - deltaLook.y,cameraTiltMin,cameraTiltMax);
@@ -91,7 +121,7 @@ public class PlayerManager : MonoBehaviour, ICamera
         gameplayCamera.transform.position = Vector3.MoveTowards(
             gameplayCamera.transform.position,
             GetCameraPosition,
-            100 * Time.deltaTime
+            lerpSpeed * Time.deltaTime
         );
         gameplayCamera.transform.forward = (transform.position - GetCameraPosition).normalized;
     }
