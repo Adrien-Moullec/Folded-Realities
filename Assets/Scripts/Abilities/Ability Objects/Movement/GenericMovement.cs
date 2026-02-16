@@ -83,7 +83,7 @@ namespace AbilitySystem
             entityBody.iAbility.OnMoveEntity(moveData.currentDirection);
         }
 
-        public class GenericMovementData : AbilityData
+        public class GenericMovementData : MovementData
         {
             [HideInInspector] internal Vector3 currentDirection;
             [HideInInspector] internal float fallSpeed = 0;

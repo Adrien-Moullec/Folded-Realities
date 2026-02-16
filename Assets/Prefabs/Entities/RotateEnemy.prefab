@@ -148,7 +148,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drawGizmos: 1
   entityBody:
-    body: {fileID: 7211196813232357869}
+    bodyHolder: {fileID: 7211196813232357869}
+    model: {fileID: 9062342287435315087}
     feet: {fileID: 6536683569106103474}
   playerDist: 3
   abilitySetSO: {fileID: 11400000, guid: 853f066d80313ab46890c7a2f1376e1f, type: 2}
@@ -183,7 +184,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5148424032271712414}
-  - component: {fileID: 4161295822485696053}
   m_Layer: 0
   m_Name: CameraHolder
   m_TagString: Untagged
@@ -206,19 +206,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8570415290911176380}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4161295822485696053
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6975155188400979986}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06bd55ff9abf26941bff3b9271d7179c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraLocation: {x: 0, y: 0, z: 0}
 --- !u!1 &7211196813232357869
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,5 +336,10 @@ PrefabInstance:
 --- !u!4 &8541139259458153781 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3ddf6a290a7f3e64a83ebf9e6555fdd9, type: 3}
+  m_PrefabInstance: {fileID: 8143213575462718174}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &9062342287435315087 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 3ddf6a290a7f3e64a83ebf9e6555fdd9, type: 3}
   m_PrefabInstance: {fileID: 8143213575462718174}
   m_PrefabAsset: {fileID: 0}
