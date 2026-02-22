@@ -1,0 +1,128 @@
+### **Interview questions tomorrow**
+
+
+
+**Questions for artists**
+
+
+
+	**3D:**
+
+		1: *"What software do you prefer to use?"*
+
+&nbsp;		2: *"What would you describe your visual style as? For example: stylised, or realistic, or a mix?"*
+
+&nbsp;		3: *"Describe to me the process for modelling an asset?"*
+
+&nbsp;		4: *"What's your experience in UV Mapping?"*
+
+&nbsp;		5: *"How would you optimise a 3D model we give you?"*
+
+&nbsp;		6: *"How do you ensure an object is suitable for real-time rendering?" **(Skippable)***
+
+&nbsp;		7: *"What were some challenging 3D models you've done, and how did you overcome them?" **(Skippable)***
+
+
+
+<b>	2D:</b>
+
+		1: *"What software do you prefer to use?"*
+
+		*2: "What's the biggest inspiration in your art?"*
+
+		3: *"How do you approach doing colour theory for a concept art piece?" **(Skippable)***
+
+		4: *"How do you handle feedback from clients or directors on your work?" **(Skippable)***
+
+		5: *"If I gave you the prompt 'illustrate concept art for a mouse bartender', what would be your workflow to achieve this?"*
+
+ 		6: *"What were some challenging art pieces you've done, and how did you overcome them?" **(Skippable)***
+
+
+
+	<b>Design:</b>
+
+&nbsp;		1: *"What kind of levels do you like to do?"*
+
+		2: *"What are you favourite games?" **(Skippable)***
+
+		3: *"Say if we were making a first-person, tactical shooter, with stealth as the main mechanic: what would be your process to 			design the level?"*
+
+
+
+**Answers:**
+
+	Eve	
+
+&nbsp;		x
+
+
+
+&nbsp;	Jamie
+
+&nbsp;		x
+
+
+
+&nbsp;	Sophie (Wheldon)
+
+&nbsp;		x
+
+
+
+&nbsp;	Rosemary
+
+&nbsp;		x
+
+
+
+&nbsp;	Kirsty
+
+&nbsp;		x
+
+
+
+&nbsp;	James
+
+&nbsp;		x
+
+
+
+&nbsp;	Liam
+
+&nbsp;		x
+
+
+
+&nbsp;	Daniel
+
+&nbsp;		x
+
+
+
+&nbsp;	Jack
+
+&nbsp;		x
+
+
+
+&nbsp;	Sophie (Hearfield)
+
+&nbsp;		x
+
+
+
+
+
+
+
+**Environment:**
+
+ 	Sprint
+
+
+
+ 	What can be cut back
+
+
+
