@@ -3,8 +3,7 @@ using UnityEngine;
 using UnityEngine.Splines;
 
 [RequireComponent(typeof(SplineContainer))]
-public class PlayerPathCameraRailSpline : CameraArea
-{
+public class PlayerPathCameraRailSpline : CameraArea {
     [SerializeField] GameObject playObj;
     [SerializeField] float cameraLerp = 1;
 
@@ -23,15 +22,13 @@ public class PlayerPathCameraRailSpline : CameraArea
     float tPoint;
     float deltaLerp;
 
-    void Awake()
-    {
+    void Awake() {
         splineContainer = GetComponent<SplineContainer>();
         playerPath = splineContainer.Splines[0];
         cameraPath = splineContainer.Splines[1];
     }
 
-    public override Vector3 GetCameraPosition(Camera camera, Vector3 cameraHolderPos)
-    {
+    public override Vector3 GetCameraPosition(Camera camera, Vector3 cameraHolderPos) {
         if (!ValidSplines()) return camera.transform.position;
 
         camTargetPos = GetCameraPosition(
@@ -45,17 +42,16 @@ public class PlayerPathCameraRailSpline : CameraArea
         );
 
         deltaLerp = Mathf.InverseLerp(cameraBoundaryTransitionEnd, cameraBoundaryTransitionStart + cameraBoundaryTransitionEnd, splineDistance);
-        
+
         playObj.transform.position = playerPathPoint;
         return Vector3.MoveTowards(
             camera.transform.position,
-            Vector3.Lerp(camTargetPos,cameraHolderPos,deltaLerp),
+            Vector3.Lerp(camTargetPos, cameraHolderPos, deltaLerp),
             cameraLerp * Time.deltaTime * Vector3.Distance(camTargetPos, camera.transform.position)
         );
     }
-    public static Vector3 GetCameraPosition(SplineContainer container, Spline playerPath, Spline cameraPath, float3 worldPlayer, out Vector3 playerPathPos, out float TPoint, out float splineDistance)
-    {
-        if (container == null || container.Splines.Count < 2) { 
+    public static Vector3 GetCameraPosition(SplineContainer container, Spline playerPath, Spline cameraPath, float3 worldPlayer, out Vector3 playerPathPos, out float TPoint, out float splineDistance) {
+        if (container == null || container.Splines.Count < 2) {
             Debug.LogWarning("SplineContainer Error");
             playerPathPos = Vector3.zero;
             TPoint = 0;
@@ -66,7 +62,7 @@ public class PlayerPathCameraRailSpline : CameraArea
         SplineUtility.GetNearestPoint(playerPath, worldPlayer, out float3 nearest, out TPoint);
         splineDistance = Vector3.Distance(nearest, worldPlayer);
         playerPathPos = (Vector3)nearest;
-        
+
         float3 camPos = playerPath == null
             ? float3.zero
             : cameraPath.EvaluatePosition(TPoint);
@@ -75,8 +71,7 @@ public class PlayerPathCameraRailSpline : CameraArea
         return (Vector3)camPos;
     }
 
-    bool ValidSplines()
-    {
+    bool ValidSplines() {
         if (splineContainer.Splines.Count >= 2)
             if (splineContainer.Splines[0].Count > 2 && splineContainer.Splines[1].Count > 2)
                 return true;

@@ -3,11 +3,9 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-namespace AbilitySystem
-{
+namespace AbilitySystem {
     [RequireComponent(typeof(NavMeshAgent))]
-    public class SingleAbilityController : AbilityController
-    {
+    public class SingleAbilityController : AbilityController {
         [Space]
         [Header("Settings")]
         [SerializeField] float playerDist = 3;
@@ -24,23 +22,19 @@ namespace AbilitySystem
             EnemyAbilitySet ab = new EnemyAbilitySet(abilitySetSO);
             abilitySetList = ab;
         }
-        private void Update()
-        {
+        private void Update() {
             InputMove(PlayerManager.player.transform.position - transform.position, false);
         }
-        
-        public override void OnMoveEntity(Vector3 direction)
-        {
+
+        public override void OnMoveEntity(Vector3 direction) {
             navMeshAgent.Move(direction);
         }
 
-        public override void OnRotateEntity(Vector3 movement)
-        {
+        public override void OnRotateEntity(Vector3 movement) {
             throw new NotImplementedException();
         }
 
-        public override void InputMove(Vector3 direction, bool isDashing)
-        {
+        public override void InputMove(Vector3 direction, bool isDashing) {
             abilitySetList?.movement.movementSO.Move(
                 entityBody,
                 abilitySetList?.movement.AbilityData,
@@ -48,13 +42,11 @@ namespace AbilitySystem
                 isDashing);
         }
 
-        public override void InputPrimaryAttack()
-        {
+        public override void InputPrimaryAttack() {
             throw new NotImplementedException();
         }
 
-        public override void InputPrimaryAbility()
-        {
+        public override void InputPrimaryAbility() {
             throw new NotImplementedException();
         }
     }

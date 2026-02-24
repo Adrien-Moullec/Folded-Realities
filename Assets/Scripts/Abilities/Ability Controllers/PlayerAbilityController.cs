@@ -4,11 +4,9 @@ using System.Linq;
 using UnityEngine;
 
 
-namespace AbilitySystem
-{
+namespace AbilitySystem {
     [RequireComponent(typeof(CharacterController))]
-    public class PlayerAbilityController : AbilityController
-    {
+    public class PlayerAbilityController : AbilityController {
 
         [Space]
         [Header("Abilities")]
@@ -21,8 +19,7 @@ namespace AbilitySystem
             base.Awake();
             characterController = GetComponent<CharacterController>();
 
-            foreach (var n in abilitySetSO)
-            {
+            foreach (var n in abilitySetSO) {
                 if (n == null)
                     continue;
                 PlayerAbilitySet ab = new PlayerAbilitySet(n);
@@ -32,17 +29,16 @@ namespace AbilitySystem
         }
 
 
-        public void SetAbility(string name)
-        {
+        public void SetAbility(string name) {
             if (abilitySetList.Any(x => x.abilitySetName == name))
                 currentAbilitySet = abilitySetList.First(x => x.abilitySetName == name);
             else
-                Debug.LogWarning("No ability to set of name "+name);
+                Debug.LogWarning("No ability to set of name " + name);
         }
 
         #region Input Functions
 
-        public override void InputMove(Vector3 moveInput, bool dash) => 
+        public override void InputMove(Vector3 moveInput, bool dash) =>
             currentAbilitySet?.movement.Activate(entityBody, moveInput, dash);
         public override void InputPrimaryAttack() {
             currentAbilitySet?.light.Activate(entityBody);
@@ -50,15 +46,13 @@ namespace AbilitySystem
         public override void InputPrimaryAbility() =>
             throw new NotImplementedException();
         #endregion
-        
+
         #region Movement Functions
 
-        public override void OnMoveEntity(Vector3 direction)
-        {
+        public override void OnMoveEntity(Vector3 direction) {
             characterController.Move(direction);
         }
-        public override void OnRotateEntity(Vector3 movement)
-        {
+        public override void OnRotateEntity(Vector3 movement) {
             throw new NotImplementedException();
         }
         #endregion

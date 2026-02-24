@@ -1,5 +1,4 @@
 using UnityEngine;
 
-public class GameplayCamera : MonoBehaviour
-{
+public class GameplayCamera : MonoBehaviour {
 }

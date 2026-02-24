@@ -3,10 +3,8 @@ using System.Collections;
 using UnityEngine;
 
 
-namespace AbilitySystem
-{
+namespace AbilitySystem {
     [Serializable]
-    public abstract class AbilityData
-    {
+    public abstract class AbilityData {
     }
 }
