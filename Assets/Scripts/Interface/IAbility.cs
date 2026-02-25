@@ -16,5 +16,10 @@ namespace AbilitySystem
         public void OnMoveEntity(Vector3 movement);
         public void OnRotateEntity(Vector3 movement);
         #endregion
+        /*
+                #region Animator Calls
+                public void SetAnimatorParameterFloat(string parameter, float value);
+                public void SetAnimatorParameterBool(string parameter, float value);
+                #endregion*/
     }
 }
