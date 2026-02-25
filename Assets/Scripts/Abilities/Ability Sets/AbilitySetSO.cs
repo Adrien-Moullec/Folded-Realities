@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
-
+using UnityEditor;
+using System.Collections.Generic;
 
 namespace AbilitySystem
 {
@@ -32,5 +33,84 @@ namespace AbilitySystem
     {
         [SerializeField] internal string abilitySetName;
         [SerializeField] internal MovementSO movement;
+    }
+
+    // Editor for ScriptBase and all derived types
+    [CustomEditor(typeof(AbilitySetSO), true)]
+    public class AbilitySetSOEditor : Editor
+    {
+        private SerializedProperty scriptProperty;
+        private bool showBaseFields = true;
+        private bool showDerivedFields = true;
+        private Dictionary<string, bool> foldouts = new Dictionary<string, bool>();
+
+        private void OnEnable()
+        {
+            // Find the script reference field so we can exclude it
+            scriptProperty = serializedObject.FindProperty("m_Script");
+            SerializedProperty prop = serializedObject.GetIterator();
+            while (prop.NextVisible(true))
+            {
+                if (!foldouts.ContainsKey(prop.propertyPath))
+                    foldouts[prop.propertyPath] = false;
+            }
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+
+            // Foldout for base fields
+            //showBaseFields = EditorGUILayout.Foldout(showBaseFields, "Base Fields", true);
+            //if (showBaseFields)
+            //    DrawPropertiesExcluding(serializedObject, "m_Script");
+
+            DrawNestedScriptableObjects();
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawNestedScriptableObjects()
+        {
+            SerializedProperty prop = serializedObject.GetIterator();
+            bool enterChildren = true;
+
+            while (prop.NextVisible(enterChildren))
+            {
+                enterChildren = false;
+
+                if (prop.name == "m_Script")
+                    continue;
+
+                EditorGUILayout.PropertyField(prop, true);
+
+                if (prop.propertyType == SerializedPropertyType.ObjectReference &&
+                    prop.objectReferenceValue is ScriptableObject nestedSO &&
+                    nestedSO != null)
+                {
+                    foldouts[prop.propertyPath] = EditorGUILayout.Foldout(
+                        foldouts[prop.propertyPath],
+                        "",
+                        true
+                    );
+
+                    EditorGUI.indentLevel++;
+
+                    if (foldouts[prop.propertyPath])
+                    {
+                        EditorGUILayout.Space();
+                        EditorGUILayout.LabelField(prop.displayName, EditorStyles.boldLabel);
+
+                        Editor nestedEditor = CreateEditor(nestedSO);
+                        if (nestedEditor != null)
+                            nestedEditor.OnInspectorGUI();
+
+                        EditorGUILayout.Space();
+                    }
+                    EditorGUILayout.Space();
+
+                    EditorGUI.indentLevel--;
+                }
+            }
+        }
     }
 }

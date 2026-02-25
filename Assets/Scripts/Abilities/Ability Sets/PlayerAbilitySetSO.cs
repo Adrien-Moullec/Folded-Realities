@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-
+using UnityEditor;
 
 namespace AbilitySystem
 {
@@ -28,7 +28,13 @@ namespace AbilitySystem
                 heavy = new(abilitySet.heavy);
 
             if (abilitySet.primary != null)
-            primary = new(abilitySet.primary);
+                primary = new(abilitySet.primary);
         }
     }
+    /*
+        [CustomEditor(typeof(PlayerAbilitySetSO))]
+        public class PlayerAbilitySetSOEditor : Editor
+        {
+
+        }*/
 }
