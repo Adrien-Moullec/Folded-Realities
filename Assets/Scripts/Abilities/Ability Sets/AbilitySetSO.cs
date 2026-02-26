@@ -39,15 +39,10 @@ namespace AbilitySystem
     [CustomEditor(typeof(AbilitySetSO), true)]
     public class AbilitySetSOEditor : Editor
     {
-        private SerializedProperty scriptProperty;
-        private bool showBaseFields = true;
-        private bool showDerivedFields = true;
         private Dictionary<string, bool> foldouts = new Dictionary<string, bool>();
 
         private void OnEnable()
         {
-            // Find the script reference field so we can exclude it
-            scriptProperty = serializedObject.FindProperty("m_Script");
             SerializedProperty prop = serializedObject.GetIterator();
             while (prop.NextVisible(true))
             {
@@ -59,12 +54,6 @@ namespace AbilitySystem
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-
-            // Foldout for base fields
-            //showBaseFields = EditorGUILayout.Foldout(showBaseFields, "Base Fields", true);
-            //if (showBaseFields)
-            //    DrawPropertiesExcluding(serializedObject, "m_Script");
-
             DrawNestedScriptableObjects();
             serializedObject.ApplyModifiedProperties();
         }
