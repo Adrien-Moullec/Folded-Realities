@@ -9,18 +9,21 @@ namespace AbilitySystem
     public abstract class AbilitySet
     {
         [SerializeField] internal string abilitySetName;
+        [SerializeField] internal Animation animation;
         [SerializeField] internal MovementAbilitySummary movement;
 
-        public AbilitySet(string name, MovementSO movementSO)
+        public AbilitySet(string name, Animation anim, MovementSO movementSO)
         {
             abilitySetName = name;
+            animation = anim;
 
             if (movementSO != null)
                 movement = new(movementSO);
         }
-        public AbilitySet(AbilitySetSO abilitySet)
+        public AbilitySet(AbilitySetSO abilitySet, Animation anim)
         {
             abilitySetName = abilitySet.abilitySetName;
+            animation = anim;
 
             if (abilitySet.movement != null)
                 movement = new MovementAbilitySummary(abilitySet.movement);
@@ -33,7 +36,7 @@ namespace AbilitySystem
 
         public virtual void SetupAnimations(AbilityController controller)
         {
-            
+
         }
     }
 

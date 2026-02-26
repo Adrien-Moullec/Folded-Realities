@@ -5,7 +5,6 @@ using UnityEngine.Playables;
 
 namespace AbilitySystem
 {
-    [RequireComponent(typeof(Animation))]
     public abstract class AbilityController : MonoBehaviour, IAbility
     {
         [Header("Body Components")]
@@ -15,7 +14,6 @@ namespace AbilitySystem
         protected virtual void Awake()
         {
             entityBody.iAbility = this;
-            //entityBody.animation = GetComponent<Animation>(); //Come back and figure out a way to introduce anims
             SetupAnimations();
         }
 
@@ -49,7 +47,7 @@ namespace AbilitySystem
             data.isUsing = false;
         }
         #endregion
-        
+
         public static IEnumerator CooldownSequence(CooldownData data, float cooldown, int maxCharges)
         {
             data.isRecharging = true;

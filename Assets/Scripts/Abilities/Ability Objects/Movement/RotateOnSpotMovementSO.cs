@@ -8,6 +8,10 @@ namespace AbilitySystem
     {
         [SerializeField] float spinSpeed = 5;
         public override AbilityData AbilityDataSetup() => null;
+        public override AbilityAnimation[] AbilityAnimationsSetup()
+        {
+            throw new System.NotImplementedException();
+        }
         internal override void Move(EntityBody entityBody, AbilityData data, Vector3 moveInput, bool dashInput)
         {
             if (moveInput == Vector3.zero) return;

@@ -6,6 +6,7 @@ using UnityEngine.AI;
 namespace AbilitySystem
 {
     [RequireComponent(typeof(NavMeshAgent))]
+    [RequireComponent(typeof(Animation))]
     public class SingleAbilityController : AbilityController
     {
         [Space]
@@ -17,18 +18,19 @@ namespace AbilitySystem
         [SerializeField] EnemyAbilitySetSO abilitySetSO;
         [HideInInspector] AbilitySet abilitySetList;
         private NavMeshAgent navMeshAgent;
-        protected override void Awake() {
+        protected override void Awake()
+        {
             base.Awake();
             navMeshAgent = GetComponent<NavMeshAgent>();
             if (abilitySetSO == null) return;
-            EnemyAbilitySet ab = new EnemyAbilitySet(abilitySetSO);
+            EnemyAbilitySet ab = new EnemyAbilitySet(abilitySetSO, GetComponent<Animation>());
             abilitySetList = ab;
         }
         private void Update()
         {
             InputMove(PlayerManager.player.transform.position - transform.position, false);
         }
-        
+
         public override void OnMoveEntity(Vector3 direction)
         {
             navMeshAgent.Move(direction);
