@@ -6,6 +6,7 @@ namespace AbilitySystem
     public abstract class AbilitySO : ScriptableObject
     {
         public abstract AbilityData AbilityDataSetup();
-        //public abstract AbilityAnimation[] AbilityUses();
+        public abstract AbilityAnimation[] AbilityAnimationsSetup();
+        public virtual float AbilityCost() { return 0; }
     }
 }

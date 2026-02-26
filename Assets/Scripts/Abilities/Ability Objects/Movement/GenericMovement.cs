@@ -26,6 +26,10 @@ namespace AbilitySystem
         [SerializeField, Min(0)] protected float maxFallSpeed = 10f;
         [SerializeField] protected LayerMask groundLayers;
         public override AbilityData AbilityDataSetup() => new GenericMovementData();
+        public override AbilityAnimation[] AbilityAnimationsSetup()
+        {
+            throw new System.NotImplementedException();
+        }
 
         protected float FallSpeed(AbilityData data, EntityBody entityBody, bool isJumping)
         {

@@ -15,7 +15,7 @@ namespace AbilitySystem
     {
         [SerializeField] internal ActivatedAbilitySummary attack;
 
-        public EnemyAbilitySet(EnemyAbilitySetSO abilitySet) : base(abilitySet.name, abilitySet.movement)
+        public EnemyAbilitySet(EnemyAbilitySetSO abilitySet, Animation anim) : base(abilitySet.name, anim, abilitySet.movement)
         {
             if (abilitySet.attack != null)
                 attack = new(abilitySet.attack);
