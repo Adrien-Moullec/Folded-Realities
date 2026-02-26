@@ -52,8 +52,12 @@ namespace AbilitySystem
         {
             throw new NotImplementedException();
         }
-
         public override void InputPrimaryAbility()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal override void SetupAnimations()
         {
             throw new NotImplementedException();
         }

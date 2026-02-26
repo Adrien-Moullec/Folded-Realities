@@ -1,6 +1,7 @@
 using AbilitySystem;
 using UnityEngine;
 
+//Come back and add the max charges and cooldown?? Might interfere with fact that IENumerator can only happen in monobehaviour
 public class CooldownData : AbilityData
 {    
     [HideInInspector] internal float cooldownDelta;

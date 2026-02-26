@@ -19,7 +19,7 @@ namespace AbilitySystem
             return true;
         }
         public abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
-        public override AbilityData Setup()
+        public override AbilityData AbilityDataSetup()
         {
             CooldownData ad = new(charges, cooldown);
             ad.currentCharges = charges;
@@ -40,7 +40,7 @@ namespace AbilitySystem
         public ActivatedAbilitySummary(CooldownAbilitySO m)
         {
             abilitySO = m;
-            AbilityData = m.Setup();
+            AbilityData = m.AbilityDataSetup();
         }
     }
 }

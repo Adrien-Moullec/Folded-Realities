@@ -23,18 +23,21 @@ namespace AbilitySystem
             abilitySetName = abilitySet.abilitySetName;
 
             if (abilitySet.movement != null)
-            {
-                movement.AbilityData = abilitySet.movement.Setup();
-                movement.movementSO = abilitySet.movement;
-            }
+                movement = new MovementAbilitySummary(abilitySet.movement);
         }
     }
     public abstract class AbilitySetSO : ScriptableObject
     {
         [SerializeField] internal string abilitySetName;
         [SerializeField] internal MovementSO movement;
+
+        public virtual void SetupAnimations(AbilityController controller)
+        {
+            
+        }
     }
 
+    #region Editor
     // Editor for ScriptBase and all derived types
     [CustomEditor(typeof(AbilitySetSO), true)]
     public class AbilitySetSOEditor : Editor
@@ -102,4 +105,5 @@ namespace AbilitySystem
             }
         }
     }
+    #endregion
 }

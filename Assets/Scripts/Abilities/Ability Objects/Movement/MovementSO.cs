@@ -17,7 +17,7 @@ namespace AbilitySystem
         public MovementAbilitySummary(MovementSO m)
         {
             movementSO = m;
-            AbilityData = m.Setup();
+            AbilityData = m.AbilityDataSetup();
         }
     }
 }

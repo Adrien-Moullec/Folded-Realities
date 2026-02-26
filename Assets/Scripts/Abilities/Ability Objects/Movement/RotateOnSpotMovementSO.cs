@@ -7,7 +7,7 @@ namespace AbilitySystem
     public class RotateTowardsPlayerSO : MovementSO
     {
         [SerializeField] float spinSpeed = 5;
-        public override AbilityData Setup() => null;
+        public override AbilityData AbilityDataSetup() => null;
         internal override void Move(EntityBody entityBody, AbilityData data, Vector3 moveInput, bool dashInput)
         {
             if (moveInput == Vector3.zero) return;
