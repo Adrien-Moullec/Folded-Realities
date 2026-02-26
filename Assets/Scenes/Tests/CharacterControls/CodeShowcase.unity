@@ -651,6 +651,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 9062342287435315087, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
   m_PrefabInstance: {fileID: 6490510640189780977}
   m_PrefabAsset: {fileID: 0}
+--- !u!111 &245153655
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245153654}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
 --- !u!1 &278993813
 GameObject:
   m_ObjectHideFlags: 0
@@ -1067,6 +1083,12 @@ MonoBehaviour:
   - {fileID: 1181832592}
   - {fileID: 867980149}
   - {fileID: 1382023240}
+  hoverHeight: 0.25
+  hoverSpeed: 2
+  idleRotationSpeed: 90
+  pickupFloatSpeed: 2
+  pickupRotationSpeed: 360
+  destroyDelay: 0.6
 --- !u!114 &666020892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3959,6 +3981,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5710287258573495793, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 666020892}
+    - targetCorrespondingSourceObject: {fileID: 9062342287435315087, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 245153655}
   m_SourcePrefab: {fileID: 100100000, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
 --- !u!1001 &7170494331300170569
 PrefabInstance:

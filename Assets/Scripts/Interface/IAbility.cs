@@ -16,10 +16,5 @@ namespace AbilitySystem
         public void OnMoveEntity(Vector3 movement);
         public void OnRotateEntity(Vector3 movement);
         #endregion
-
-        #region Animator Calls
-        public void PlayAnimation(AnimationClip animationClip);
-        public void PlayAnimation(AnimationClip animationClip, float crossFadeTime);
-        #endregion
     }
 }

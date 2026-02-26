@@ -61,6 +61,11 @@ namespace AbilitySystem
         {
             throw new NotImplementedException();
         }
+
+        internal override void SetupAnimations()
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

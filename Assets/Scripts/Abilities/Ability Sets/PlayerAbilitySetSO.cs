@@ -31,10 +31,4 @@ namespace AbilitySystem
                 primary = new(abilitySet.primary);
         }
     }
-    /*
-        [CustomEditor(typeof(PlayerAbilitySetSO))]
-        public class PlayerAbilitySetSOEditor : Editor
-        {
-
-        }*/
 }

@@ -9,7 +9,7 @@ namespace AbilitySystem
     public class LightAttack : CooldownAbilitySO
     {
         [SerializeField] float attackDuration = 1;
-        public override AbilityData Setup() => new CooldownData(charges, cooldown);
+        public override AbilityData AbilityDataSetup() => new CooldownData(charges, cooldown);
 
         public override IEnumerator Ability(EntityBody entityBody, CooldownData data)
         {
