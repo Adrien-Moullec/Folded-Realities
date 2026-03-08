@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.Interactions;
 
 
 namespace AbilitySystem
@@ -6,29 +7,96 @@ namespace AbilitySystem
     [CreateAssetMenu(fileName = "GeneralMovement", menuName = "Origami/Movement/General Movement", order = -1)]
     public class GenericMovement : MovementSO
     {
+        [Header("Animations")]
+        [Tooltip("Idle animation information when model is still.")]
+        [SerializeField] AbilityAnimation idleAnimation;
+        [Tooltip("Walk animation information when model is walking.")]
+        [SerializeField] AbilityAnimation walkingAnimation;
+        [Tooltip("Run animation information when model is running.")]
+        [SerializeField] AbilityAnimation runningAnimation;
+        [Tooltip("Jump animation information when model is jumping.")]
+        [SerializeField] AbilityAnimation jumpingAnimation;
+        [Tooltip("Fall animation information when model is falling.")]
+        [SerializeField] AbilityAnimation fallingAnimation;
 
+        [Space]
         [Header("Speed Settings")]
-        internal static float baseSpeed = 0.01f;
+        [Tooltip("Adjust the overall speed.")]
         [SerializeField] protected float speedMultiplier = 1;
-        protected float speed { get => baseSpeed * speedMultiplier; }
-        [SerializeField, Min(0)] protected float acceleration = 1;
-        [SerializeField, Min(0)] protected float deceleration = 0.1f;
-        [SerializeField, Min(0)] protected float fallingDeceleration = 2f;
+        [Tooltip("If the entity is travelling a different direction to the input movement, this value controls how extra quickly the entity moves back on themselves.")]
+        [SerializeField, Min(1)] protected float changeDirectionSpeedMultiplier = 3;
+        [Tooltip("The acceleration of the entity from a stopped position to walk/run speed.")]
+        [SerializeField, Min(0.01f)] protected float acceleration = 1;
+        [Tooltip("The deceleration of the entity from a moving state to stopped.")]
+        [SerializeField, Min(0.01f)] protected float deceleration = 0.1f;
+        [Tooltip("The falling deceleration when the player reaches ground. This is so if the player hits an edge, the player could slip off and keep some momentum from the previous falling state.")]
+        [SerializeField, Min(0.01f)] protected float decelerationWhileFalling = 2f;
+        [Tooltip("How quickly the player turns around. Might become obselete later.")]
+        [SerializeField, Min(0.01f)] protected float turnSpeed = 1;
+        [Tooltip("How quickly the player runs in proportion to the walking speed.")]
+        [SerializeField] protected float runSpeedMultiplier = 1.5f;
+        [Tooltip("The acceleration multiplier of the player when running in proportion to normal acceleration.")]
+        [SerializeField] protected float runAccelerationMultiplier = 1;
 
-        [Header("Dash Settings")]
-        [SerializeField] protected float dashSpeedMultiplier = 1.5f;
-        [SerializeField] protected float dashAccelerationMultiplier = 1;
+        [Header("Speed References")]
+        protected static float baseSpeed = 0.01f;
+        protected float walkSpeed { get => baseSpeed * speedMultiplier; }
+        protected float runSpeed { get => baseSpeed * speedMultiplier * runSpeedMultiplier; }
 
+        [Space]
         [Header("Vertical Settings")]
+        [Tooltip("Controls if this entity can jump.")]
         [SerializeField] protected bool canJump = false;
+        [Tooltip("Jump velocity when player jumps from grounded position.")]
         [SerializeField, Min(0)] protected float jumpSpeed = 0.07f;
+        [Tooltip("Acceleration at all times towards the ground.")]
         [SerializeField, Min(0)] protected float gravity = 0.2f;
+        [Tooltip("The fastest speed that the entity can fall.")]
         [SerializeField, Min(0)] protected float maxFallSpeed = 10f;
+        [Tooltip("The layers that count as the ground for the entity. Objects that don't have these layers won't stop the player's downward trajectory, even if the player looks still on the surface.")]
         [SerializeField] protected LayerMask groundLayers;
+
+        #region Setup
         public override AbilityData AbilityDataSetup() => new GenericMovementData();
-        public override AbilityAnimation[] AbilityAnimationsSetup()
+        public override AbilityAnimation[] AbilityAnimationsSetup() => new AbilityAnimation[]
         {
-            throw new System.NotImplementedException();
+            idleAnimation,
+            walkingAnimation,
+            runningAnimation
+        };
+        #endregion
+
+        #region Movement Logic
+        internal override void Move(EntityBody entityBody, AbilityData data, Vector3 moveInput, bool runInput)
+        {
+            GenericMovementData moveData = (GenericMovementData)data;
+            Vector3 move = new Vector3(moveInput.x, 0, moveInput.z);
+
+            // If move input
+            if (move.magnitude > 0)
+            {
+                move = move.normalized * acceleration *
+                (runInput ? runAccelerationMultiplier : 1) *
+                0.01f * Time.deltaTime;
+
+                //Set current Velocity, and adjust change in velocity to be greater if currentDirection and move input are different directions
+                moveData.currentDirection.y = 0;
+                moveData.currentDirection += new Vector3(move.x, 0, move.z) * Mathf.Lerp(changeDirectionSpeedMultiplier, 1, Vector3.Dot(moveData.currentDirection, move));
+                moveData.currentDirection = Vector3.ClampMagnitude(moveData.currentDirection, runInput ? runSpeed : walkSpeed);
+            }
+            // If no move input
+            else
+            {
+                // If still decelerating
+                if (moveData.currentDirection != Vector3.zero)
+                {
+                    moveData.currentDirection = Vector3.MoveTowards(moveData.currentDirection, Vector3.zero, (moveData.isGrounded ? deceleration : decelerationWhileFalling) * Time.deltaTime * 0.01f);
+                }
+            }
+
+            FallSpeed(moveData, entityBody, moveInput.y == 1);
+            AnimateAbility(moveData, entityBody);
+            entityBody.iAbility.OnMoveEntity(moveData.currentDirection, turnSpeed);
         }
 
         protected float FallSpeed(AbilityData data, EntityBody entityBody, bool isJumping)
@@ -42,66 +110,60 @@ namespace AbilitySystem
                     && (pmd.fallSpeed <= 0);
             if (pmd.isGrounded)
                 if (isJumping && canJump)
-                    pmd.fallSpeed = jumpSpeed;
+                    pmd.fallSpeed = jumpSpeed * 0.01f;
                 else
-                    pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, 0, fallingDeceleration * Time.deltaTime);
+                    pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, 0, decelerationWhileFalling * Time.deltaTime);
             else
-                pmd.fallSpeed += -gravity * Time.deltaTime;
+                pmd.fallSpeed += -gravity * Time.deltaTime * 0.01f;
 
+            pmd.fallSpeed = Mathf.Clamp(pmd.fallSpeed, -maxFallSpeed, maxFallSpeed);
+            pmd.currentDirection.y = pmd.fallSpeed;
             return pmd.fallSpeed;
         }
 
-        internal override void Move(EntityBody entityBody, AbilityData data, Vector3 moveInput, bool dashInput)
+        protected void AnimateAbility(GenericMovementData moveData, EntityBody entityBody)
         {
-            GenericMovementData moveData = (GenericMovementData)data;
-            Vector3 move = new Vector3(moveInput.x, 0, moveInput.z);
+            Animation anim = entityBody.animationComponent;
+            float magnitudeDelta = moveData.currentDirection.magnitude / runSpeed;
+            float walkCutoff = walkSpeed / runSpeed;
 
-            //If move input
-            if (move.magnitude > 0)
+            float x = Mathf.Clamp01(magnitudeDelta);
+
+            float weightIdle = 0f;
+            float weightWalk = 0f;
+            float weightRun = 0f;
+
+            if (x <= walkCutoff)
             {
-                move = move.normalized * acceleration * (dashInput ? dashAccelerationMultiplier : 1) * Time.deltaTime;
-
-                moveData.currentDirection.y = 0;
-                moveData.currentDirection += new Vector3(move.x, 0, move.z);
-                moveData.currentDirection = Vector3.ClampMagnitude(moveData.currentDirection, speed * (dashInput ? dashSpeedMultiplier : 1));
+                float t = x / walkCutoff;
+                weightIdle = 1f - t;
+                weightWalk = t;
             }
-            //If no move input
             else
             {
-                if (moveData.decelerationDelta < 1f)
-                    if ((moveData.currentDirection.magnitude - deceleration * Time.deltaTime) > 0)
-                        moveData.currentDirection = Vector3.ClampMagnitude(moveData.currentDirection, moveData.currentDirection.magnitude - deceleration * Time.deltaTime);
-                    else
-                        moveData.currentDirection = Vector3.zero;
-
-                else
-                    moveData.currentDirection = Vector3.zero;
+                float t = (x - walkCutoff) / (1f - walkCutoff);
+                weightWalk = 1f - t;
+                weightRun = t;
             }
-
-            moveData.currentDirection.y = 0;
-            if (moveData.currentDirection != Vector3.zero)
-                entityBody.bodyHolder.transform.forward = moveData.currentDirection;
-            FallSpeed(moveData, entityBody, moveInput.y == 1);
-            moveData.currentDirection.y = Mathf.Clamp(moveData.fallSpeed, -maxFallSpeed, maxFallSpeed);
-
-            entityBody.iAbility.OnMoveEntity(moveData.currentDirection);
+            anim.Blend(idleAnimation.animation.name, weightIdle);
+            anim.Blend(walkingAnimation.animation.name, weightWalk);
+            anim.Blend(runningAnimation.animation.name, weightRun);
         }
+        #endregion
 
         public class GenericMovementData : AbilityData
         {
             [HideInInspector] internal Vector3 currentDirection;
             [HideInInspector] internal float fallSpeed = 0;
-            [HideInInspector] internal float decelerationDelta = 0;
             [HideInInspector] internal bool isGrounded = false;
-            [HideInInspector] internal bool isDashing = false;
+            [HideInInspector] internal bool isRunning = false;
 
             public GenericMovementData()
             {
                 currentDirection = Vector3.zero;
                 fallSpeed = 0;
-                decelerationDelta = 0;
                 isGrounded = false;
-                isDashing = false;
+                isRunning = false;
             }
         }
     }

@@ -3163,6 +3163,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FollowEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 5710287258573495793, guid: bdd47b8a7092d2041b58d1c6446513c6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5099,6 +5103,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1808501594}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &530218824 stripped
+SphereCollider:
+  m_CorrespondingSourceObject: {fileID: 6536683569106103474, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+  m_PrefabInstance: {fileID: 863757657}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &542822807
 GameObject:
   m_ObjectHideFlags: 0
@@ -7802,6 +7811,11 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &775590792 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7211196813232357869, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+  m_PrefabInstance: {fileID: 863757657}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &783429495
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8634,6 +8648,18 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      propertyPath: entityBody.model
+      value: 
+      objectReference: {fileID: 1456146722}
+    - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      propertyPath: playerSetsList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      propertyPath: entityBody.animationComponent
+      value: 
+      objectReference: {fileID: 1456146724}
+    - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
       propertyPath: abilitySetSO.Array.data[0].animation
       value: 
       objectReference: {fileID: 0}
@@ -8641,6 +8667,50 @@ PrefabInstance:
       propertyPath: abilitySetSO.Array.data[0].abilitySet
       value: 
       objectReference: {fileID: 11400000, guid: 2e417aba74ec54441b9b591a31db43e0, type: 2}
+    - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      propertyPath: playerSetsList.Array.data[0].abilitySet
+      value: 
+      objectReference: {fileID: 11400000, guid: 2e417aba74ec54441b9b591a31db43e0, type: 2}
+    - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      propertyPath: playerSetsList.Array.data[1].abilitySet
+      value: 
+      objectReference: {fileID: 11400000, guid: 2e417aba74ec54441b9b591a31db43e0, type: 2}
+    - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      propertyPath: playerSetsList.Array.data[0].entityBody.feet
+      value: 
+      objectReference: {fileID: 530218824}
+    - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      propertyPath: playerSetsList.Array.data[1].entityBody.feet
+      value: 
+      objectReference: {fileID: 530218824}
+    - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      propertyPath: playerSetsList.Array.data[0].entityBody.model
+      value: 
+      objectReference: {fileID: 1456146722}
+    - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      propertyPath: playerSetsList.Array.data[1].entityBody.model
+      value: 
+      objectReference: {fileID: 1456146722}
+    - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      propertyPath: playerSetsList.Array.data[0].animationComponent
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      propertyPath: playerSetsList.Array.data[0].entityBody.bodyHolder
+      value: 
+      objectReference: {fileID: 775590792}
+    - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      propertyPath: playerSetsList.Array.data[1].entityBody.bodyHolder
+      value: 
+      objectReference: {fileID: 775590792}
+    - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      propertyPath: playerSetsList.Array.data[0].entityBody.animationComponent
+      value: 
+      objectReference: {fileID: 1456146724}
+    - target: {fileID: 6552002042681570147, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      propertyPath: playerSetsList.Array.data[1].entityBody.animationComponent
+      value: 
+      objectReference: {fileID: 1456146724}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -8651,6 +8721,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5710287258573495793, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 919303206}
+    - targetCorrespondingSourceObject: {fileID: 6276891074676252527, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1456146724}
   m_SourcePrefab: {fileID: 100100000, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
 --- !u!43 &893588891
 Mesh:
@@ -11233,8 +11306,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1131584178}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.16255103, y: 0, z: 0, w: 0.9867001}
-  m_LocalPosition: {x: -0.085, y: 8.48, z: -19.93}
+  m_LocalRotation: {x: 0.23800017, y: 0.009467687, z: -0.00122446, w: 0.9712182}
+  m_LocalPosition: {x: 0.21804142, y: 1.155642, z: -2.3191462}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12839,6 +12912,27 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &1456146722 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6276891074676252527, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
+  m_PrefabInstance: {fileID: 863757657}
+  m_PrefabAsset: {fileID: 0}
+--- !u!111 &1456146724
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456146722}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 0}
+  m_Animations: []
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
 --- !u!1 &1464517649
 GameObject:
   m_ObjectHideFlags: 0
