@@ -26,14 +26,14 @@ namespace AbilitySystem
             Gizmos.DrawWireSphere(entityBody.feet.transform.position + entityBody.feet.center, entityBody.feet.radius);
         }
         #region Input Interface
-        public abstract void InputMove(Vector3 direction, bool isDashing);
+        public abstract void InputMove(Vector3 direction, bool isRunning);
         public abstract void InputPrimaryAttack();
         public abstract void InputPrimaryAbility();
         #endregion
 
         #region Ability Interface
         public abstract void OnRotateEntity(Vector3 movement);
-        public abstract void OnMoveEntity(Vector3 direction);
+        public abstract void OnMoveEntity(Vector3 direction, float turnSpeed = 1);
         public virtual void OnActivateCooldownAbility(IEnumerator ability, CooldownData data, float cooldown, int maxCharges)
         {
             StartCoroutine(RunAbility(ability, data));

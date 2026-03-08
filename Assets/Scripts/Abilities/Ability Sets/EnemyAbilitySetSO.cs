@@ -8,6 +8,12 @@ namespace AbilitySystem
     public class EnemyAbilitySetSO : AbilitySetSO
     {
         [SerializeField] internal CooldownAbilitySO attack;
+
+        internal override void SetupAnimations(Animation anim)
+        {
+            base.SetupAnimations(anim);
+            if (attack != null) AssignAnimations(anim, attack);
+        }
     }
 
     [Serializable]

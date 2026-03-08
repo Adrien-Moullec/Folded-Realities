@@ -34,9 +34,25 @@ namespace AbilitySystem
         [SerializeField] internal string abilitySetName;
         [SerializeField] internal MovementSO movement;
 
-        public virtual void SetupAnimations(AbilityController controller)
+        internal virtual void SetupAnimations(Animation anim)
         {
-
+            if (anim == null) return;
+            if (movement != null) AssignAnimations(anim, movement);
+        }
+        protected static void AssignAnimations(Animation anim, AbilitySO ability)
+        {
+            foreach (var clipInfo in ability.AbilityAnimationsSetup())
+                if (clipInfo.animation != null)
+                {
+                    AnimationClip clip = clipInfo.animation;
+                    clip.legacy = true;
+                    anim.AddClip(clip, clip.name);
+                    switch (clipInfo.animationPlayStyle)
+                    {
+                        case AnimationPlayStyle.Loop: anim[clip.name].wrapMode = WrapMode.Loop; break;
+                    }
+                    anim[clip.name].speed = clipInfo.speed;
+                }
         }
     }
 
