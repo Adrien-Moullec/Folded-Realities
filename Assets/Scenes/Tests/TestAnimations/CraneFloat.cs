@@ -16,7 +16,6 @@ public class CraneFloat : MonoBehaviour
     private Vector3 startPosition;
     private Quaternion meshOriginalRotation;
 
-    private bool isSpinning = false;
     private float spinTimer = 0f;
 
     void OnEnable()
@@ -29,23 +28,11 @@ public class CraneFloat : MonoBehaviour
         }
 
         spinTimer = 0f;
-        isSpinning = false;
-    }
-
-    public void StartSpinFrom(float startPercent)
-    {
-        spinTimer = spinDuration * startPercent;
-        isSpinning = true;
-    }
-
-    public float GetSpinPercent()
-    {
-        return spinTimer / spinDuration;
     }
 
     void Update()
     {
-        if (isSpinning && meshToSpin != null)
+        if (meshToSpin != null)
         {
             spinTimer += Time.deltaTime;
 
@@ -59,13 +46,15 @@ public class CraneFloat : MonoBehaviour
             if (spinTimer >= spinDuration)
             {
                 meshToSpin.localRotation = meshOriginalRotation;
-                isSpinning = false;
             }
-
-            return;
         }
 
         float newY = startPosition.y + Mathf.Sin(Time.time * floatSpeed) * floatHeight;
-        transform.position = new Vector3(startPosition.x, newY, startPosition.z);
+
+        transform.position = new Vector3(
+            startPosition.x,
+            newY,
+            startPosition.z
+        );
     }
 }
