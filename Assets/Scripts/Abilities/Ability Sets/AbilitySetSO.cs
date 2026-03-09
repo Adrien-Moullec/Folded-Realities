@@ -43,11 +43,7 @@ namespace AbilitySystem
                 {
                     AnimationClip clip = clipInfo.animation;
                     clip.legacy = true;
-                    anim.AddClip(clip, clip.name);
-                    switch (clipInfo.animationPlayStyle)
-                    {
-                        case AnimationPlayStyle.Loop: anim[clip.name].wrapMode = WrapMode.Loop; break;
-                    }
+                    anim.AddClip(clip, clip.name); anim[clip.name].wrapMode = anim[clip.name].wrapMode;
                     anim[clip.name].speed = clipInfo.speed;
                 }
         }

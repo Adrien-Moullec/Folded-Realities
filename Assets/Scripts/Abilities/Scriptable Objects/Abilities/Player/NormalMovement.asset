@@ -14,44 +14,69 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   idleAnimation:
     animation: {fileID: -203655887218126122, guid: 5a96e3926f2a99145b002651026b70db, type: 3}
-    animationPlayStyle: 1
-    playMode: 0
+    animationPlayStyle: 2
     speed: 1
     weight: 1
     crossFadeTime: 0
-    activateAbilityTime: 0
+    abilityEventDelta: 1
+    weightOverTime:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   walkingAnimation:
     animation: {fileID: -203655887218126122, guid: acf02931ebb226f4c8f971cbb487b34b, type: 3}
-    animationPlayStyle: 1
-    playMode: 0
+    animationPlayStyle: 2
     speed: 1
     weight: 1
     crossFadeTime: 2
-    activateAbilityTime: 0
+    abilityEventDelta: 1
+    weightOverTime:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   runningAnimation:
     animation: {fileID: -203655887218126122, guid: d856e953a1e6fed4caac9036a290c867, type: 3}
-    animationPlayStyle: 1
-    playMode: 0
+    animationPlayStyle: 2
     speed: 1
     weight: 1
     crossFadeTime: 0
-    activateAbilityTime: 0
+    abilityEventDelta: 1
+    weightOverTime:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   jumpingAnimation:
     animation: {fileID: 0}
-    animationPlayStyle: 0
-    playMode: 0
+    animationPlayStyle: 2
     speed: 1
     weight: 1
     crossFadeTime: 0
-    activateAbilityTime: 0
+    abilityEventDelta: 1
+    weightOverTime:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   fallingAnimation:
     animation: {fileID: 0}
     animationPlayStyle: 0
-    playMode: 0
     speed: 1
     weight: 1
     crossFadeTime: 0
-    activateAbilityTime: 0
+    abilityEventDelta: 1
+    weightOverTime:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   speedMultiplier: 1
   changeDirectionSpeedMultiplier: 1
   acceleration: 2.09

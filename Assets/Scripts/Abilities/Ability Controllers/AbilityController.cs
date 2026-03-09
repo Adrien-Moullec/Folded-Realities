@@ -38,25 +38,26 @@ namespace AbilitySystem
         public virtual IEnumerator RunAnimationWithEvent(AbilityAnimation abilityAnimation, Animation animationComponent, IEnumerator ability)
         {
             animationComponent.Play(abilityAnimation.animation.name);
+            Debug.Log("Start");
             AnimationState state = animationComponent[abilityAnimation.animation.name];
-            Debug.Log("State activated");
-            float normalizedTime;
+
+            //Transform upperBody;
+            //animationComponent["NAME"].AddMixingTransform(upperBody);
 
             while (state.enabled)
             {
-                normalizedTime = state.normalizedTime % 1f;
-                state.weight = abilityAnimation.weightOverTime.Evaluate(normalizedTime);
-                if (normalizedTime >= abilityAnimation.abilityEventDelta)
+                animationComponent[abilityAnimation.clipName].weight = abilityAnimation.weightOverTime.Evaluate(state.normalizedTime);
+                if (state.normalizedTime >= abilityAnimation.abilityEventDelta)
                 {
-                    Debug.Log("ABILITY");
+                    Debug.Log("AbilityTIME");
                     yield return StartCoroutine(ability);
-                    yield break;
+                    break;
                 }
-
+                float seconds = state.normalizedTime * state.length;
                 yield return null;
             }
             while (state.enabled) yield return null;
-            Debug.Log("End ability");
+            Debug.Log("End");
         }
         public virtual IEnumerator RunAnimationWithEvent(AbilityAnimation abilityAnimation, Animation animationComponent, Action ability) => RunAnimationWithEvent(abilityAnimation, animationComponent, ActionToIenumerator(ability));
         private IEnumerator ActionToIenumerator(Action action)
