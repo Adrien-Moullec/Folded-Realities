@@ -7,7 +7,7 @@ namespace AbilitySystem
 {
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(Animation))]
-    public class SingleAbilityController : AbilityController
+    public class SingleAbilityEnemyController : AbilityController
     {
         [Space]
         [Header("Settings")]
@@ -31,7 +31,7 @@ namespace AbilitySystem
             InputMove(PlayerManager.player.transform.position - transform.position, false);
         }
 
-        public override void OnMoveEntity(Vector3 direction)
+        public override void OnMoveEntity(Vector3 direction, float turnSpeed)
         {
             navMeshAgent.Move(direction);
         }
@@ -41,13 +41,13 @@ namespace AbilitySystem
             throw new NotImplementedException();
         }
 
-        public override void InputMove(Vector3 direction, bool isDashing)
+        public override void InputMove(Vector3 direction, bool isRunning)
         {
             abilitySetList?.movement.movementSO.Move(
                 entityBody,
                 abilitySetList?.movement.AbilityData,
                 Vector3.Distance(PlayerManager.player.transform.position, transform.position) > playerDist ? direction : Vector3.zero,
-                isDashing);
+                isRunning);
         }
 
         public override void InputPrimaryAttack()
@@ -59,9 +59,6 @@ namespace AbilitySystem
             throw new NotImplementedException();
         }
 
-        internal override void SetupAnimations()
-        {
-            throw new NotImplementedException();
-        }
+        internal override void SetupAnimations() => abilitySetSO?.SetupAnimations(entityBody.animationComponent);
     }
 }
