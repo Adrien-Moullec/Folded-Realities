@@ -27,7 +27,7 @@ namespace AbilitySystem
         [SerializeField] internal ActivatedAbilitySummary heavy;
         [SerializeField] internal ActivatedAbilitySummary primary;
 
-        public PlayerAbilitySet(PlayerAbilitySetSO abilitySet, Animation anim) : base(abilitySet.name, anim, abilitySet.movement)
+        public PlayerAbilitySet(PlayerAbilitySetSO abilitySet, Animation anim) : base(abilitySet.name, abilitySet.movement)
         {
             if (abilitySet.light != null)
                 light = new(abilitySet.light);

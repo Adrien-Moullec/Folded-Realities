@@ -1,30 +1,20 @@
 using System;
 using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Playables;
 
 namespace AbilitySystem
 {
     public abstract class AbilityController : MonoBehaviour, IAbility
     {
-        [Header("Body Components")]
-        [SerializeField] private bool drawGizmos = true;
-        [SerializeField] public EntityBody entityBody;
-
         protected virtual void Awake()
         {
-            entityBody.iAbility = this;
             SetupAnimations();
         }
 
         internal abstract void SetupAnimations();
-
-        protected virtual void OnDrawGizmos()
-        {
-            if (entityBody.feet == null || !drawGizmos) return;
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(entityBody.feet.transform.position + entityBody.feet.center, entityBody.feet.radius);
-        }
         #region Input Interface
         public abstract void InputMove(Vector3 direction, bool isRunning);
         public abstract void InputPrimaryAttack();
@@ -34,17 +24,45 @@ namespace AbilitySystem
         #region Ability Interface
         public abstract void OnRotateEntity(Vector3 movement);
         public abstract void OnMoveEntity(Vector3 direction, float turnSpeed = 1);
-        public virtual void OnActivateCooldownAbility(IEnumerator ability, CooldownData data, float cooldown, int maxCharges)
+        public void OnActivateCooldownAbility(AbilityAnimation abilityAnimation, Animation animationComponent, IEnumerator ability, CooldownData data, float cooldown, int maxCharges) => StartCoroutine(ActivateCooldownAbility(abilityAnimation, animationComponent, ability, data, cooldown, maxCharges));
+
+        IEnumerator ActivateCooldownAbility(AbilityAnimation abilityAnimation, Animation animationComponent, IEnumerator ability, CooldownData data, float cooldown, int maxCharges)
         {
-            StartCoroutine(RunAbility(ability, data));
-            if (!data.isRecharging) StartCoroutine(CooldownSequence(data, cooldown, maxCharges));
-        }
-        public virtual IEnumerator RunAbility(IEnumerator ability, CooldownData data)
-        {
+            data.currentCharges--;
+            StartCoroutine(CooldownSequence(data, cooldown, maxCharges));
+
             data.isUsing = true;
-            Debug.Log("Start using ability");
-            yield return StartCoroutine(ability);
+            yield return RunAnimationWithEvent(abilityAnimation, animationComponent, ability);
             data.isUsing = false;
+        }
+        public virtual IEnumerator RunAnimationWithEvent(AbilityAnimation abilityAnimation, Animation animationComponent, IEnumerator ability)
+        {
+            animationComponent.Play(abilityAnimation.animation.name);
+            AnimationState state = animationComponent[abilityAnimation.animation.name];
+            Debug.Log("State activated");
+            float normalizedTime;
+
+            while (state.enabled)
+            {
+                normalizedTime = state.normalizedTime % 1f;
+                state.weight = abilityAnimation.weightOverTime.Evaluate(normalizedTime);
+                if (normalizedTime >= abilityAnimation.abilityEventDelta)
+                {
+                    Debug.Log("ABILITY");
+                    yield return StartCoroutine(ability);
+                    yield break;
+                }
+
+                yield return null;
+            }
+            while (state.enabled) yield return null;
+            Debug.Log("End ability");
+        }
+        public virtual IEnumerator RunAnimationWithEvent(AbilityAnimation abilityAnimation, Animation animationComponent, Action ability) => RunAnimationWithEvent(abilityAnimation, animationComponent, ActionToIenumerator(ability));
+        private IEnumerator ActionToIenumerator(Action action)
+        {
+            action?.Invoke();
+            yield return null;
         }
         #endregion
 
@@ -60,7 +78,6 @@ namespace AbilitySystem
                 if (data.cooldownDelta <= 0)
                 {
                     data.currentCharges++;
-                    Debug.Log("COOLDOWN FINISHED ");
                     data.cooldownDelta = cooldown;
                 }
             }
