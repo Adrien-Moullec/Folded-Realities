@@ -8,20 +8,11 @@ namespace AbilitySystem
     {
         public AnimationClip animation;
         public AnimationPlayStyle animationPlayStyle;
-        public PlayMode playMode;
         public float speed = 1;
         public float weight = 1;
         public float crossFadeTime = 0.2f;
-        public float activateAbilityTime;
-
-        internal void PlayAnimation(Animation anim)
-        {
-            anim.CrossFade(animation.name, crossFadeTime, playMode);
-        }
-        internal void AddAnimation(Animation anim)
-        {
-            anim.AddClip(animation, animation.name);
-        }
+        [Range(0f, 1f)] public float abilityEventDelta = 1;
+        public AnimationCurve weightOverTime;
     }
     public enum AnimationPlayStyle
     {

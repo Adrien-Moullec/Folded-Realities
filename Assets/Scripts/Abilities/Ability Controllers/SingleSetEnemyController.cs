@@ -2,28 +2,26 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-
 namespace AbilitySystem
 {
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(Animation))]
-    public class SingleAbilityEnemyController : AbilityController
+    public abstract class SingleSetEnemyController : AbilityController
     {
         [Space]
         [Header("Settings")]
-        [SerializeField] float playerDist = 3;
-
-        [Space]
-        [Header("Abilities")]
         [SerializeField] EnemyAbilitySetSO abilitySetSO;
+        [SerializeField] internal EntityBody entityBody;
+        [SerializeField] float playerDist = 3;
         [HideInInspector] AbilitySet abilitySetList;
         private NavMeshAgent navMeshAgent;
         protected override void Awake()
         {
             base.Awake();
+            entityBody.iAbility = this;
             navMeshAgent = GetComponent<NavMeshAgent>();
             if (abilitySetSO == null) return;
-            EnemyAbilitySet ab = new EnemyAbilitySet(abilitySetSO, GetComponent<Animation>());
+            EnemyAbilitySet ab = new EnemyAbilitySet(abilitySetSO);
             abilitySetList = ab;
         }
         private void Update()

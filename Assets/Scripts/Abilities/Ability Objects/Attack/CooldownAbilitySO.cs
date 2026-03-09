@@ -21,11 +21,10 @@ namespace AbilitySystem
         public virtual bool TryUseAbility(EntityBody entityBody, CooldownData data)
         {
             if (data.currentCharges <= 0) return false;
-            data.currentCharges--;
-            entityBody.iAbility.OnActivateCooldownAbility(Ability(entityBody, data), data, cooldown, charges);
+            entityBody.iAbility.OnActivateCooldownAbility(cooldownAnim, entityBody.animationComponent, Ability(entityBody, data), data, cooldown, charges);
             return true;
         }
-        public abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
+        protected abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
         public override AbilityData AbilityDataSetup()
         {
             CooldownData ad = new(charges, cooldown);

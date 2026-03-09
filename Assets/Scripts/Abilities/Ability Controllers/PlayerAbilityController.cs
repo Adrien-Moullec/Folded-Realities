@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -12,11 +13,9 @@ namespace AbilitySystem
 
         [Space]
         [Header("Abilities")]
-        [SerializeField] List<PlayerSetForController> playerSetsList;
-        [HideInInspector] List<PlayerAbilitySet> abilitySetList = new();
-        [HideInInspector] internal PlayerAbilitySet currentAbilitySet;
+        [SerializeField] List<PlayerSetSummary> playerSetsList;
+        [HideInInspector] internal PlayerSetSummary currentAbilitySet;
         private CharacterController characterController;
-
 
         private Vector3 currentViewDir = Vector3.zero;
 
@@ -26,35 +25,27 @@ namespace AbilitySystem
             base.Awake();
             characterController = GetComponent<CharacterController>();
 
-            foreach (var n in playerSetsList)
+            for (int i = 0; i < playerSetsList.Count; i++)
             {
-                if (n.abilitySet == null)
+                PlayerSetSummary summary = playerSetsList[i];
+                if (summary.abilitySetSO == null)
                     continue;
-                PlayerAbilitySet ab = new PlayerAbilitySet(n.abilitySet, n.entityBody.animationComponent);
-                abilitySetList.Add(ab);
+                summary.playerAbilitySet = new PlayerAbilitySet(summary.abilitySetSO, summary.entityBody.animationComponent);
+                summary.entityBody.iAbility = this;
+                if (summary.switchAnimation.animation != null) summary.entityBody.animationComponent.AddClip(currentAbilitySet.switchAnimation.animation, currentAbilitySet.switchAnimation.animation.name);
             }
-            currentAbilitySet = abilitySetList[0];
+            currentAbilitySet = playerSetsList[0];
         }
         internal override void SetupAnimations()
         {
             foreach (var n in playerSetsList)
-                n.abilitySet?.SetupAnimations(n.entityBody.animationComponent);
+                n.abilitySetSO?.SetupAnimations(n.entityBody.animationComponent);
         }
         #endregion
-
-        private void TestPlayAnimations(AbilityAnimation abilityAnimation, AnimationStyle style)
-        {
-            switch (style)
-            {
-                case AnimationStyle.Play: entityBody.animationComponent.CrossFade(abilityAnimation.animation.name, abilityAnimation.crossFadeTime); break;
-                case AnimationStyle.Queue: entityBody.animationComponent.CrossFadeQueued(abilityAnimation.animation.name); break;
-            }
-        }
-
         public void SetAbility(string name)
         {
-            if (abilitySetList.Any(x => x.abilitySetName == name))
-                currentAbilitySet = abilitySetList.First(x => x.abilitySetName == name);
+            if (playerSetsList.Any(x => x.abilitySetSO.abilitySetName == name))
+                currentAbilitySet = playerSetsList.First(x => x.abilitySetSO.abilitySetName == name);
             else
                 Debug.LogWarning("No ability to set of name " + name);
         }
@@ -62,10 +53,15 @@ namespace AbilitySystem
         #region Input Functions
 
         public override void InputMove(Vector3 moveInput, bool isRunning) =>
-            currentAbilitySet?.movement.Activate(entityBody, moveInput, isRunning);
+            currentAbilitySet.
+            playerAbilitySet?.
+            movement.Activate(
+                currentAbilitySet.entityBody,
+                moveInput,
+                isRunning);
         public override void InputPrimaryAttack()
         {
-            currentAbilitySet?.light.Activate(entityBody);
+            currentAbilitySet.playerAbilitySet?.light.Activate(currentAbilitySet.entityBody);
         }
         public override void InputPrimaryAbility() =>
             throw new NotImplementedException();
@@ -77,7 +73,7 @@ namespace AbilitySystem
         {
             characterController.Move(direction);
             direction.y = 0;
-            if (direction != Vector3.zero) entityBody.bodyHolder.transform.forward = direction;
+            if (direction != Vector3.zero) currentAbilitySet.entityBody.bodyHolder.transform.forward = direction;
             //Vector3.RotateTowards(entityBody.bodyHolder.transform.forward, direction, turnSpeed, 0);
         }
         public override void OnRotateEntity(Vector3 movement)
@@ -88,10 +84,12 @@ namespace AbilitySystem
         #endregion
 
         [Serializable]
-        public struct PlayerSetForController
+        public class PlayerSetSummary
         {
-            public PlayerAbilitySetSO abilitySet;
+            public PlayerAbilitySetSO abilitySetSO;
             public EntityBody entityBody;
+            public AbilityAnimation switchAnimation;
+            [HideInInspector] public PlayerAbilitySet playerAbilitySet;
         }
     }
 }

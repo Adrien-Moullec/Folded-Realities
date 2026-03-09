@@ -13,7 +13,7 @@ namespace AbilitySystem
     public class MovementAbilitySummary : AbilitySummary
     {
         [SerializeField] internal MovementSO movementSO;
-        internal void Activate(EntityBody entityBody, Vector3 move, bool dashInput) => movementSO.Move(entityBody, AbilityData, move, dashInput);
+        internal void Activate(EntityBody entityBody, Vector3 move, bool dashInput) => movementSO?.Move(entityBody, AbilityData, move, dashInput);
         public MovementAbilitySummary(MovementSO m)
         {
             movementSO = m;

@@ -12,7 +12,7 @@ namespace AbilitySystem
         #endregion
 
         #region Ability Actions
-        public void OnActivateCooldownAbility(IEnumerator ability, CooldownData data, float cooldown, int maxCharges);
+        public void OnActivateCooldownAbility(AbilityAnimation abilityAnimation, Animation animationComponent, IEnumerator ability, CooldownData data, float cooldown, int maxCharges);
         public void OnMoveEntity(Vector3 movement, float turnSpeed = 1);
         public void OnRotateEntity(Vector3 movement);
         #endregion
