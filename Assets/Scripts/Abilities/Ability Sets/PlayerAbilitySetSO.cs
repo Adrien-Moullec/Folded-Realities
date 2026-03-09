@@ -10,6 +10,14 @@ namespace AbilitySystem
         [SerializeField] internal CooldownAbilitySO light;
         [SerializeField] internal CooldownAbilitySO heavy;
         [SerializeField] internal CooldownAbilitySO primary;
+
+        internal override void SetupAnimations(Animation anim)
+        {
+            base.SetupAnimations(anim);
+            if (light != null) AssignAnimations(anim, light);
+            if (heavy != null) AssignAnimations(anim, heavy);
+            if (primary != null) AssignAnimations(anim, primary);
+        }
     }
 
     [Serializable]

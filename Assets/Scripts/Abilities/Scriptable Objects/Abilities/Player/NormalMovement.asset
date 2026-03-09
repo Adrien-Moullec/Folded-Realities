@@ -12,15 +12,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89498978a5163564984da6a9f23b4e81, type: 3}
   m_Name: NormalMovement
   m_EditorClassIdentifier: 
+  idleAnimation:
+    animation: {fileID: -203655887218126122, guid: 5a96e3926f2a99145b002651026b70db, type: 3}
+    animationPlayStyle: 1
+    playMode: 0
+    speed: 1
+    weight: 1
+    crossFadeTime: 0
+    activateAbilityTime: 0
+  walkingAnimation:
+    animation: {fileID: -203655887218126122, guid: acf02931ebb226f4c8f971cbb487b34b, type: 3}
+    animationPlayStyle: 1
+    playMode: 0
+    speed: 1
+    weight: 1
+    crossFadeTime: 2
+    activateAbilityTime: 0
+  runningAnimation:
+    animation: {fileID: -203655887218126122, guid: d856e953a1e6fed4caac9036a290c867, type: 3}
+    animationPlayStyle: 1
+    playMode: 0
+    speed: 1
+    weight: 1
+    crossFadeTime: 0
+    activateAbilityTime: 0
+  jumpingAnimation:
+    animation: {fileID: 0}
+    animationPlayStyle: 0
+    playMode: 0
+    speed: 1
+    weight: 1
+    crossFadeTime: 0
+    activateAbilityTime: 0
+  fallingAnimation:
+    animation: {fileID: 0}
+    animationPlayStyle: 0
+    playMode: 0
+    speed: 1
+    weight: 1
+    crossFadeTime: 0
+    activateAbilityTime: 0
   speedMultiplier: 1
   acceleration: 1
-  deceleration: 1.53
+  deceleration: 0.02
   fallingDeceleration: 2
-  dashSpeedMultiplier: 1.5
-  dashAccelerationMultiplier: 1
+  turnSpeed: 0.01
+  runSpeedMultiplier: 1.5
+  runAccelerationMultiplier: 1
   canJump: 1
-  jumpSpeed: 0.07
-  gravity: 0.2
+  jumpSpeed: 1
+  gravity: 1
   maxFallSpeed: 4
   groundLayers:
     serializedVersion: 2

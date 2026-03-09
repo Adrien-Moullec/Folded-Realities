@@ -4,13 +4,15 @@ using UnityEngine;
 namespace AbilitySystem
 {
     [Serializable]
-    public struct AbilityAnimation
+    public class AbilityAnimation
     {
         public AnimationClip animation;
+        public AnimationPlayStyle animationPlayStyle;
         public PlayMode playMode;
-        public float crossFadeTime;
+        public float speed = 1;
+        public float weight = 1;
+        public float crossFadeTime = 0.2f;
         public float activateAbilityTime;
-        public bool interruptCurrentAnimation;
 
         internal void PlayAnimation(Animation anim)
         {
@@ -20,5 +22,10 @@ namespace AbilitySystem
         {
             anim.AddClip(animation, animation.name);
         }
+    }
+    public enum AnimationPlayStyle
+    {
+        SingleUse,
+        Loop
     }
 }
