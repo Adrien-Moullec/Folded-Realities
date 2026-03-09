@@ -35,14 +35,16 @@ namespace AbilitySystem
             yield return RunAnimationWithEvent(abilityAnimation, animationComponent, ability);
             data.isUsing = false;
         }
-        public virtual IEnumerator RunAnimationWithEvent(AbilityAnimation abilityAnimation, Animation animationComponent, IEnumerator ability)
+        public IEnumerator RunAnimationWithEvent(AbilityAnimation abilityAnimation, Animation animationComponent, IEnumerator ability)//, Transform body)
         {
-            animationComponent.Play(abilityAnimation.animation.name);
-            Debug.Log("Start");
-            AnimationState state = animationComponent[abilityAnimation.animation.name];
 
-            //Transform upperBody;
-            //animationComponent["NAME"].AddMixingTransform(upperBody);
+            animationComponent.Play(abilityAnimation.clipName);
+            Debug.Log("Start");
+            AnimationState state = animationComponent[abilityAnimation.clipName];
+
+            //Transform[] transforms = new Transform[4];
+            //animationComponent["NAME"].AddMixingTransform(transforms[0]);
+            //animationComponent["NAME"].AddMixingTransform(transforms[1]);
 
             while (state.enabled)
             {
@@ -59,7 +61,7 @@ namespace AbilitySystem
             while (state.enabled) yield return null;
             Debug.Log("End");
         }
-        public virtual IEnumerator RunAnimationWithEvent(AbilityAnimation abilityAnimation, Animation animationComponent, Action ability) => RunAnimationWithEvent(abilityAnimation, animationComponent, ActionToIenumerator(ability));
+        public IEnumerator RunAnimationWithEvent(AbilityAnimation abilityAnimation, Animation animationComponent, Action ability) => RunAnimationWithEvent(abilityAnimation, animationComponent, ActionToIenumerator(ability));
         private IEnumerator ActionToIenumerator(Action action)
         {
             action?.Invoke();

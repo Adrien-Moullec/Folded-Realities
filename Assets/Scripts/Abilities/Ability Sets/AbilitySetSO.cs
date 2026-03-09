@@ -38,14 +38,18 @@ namespace AbilitySystem
         }
         protected static void AssignAnimations(Animation anim, AbilitySO ability)
         {
+            AnimationClip clip;
             foreach (var clipInfo in ability.AbilityAnimationsSetup())
+            {
                 if (clipInfo.animation != null)
                 {
-                    AnimationClip clip = clipInfo.animation;
+                    clip = clipInfo.animation;
                     clip.legacy = true;
-                    anim.AddClip(clip, clip.name); anim[clip.name].wrapMode = anim[clip.name].wrapMode;
-                    anim[clip.name].speed = clipInfo.speed;
+                    anim.AddClip(clip, clipInfo.clipName);
+                    anim[clipInfo.clipName].wrapMode = clipInfo.wrapMode;
+                    anim[clipInfo.clipName].speed = clipInfo.speed;
                 }
+            }
         }
     }
 
