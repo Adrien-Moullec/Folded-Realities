@@ -81,7 +81,7 @@ namespace AbilitySystem
 
                 //Set current Velocity, and adjust change in velocity to be greater if currentDirection and move input are different directions
                 moveData.currentDirection.y = 0;
-                moveData.currentDirection += new Vector3(move.x, 0, move.z) * Mathf.Lerp(changeDirectionSpeedMultiplier, 1, Vector3.Dot(moveData.currentDirection, move));
+                moveData.currentDirection += new Vector3(move.x, 0, move.z) * Mathf.Lerp(changeDirectionSpeedMultiplier, 1, Vector3.Dot(moveData.currentDirection.normalized, move.normalized));
                 moveData.currentDirection = Vector3.ClampMagnitude(moveData.currentDirection, runInput ? runSpeed : walkSpeed);
             }
             // If no move input

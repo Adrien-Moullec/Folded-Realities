@@ -7,7 +7,7 @@ namespace AbilitySystem
     public class AbilityAnimation
     {
         public AnimationClip animation;
-        public WrapMode animationPlayStyle;
+        public WrapMode wrapMode;
         public float speed = 1;
         public float weight = 1;
         public float crossFadeTime = 0.2f;
