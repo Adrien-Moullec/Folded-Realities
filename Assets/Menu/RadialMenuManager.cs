@@ -8,35 +8,39 @@ public class RadialMenuManager : MonoBehaviour
     public RectTransform selectObject;
     public GameObject radialMenuRoot;
 
-    [Header("Model References")]
-    public GameObject Crane;
-    public GameObject XBot;
+    [Header("Forms")]
+    public GameObject kuhaku_jump;
+    public GameObject kuhaku_krane;
 
-    private GameObject currentModel;
+    [Header("Animation")]
+    public Animation playerAnimation;
+
+    public float transformTime = 0.4f;
+    public float scrunchTime = 0.9f;
 
     [Header("Radial Settings")]
     [SerializeField] private int segmentCount = 6;
     [SerializeField] private float spriteRotationOffset = -120f;
 
-    [Header("Spin Timing")]
-    [SerializeField] private float animationStartOffset = 0.2f;
-    [SerializeField] private float animationEndCutoff = 0.15f;
-
     private float segmentAngle;
+
     private bool isRadialMenuActive = false;
     private bool isSwitching = false;
 
     private int currentIndex = -1;
 
+    private GameObject currentModel;
+
     void Start()
     {
         segmentAngle = 360f / segmentCount;
+
         radialMenuRoot.SetActive(false);
 
-        currentModel = XBot;
+        currentModel = kuhaku_jump;
 
-        XBot.SetActive(true);
-        Crane.SetActive(false);
+        kuhaku_jump.SetActive(true);
+        kuhaku_krane.SetActive(false);
     }
 
     void Update()
@@ -60,8 +64,7 @@ public class RadialMenuManager : MonoBehaviour
 
     private void UpdateSelection()
     {
-        Vector2 centerScreenPosition =
-            RectTransformUtility.WorldToScreenPoint(null, center.position);
+        Vector2 centerScreenPosition = RectTransformUtility.WorldToScreenPoint(null, center.position);
 
         Vector2 mousePos = Input.mousePosition;
         Vector2 delta = mousePos - centerScreenPosition;
@@ -94,76 +97,71 @@ public class RadialMenuManager : MonoBehaviour
             return;
         }
 
-        if (index == 0 && currentModel != XBot)
+        if (index == 0 && currentModel != kuhaku_jump)
         {
-            StartCoroutine(SwitchModels(XBot));
+            StartCoroutine(CraneToPlayer());
         }
 
-        if (index == 1 && currentModel != Crane)
+        if (index == 1 && currentModel != kuhaku_krane)
         {
-            StartCoroutine(SwitchModels(Crane));
+            StartCoroutine(PlayerToCrane());
         }
 
         radialMenuRoot.SetActive(false);
         isRadialMenuActive = false;
     }
 
-    IEnumerator SwitchModels(GameObject newModel)
+    IEnumerator PlayerToCrane()
     {
         isSwitching = true;
 
-        float swapPoint = 0.5f;
+        Vector3 lockedPos = kuhaku_jump.transform.position;
+        Quaternion lockedRot = kuhaku_jump.transform.rotation;
 
-        float spinPercent = 0f;
+        playerAnimation.Play("Transform");
 
-        // --- START CURRENT SPIN ---
-        if (currentModel == XBot)
+        float timer = 0f;
+
+        while (timer < transformTime)
         {
-            Animation anim = currentModel.GetComponent<Animation>();
-            if (anim != null && anim.clip != null)
-            {
-                anim.Play(anim.clip.name);
-                yield return new WaitForSeconds(anim.clip.length * swapPoint);
-
-                spinPercent = swapPoint;
-            }
-        }
-        else if (currentModel == Crane)
-        {
-            CraneFloat crane = currentModel.GetComponent<CraneFloat>();
-            if (crane != null)
-            {
-                crane.StartSpinFrom(0f);
-                yield return new WaitForSeconds(crane.spinDuration * swapPoint);
-
-                spinPercent = swapPoint;
-            }
+            kuhaku_jump.transform.SetPositionAndRotation(lockedPos, lockedRot);
+            timer += Time.deltaTime;
+            yield return null;
         }
 
-        currentModel.SetActive(false);
+        playerAnimation.Play("Scrunch");
 
-        newModel.SetActive(true);
-        currentModel = newModel;
+        timer = 0f;
 
-        // --- CONTINUE SPIN ON NEW ---
-        if (currentModel == XBot)
+        while (timer < scrunchTime)
         {
-            Animation anim = currentModel.GetComponent<Animation>();
-            if (anim != null && anim.clip != null)
-            {
-                anim.Play(anim.clip.name);
-                anim[anim.clip.name].time = anim.clip.length * spinPercent;
-            }
+            kuhaku_jump.transform.SetPositionAndRotation(lockedPos, lockedRot);
+            timer += Time.deltaTime;
+            yield return null;
         }
-        else if (currentModel == Crane)
-        {
-            CraneFloat crane = currentModel.GetComponent<CraneFloat>();
-            if (crane != null)
-            {
-                crane.StartSpinFrom(spinPercent);
-            }
-        }
+
+        kuhaku_jump.SetActive(false);
+
+        kuhaku_krane.SetActive(true);
+        kuhaku_krane.transform.SetPositionAndRotation(lockedPos, lockedRot);
+
+        currentModel = kuhaku_krane;
 
         isSwitching = false;
+    }
+
+    IEnumerator CraneToPlayer()
+    {
+        Vector3 pos = kuhaku_krane.transform.position;
+        Quaternion rot = kuhaku_krane.transform.rotation;
+
+        kuhaku_krane.SetActive(false);
+
+        kuhaku_jump.SetActive(true);
+        kuhaku_jump.transform.SetPositionAndRotation(pos, rot);
+
+        currentModel = kuhaku_jump;
+
+        yield return null;
     }
 }
