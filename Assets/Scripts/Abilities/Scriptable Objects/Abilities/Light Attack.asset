@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: Light Attack
   m_EditorClassIdentifier: 
   cooldownAnim:
+    name: ads
     animation: {fileID: -203655887218126122, guid: 0c692960aa4fba048a7c49cc9e1e3539, type: 3}
-    wrapMode: 0
-    speed: 5.05
+    speed: 3
     weight: 1
     crossFadeTime: 0
-    abilityEventDelta: 0.503
     weightOverTime:
       serializedVersion: 2
       m_Curve:
@@ -61,5 +60,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  cooldown: 3.6
+  deltaEvent: 0.622
+  cooldown: 2
   charges: 1
