@@ -6,7 +6,7 @@ using UnityEngine;
 namespace AbilitySystem {
 
     /// <summary> Ability Animation
-    /// This class stores all the needed data to create fluid 
+    /// This class stores all the needed data to create fluid animations
     /// </summary>
     [Serializable]
     public class AbilityAnimation {
@@ -45,9 +45,14 @@ namespace AbilitySystem {
         public void Play(Animation anim) => anim.Play(clipName);
         public void Blend(Animation anim, float weight) => anim.Blend(clipName, weight);
         public void MixTransform(Animation anim, Transform transform) {
-            anim[clipName].AddMixingTransform(transform);
+            if (anim == null) return;
+            if (transform != null)
+                anim[clipName].AddMixingTransform(transform);
+            Play(anim);
         }
-
+        public void MixTransform((Animation component, Transform transform) modelInfo) {
+            MixTransform(modelInfo.component, modelInfo.transform);
+        }
         #endregion
     }
 }
