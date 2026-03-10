@@ -211,39 +211,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &284736502 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5710287258573495793, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
-  m_PrefabInstance: {fileID: 449240057}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &284736509
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 284736502}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!1001 &449240057
+--- !u!1001 &595812748
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -253,15 +221,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1225429674322778145, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.0133824
+      value: 3.3019023
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.13
+      value: 7.91
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.2622766
+      value: -2.5543666
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -293,15 +261,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5710287258573495793, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
       propertyPath: m_Name
-      value: Player
+      value: Mixamo
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5710287258573495793, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 284736509}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 411fb754a2b46664e82d9a1a997ce28d, type: 3}
 --- !u!1 &821837309
 GameObject:
@@ -630,6 +595,6 @@ SceneRoots:
   - {fileID: 226164481}
   - {fileID: 1119793896}
   - {fileID: 821837313}
-  - {fileID: 449240057}
   - {fileID: 8622619754544091115}
   - {fileID: 7308071339485666601}
+  - {fileID: 595812748}
