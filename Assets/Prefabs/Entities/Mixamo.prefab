@@ -153,13 +153,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff8c1c2fad136644ba2498d566b823a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawGizmos: 1
-  entityBody:
-    bodyHolder: {fileID: 7211196813232357869}
-    model: {fileID: 0}
-    feet: {fileID: 6536683569106103474}
-    animationComponent: {fileID: 0}
-  playerSetsList: []
+  playerSetsList:
+  - abilitySetSO: {fileID: 11400000, guid: 2e417aba74ec54441b9b591a31db43e0, type: 2}
+    entityBody:
+      bodyHolder: {fileID: 0}
+      model: {fileID: 0}
+      feet: {fileID: 0}
+      animationComponent: {fileID: 0}
+    switchAnimation:
+      animation: {fileID: 0}
+      wrapMode: 0
+      speed: 0
+      weight: 0
+      crossFadeTime: 0
+      abilityEventDelta: 0
+      weightOverTime:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+    playerAbilitySet:
+      abilitySetName: 
+      movement:
+        movementSO: {fileID: 0}
+      light:
+        abilitySO: {fileID: 0}
+      heavy:
+        abilitySO: {fileID: 0}
+      primary:
+        abilitySO: {fileID: 0}
 --- !u!143 &4601957020910338640
 CharacterController:
   m_ObjectHideFlags: 0
@@ -230,6 +253,11 @@ MonoBehaviour:
   center: {fileID: 0}
   selectObject: {fileID: 0}
   radialMenuRoot: {fileID: 0}
+  kuhaku_jump: {fileID: 0}
+  kuhaku_krane: {fileID: 0}
+  playerAnimation: {fileID: 0}
+  transformTime: 0.4
+  scrunchTime: 0.9
   segmentCount: 6
   spriteRotationOffset: -120
 --- !u!1 &6975155188400979986

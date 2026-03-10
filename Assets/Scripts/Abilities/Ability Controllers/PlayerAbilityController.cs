@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Unity.VisualScripting;
+
 using UnityEngine;
 
 
-namespace AbilitySystem
-{
+namespace AbilitySystem {
     [RequireComponent(typeof(CharacterController))]
-    public class PlayerAbilityController : AbilityController
-    {
+    public class PlayerAbilityController : AbilityController {
 
         [Space]
         [Header("Abilities")]
@@ -20,30 +20,26 @@ namespace AbilitySystem
         private Vector3 currentViewDir = Vector3.zero;
 
         #region OnStart
-        protected override void Awake()
-        {
+        protected override void Awake() {
             base.Awake();
             characterController = GetComponent<CharacterController>();
 
-            for (int i = 0; i < playerSetsList.Count; i++)
-            {
-                PlayerSetSummary summary = playerSetsList[i];
-                if (summary.abilitySetSO == null)
+            for (int i = 0; i < playerSetsList.Count; i++) {
+                PlayerSetSummary setSummaryItem = playerSetsList[i];
+                if (setSummaryItem.abilitySetSO == null)
                     continue;
-                summary.playerAbilitySet = new PlayerAbilitySet(summary.abilitySetSO, summary.entityBody.animationComponent);
-                summary.entityBody.iAbility = this;
-                if (summary.switchAnimation.animation != null) summary.entityBody.animationComponent.AddClip(currentAbilitySet.switchAnimation.animation, currentAbilitySet.switchAnimation.animation.name);
+                setSummaryItem.playerAbilitySet = new PlayerAbilitySet(setSummaryItem.abilitySetSO, setSummaryItem.entityBody.animationComponent);
+                setSummaryItem.entityBody.iAbility = this;
+                if (setSummaryItem.switchAnimation.animation != null) setSummaryItem.entityBody.animationComponent.AddClip(currentAbilitySet.switchAnimation.animation, currentAbilitySet.switchAnimation.clipName);
             }
             currentAbilitySet = playerSetsList[0];
         }
-        internal override void SetupAnimations()
-        {
+        internal override void SetupAnimations() {
             foreach (var n in playerSetsList)
                 n.abilitySetSO?.SetupAnimations(n.entityBody.animationComponent);
         }
         #endregion
-        public void SetAbility(string name)
-        {
+        public void SetAbility(string name) {
             if (playerSetsList.Any(x => x.abilitySetSO.abilitySetName == name))
                 currentAbilitySet = playerSetsList.First(x => x.abilitySetSO.abilitySetName == name);
             else
@@ -59,8 +55,7 @@ namespace AbilitySystem
                 currentAbilitySet.entityBody,
                 moveInput,
                 isRunning);
-        public override void InputPrimaryAttack()
-        {
+        public override void InputPrimaryAttack() {
             currentAbilitySet.playerAbilitySet?.light.Activate(currentAbilitySet.entityBody);
         }
         public override void InputPrimaryAbility() =>
@@ -69,23 +64,22 @@ namespace AbilitySystem
 
         #region Movement Functions
 
-        public override void OnMoveEntity(Vector3 direction, float turnSpeed)
-        {
+        public override void OnMoveEntity(Vector3 direction, float turnSpeed) {
             characterController.Move(direction);
             direction.y = 0;
             if (direction != Vector3.zero) currentAbilitySet.entityBody.bodyHolder.transform.forward = direction;
             //Vector3.RotateTowards(entityBody.bodyHolder.transform.forward, direction, turnSpeed, 0);
         }
-        public override void OnRotateEntity(Vector3 movement)
-        {
+        public override void OnRotateEntity(Vector3 movement) {
             throw new NotImplementedException();
         }
+
+        public override EntityBody GetEntityBody() => currentAbilitySet.entityBody;
 
         #endregion
 
         [Serializable]
-        public class PlayerSetSummary
-        {
+        public class PlayerSetSummary {
             public PlayerAbilitySetSO abilitySetSO;
             public EntityBody entityBody;
             public AbilityAnimation switchAnimation;

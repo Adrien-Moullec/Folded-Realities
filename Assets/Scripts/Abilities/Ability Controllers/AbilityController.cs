@@ -1,16 +1,12 @@
+using UnityEngine;
+
 using System;
 using System.Collections;
-using JetBrains.Annotations;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Playables;
+using System.Linq;
 
-namespace AbilitySystem
-{
-    public abstract class AbilityController : MonoBehaviour, IAbility
-    {
-        protected virtual void Awake()
-        {
+namespace AbilitySystem {
+    public abstract class AbilityController : MonoBehaviour, IAbility {
+        protected virtual void Awake() {
             SetupAnimations();
         }
 
@@ -21,70 +17,67 @@ namespace AbilitySystem
         public abstract void InputPrimaryAbility();
         #endregion
 
-        #region Ability Interface
+        #region Movement Interface
         public abstract void OnRotateEntity(Vector3 movement);
         public abstract void OnMoveEntity(Vector3 direction, float turnSpeed = 1);
-        public void OnActivateCooldownAbility(AbilityAnimation abilityAnimation, Animation animationComponent, IEnumerator ability, CooldownData data, float cooldown, int maxCharges) => StartCoroutine(ActivateCooldownAbility(abilityAnimation, animationComponent, ability, data, cooldown, maxCharges));
+        #endregion
 
-        IEnumerator ActivateCooldownAbility(AbilityAnimation abilityAnimation, Animation animationComponent, IEnumerator ability, CooldownData data, float cooldown, int maxCharges)
-        {
+        #region Ability Events Manager and Interface
+        public void OnActivateCooldownAbility(AbilityAnimation abilityAnimation, Animation animation, (IEnumerator, AnimationDeltaEventInfo)[] dEvents, CooldownData data, float cooldown, int maxCharges) => StartCoroutine(ActivateCooldownAbility(abilityAnimation, animation, dEvents, data, cooldown, maxCharges));
+
+        IEnumerator ActivateCooldownAbility(AbilityAnimation abilityAnimation, Animation animation, (IEnumerator, AnimationDeltaEventInfo)[] dEvents, CooldownData data, float cooldown, int maxCharges) {
             data.currentCharges--;
             StartCoroutine(CooldownSequence(data, cooldown, maxCharges));
 
             data.isUsing = true;
-            yield return RunAnimationWithEvent(abilityAnimation, animationComponent, ability);
+            yield return RunAnimationWithEvents(abilityAnimation, animation, dEvents);
             data.isUsing = false;
         }
-        public IEnumerator RunAnimationWithEvent(AbilityAnimation abilityAnimation, Animation animationComponent, IEnumerator ability)//, Transform body)
-        {
+        public IEnumerator RunAnimationWithEvents(AbilityAnimation anim, Animation animComponent, (IEnumerator, AnimationDeltaEventInfo)[] deltaEvents = null) {
+            anim.Play(animComponent);
+            AnimationState state = animComponent[anim.clipName];
+            (IEnumerator, AnimationDeltaEventInfo)[] dEvs = deltaEvents.OrderBy(x => x.Item2.delta).ToArray();
 
-            animationComponent.Play(abilityAnimation.clipName);
-            Debug.Log("Start");
-            AnimationState state = animationComponent[abilityAnimation.clipName];
+            int counter = 0;
+            if (dEvs?.Length == 0)
+                goto EndOfDeltaEvents;
+            yield return null;
+            Debug.Log(state.enabled);
 
-            //Transform[] transforms = new Transform[4];
-            //animationComponent["NAME"].AddMixingTransform(transforms[0]);
-            //animationComponent["NAME"].AddMixingTransform(transforms[1]);
+            while (state.enabled) {
+                Debug.Log("while");
 
-            while (state.enabled)
-            {
-                animationComponent[abilityAnimation.clipName].weight = abilityAnimation.weightOverTime.Evaluate(state.normalizedTime);
-                if (state.normalizedTime >= abilityAnimation.abilityEventDelta)
-                {
-                    Debug.Log("AbilityTIME");
-                    yield return StartCoroutine(ability);
-                    break;
+                anim.SetWeight(animComponent, anim.weightOverTime.length > 0 ? anim.weightOverTime.Evaluate(state.normalizedTime) : 1);
+
+                if (state.normalizedTime >= dEvs[counter].Item2.delta) {
+                    Debug.Log("Ability Event " + counter + "!");
+                    StartCoroutine(dEvs[counter].Item1);
+                    if (dEvs.Length == ++counter) break;
                 }
-                float seconds = state.normalizedTime * state.length;
+
                 yield return null;
             }
+
+        EndOfDeltaEvents:
             while (state.enabled) yield return null;
-            Debug.Log("End");
-        }
-        public IEnumerator RunAnimationWithEvent(AbilityAnimation abilityAnimation, Animation animationComponent, Action ability) => RunAnimationWithEvent(abilityAnimation, animationComponent, ActionToIenumerator(ability));
-        private IEnumerator ActionToIenumerator(Action action)
-        {
-            action?.Invoke();
-            yield return null;
         }
         #endregion
 
-        public static IEnumerator CooldownSequence(CooldownData data, float cooldown, int maxCharges)
-        {
+        public static IEnumerator CooldownSequence(CooldownData data, float cooldown, int maxCharges) {
             data.isRecharging = true;
             data.cooldownDelta = cooldown;
-            while (data.currentCharges < maxCharges)
-            {
+            while (data.currentCharges < maxCharges) {
                 yield return null;
                 data.cooldownDelta -= Time.deltaTime;
 
-                if (data.cooldownDelta <= 0)
-                {
+                if (data.cooldownDelta <= 0) {
                     data.currentCharges++;
                     data.cooldownDelta = cooldown;
                 }
             }
             data.isRecharging = false;
         }
+
+        public abstract EntityBody GetEntityBody();
     }
 }

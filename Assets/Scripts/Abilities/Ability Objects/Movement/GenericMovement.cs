@@ -2,11 +2,9 @@ using UnityEngine;
 using UnityEngine.InputSystem.Interactions;
 
 
-namespace AbilitySystem
-{
+namespace AbilitySystem {
     [CreateAssetMenu(fileName = "GeneralMovement", menuName = "Origami/Movement/General Movement", order = -1)]
-    public class GenericMovement : MovementSO
-    {
+    public class GenericMovement : MovementSO {
         [Header("Animations")]
         [Tooltip("Idle animation information when model is still.")]
         [SerializeField] AbilityAnimation idleAnimation;
@@ -58,23 +56,21 @@ namespace AbilitySystem
 
         #region Setup
         public override AbilityData AbilityDataSetup() => new GenericMovementData();
-        public override AbilityAnimation[] AbilityAnimationsSetup() => new AbilityAnimation[]
+        public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() => new (AbilityAnimation, WrapMode)[]
         {
-            idleAnimation,
-            walkingAnimation,
-            runningAnimation
+            (idleAnimation,WrapMode.Loop),
+            (walkingAnimation,WrapMode.Loop),
+            (runningAnimation,WrapMode.Loop)
         };
         #endregion
 
         #region Movement Logic
-        internal override void Move(EntityBody entityBody, AbilityData data, Vector3 moveInput, bool runInput)
-        {
+        internal override void Move(EntityBody entityBody, AbilityData data, Vector3 moveInput, bool runInput) {
             GenericMovementData moveData = (GenericMovementData)data;
             Vector3 move = new Vector3(moveInput.x, 0, moveInput.z);
 
             // If move input
-            if (move.magnitude > 0)
-            {
+            if (move.magnitude > 0) {
                 move = move.normalized * acceleration *
                 (runInput ? runAccelerationMultiplier : 1) *
                 0.01f * Time.deltaTime;
@@ -85,29 +81,26 @@ namespace AbilitySystem
                 moveData.currentDirection = Vector3.ClampMagnitude(moveData.currentDirection, runInput ? runSpeed : walkSpeed);
             }
             // If no move input
-            else
-            {
+            else {
                 // If still decelerating
-                if (moveData.currentDirection != Vector3.zero)
-                {
+                if (moveData.currentDirection != Vector3.zero) {
                     moveData.currentDirection = Vector3.MoveTowards(moveData.currentDirection, Vector3.zero, (moveData.isGrounded ? deceleration : decelerationWhileFalling) * Time.deltaTime * 0.01f);
                 }
             }
 
             FallSpeed(moveData, entityBody, moveInput.y == 1);
-            AnimateAbility(moveData, entityBody);
+            AnimateAbility(moveData, entityBody.animationComponent);
             entityBody.iAbility.OnMoveEntity(moveData.currentDirection, turnSpeed);
         }
 
-        protected float FallSpeed(AbilityData data, EntityBody entityBody, bool isJumping)
-        {
+        protected float FallSpeed(AbilityData data, EntityBody entityBody, bool isJumping) {
             GenericMovementData pmd = (GenericMovementData)data;
-            pmd.isGrounded =
-                Physics.CheckSphere(
-                    entityBody.feet.center + entityBody.feet.transform.position,
-                    entityBody.feet.radius,
-                    groundLayers)
-                    && (pmd.fallSpeed <= 0);
+            pmd.isGrounded = Physics.CheckSphere(
+                entityBody.feet.center + entityBody.feet.transform.position,
+                entityBody.feet.radius,
+                groundLayers)
+                && (pmd.fallSpeed <= 0);
+
             if (pmd.isGrounded)
                 if (isJumping && canJump)
                     pmd.fallSpeed = jumpSpeed * 0.01f;
@@ -121,9 +114,7 @@ namespace AbilitySystem
             return pmd.fallSpeed;
         }
 
-        protected void AnimateAbility(GenericMovementData moveData, EntityBody entityBody)
-        {
-            Animation anim = entityBody.animationComponent;
+        protected void AnimateAbility(GenericMovementData moveData, Animation anim) {
             float magnitudeDelta = moveData.currentDirection.magnitude / runSpeed;
             float walkCutoff = walkSpeed / runSpeed;
 
@@ -133,33 +124,28 @@ namespace AbilitySystem
             float weightWalk = 0f;
             float weightRun = 0f;
 
-            if (x <= walkCutoff)
-            {
+            if (x <= walkCutoff) {
                 float t = x / walkCutoff;
                 weightIdle = 1f - t;
                 weightWalk = t;
-            }
-            else
-            {
+            } else {
                 float t = (x - walkCutoff) / (1f - walkCutoff);
                 weightWalk = 1f - t;
                 weightRun = t;
             }
-            anim.Blend(idleAnimation.animation.name, weightIdle);
-            anim.Blend(walkingAnimation.animation.name, weightWalk);
-            anim.Blend(runningAnimation.animation.name, weightRun);
+            idleAnimation.Blend(anim, weightIdle);
+            walkingAnimation.Blend(anim, weightWalk);
+            runningAnimation.Blend(anim, weightRun);
         }
         #endregion
 
-        public class GenericMovementData : AbilityData
-        {
+        public class GenericMovementData : AbilityData {
             [HideInInspector] internal Vector3 currentDirection;
             [HideInInspector] internal float fallSpeed = 0;
             [HideInInspector] internal bool isGrounded = false;
             [HideInInspector] internal bool isRunning = false;
 
-            public GenericMovementData()
-            {
+            public GenericMovementData() {
                 currentDirection = Vector3.zero;
                 fallSpeed = 0;
                 isGrounded = false;
