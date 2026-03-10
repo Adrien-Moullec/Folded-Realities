@@ -6,8 +6,8 @@ using System.Collections.Generic;
 namespace AbilitySystem {
     [Serializable]
     public abstract class AbilitySet {
-        [SerializeField] internal string abilitySetName;
-        [SerializeField] internal MovementAbilitySummary movement;
+        [SerializeField] public string abilitySetName;
+        [SerializeField] public MovementAbilitySummary movement;
 
         public AbilitySet(string name, MovementSO movementSO) {
             abilitySetName = name;
@@ -23,10 +23,10 @@ namespace AbilitySystem {
         }
     }
     public abstract class AbilitySetSO : ScriptableObject {
-        [SerializeField] internal string abilitySetName;
-        [SerializeField] internal MovementSO movement;
+        [SerializeField] public string abilitySetName;
+        [SerializeField] public MovementSO movement;
 
-        internal virtual void SetupAnimations(Animation anim) {
+        public virtual void SetupAnimations(Animation anim) {
             if (anim == null) return;
             if (movement != null) AssignAnimations(anim, movement);
         }

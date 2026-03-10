@@ -24,7 +24,10 @@ namespace AbilitySystem {
         [Tooltip("The weight of the animation on the model over time. (use range x:0->1, y:0->1)")]
         public AnimationCurve weightOverTime;
         public string clipName {
-            get => name + animation.name;
+            get {
+                string s = name + (animation == null ? "" : animation.name);
+                return s;
+            }
         }
         #endregion
 
@@ -32,7 +35,7 @@ namespace AbilitySystem {
         public AnimationState GetState(Animation anim) => anim[clipName];
         public float SetWeight(Animation anim, float weight) => anim[clipName].weight = weight;
         public void Setup(Animation animComponent, WrapMode wrapMode) {
-            if (animComponent == null) return;
+            if (animComponent == null || animation == null) return;
 
             animation.legacy = true;
             animComponent.AddClip(animation, clipName);

@@ -7,12 +7,14 @@ using UnityEditor;
 namespace AbilitySystem {
     [CreateAssetMenu(fileName = "Ability Set", menuName = "Origami/Ability Sets/Player Ability Set", order = 0)]
     public class PlayerAbilitySetSO : AbilitySetSO {
-        [SerializeField] internal CooldownAbilitySO light;
-        [SerializeField] internal CooldownAbilitySO heavy;
-        [SerializeField] internal CooldownAbilitySO primary;
+        [SerializeField] public AbilityAnimation transitionAnimation;
+        [SerializeField] public CooldownAbilitySO light;
+        [SerializeField] public CooldownAbilitySO heavy;
+        [SerializeField] public CooldownAbilitySO primary;
 
-        internal override void SetupAnimations(Animation anim) {
+        public override void SetupAnimations(Animation anim) {
             base.SetupAnimations(anim);
+            transitionAnimation.Setup(anim, WrapMode.Once);
             if (light != null) AssignAnimations(anim, light);
             if (heavy != null) AssignAnimations(anim, heavy);
             if (primary != null) AssignAnimations(anim, primary);
@@ -21,9 +23,10 @@ namespace AbilitySystem {
 
     [Serializable]
     public class PlayerAbilitySet : AbilitySet {
-        [SerializeField] internal ActivatedAbilitySummary light;
-        [SerializeField] internal ActivatedAbilitySummary heavy;
-        [SerializeField] internal ActivatedAbilitySummary primary;
+        [SerializeField] public AbilityAnimation transitionAnimation;
+        [SerializeField] public ActivatedAbilitySummary light;
+        [SerializeField] public ActivatedAbilitySummary heavy;
+        [SerializeField] public ActivatedAbilitySummary primary;
 
         public PlayerAbilitySet(PlayerAbilitySetSO abilitySet, Animation anim) : base(abilitySet.name, abilitySet.movement) {
             if (abilitySet.light != null)

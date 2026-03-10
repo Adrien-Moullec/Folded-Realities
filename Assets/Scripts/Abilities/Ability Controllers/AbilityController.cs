@@ -10,7 +10,7 @@ namespace AbilitySystem {
             SetupAnimations();
         }
 
-        internal abstract void SetupAnimations();
+        public abstract void SetupAnimations();
         #region Input Interface
         public abstract void InputMove(Vector3 direction, bool isRunning);
         public abstract void InputPrimaryAttack();
@@ -43,6 +43,25 @@ namespace AbilitySystem {
                 goto EndOfDeltaEvents;
             yield return null;
 
+            while (state.enabled) {
+
+                if (state.normalizedTime >= dEvs[counter].delta) {
+                    StartCoroutine(dEvs[counter].Item1);
+                    if (dEvs.Length == ++counter) break;
+                }
+
+                animInfo.SetWeight(modelInfo.component, animInfo.weightOverTime.length > 0 ? animInfo.weightOverTime.Evaluate(state.normalizedTime) : 1);
+                yield return null;
+            }
+
+        EndOfDeltaEvents:
+            while (state.enabled) {
+                animInfo.SetWeight(modelInfo.component, animInfo.weightOverTime.length > 0 ? animInfo.weightOverTime.Evaluate(state.normalizedTime) : 1);
+                yield return null;
+            }
+        }
+
+        public IEnumerator AnimationTimeline() {
             while (state.enabled) {
 
                 if (state.normalizedTime >= dEvs[counter].delta) {
