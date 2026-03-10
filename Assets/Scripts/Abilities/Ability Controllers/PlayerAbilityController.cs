@@ -24,13 +24,17 @@ namespace AbilitySystem {
             base.Awake();
             characterController = GetComponent<CharacterController>();
 
-            for (int i = 0; i < playerSetsList.Count; i++) {
-                PlayerSetSummary setSummaryItem = playerSetsList[i];
-                if (setSummaryItem.abilitySetSO == null)
+            foreach (var i in playerSetsList) {
+                if (i.abilitySetSO == null)
                     continue;
-                setSummaryItem.playerAbilitySet = new PlayerAbilitySet(setSummaryItem.abilitySetSO, setSummaryItem.entityBody.animationComponent);
-                setSummaryItem.entityBody.iAbility = this;
-                if (setSummaryItem.switchAnimation.animation != null) setSummaryItem.entityBody.animationComponent.AddClip(currentAbilitySet.switchAnimation.animation, currentAbilitySet.switchAnimation.clipName);
+                i.playerAbilitySet = new PlayerAbilitySet(i.abilitySetSO, i.entityBody.animationComponent);
+                i.entityBody.iAbility = this;
+
+                if (i.switchAnimation.animation != null) {
+                    i.entityBody.animationComponent?.AddClip(
+                        i.switchAnimation.animation, i.switchAnimation.clipName
+                    );
+                }
             }
             currentAbilitySet = playerSetsList[0];
         }
