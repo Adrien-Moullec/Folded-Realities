@@ -9,25 +9,28 @@ namespace AbilitySystem {
         [Tooltip("The animation that will play for this ability.")]
         [SerializeField] AbilityAnimation cooldownAnim;
         [Tooltip("The effected animated transforms and the animation timeline point of the game mechanic event.")]
-        [SerializeField] AnimationDeltaEventInfo eventOn01Timeline;
-        [SerializeField] AnimationDeltaEventInfo eventOn02Timeline;
-        [SerializeField] AnimationDeltaEventInfo eventOn03Timeline;
+        [SerializeField] AnimationDeltaEventInfo deltaEvent;
         [Header("Ability Settings")]
         [SerializeField, Range(1, 20)] internal float cooldown;
         [SerializeField, Range(1, 5)] internal int charges;
         public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() => new (AbilityAnimation, WrapMode)[]
             {
-                (cooldownAnim,WrapMode.Once)
+                (cooldownAnim, WrapMode.Once)
             };
 
         public virtual bool TryUseAbility(EntityBody entityBody, CooldownData data) {
             if (data.currentCharges <= 0) return false;
             (IEnumerator, AnimationDeltaEventInfo)[] deltaEvents = {
-                (Ability(entityBody, data), eventOn01Timeline),
-                (Ability(entityBody, data), eventOn02Timeline),
-                (Ability(entityBody, data), eventOn03Timeline)
+                    (Ability(entityBody, data), deltaEvent)
                 };
-            entityBody.iAbility.OnActivateCooldownAbility(cooldownAnim, entityBody.animationComponent, deltaEvents, data, cooldown, charges);
+            entityBody.iAbility.OnActivateCooldownAbility(
+                cooldownAnim,
+                entityBody.animationComponent,
+                new (IEnumerator, AnimationDeltaEventInfo)[]
+                {
+                    (Ability(entityBody, data), deltaEvent)
+                },
+                data, cooldown, charges);
             return true;
         }
         protected abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
