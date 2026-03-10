@@ -3,87 +3,64 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 
-namespace AbilitySystem
-{
+namespace AbilitySystem {
     [Serializable]
-    public abstract class AbilitySet
-    {
+    public abstract class AbilitySet {
         [SerializeField] internal string abilitySetName;
         [SerializeField] internal MovementAbilitySummary movement;
 
-        public AbilitySet(string name, MovementSO movementSO)
-        {
+        public AbilitySet(string name, MovementSO movementSO) {
             abilitySetName = name;
 
             if (movementSO != null)
                 movement = new(movementSO);
         }
-        public AbilitySet(AbilitySetSO abilitySet)
-        {
+        public AbilitySet(AbilitySetSO abilitySet) {
             abilitySetName = abilitySet.abilitySetName;
 
             if (abilitySet.movement != null)
                 movement = new MovementAbilitySummary(abilitySet.movement);
         }
     }
-    public abstract class AbilitySetSO : ScriptableObject
-    {
+    public abstract class AbilitySetSO : ScriptableObject {
         [SerializeField] internal string abilitySetName;
         [SerializeField] internal MovementSO movement;
 
-        internal virtual void SetupAnimations(Animation anim)
-        {
+        internal virtual void SetupAnimations(Animation anim) {
             if (anim == null) return;
             if (movement != null) AssignAnimations(anim, movement);
         }
-        protected static void AssignAnimations(Animation anim, AbilitySO ability)
-        {
-            AnimationClip clip;
-            foreach (var clipInfo in ability.AbilityAnimationsSetup())
-            {
-                if (clipInfo.animation != null)
-                {
-                    clip = clipInfo.animation;
-                    clip.legacy = true;
-                    anim.AddClip(clip, clipInfo.clipName);
-                    anim[clipInfo.clipName].wrapMode = clipInfo.wrapMode;
-                    anim[clipInfo.clipName].speed = clipInfo.speed;
-                }
-            }
+        protected static void AssignAnimations(Animation anim, AbilitySO ability) {
+            foreach (var clipSummary in ability.AbilityAnimationsSetup())
+                clipSummary.Item1.Setup(anim, clipSummary.Item2);
         }
     }
 
     #region Editor
     // Editor for ScriptBase and all derived types
     [CustomEditor(typeof(AbilitySetSO), true)]
-    public class AbilitySetSOEditor : Editor
-    {
+    public class AbilitySetSOEditor : Editor {
         private Dictionary<string, bool> foldouts = new Dictionary<string, bool>();
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             SerializedProperty prop = serializedObject.GetIterator();
-            while (prop.NextVisible(true))
-            {
+            while (prop.NextVisible(true)) {
                 if (!foldouts.ContainsKey(prop.propertyPath))
                     foldouts[prop.propertyPath] = false;
             }
         }
 
-        public override void OnInspectorGUI()
-        {
+        public override void OnInspectorGUI() {
             serializedObject.Update();
             DrawNestedScriptableObjects();
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawNestedScriptableObjects()
-        {
+        private void DrawNestedScriptableObjects() {
             SerializedProperty prop = serializedObject.GetIterator();
             bool enterChildren = true;
 
-            while (prop.NextVisible(enterChildren))
-            {
+            while (prop.NextVisible(enterChildren)) {
                 enterChildren = false;
 
                 if (prop.name == "m_Script")
@@ -93,8 +70,7 @@ namespace AbilitySystem
 
                 if (prop.propertyType == SerializedPropertyType.ObjectReference &&
                     prop.objectReferenceValue is ScriptableObject nestedSO &&
-                    nestedSO != null)
-                {
+                    nestedSO != null) {
                     foldouts[prop.propertyPath] = EditorGUILayout.Foldout(
                         foldouts[prop.propertyPath],
                         "",
@@ -103,8 +79,7 @@ namespace AbilitySystem
 
                     EditorGUI.indentLevel++;
 
-                    if (foldouts[prop.propertyPath])
-                    {
+                    if (foldouts[prop.propertyPath]) {
                         EditorGUILayout.Space();
                         EditorGUILayout.LabelField(prop.displayName, EditorStyles.boldLabel);
 

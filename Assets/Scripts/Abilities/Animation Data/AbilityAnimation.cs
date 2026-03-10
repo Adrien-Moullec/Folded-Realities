@@ -1,0 +1,52 @@
+using System;
+using System.Collections;
+
+using UnityEngine;
+
+namespace AbilitySystem {
+
+    /// <summary> Ability Animation
+    /// This class stores all the needed data to create fluid 
+    /// </summary>
+    [Serializable]
+    public class AbilityAnimation {
+        #region Animation Information
+        [Tooltip("Animation Clip that will be used.")]
+        public AnimationClip animation;
+        [Tooltip("Speed multiplier of original clip. (1 = default)")]
+        public float speed = 1;
+        [Tooltip("The amount this animation affects the model. (1 = default)")]
+        public float weight = 1;
+        [Tooltip("UNUSED - The transition period that the animation will mix with other animations.")]
+        public float crossFadeTime = 0.2f;
+        [Tooltip("The weight of the animation on the model over time. (use range x:0->1, y:0->1)")]
+        public AnimationCurve weightOverTime;
+        public string clipName {
+            get => animation.name;
+        }
+        #endregion
+
+        #region Set Animation Data
+        public AnimationState GetState(Animation anim) => anim[clipName];
+        public float SetWeight(Animation anim, float weight) => anim[clipName].weight = weight;
+        public void Setup(Animation animComponent, WrapMode wrapMode) {
+            if (animComponent == null) return;
+
+            animation.legacy = true;
+            animComponent.AddClip(animation, clipName);
+            animComponent[clipName].speed = speed;
+            animComponent[clipName].wrapMode = wrapMode;
+        }
+        #endregion
+
+        #region Play Modes
+        public void Play(Animation anim) => anim[clipName].speed = speed;
+        public void Blend(Animation anim, float weight) => anim.Blend(clipName, weight);
+        public void MixTransform(Animation anim, Transform transform) {
+            throw new NotImplementedException();
+            //anim[clipName].AddMixingTransform(transforms[1]);
+        }
+
+        #endregion
+    }
+}
