@@ -50,9 +50,7 @@ namespace AbilitySystem {
                 anim[clipName].AddMixingTransform(transform);
             Play(anim);
         }
-        public void MixTransform((Animation component, Transform transform) modelInfo) {
-            MixTransform(modelInfo.component, modelInfo.transform);
-        }
+        public void MixTransform((Animation component, Transform transform) modelInfo) => MixTransform(modelInfo.component, modelInfo.transform);
         #endregion
     }
 }
