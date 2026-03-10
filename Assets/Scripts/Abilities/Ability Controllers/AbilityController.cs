@@ -34,7 +34,7 @@ namespace AbilitySystem {
             data.isUsing = false;
         }
         public IEnumerator RunAnimationWithEvents(AbilityAnimation animInfo, (Animation component, Transform transform) modelInfo, (IEnumerator action, float delta)[] deltaEvents = null) {
-            animInfo.Play(modelInfo.component);
+            animInfo.MixTransform(modelInfo);
             AnimationState state = animInfo.GetState(modelInfo.component);
             (IEnumerator action, float delta)[] dEvs = deltaEvents.OrderBy(x => x.delta).ToArray();
 
