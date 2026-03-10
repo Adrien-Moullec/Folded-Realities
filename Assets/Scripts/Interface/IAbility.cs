@@ -12,8 +12,8 @@ namespace AbilitySystem {
 
         #region Ability Actions
         public void OnActivateCooldownAbility(AbilityAnimation animInfo, (Animation component, Transform transform) modelInfo, (IEnumerator action, float delta)[] dEvents, CooldownData data, float cooldown, int maxCharges);
-        public void OnMoveEntity(Vector3 movement, float turnSpeed = 1);
-        public void OnRotateEntity(Vector3 movement);
+        public void OnMoveEntity(Vector3 direction, float turnSpeed = 1);
+        public void OnRotateEntity(Vector3 direction);
         #endregion
 
         #region Utility Functions

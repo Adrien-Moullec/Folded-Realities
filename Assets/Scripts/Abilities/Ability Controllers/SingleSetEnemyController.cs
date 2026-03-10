@@ -49,7 +49,7 @@ namespace AbilitySystem {
             throw new NotImplementedException();
         }
 
-        internal override void SetupAnimations() => abilitySetSO?.SetupAnimations(entityBody.animationComponent);
+        public override void SetupAnimations() => abilitySetSO?.SetupAnimations(entityBody.animationComponent);
 
         public override EntityBody GetEntityBody() => entityBody;
     }
