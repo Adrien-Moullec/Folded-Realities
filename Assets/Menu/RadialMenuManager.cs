@@ -1,8 +1,10 @@
 using System.Collections;
+
 using UnityEngine;
 
-public class RadialMenuManager : MonoBehaviour
-{
+using UnityEditor;
+
+public class RadialMenuManager : MonoBehaviour {
     [Header("UI References")]
     public RectTransform center;
     public RectTransform selectObject;
@@ -31,8 +33,7 @@ public class RadialMenuManager : MonoBehaviour
 
     private GameObject currentModel;
 
-    void Start()
-    {
+    void Start() {
         segmentAngle = 360f / segmentCount;
 
         radialMenuRoot.SetActive(false);
@@ -43,27 +44,22 @@ public class RadialMenuManager : MonoBehaviour
         kuhaku_krane.SetActive(false);
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.E)) {
             isRadialMenuActive = !isRadialMenuActive;
             radialMenuRoot.SetActive(isRadialMenuActive);
         }
 
-        if (isRadialMenuActive)
-        {
+        if (isRadialMenuActive) {
             UpdateSelection();
 
-            if (Input.GetMouseButtonDown(0))
-            {
+            if (Input.GetMouseButtonDown(0)) {
                 OnSegmentClicked(currentIndex);
             }
         }
     }
 
-    private void UpdateSelection()
-    {
+    private void UpdateSelection() {
         Vector2 centerScreenPosition = RectTransformUtility.WorldToScreenPoint(null, center.position);
 
         Vector2 mousePos = Input.mousePosition;
@@ -71,15 +67,13 @@ public class RadialMenuManager : MonoBehaviour
 
         float angle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
 
-        if (angle < 0f)
-        {
+        if (angle < 0f) {
             angle += 360f;
         }
 
         angle += segmentAngle / 2f;
 
-        if (angle >= 360f)
-        {
+        if (angle >= 360f) {
             angle -= 360f;
         }
 
@@ -90,20 +84,16 @@ public class RadialMenuManager : MonoBehaviour
         selectObject.localRotation = Quaternion.Euler(0f, 0f, finalRotation);
     }
 
-    private void OnSegmentClicked(int index)
-    {
-        if (isSwitching)
-        {
+    private void OnSegmentClicked(int index) {
+        if (isSwitching) {
             return;
         }
 
-        if (index == 0 && currentModel != kuhaku_jump)
-        {
+        if (index == 0 && currentModel != kuhaku_jump) {
             StartCoroutine(CraneToPlayer());
         }
 
-        if (index == 1 && currentModel != kuhaku_krane)
-        {
+        if (index == 1 && currentModel != kuhaku_krane) {
             StartCoroutine(PlayerToCrane());
         }
 
@@ -111,8 +101,8 @@ public class RadialMenuManager : MonoBehaviour
         isRadialMenuActive = false;
     }
 
-    IEnumerator PlayerToCrane()
-    {
+    public void StartPlayerToCrane() => StartCoroutine(PlayerToCrane());
+    IEnumerator PlayerToCrane() {
         isSwitching = true;
 
         Vector3 lockedPos = kuhaku_jump.transform.position;
@@ -122,8 +112,7 @@ public class RadialMenuManager : MonoBehaviour
 
         float timer = 0f;
 
-        while (timer < transformTime)
-        {
+        while (timer < transformTime) {
             kuhaku_jump.transform.SetPositionAndRotation(lockedPos, lockedRot);
             timer += Time.deltaTime;
             yield return null;
@@ -133,8 +122,7 @@ public class RadialMenuManager : MonoBehaviour
 
         timer = 0f;
 
-        while (timer < scrunchTime)
-        {
+        while (timer < scrunchTime) {
             kuhaku_jump.transform.SetPositionAndRotation(lockedPos, lockedRot);
             timer += Time.deltaTime;
             yield return null;
@@ -150,8 +138,8 @@ public class RadialMenuManager : MonoBehaviour
         isSwitching = false;
     }
 
-    IEnumerator CraneToPlayer()
-    {
+    public void StartCraneToPlayer() => StartCoroutine(CraneToPlayer());
+    IEnumerator CraneToPlayer() {
         Vector3 pos = kuhaku_krane.transform.position;
         Quaternion rot = kuhaku_krane.transform.rotation;
 
@@ -163,5 +151,22 @@ public class RadialMenuManager : MonoBehaviour
         currentModel = kuhaku_jump;
 
         yield return null;
+    }
+}
+
+[CustomEditor(typeof(RadialMenuManager))]
+public class RadialMenuManagerEditor : Editor {
+    SerializedProperty lookAtPoint;
+
+
+    public override void OnInspectorGUI() {
+        RadialMenuManager rmm = (RadialMenuManager)target;
+        DrawDefaultInspector();
+        if (GUILayout.Button("Player to Crane")) {
+            rmm.StartPlayerToCrane();
+        }
+        if (GUILayout.Button("Crane to Player")) {
+            rmm.StartCraneToPlayer();
+        }
     }
 }
