@@ -11,6 +11,8 @@ namespace AbilitySystem {
     [Serializable]
     public class AbilityAnimation {
         #region Animation Information
+        [Tooltip("Unique name that will be stored in the Animation Component. (name + animation.name)")]
+        public string name;
         [Tooltip("Animation Clip that will be used.")]
         public AnimationClip animation;
         [Tooltip("Speed multiplier of original clip. (1 = default)")]
@@ -22,7 +24,7 @@ namespace AbilitySystem {
         [Tooltip("The weight of the animation on the model over time. (use range x:0->1, y:0->1)")]
         public AnimationCurve weightOverTime;
         public string clipName {
-            get => animation.name;
+            get => name + animation.name;
         }
         #endregion
 
@@ -40,11 +42,10 @@ namespace AbilitySystem {
         #endregion
 
         #region Play Modes
-        public void Play(Animation anim) => anim[clipName].speed = speed;
+        public void Play(Animation anim) => anim.Play(clipName);
         public void Blend(Animation anim, float weight) => anim.Blend(clipName, weight);
         public void MixTransform(Animation anim, Transform transform) {
-            throw new NotImplementedException();
-            //anim[clipName].AddMixingTransform(transforms[1]);
+            anim[clipName].AddMixingTransform(transform);
         }
 
         #endregion

@@ -42,15 +42,11 @@ namespace AbilitySystem {
             if (dEvs?.Length == 0)
                 goto EndOfDeltaEvents;
             yield return null;
-            Debug.Log(state.enabled);
 
             while (state.enabled) {
-                Debug.Log("while");
-
                 anim.SetWeight(animComponent, anim.weightOverTime.length > 0 ? anim.weightOverTime.Evaluate(state.normalizedTime) : 1);
 
                 if (state.normalizedTime >= dEvs[counter].Item2.delta) {
-                    Debug.Log("Ability Event " + counter + "!");
                     StartCoroutine(dEvs[counter].Item1);
                     if (dEvs.Length == ++counter) break;
                 }
