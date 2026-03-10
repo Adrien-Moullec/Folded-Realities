@@ -9,24 +9,29 @@ namespace AbilitySystem {
         [Tooltip("The animation that will play for this ability.")]
         [SerializeField] AbilityAnimation cooldownAnim;
         [Tooltip("The effected animated transforms and the animation timeline point of the game mechanic event.")]
-        [SerializeField] AnimationDeltaEventInfo deltaEvent;
+        [SerializeField, Range(0, 1)] float deltaEvent;
         [Header("Ability Settings")]
         [SerializeField, Range(1, 20)] internal float cooldown;
         [SerializeField, Range(1, 5)] internal int charges;
-        public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() => new (AbilityAnimation, WrapMode)[]
+        public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() =>
+            new (AbilityAnimation, WrapMode)[]
             {
                 (cooldownAnim, WrapMode.Once)
             };
 
+        private static IEnumerator ActionToIenumerator(Action action) {
+            action?.Invoke();
+            yield return null;
+        }
         public virtual bool TryUseAbility(EntityBody entityBody, CooldownData data) {
             if (data.currentCharges <= 0) return false;
-            (IEnumerator, AnimationDeltaEventInfo)[] deltaEvents = {
+            (IEnumerator action, float delta)[] deltaEvents = {
                     (Ability(entityBody, data), deltaEvent)
                 };
             entityBody.iAbility.OnActivateCooldownAbility(
                 cooldownAnim,
-                entityBody.animationComponent,
-                new (IEnumerator, AnimationDeltaEventInfo)[]
+                (entityBody.animationComponent, null),
+                new (IEnumerator, float)[]
                 {
                     (Ability(entityBody, data), deltaEvent)
                 },

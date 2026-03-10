@@ -23,20 +23,20 @@ namespace AbilitySystem {
         #endregion
 
         #region Ability Events Manager and Interface
-        public void OnActivateCooldownAbility(AbilityAnimation abilityAnimation, Animation animation, (IEnumerator, AnimationDeltaEventInfo)[] dEvents, CooldownData data, float cooldown, int maxCharges) => StartCoroutine(ActivateCooldownAbility(abilityAnimation, animation, dEvents, data, cooldown, maxCharges));
+        public void OnActivateCooldownAbility(AbilityAnimation animInfo, (Animation component, Transform transform) modelInfo, (IEnumerator action, float delta)[] dEvents, CooldownData data, float cooldown, int maxCharges) => StartCoroutine(ActivateCooldownAbility(animInfo, modelInfo, dEvents, data, cooldown, maxCharges));
 
-        IEnumerator ActivateCooldownAbility(AbilityAnimation abilityAnimation, Animation animation, (IEnumerator, AnimationDeltaEventInfo)[] dEvents, CooldownData data, float cooldown, int maxCharges) {
+        IEnumerator ActivateCooldownAbility(AbilityAnimation animInfo, (Animation component, Transform transform) modelInfo, (IEnumerator action, float delta)[] dEvents, CooldownData data, float cooldown, int maxCharges) {
             data.currentCharges--;
             StartCoroutine(CooldownSequence(data, cooldown, maxCharges));
 
             data.isUsing = true;
-            yield return RunAnimationWithEvents(abilityAnimation, animation, dEvents);
+            yield return RunAnimationWithEvents(animInfo, modelInfo, dEvents);
             data.isUsing = false;
         }
-        public IEnumerator RunAnimationWithEvents(AbilityAnimation anim, Animation animComponent, (IEnumerator, AnimationDeltaEventInfo)[] deltaEvents = null) {
-            anim.Play(animComponent);
-            AnimationState state = animComponent[anim.clipName];
-            (IEnumerator, AnimationDeltaEventInfo)[] dEvs = deltaEvents.OrderBy(x => x.Item2.delta).ToArray();
+        public IEnumerator RunAnimationWithEvents(AbilityAnimation animInfo, (Animation component, Transform transform) modelInfo, (IEnumerator action, float delta)[] deltaEvents = null) {
+            animInfo.Play(modelInfo.component);
+            AnimationState state = animInfo.GetState(modelInfo.component);
+            (IEnumerator action, float delta)[] dEvs = deltaEvents.OrderBy(x => x.delta).ToArray();
 
             int counter = 0;
             if (dEvs?.Length == 0)
@@ -44,18 +44,21 @@ namespace AbilitySystem {
             yield return null;
 
             while (state.enabled) {
-                anim.SetWeight(animComponent, anim.weightOverTime.length > 0 ? anim.weightOverTime.Evaluate(state.normalizedTime) : 1);
 
-                if (state.normalizedTime >= dEvs[counter].Item2.delta) {
+                if (state.normalizedTime >= dEvs[counter].delta) {
                     StartCoroutine(dEvs[counter].Item1);
                     if (dEvs.Length == ++counter) break;
                 }
 
+                animInfo.SetWeight(modelInfo.component, animInfo.weightOverTime.length > 0 ? animInfo.weightOverTime.Evaluate(state.normalizedTime) : 1);
                 yield return null;
             }
 
         EndOfDeltaEvents:
-            while (state.enabled) yield return null;
+            while (state.enabled) {
+                animInfo.SetWeight(modelInfo.component, animInfo.weightOverTime.length > 0 ? animInfo.weightOverTime.Evaluate(state.normalizedTime) : 1);
+                yield return null;
+            }
         }
         #endregion
 
