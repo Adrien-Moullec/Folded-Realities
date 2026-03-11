@@ -26,8 +26,9 @@ namespace AbilitySystem {
         public virtual bool TryUseAbility(EntityBody entityBody, CooldownData data) {
             if (data.currentCharges <= 0) return false;
             entityBody.iAbility.OnActivateCooldownAbility(
-                cooldownAnim,
-                (entityBody.animationComponent, entityBody.upperBody),
+                new (Animation, AbilityAnimation, Transform, float, float)[] {
+                    (entityBody.animationComponent, cooldownAnim, null, 0, cooldownAnim.length)
+                },
                 new (IEnumerator, float)[] { (Ability(entityBody, data), deltaEvent) },
                 data, cooldown, charges
             );
