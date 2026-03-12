@@ -163,6 +163,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RadialMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""5b3161d1-7fcc-4f4b-a082-36c839f805ea"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -504,6 +513,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""NextModel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b3eb8c8d-1bbb-4d0b-a351-101466313384"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RadialMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1099,6 +1119,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
         m_Player_NextModel = m_Player.FindAction("NextModel", throwIfNotFound: true);
+        m_Player_RadialMenu = m_Player.FindAction("RadialMenu", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1200,6 +1221,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Crouch;
     private readonly InputAction m_Player_NextModel;
+    private readonly InputAction m_Player_RadialMenu;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1243,6 +1265,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/NextModel".
         /// </summary>
         public InputAction @NextModel => m_Wrapper.m_Player_NextModel;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/RadialMenu".
+        /// </summary>
+        public InputAction @RadialMenu => m_Wrapper.m_Player_RadialMenu;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1293,6 +1319,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @NextModel.started += instance.OnNextModel;
             @NextModel.performed += instance.OnNextModel;
             @NextModel.canceled += instance.OnNextModel;
+            @RadialMenu.started += instance.OnRadialMenu;
+            @RadialMenu.performed += instance.OnRadialMenu;
+            @RadialMenu.canceled += instance.OnRadialMenu;
         }
 
         /// <summary>
@@ -1328,6 +1357,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @NextModel.started -= instance.OnNextModel;
             @NextModel.performed -= instance.OnNextModel;
             @NextModel.canceled -= instance.OnNextModel;
+            @RadialMenu.started -= instance.OnRadialMenu;
+            @RadialMenu.performed -= instance.OnRadialMenu;
+            @RadialMenu.canceled -= instance.OnRadialMenu;
         }
 
         /// <summary>
@@ -1684,6 +1716,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnNextModel(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RadialMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRadialMenu(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

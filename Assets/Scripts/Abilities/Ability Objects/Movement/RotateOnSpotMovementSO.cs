@@ -9,7 +9,7 @@ namespace AbilitySystem {
         public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() {
             throw new System.NotImplementedException();
         }
-        internal override void Move(EntityBody entityBody, AbilityData data, Vector3 moveInput, bool dashInput) {
+        public override void Move(EntityBody entityBody, AbilityData data, Vector3 moveInput, bool dashInput) {
             if (moveInput == Vector3.zero) return;
             Vector3 dir = moveInput;
             dir.y = 0;

@@ -27,7 +27,8 @@ public class PlayerManager : MonoBehaviour, ICamera {
     [Space]
     [Header("Script Managers")]
     [SerializeField] IAbility iAbility;
-    private PlayerInput _playerInput;
+    [SerializeField] RadialMenuManager _RadialMenuManager;
+    private PlayerInput _PlayerInput;
 
     [Space]
     [Header("Inputs")]
@@ -39,6 +40,7 @@ public class PlayerManager : MonoBehaviour, ICamera {
     bool isJumping;
     InputAction dashInput;
     bool isDashing;
+    InputAction radialWheel;
 
     InputAction primaryAttackInput;
     bool holdPrimaryAttack;
@@ -51,13 +53,14 @@ public class PlayerManager : MonoBehaviour, ICamera {
     #region On Start
     private void OnEnable() {
         iAbility = GetComponent<PlayerAbilityController>();
-        _playerInput = GetComponent<PlayerInput>();
+        _PlayerInput = GetComponent<PlayerInput>();
 
-        moveInput = _playerInput.actions["Move"];
-        lookInput = _playerInput.actions["Look"];
-        jumpInput = _playerInput.actions["Jump"];
-        dashInput = _playerInput.actions["Sprint"];
-        primaryAttackInput = _playerInput.actions["PrimaryAttack"];
+        moveInput = _PlayerInput.actions["Move"];
+        lookInput = _PlayerInput.actions["Look"];
+        jumpInput = _PlayerInput.actions["Jump"];
+        dashInput = _PlayerInput.actions["Sprint"];
+        primaryAttackInput = _PlayerInput.actions["PrimaryAttack"];
+        radialWheel = _PlayerInput.actions["RadialMenu"];
 
         moveInput.performed += input => deltaMove = input.ReadValue<Vector2>();
         moveInput.canceled += input => deltaMove = input.ReadValue<Vector2>();
@@ -67,7 +70,11 @@ public class PlayerManager : MonoBehaviour, ICamera {
         jumpInput.canceled += input => isJumping = false;
         dashInput.performed += input => isDashing = true;
         dashInput.canceled += input => isDashing = false;
-
+        radialWheel.performed += input => _RadialMenuManager?.SetWheelActive(true);
+        radialWheel.canceled += input => {
+            _RadialMenuManager?.SetWheelActive(false);
+            iAbility.InputTransitionName(_RadialMenuManager?.OnSegmentClicked());
+        };
         primaryAttackInput.performed += input => Attack();
         primaryAttackInput.canceled += input => holdPrimaryAttack = false;
     }
@@ -80,7 +87,11 @@ public class PlayerManager : MonoBehaviour, ICamera {
         jumpInput.canceled -= input => isJumping = false;
         dashInput.performed -= input => isDashing = true;
         dashInput.canceled -= input => isDashing = false;
-
+        radialWheel.performed -= input => _RadialMenuManager?.SetWheelActive(true);
+        radialWheel.canceled -= input => {
+            _RadialMenuManager?.SetWheelActive(false);
+            iAbility.InputTransitionName(_RadialMenuManager?.OnSegmentClicked());
+        };
         primaryAttackInput.performed -= input => Attack();
         primaryAttackInput.canceled -= input => holdPrimaryAttack = false;
     }

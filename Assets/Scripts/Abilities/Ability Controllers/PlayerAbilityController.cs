@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,8 +23,8 @@ namespace AbilitySystem {
         #region OnStart
         protected override void Awake() {
             base.Awake();
+            SmokesAndMirrorsAnimation.gameObject.SetActive(false);
             characterController = GetComponent<CharacterController>();
-
             transitionAnimationClip.Setup(SmokesAndMirrorsAnimation, WrapMode.Once);
             foreach (var i in playerSetsList) {
                 if (i.abilitySetSO == null)
@@ -40,12 +41,41 @@ namespace AbilitySystem {
         #endregion
 
         #region Transitions
-        public void SetAbility(string name) {
+        public override void InputTransitionName(string name) {
+
             if (!playerSetsList.Any(x => x.abilitySetSO.abilitySetName == name)) {
                 Debug.LogWarning("No ability set of that name.");
                 return;
             }
-            currentAbilitySet = playerSetsList.First(x => x.abilitySetSO.abilitySetName == name);
+
+            PlayerSetSummary checkAbilitySet = playerSetsList.First(x => x.abilitySetSO.abilitySetName == name);
+            if (checkAbilitySet == currentAbilitySet) {
+                Debug.LogWarning("Currently set to this set.");
+                return;
+            }
+
+            StartCoroutine(RunAnimationsWithEvents(
+                new TimelineEvent[] {
+                    new TimelineEvent(currentAbilitySet.entityBody.animationComponent, currentAbilitySet.abilitySetSO.transitionAnimation, 0, 1),
+                    new TimelineEvent(checkAbilitySet.entityBody.animationComponent, checkAbilitySet.abilitySetSO.transitionAnimation, 1, 2),
+                    new TimelineEvent(SmokesAndMirrorsAnimation, transitionAnimationClip, 0, 2, true)
+                },
+                new DeltaEvent[] {
+                    new DeltaEvent(() => {
+                        canUseAbilities = false; SmokesAndMirrorsAnimation.gameObject.SetActive(true);
+                    }, 0),
+                    new DeltaEvent(() => {
+                        currentAbilitySet.entityBody.modelPrefab.SetActive(false);
+                        checkAbilitySet.entityBody.modelPrefab.SetActive(true);
+                        currentAbilitySet = checkAbilitySet;
+                    }, 0.5f),
+                    new DeltaEvent(() => {
+                        canUseAbilities = true;
+                        SmokesAndMirrorsAnimation.gameObject.SetActive(false);
+                    }, 1)
+                }
+            ));
+            print("End");
         }
         #endregion
 
@@ -62,18 +92,24 @@ namespace AbilitySystem {
         #endregion
 
         #region Input Functions
-        public override void InputMove(Vector3 moveInput, bool isRunning) =>
+        public override void InputMove(Vector3 moveInput, bool isRunning) {
+            base.InputMove(moveInput, isRunning);
             currentAbilitySet.
             playerAbilitySet?.
             movement.Activate(
                 currentAbilitySet.entityBody,
                 moveInput,
                 isRunning);
-        public override void InputPrimaryAttack() =>
+        }
+        public override void InputPrimaryAttack() {
+            base.InputPrimaryAttack();
             currentAbilitySet.playerAbilitySet?.light.Activate(currentAbilitySet.entityBody);
+        }
 
-        public override void InputPrimaryAbility() =>
+        public override void InputPrimaryAbility() {
+            base.InputPrimaryAbility();
             currentAbilitySet.playerAbilitySet?.primary.Activate(currentAbilitySet.entityBody);
+        }
         #endregion
 
         #region Data

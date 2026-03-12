@@ -141,6 +141,7 @@ MonoBehaviour:
   cameraTiltMin: 0
   cameraTiltMax: 0
   lerpSpeed: 10
+  _RadialMenuManager: {fileID: 0}
 --- !u!114 &6552002042681570147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,11 +154,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff8c1c2fad136644ba2498d566b823a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SmokesAndMirrorsAnimation: {fileID: 0}
+  transitionAnimationClip:
+    <name>k__BackingField: 
+    <animation>k__BackingField: {fileID: 0}
+    <speed>k__BackingField: 1
+    <weight>k__BackingField: 1
+    <crossFadeTime>k__BackingField: 0.2
+    <weightOverTime>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <reverseAnimation>k__BackingField: 0
   playerSetsList:
   - abilitySetSO: {fileID: 11400000, guid: 2e417aba74ec54441b9b591a31db43e0, type: 2}
     entityBody:
       bodyHolder: {fileID: 7211196813232357869}
-      model: {fileID: 2268757310712961369}
+      modelPrefab: {fileID: 2268757310712961369}
       feet: {fileID: 6536683569106103474}
       upperBody: {fileID: 0}
       lowerBody: {fileID: 0}
@@ -167,17 +182,81 @@ MonoBehaviour:
       movement:
         movementSO: {fileID: 0}
       transitionAnimation:
-        name: 
-        animation: {fileID: 0}
-        speed: 1
-        weight: 1
-        crossFadeTime: 0.2
-        weightOverTime:
+        <name>k__BackingField: 
+        <animation>k__BackingField: {fileID: 0}
+        <speed>k__BackingField: 1
+        <weight>k__BackingField: 1
+        <crossFadeTime>k__BackingField: 0.2
+        <weightOverTime>k__BackingField:
           serializedVersion: 2
           m_Curve: []
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+        <reverseAnimation>k__BackingField: 0
+      light:
+        abilitySO: {fileID: 0}
+      heavy:
+        abilitySO: {fileID: 0}
+      primary:
+        abilitySO: {fileID: 0}
+  - abilitySetSO: {fileID: 11400000, guid: 89af5bf81303abc42874c73912743bda, type: 2}
+    entityBody:
+      bodyHolder: {fileID: 7211196813232357869}
+      modelPrefab: {fileID: 3004555409553840708}
+      feet: {fileID: 6536683569106103474}
+      upperBody: {fileID: 0}
+      lowerBody: {fileID: 0}
+      animationComponent: {fileID: 2595476576709269853}
+    playerAbilitySet:
+      abilitySetName: 
+      movement:
+        movementSO: {fileID: 0}
+      transitionAnimation:
+        <name>k__BackingField: 
+        <animation>k__BackingField: {fileID: 0}
+        <speed>k__BackingField: 1
+        <weight>k__BackingField: 1
+        <crossFadeTime>k__BackingField: 0.2
+        <weightOverTime>k__BackingField:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        <reverseAnimation>k__BackingField: 0
+      light:
+        abilitySO: {fileID: 0}
+      heavy:
+        abilitySO: {fileID: 0}
+      primary:
+        abilitySO: {fileID: 0}
+  currentAbilitySet:
+    abilitySetSO: {fileID: 0}
+    entityBody:
+      bodyHolder: {fileID: 0}
+      modelPrefab: {fileID: 0}
+      feet: {fileID: 0}
+      upperBody: {fileID: 0}
+      lowerBody: {fileID: 0}
+      animationComponent: {fileID: 0}
+    playerAbilitySet:
+      abilitySetName: 
+      movement:
+        movementSO: {fileID: 0}
+      transitionAnimation:
+        <name>k__BackingField: 
+        <animation>k__BackingField: {fileID: 0}
+        <speed>k__BackingField: 1
+        <weight>k__BackingField: 1
+        <crossFadeTime>k__BackingField: 0.2
+        <weightOverTime>k__BackingField:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        <reverseAnimation>k__BackingField: 0
       light:
         abilitySO: {fileID: 0}
       heavy:
@@ -254,11 +333,6 @@ MonoBehaviour:
   center: {fileID: 0}
   selectObject: {fileID: 0}
   radialMenuRoot: {fileID: 0}
-  kuhaku_jump: {fileID: 0}
-  kuhaku_krane: {fileID: 0}
-  playerAnimation: {fileID: 0}
-  transformTime: 0.4
-  scrunchTime: 0.9
   segmentCount: 6
   spriteRotationOffset: -120
 --- !u!1 &6975155188400979986
@@ -324,6 +398,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 2520190144558858494}
   - {fileID: 1456895153849336803}
   - {fileID: 3280997533145751887}
   m_Father: {fileID: 1225429674322778145}
@@ -506,3 +581,86 @@ Animation:
   m_AnimatePhysics: 0
   m_UpdateMode: 0
   m_CullingType: 0
+--- !u!1001 &2698565369871886101
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1726812301455353388}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 6.46
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 6.46
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.395172
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.076
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+      propertyPath: m_Name
+      value: kuhaku krane
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+--- !u!4 &2520190144558858494 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+  m_PrefabInstance: {fileID: 2698565369871886101}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3004555409553840708 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f12f4c50f31d6be4db57d05fa69ccdf2, type: 3}
+  m_PrefabInstance: {fileID: 2698565369871886101}
+  m_PrefabAsset: {fileID: 0}

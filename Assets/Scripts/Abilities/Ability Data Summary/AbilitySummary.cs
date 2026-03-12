@@ -1,12 +1,11 @@
 using System;
+
 using UnityEngine;
 
 
-namespace AbilitySystem
-{
+namespace AbilitySystem {
     [Serializable]
-    public abstract class AbilitySummary
-    {
-        internal AbilityData AbilityData;
+    public abstract class AbilitySummary {
+        public AbilityData AbilityData;
     }
 }
