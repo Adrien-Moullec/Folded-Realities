@@ -10,7 +10,7 @@ public class RadialMenuManager : MonoBehaviour {
     public RectTransform selectObject;
     public GameObject radialMenuRoot;
 
-    [Header("Forms")]
+    /*[Header("Forms")]
     public GameObject kuhaku_jump;
     public GameObject kuhaku_krane;
 
@@ -18,45 +18,32 @@ public class RadialMenuManager : MonoBehaviour {
     public Animation playerAnimation;
 
     public float transformTime = 0.4f;
-    public float scrunchTime = 0.9f;
+    public float scrunchTime = 0.9f;*/
 
     [Header("Radial Settings")]
     [SerializeField] private int segmentCount = 6;
     [SerializeField] private float spriteRotationOffset = -120f;
 
     private float segmentAngle;
+    private int currentIndex = 0;
 
-    private bool isRadialMenuActive = false;
-    private bool isSwitching = false;
-
-    private int currentIndex = -1;
-
-    private GameObject currentModel;
+    //private GameObject currentModel;
 
     void Start() {
         segmentAngle = 360f / segmentCount;
-
         radialMenuRoot.SetActive(false);
 
-        currentModel = kuhaku_jump;
+        //currentModel = kuhaku_jump;
 
-        kuhaku_jump.SetActive(true);
-        kuhaku_krane.SetActive(false);
+        //kuhaku_jump.SetActive(true);
+        //kuhaku_krane.SetActive(false);
     }
 
+    public void SetWheelActive(bool active) => radialMenuRoot.SetActive(active);
+
     void Update() {
-        if (Input.GetKeyDown(KeyCode.E)) {
-            isRadialMenuActive = !isRadialMenuActive;
-            radialMenuRoot.SetActive(isRadialMenuActive);
-        }
-
-        if (isRadialMenuActive) {
+        if (radialMenuRoot.activeSelf)
             UpdateSelection();
-
-            if (Input.GetMouseButtonDown(0)) {
-                OnSegmentClicked(currentIndex);
-            }
-        }
     }
 
     private void UpdateSelection() {
@@ -84,23 +71,25 @@ public class RadialMenuManager : MonoBehaviour {
         selectObject.localRotation = Quaternion.Euler(0f, 0f, finalRotation);
     }
 
-    private void OnSegmentClicked(int index) {
+    public string OnSegmentClicked() {
+
+
+        /*
         if (isSwitching) {
             return;
+        }*/
+
+        switch (currentIndex) {
+            case 0: return "Kuhaku";
+            case 1: return "Crane";
+            default: Debug.LogError("Not a sufficient index"); return "";
         }
 
-        if (index == 0 && currentModel != kuhaku_jump) {
-            StartCoroutine(CraneToPlayer());
-        }
-
-        if (index == 1 && currentModel != kuhaku_krane) {
-            StartCoroutine(PlayerToCrane());
-        }
-
-        radialMenuRoot.SetActive(false);
-        isRadialMenuActive = false;
+        /*radialMenuRoot.SetActive(false);
+        isRadialMenuActive = false;*/
     }
 
+    /*
     public void StartPlayerToCrane() => StartCoroutine(PlayerToCrane());
     IEnumerator PlayerToCrane() {
         isSwitching = true;
@@ -152,8 +141,10 @@ public class RadialMenuManager : MonoBehaviour {
 
         yield return null;
     }
+    */
 }
 
+/*
 [CustomEditor(typeof(RadialMenuManager))]
 public class RadialMenuManagerEditor : Editor {
     SerializedProperty lookAtPoint;
@@ -169,4 +160,4 @@ public class RadialMenuManagerEditor : Editor {
             rmm.StartCraneToPlayer();
         }
     }
-}
+}*/

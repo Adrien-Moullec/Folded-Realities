@@ -1,23 +1,29 @@
 using UnityEngine;
 
-using System;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 
-using Unity.VisualScripting;
-
 namespace AbilitySystem {
     public abstract class AbilityController : MonoBehaviour, IAbility {
+        [HideInInspector] protected bool canUseAbilities = true;
+
         protected virtual void Awake() {
             SetupAnimations();
         }
 
         public abstract void SetupAnimations();
         #region Input Interface
-        public abstract void InputMove(Vector3 direction, bool isRunning);
-        public abstract void InputPrimaryAttack();
-        public abstract void InputPrimaryAbility();
+        public virtual void InputTransitionName(string back) { }
+        public virtual void InputMove(Vector3 direction, bool isRunning) {
+            if (!canUseAbilities) return;
+        }
+        public virtual void InputPrimaryAttack() {
+            if (!canUseAbilities) return;
+        }
+        public virtual void InputPrimaryAbility() {
+            if (!canUseAbilities) return;
+        }
         #endregion
 
         #region Movement Interface
@@ -26,27 +32,25 @@ namespace AbilitySystem {
         #endregion
 
         #region Ability Events Manager and Interface
-        public void OnActivateCooldownAbility((Animation component, AbilityAnimation anim, Transform transform, float start, float end)[] timelineEvents, (IEnumerator action, float delta)[] dEvents, CooldownData data, float cooldown, int maxCharges) => StartCoroutine(ActivateCooldownAbility(timelineEvents, dEvents, data, cooldown, maxCharges));
-        IEnumerator ActivateCooldownAbility((Animation component, AbilityAnimation anim, Transform transform, float start, float end)[] timelineEvents, (IEnumerator action, float delta)[] dEvents, CooldownData data, float cooldown, int maxCharges) {
+        public void OnActivateCooldownAbility(TimelineEvent[] timelineEvents, DeltaEvent[] dEvents, CooldownData data, float cooldown, int maxCharges) => StartCoroutine(ActivateCooldownAbility(timelineEvents, dEvents, data, cooldown, maxCharges));
+        IEnumerator ActivateCooldownAbility(TimelineEvent[] timelineEvents, DeltaEvent[] dEvents, CooldownData data, float cooldown, int maxCharges) {
             data.currentCharges--;
             StartCoroutine(CooldownSequence(data, cooldown, maxCharges));
 
             data.isUsing = true;
-            yield return RunAnimationWithEvents(
+            yield return RunAnimationsWithEvents(
                 timelineEvents,
                 dEvents
             );
             data.isUsing = false;
         }
 
-        public IEnumerator RunAnimationWithEvents((Animation component, AbilityAnimation anim, Transform transform, float start, float end)[] timelineInfo, (IEnumerator action, float delta)[] timelineEvents = null) {
+        public IEnumerator RunAnimationsWithEvents(TimelineEvent[] timelineInfo, DeltaEvent[] timelineEvents = null) {
             float time = 0;
             float endTime = timelineInfo.Max(x => x.end);
-            (IEnumerator action, float delta)[] dEvs = timelineEvents.OrderBy(x => x.delta).ToArray();
-            Dictionary<(Animation component, AbilityAnimation anim, Transform transform, float start, float end), bool> isPlaying = new();
+            DeltaEvent[] dEvs = timelineEvents.OrderBy(x => x.deltaTime).ToArray();
+            Dictionary<TimelineEvent, bool> isPlaying = new();
 
-            if (dEvs?.Length == 0)
-                goto EndOfDeltaEvents;
             int eventCounter = 0;
 
             foreach (var n in timelineInfo)
@@ -54,11 +58,13 @@ namespace AbilitySystem {
 
             while (time < endTime) {
                 time += Time.deltaTime;
-                if (time / endTime >= dEvs[eventCounter].delta) {
-                    StartCoroutine(dEvs[eventCounter].Item1);
-                    if (dEvs.Length == ++eventCounter) break;
-                }
-                foreach (var n in timelineInfo) {
+
+                if (dEvs?.Length > eventCounter)
+                    if (time / endTime >= dEvs[eventCounter].deltaTime) {
+                        StartCoroutine(dEvs[eventCounter].action);
+                        if (dEvs.Length == ++eventCounter) break;
+                    }
+                foreach (TimelineEvent n in timelineInfo) {
                     RunAnimationCycle(
                         n,
                         time,
@@ -66,33 +72,24 @@ namespace AbilitySystem {
                         isPlaying
                     );
                 }
-
-
                 yield return null;
             }
 
-        EndOfDeltaEvents:
-            while (time < endTime) {
-                time += Time.deltaTime;
-                foreach (var n in timelineInfo) {
-                    RunAnimationCycle(
-                        n,
-                        time,
-                        time >= n.start && time <= n.end,
-                        isPlaying
-                    );
-                }
-            }
             foreach (var n in timelineInfo)
                 n.anim.Stop(n.component);
         }
-        private void RunAnimationCycle((Animation component, AbilityAnimation anim, Transform transform, float start, float end) n, float time, bool canPlay, Dictionary<(Animation component, AbilityAnimation anim, Transform transform, float start, float end), bool> isPlaying) {
+        private void RunAnimationCycle(TimelineEvent n, float time, bool canPlay, Dictionary<TimelineEvent, bool> isPlaying) {
             if (canPlay) {
                 if (!isPlaying[n]) {
                     isPlaying[n] = true;
                     n.anim.MixTransform(n.component, n.transform);
                 }
-                n.anim.PlayOnTimeline(n.component, n.transform, Mathf.InverseLerp(n.start, n.end, time));
+                n.anim.PlayOnTimeline(
+                    n.component,
+                    n.reverse ?
+                    Mathf.InverseLerp(n.end, n.start, time) :
+                    Mathf.InverseLerp(n.start, n.end, time)
+                );
             } else {
                 if (isPlaying[n]) {
                     isPlaying[n] = false;

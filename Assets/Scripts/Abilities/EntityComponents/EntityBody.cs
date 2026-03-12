@@ -10,7 +10,7 @@ namespace AbilitySystem {
         [Tooltip("Gameobject that parents the body prefab.")]
         public GameObject bodyHolder;
         [Tooltip("Gameobject of the prefab body.")]
-        public GameObject model;
+        public GameObject modelPrefab;
         [Tooltip("Gameobject that has the Collider for the feet collisions.")]
         public SphereCollider feet;
 

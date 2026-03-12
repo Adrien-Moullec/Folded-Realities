@@ -19,17 +19,15 @@ namespace AbilitySystem {
                 (cooldownAnim, WrapMode.Once)
             };
 
-        private static IEnumerator ActionToIenumerator(Action action) {
-            action?.Invoke();
-            yield return null;
-        }
         public virtual bool TryUseAbility(EntityBody entityBody, CooldownData data) {
             if (data.currentCharges <= 0) return false;
             entityBody.iAbility.OnActivateCooldownAbility(
-                new (Animation, AbilityAnimation, Transform, float, float)[] {
-                    (entityBody.animationComponent, cooldownAnim, null, 0, cooldownAnim.length)
+                new TimelineEvent[] {
+                    new TimelineEvent(entityBody.animationComponent, cooldownAnim, 0, cooldownAnim.length)
                 },
-                new (IEnumerator, float)[] { (Ability(entityBody, data), deltaEvent) },
+                new DeltaEvent[] {
+                    new DeltaEvent(Ability(entityBody, data), deltaEvent)
+                },
                 data, cooldown, charges
             );
             return true;

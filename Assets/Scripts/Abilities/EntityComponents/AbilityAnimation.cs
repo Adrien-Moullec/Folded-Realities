@@ -16,13 +16,15 @@ namespace AbilitySystem {
         [Tooltip("Animation Clip that will be used.")]
         [field: SerializeField] public AnimationClip animation { get; private set; }
         [Tooltip("Speed multiplier of original clip. (1 = default)")]
-        [field: SerializeField] public float speed { get; private set; } = 1;
+        [field: SerializeField, Min(0)] public float speed { get; private set; } = 1;
         [Tooltip("The amount this animation affects the model. (1 = default)")]
-        [field: SerializeField] public float weight { get; private set; } = 1;
+        [field: SerializeField, Min(0)] public float weight { get; private set; } = 1;
         [Tooltip("UNUSED - The transition period that the animation will mix with other animations.")]
-        [field: SerializeField] public float crossFadeTime { get; private set; } = 0.2f;
+        [field: SerializeField, Min(0)] public float crossFadeTime { get; private set; } = 0.2f;
         [Tooltip("The weight of the animation on the model over time. (use range x:0->1, y:0->1)")]
         [field: SerializeField] public AnimationCurve weightOverTime { get; private set; }
+        [Tooltip("Choose to reverse the animation when it is played.")]
+        [field: SerializeField] public bool reverseAnimation { get; private set; } = false;
         public string clipName {
             get => name + (animation == null ? "" : animation.name);
         }
@@ -66,7 +68,7 @@ namespace AbilitySystem {
             if (GetState(anim))
                 anim.Stop(clipName);
         }
-        public void PlayOnTimeline(Animation anim, Transform transform, float deltaTime, float weight = 1) {
+        public void PlayOnTimeline(Animation anim, float deltaTime) {
             if (anim == null || animation == null) return;
             anim[clipName].time = deltaTime * anim[clipName].length;
         }
