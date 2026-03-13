@@ -3,8 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 
-public class CollectibleManager : MonoBehaviour
-{
+public class CollectiblesManager : MonoBehaviour {
     [Header("Normal Collectibles")]
     public int normalCount = 0;
     public TMP_Text normalCountText;
@@ -13,63 +12,58 @@ public class CollectibleManager : MonoBehaviour
     public Image[] puzzlePieces;
     private int specialCount = 0;
 
-    [Header("Idle Float Settings")]
-    public float hoverHeight = 0.25f;
-    public float hoverSpeed = 2f;
-    public float idleRotationSpeed = 90f;
-
     [Header("Pickup Effect Settings")]
     public float pickupFloatSpeed = 2f;
     public float pickupRotationSpeed = 360f;
     public float destroyDelay = 0.6f;
 
-    private void Start()
-    {
+    [Header("Audio")]
+    public AudioClip pickupSound;
+
+    void Start() {
         UpdateNormalUI();
         ResetPuzzleUI();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Collectibles"))
-        {
-            normalCount++;
-            UpdateNormalUI();
-            StartCoroutine(PlayPickupEffect(other.gameObject));
-        }
+    // Called when star is collected
+    public void CollectNormal(GameObject obj) {
+        normalCount++;
+        UpdateNormalUI();
 
-        if (other.CompareTag("Special"))
-        {
-            if (specialCount < puzzlePieces.Length)
-            {
-                puzzlePieces[specialCount].enabled = true;
-                specialCount++;
-            }
-
-            StartCoroutine(PlayPickupEffect(other.gameObject));
-        }
+        StartCoroutine(PlayPickupEffect(obj));
     }
 
-    private IEnumerator PlayPickupEffect(GameObject obj)
-    {
+    // Called when puzzle piece is collected
+    public void CollectSpecial(GameObject obj) {
+        if (specialCount < puzzlePieces.Length) {
+            puzzlePieces[specialCount].enabled = true;
+            specialCount++;
+        }
+
+        StartCoroutine(PlayPickupEffect(obj));
+    }
+
+    IEnumerator PlayPickupEffect(GameObject obj) {
+        // Play pickup sound
+        if (pickupSound != null) {
+            AudioSource.PlayClipAtPoint(pickupSound, obj.transform.position);
+        }
+
         // Disable collider
         Collider col = obj.GetComponent<Collider>();
-        if (col != null)
-        {
+        if (col != null) {
             col.enabled = false;
         }
 
-        // Stop idle floating script
+        // Stop idle floating
         CollectibleIdle idle = obj.GetComponent<CollectibleIdle>();
-        if (idle != null)
-        {
+        if (idle != null) {
             idle.enabled = false;
         }
 
         float timer = 0f;
 
-        while (timer < destroyDelay)
-        {
+        while (timer < destroyDelay) {
             obj.transform.position += Vector3.up * pickupFloatSpeed * Time.deltaTime;
             obj.transform.Rotate(Vector3.up * pickupRotationSpeed * Time.deltaTime);
 
@@ -80,20 +74,15 @@ public class CollectibleManager : MonoBehaviour
         Destroy(obj);
     }
 
-    private void UpdateNormalUI()
-    {
-        if (normalCountText != null)
-        {
+    void UpdateNormalUI() {
+        if (normalCountText != null) {
             normalCountText.text = normalCount.ToString();
         }
     }
 
-    private void ResetPuzzleUI()
-    {
-        for (int i = 0; i < puzzlePieces.Length; i++)
-        {
-            if (puzzlePieces[i] != null)
-            {
+    void ResetPuzzleUI() {
+        for (int i = 0; i < puzzlePieces.Length; i++) {
+            if (puzzlePieces[i] != null) {
                 puzzlePieces[i].enabled = false;
             }
         }
