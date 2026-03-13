@@ -31,8 +31,10 @@ namespace AbilitySystem {
                     continue;
                 i.playerAbilitySet = new PlayerAbilitySet(i.abilitySetSO, i.entityBody.animationComponent);
                 i.entityBody.iAbility = this;
+                i.entityBody.modelPrefab.SetActive(false);
             }
             currentAbilitySet = playerSetsList[0];
+            currentAbilitySet.entityBody.modelPrefab.SetActive(true);
         }
         public override void SetupAnimations() {
             foreach (var n in playerSetsList)

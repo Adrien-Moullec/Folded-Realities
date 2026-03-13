@@ -77,18 +77,22 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <reverseAnimation>k__BackingField: 0
-  speedMultiplier: 0.5
+  speedMultiplier: 1
   changeDirectionSpeedMultiplier: 1
-  acceleration: 2.09
-  deceleration: 3.35
-  decelerationWhileFalling: 2
-  turnSpeed: 0.01
-  runSpeedMultiplier: 1.5
+  acceleration: 1
+  deceleration: 1
   runAccelerationMultiplier: 1
+  accelerationWhileFalling: 0.5
+  decelerationWhileFalling: 0.5
+  turnSpeed: 1
+  runSpeedMultiplier: 1.5
   canJump: 1
-  jumpSpeed: 2
-  gravity: 5.09
-  maxFallSpeed: 4
+  jumpSpeed: 19.84
+  maxFallSpeed: 20
+  canGlide: 1
+  glideFallSpeed: 2.55
+  fallToGlideAcceleration: 2
+  gravity: 20
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
