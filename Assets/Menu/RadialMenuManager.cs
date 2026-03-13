@@ -42,8 +42,9 @@ public class RadialMenuManager : MonoBehaviour {
     public void SetWheelActive(bool active) => radialMenuRoot.SetActive(active);
 
     void Update() {
-        if (radialMenuRoot.activeSelf)
+        if (radialMenuRoot.activeSelf) {
             UpdateSelection();
+        }
     }
 
     private void UpdateSelection() {
