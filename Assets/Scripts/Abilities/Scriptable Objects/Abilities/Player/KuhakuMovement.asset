@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89498978a5163564984da6a9f23b4e81, type: 3}
-  m_Name: NormalMovement
+  m_Name: KuhakuMovement
   m_EditorClassIdentifier: 
   idleAnimation:
     <name>k__BackingField: 
@@ -87,12 +87,12 @@ MonoBehaviour:
   turnSpeed: 5
   runSpeedMultiplier: 1.5
   canJump: 1
-  jumpSpeed: 2
+  jumpSpeed: 0.2
   maxFallSpeed: 20
-  canGlide: 1
+  canGlide: 0
   glideFallSpeed: 2.55
   fallToGlideAcceleration: 2
-  gravity: 30
+  gravity: 60
   groundLayers:
     serializedVersion: 2
     m_Bits: 64

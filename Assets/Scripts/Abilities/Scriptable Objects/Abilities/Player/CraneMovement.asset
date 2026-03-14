@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89498978a5163564984da6a9f23b4e81, type: 3}
+  m_Name: CraneMovement
+  m_EditorClassIdentifier: 
+  idleAnimation:
+    <name>k__BackingField: 
+    <animation>k__BackingField: {fileID: 0}
+    <speed>k__BackingField: 1
+    <weight>k__BackingField: 1
+    <crossFadeTime>k__BackingField: 0.2
+    <weightOverTime>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <reverseAnimation>k__BackingField: 0
+  walkingAnimation:
+    <name>k__BackingField: 
+    <animation>k__BackingField: {fileID: -7307076794432317810, guid: 784239e0572055e41b419646c537bd0c, type: 3}
+    <speed>k__BackingField: 1
+    <weight>k__BackingField: 1
+    <crossFadeTime>k__BackingField: 0.2
+    <weightOverTime>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <reverseAnimation>k__BackingField: 0
+  runningAnimation:
+    <name>k__BackingField: 
+    <animation>k__BackingField: {fileID: 8498131026618272491, guid: 784239e0572055e41b419646c537bd0c, type: 3}
+    <speed>k__BackingField: 1
+    <weight>k__BackingField: 1
+    <crossFadeTime>k__BackingField: 0.2
+    <weightOverTime>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <reverseAnimation>k__BackingField: 0
+  jumpingAnimation:
+    <name>k__BackingField: 
+    <animation>k__BackingField: {fileID: 0}
+    <speed>k__BackingField: 1
+    <weight>k__BackingField: 1
+    <crossFadeTime>k__BackingField: 0.2
+    <weightOverTime>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <reverseAnimation>k__BackingField: 0
+  fallingAnimation:
+    <name>k__BackingField: 
+    <animation>k__BackingField: {fileID: 0}
+    <speed>k__BackingField: 1
+    <weight>k__BackingField: 1
+    <crossFadeTime>k__BackingField: 0.2
+    <weightOverTime>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <reverseAnimation>k__BackingField: 0
+  speedMultiplier: 1
+  changeDirectionSpeedMultiplier: 1
+  acceleration: 0.01
+  deceleration: 4
+  runAccelerationMultiplier: 1
+  accelerationWhileFalling: 5
+  decelerationWhileFalling: 5
+  turnSpeed: 5
+  runSpeedMultiplier: 1.5
+  canJump: 0
+  jumpSpeed: 2
+  maxFallSpeed: 20
+  canGlide: 1
+  glideFallSpeed: 2.5
+  fallToGlideAcceleration: 2
+  gravity: 10
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 64
