@@ -61,6 +61,8 @@ namespace AbilitySystem {
         [Header("Vertical Settings")]
         [Tooltip("Controls if entity can jump.")]
         [SerializeField] protected bool canJump = true;
+        [Tooltip("Controls if entity can jump.")]
+        [SerializeField, Range(1, 5)] protected int doubleJumpCount = 1;
         [Tooltip("Jump velocity.")]
         [SerializeField, Min(0)] protected float jumpSpeed = 7f;
         [Tooltip("Max fall speed.")]
@@ -100,15 +102,15 @@ namespace AbilitySystem {
         public override void Move(EntityBody entityBody, AbilityData data, Vector3 moveInput, bool runInput) {
             GenericMovementData moveData = (GenericMovementData)data;
 
-            HorizontalSpeed(moveData, new Vector3(moveInput.x, 0, moveInput.z), runInput);
-            FallSpeed(moveData, entityBody, moveInput.y > 0);
+            HorizontalMovement(moveData, new Vector3(moveInput.x, 0, moveInput.z), runInput);
+            VerticalMovement(moveData, entityBody, moveInput.y > 0);
 
             AnimateAbility(moveData, entityBody.animationComponent);
 
             entityBody.iAbility.OnMoveEntity(moveData.velocity * Time.deltaTime, turnSpeed);
         }
 
-        private void HorizontalSpeed(GenericMovementData moveData, Vector3 inputDir, bool runInput) {
+        private void HorizontalMovement(GenericMovementData moveData, Vector3 inputDir, bool runInput) {
             Vector3 horizontalVelocity = new Vector3(moveData.velocity.x, 0, moveData.velocity.z);
 
             if (inputDir.sqrMagnitude > 0.001f) {
@@ -146,7 +148,7 @@ namespace AbilitySystem {
             moveData.velocity.z = horizontalVelocity.z;
         }
 
-        private void FallSpeed(GenericMovementData pmd, EntityBody entityBody, bool isJumping) {
+        private void VerticalMovement(GenericMovementData pmd, EntityBody entityBody, bool isJumping) {
             Vector3 feetPos = entityBody.feetSphereArea.transform.position + entityBody.feetSphereArea.center;
 
             pmd.isGrounded = Physics.CheckSphere(
@@ -154,32 +156,62 @@ namespace AbilitySystem {
                 entityBody.feetSphereArea.radius,
                 groundLayers
             ) && pmd.fallSpeed <= 0;
+            if (!isJumping) pmd.performedJump = false;
 
+
+            // Grounded conditions
             if (pmd.isGrounded) {
-                if (isJumping && canJump) {
-                    pmd.fallSpeed = jumpSpeed * 100;
-                    pmd.isGrounded = false;
-                } else {
-                    pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, 0, decelerationWhileGrounded);
-                }
-            } else {
-                if (canGlide && isJumping) {
-                    pmd.isGliding = true;
-                    pmd.fallSpeed = Mathf.MoveTowards(
-                        pmd.fallSpeed,
-                        -glideFallSpeed,
-                        gravity * Time.deltaTime * (pmd.fallSpeed > -glideFallSpeed ? 1 : fallToGlideAcceleration)
-                    );
-                } else if (canGlide && !isJumping) {
-                    pmd.isGliding = false;
+                pmd.remainingJumps = doubleJumpCount;
+                //Jumping after just pressed
+                if (pmd.canJump && isJumping)
+                    OnJump(pmd);
+
+                //Not jumping
+                else {
+                    pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, 0, decelerationWhileGrounded * Time.deltaTime);
                 }
 
-                pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, -maxFallSpeed, gravity * Time.deltaTime);
+                // Arial Conditions
+            } else {
+
+                // When pressing jump input in the air
+                if (isJumping) {
+
+                    // When jump input has just been pressed
+                    if (pmd.canJump)
+                        OnJump(pmd);
+
+                    // When jump input is being held
+                    else {
+
+                        // If glide is activated
+                        if (canGlide) {
+                            pmd.isGliding = true;
+                            pmd.fallSpeed = Mathf.MoveTowards(
+                                pmd.fallSpeed,
+                                -glideFallSpeed,
+                                gravity * Time.deltaTime * (pmd.fallSpeed > -glideFallSpeed ? 1 : fallToGlideAcceleration)
+                            );
+                        }
+
+                        //If Glide isn't activated
+                        else
+                            pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, -maxFallSpeed, gravity * Time.deltaTime);
+                    }
+                } else {
+                    pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, -maxFallSpeed, gravity * Time.deltaTime);
+                }
             }
 
             pmd.fallSpeed = Mathf.Clamp(pmd.fallSpeed, -maxFallSpeed, maxFallSpeed);
-
             pmd.velocity.y = pmd.fallSpeed;
+        }
+
+        private void OnJump(GenericMovementData pmd) {
+            pmd.fallSpeed = jumpSpeed * 100;
+            pmd.isGrounded = false;
+            pmd.remainingJumps--;
+            pmd.performedJump = true;
         }
 
         protected void AnimateAbility(GenericMovementData moveData, Animation anim) {
@@ -212,15 +244,27 @@ namespace AbilitySystem {
         public class GenericMovementData : AbilityData {
             [HideInInspector] public Vector3 velocity;
             [HideInInspector] public float fallSpeed;
+
+            //Jumping
+            [HideInInspector] public int remainingJumps;
+            [HideInInspector] public bool performedJump;
+
+            //States
             [HideInInspector] public bool isGrounded;
             [HideInInspector] public bool isRunning;
             [HideInInspector] public bool isGliding;
+
+            [HideInInspector]
+            public bool canJump {
+                get => !performedJump && remainingJumps > 0;
+            }
 
             public GenericMovementData() {
                 velocity = Vector3.zero;
                 fallSpeed = 0;
                 isGrounded = false;
                 isRunning = false;
+                remainingJumps = 0;
             }
         }
     }
