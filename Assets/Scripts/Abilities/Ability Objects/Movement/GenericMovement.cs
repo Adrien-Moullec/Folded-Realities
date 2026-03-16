@@ -55,7 +55,6 @@ namespace AbilitySystem {
         protected float runSpeed => baseSpeed * speedMultiplier * runSpeedMultiplier;
 
         [Header("Vertical Settings")]
-
         [Tooltip("Controls if entity can jump.")]
         [SerializeField] protected bool canJump = true;
         [Tooltip("Jump velocity.")]
@@ -64,6 +63,8 @@ namespace AbilitySystem {
         [SerializeField, Min(0)] protected float maxFallSpeed = 25f;
         [Tooltip("Controls if entity can glide.")]
         [SerializeField] protected bool canGlide = false;
+        [Tooltip("The horizontal speed while gliding.")]
+        [SerializeField] protected float glideHorizontalSpeed = 1;
         [Tooltip("The fall speed of gliding.")]
         [SerializeField] protected float glideFallSpeed = 1;
         [Tooltip("The speed to decelerate into glide fallspeed.")]
@@ -125,10 +126,11 @@ namespace AbilitySystem {
                     directionMultiplier * 10;
 
                 horizontalVelocity += inputDir * accel * Time.deltaTime;
+                float maxSpeed = runInput ? runSpeed : walkSpeed;
 
-                horizontalVelocity = Vector3.ClampMagnitude(horizontalVelocity, runInput ? runSpeed : walkSpeed);
+                if (horizontalVelocity.magnitude > maxSpeed)
+                    horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, Vector3.ClampMagnitude(horizontalVelocity, maxSpeed), moveData.isGrounded ? deceleration : decelerationWhileFalling);
             } else {
-
                 horizontalVelocity = Vector3.MoveTowards(
                     horizontalVelocity,
                     Vector3.zero,
@@ -157,12 +159,16 @@ namespace AbilitySystem {
                     pmd.fallSpeed = 0;
                 }
             } else {
-                if (canGlide && isJumping)
+                if (canGlide && isJumping) {
+                    pmd.isGliding = true;
                     pmd.fallSpeed = Mathf.MoveTowards(
                         pmd.fallSpeed,
                         -glideFallSpeed,
                         gravity * Time.deltaTime * (pmd.fallSpeed > -glideFallSpeed ? 1 : fallToGlideAcceleration)
                     );
+                } else if (canGlide && !isJumping) {
+                    pmd.isGliding = false;
+                }
 
                 pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, -maxFallSpeed, gravity * Time.deltaTime);
             }
@@ -204,6 +210,7 @@ namespace AbilitySystem {
             [HideInInspector] public float fallSpeed;
             [HideInInspector] public bool isGrounded;
             [HideInInspector] public bool isRunning;
+            [HideInInspector] public bool isGliding;
 
             public GenericMovementData() {
                 velocity = Vector3.zero;
