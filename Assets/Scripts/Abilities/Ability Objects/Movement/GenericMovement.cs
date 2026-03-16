@@ -1,3 +1,5 @@
+using UnityEditor.ShaderGraph.Internal;
+
 using UnityEngine;
 
 namespace AbilitySystem {
@@ -40,6 +42,8 @@ namespace AbilitySystem {
         [SerializeField, Min(0.01f)] protected float accelerationWhileFalling = 0.5f;
         [Tooltip("Deceleration while falling.")]
         [SerializeField, Min(0.01f)] protected float decelerationWhileFalling = 0.5f;
+        [Tooltip("Deceleration while grounded. This lets the entity model keep some momentum if they slide off a ledge.")]
+        [SerializeField, Min(0.01f)] protected float decelerationWhileGrounded = 5f;
 
         [Tooltip("Turn speed of the entity.")]
         [SerializeField, Min(0.01f)] protected float turnSpeed = 10f;
@@ -143,11 +147,11 @@ namespace AbilitySystem {
         }
 
         private void FallSpeed(GenericMovementData pmd, EntityBody entityBody, bool isJumping) {
-            Vector3 feetPos = entityBody.feet.transform.position + entityBody.feet.center;
+            Vector3 feetPos = entityBody.feetSphereArea.transform.position + entityBody.feetSphereArea.center;
 
             pmd.isGrounded = Physics.CheckSphere(
                 feetPos,
-                entityBody.feet.radius,
+                entityBody.feetSphereArea.radius,
                 groundLayers
             ) && pmd.fallSpeed <= 0;
 
@@ -156,7 +160,7 @@ namespace AbilitySystem {
                     pmd.fallSpeed = jumpSpeed * 100;
                     pmd.isGrounded = false;
                 } else {
-                    pmd.fallSpeed = 0;
+                    pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, 0, decelerationWhileGrounded);
                 }
             } else {
                 if (canGlide && isJumping) {
