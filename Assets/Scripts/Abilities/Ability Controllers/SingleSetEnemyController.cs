@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 namespace AbilitySystem {
     [RequireComponent(typeof(NavMeshAgent))]
-    [RequireComponent(typeof(Animation))]
     public abstract class SingleSetEnemyController : AbilityController {
         [Space]
         [Header("Settings")]
@@ -28,10 +27,12 @@ namespace AbilitySystem {
 
         public override void OnMoveEntity(Vector3 direction, float turnSpeed) {
             navMeshAgent.Move(direction);
+            direction.y = 0;
+            if (direction != Vector3.zero) entityBody.bodyHolder.transform.forward = direction;
         }
-
-        public override void OnRotateEntity(Vector3 movement) {
-            throw new NotImplementedException();
+        public override void OnRotateEntity(Vector3 direction) {
+            direction.y = 0;
+            if (direction != Vector3.zero) entityBody.bodyHolder.transform.forward = direction;
         }
 
         public override void InputMove(Vector3 direction, bool isRunning) {
