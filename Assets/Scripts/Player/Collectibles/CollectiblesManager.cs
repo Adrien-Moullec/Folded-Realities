@@ -29,7 +29,10 @@ public class CollectiblesManager : MonoBehaviour {
     public void CollectNormal(GameObject obj) {
         normalCount++;
         UpdateNormalUI();
+        
+        CurrencyManager.Instance.AddCoins(1);
 
+        
         StartCoroutine(PlayPickupEffect(obj));
     }
 
