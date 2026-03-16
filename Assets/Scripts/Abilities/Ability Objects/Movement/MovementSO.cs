@@ -11,7 +11,12 @@ namespace AbilitySystem {
     [Serializable]
     public class MovementAbilitySummary : AbilitySummary {
         [SerializeField] public MovementSO movementSO;
-        public void Activate(EntityBody entityBody, Vector3 move, bool dashInput) => movementSO?.Move(entityBody, AbilityData, move, dashInput);
+        public void Activate(EntityBody entityBody, Vector3 move, bool dashInput, AbilityData data = null) =>
+            movementSO?.Move(entityBody,
+            data == null ? AbilityData : data,
+            move,
+            dashInput);
+
         public MovementAbilitySummary(MovementSO m) {
             movementSO = m;
             AbilityData = m.AbilityDataSetup();

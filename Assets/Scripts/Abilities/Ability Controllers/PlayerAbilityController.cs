@@ -13,6 +13,8 @@ namespace AbilitySystem {
         [Header("Transition Animation")]
         [SerializeField] Animation SmokesAndMirrorsAnimation;
         [SerializeField] AbilityAnimation transitionAnimationClip;
+        [SerializeField] float transitionTime = 0.5f;
+        private bool isTransitioning = false;
 
         [Space]
         [Header("Abilities")]
@@ -29,9 +31,10 @@ namespace AbilitySystem {
             foreach (var i in playerSetsList) {
                 if (i.abilitySetSO == null)
                     continue;
-                i.playerAbilitySet = new PlayerAbilitySet(i.abilitySetSO, i.entityBody.animationComponent);
+                i.playerAbilitySet = new PlayerAbilitySet(i.abilitySetSO);
                 i.entityBody.iAbility = this;
                 i.entityBody.modelPrefab.SetActive(false);
+                i.playerAbilitySet.movement.AbilityData = playerSetsList[0].playerAbilitySet.movement.AbilityData;
             }
             currentAbilitySet = playerSetsList[0];
             currentAbilitySet.entityBody.modelPrefab.SetActive(true);
@@ -43,7 +46,9 @@ namespace AbilitySystem {
         #endregion
 
         #region Transitions
+        public override void OnEvent(string eventMessage) => InputTransitionName(eventMessage);
         public override void InputTransitionName(string name) {
+            if (isTransitioning) return;
 
             if (!playerSetsList.Any(x => x.abilitySetSO.abilitySetName == name)) {
                 Debug.LogWarning("No ability set of that name.");
@@ -58,23 +63,24 @@ namespace AbilitySystem {
 
             StartCoroutine(RunAnimationsWithEvents(
                 new TimelineEvent[] {
-                    new TimelineEvent(currentAbilitySet.entityBody.animationComponent, currentAbilitySet.abilitySetSO.transitionAnimation, 0, 1),
-                    new TimelineEvent(checkAbilitySet.entityBody.animationComponent, checkAbilitySet.abilitySetSO.transitionAnimation, 1, 2),
-                    new TimelineEvent(SmokesAndMirrorsAnimation, transitionAnimationClip, 0, 2, true)
+                    new TimelineEvent(currentAbilitySet.entityBody.animationComponent, currentAbilitySet.abilitySetSO.transitionAnimation, 0, transitionTime/2),
+                    new TimelineEvent(checkAbilitySet.entityBody.animationComponent, checkAbilitySet.abilitySetSO.transitionAnimation, transitionTime/2, transitionTime),
+                    new TimelineEvent(SmokesAndMirrorsAnimation, transitionAnimationClip, 0, transitionTime, true)
                 },
                 new DeltaEvent[] {
                     new DeltaEvent(() => {
-                        canUseAbilities = false; SmokesAndMirrorsAnimation.gameObject.SetActive(true);
+                        isTransitioning = true;
+                        SmokesAndMirrorsAnimation.gameObject.SetActive(true);
                     }, 0),
                     new DeltaEvent(() => {
                         currentAbilitySet.entityBody.modelPrefab.SetActive(false);
                         checkAbilitySet.entityBody.modelPrefab.SetActive(true);
                         currentAbilitySet = checkAbilitySet;
-                    }, 0.5f),
+                    }, transitionTime/2),
                     new DeltaEvent(() => {
-                        canUseAbilities = true;
+                        isTransitioning = false;
                         SmokesAndMirrorsAnimation.gameObject.SetActive(false);
-                    }, 1)
+                    }, transitionTime)
                 }
             ));
             print("End");

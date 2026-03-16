@@ -15,6 +15,7 @@ namespace AbilitySystem {
         public void OnActivateCooldownAbility(TimelineEvent[] timelineEvents, DeltaEvent[] dEvents, CooldownData data, float cooldown, int maxCharges);
         public void OnMoveEntity(Vector3 direction, float turnSpeed = 1);
         public void OnRotateEntity(Vector3 direction);
+        public void OnEvent(string eventMessage);
         #endregion
 
         #region Utility Functions
