@@ -42,6 +42,12 @@ public class RadialMenuManager : MonoBehaviour {
     public void SetWheelActive(bool active) => radialMenuRoot.SetActive(active);
 
     void Update() {
+
+        // Toggle radial menu with E
+        if (Input.GetKeyDown(KeyCode.E)) {
+            radialMenuRoot.SetActive(!radialMenuRoot.activeSelf);
+        }
+
         if (radialMenuRoot.activeSelf) {
             UpdateSelection();
         }
