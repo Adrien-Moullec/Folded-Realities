@@ -12,18 +12,89 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89498978a5163564984da6a9f23b4e81, type: 3}
   m_Name: EnemyMovement
   m_EditorClassIdentifier: 
-  cooldown: 0
-  charges: 0
+  idleAnimation:
+    <name>k__BackingField: 
+    <animation>k__BackingField: {fileID: 0}
+    <speed>k__BackingField: 1
+    <weight>k__BackingField: 1
+    <crossFadeTime>k__BackingField: 0.2
+    <weightOverTime>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <reverseAnimation>k__BackingField: 0
+  walkingAnimation:
+    <name>k__BackingField: 
+    <animation>k__BackingField: {fileID: 4781951162920444690, guid: 306ebdc398a2a904a8d450d31438db0b, type: 3}
+    <speed>k__BackingField: 1
+    <weight>k__BackingField: 1
+    <crossFadeTime>k__BackingField: 0.2
+    <weightOverTime>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <reverseAnimation>k__BackingField: 0
+  runningAnimation:
+    <name>k__BackingField: 
+    <animation>k__BackingField: {fileID: 0}
+    <speed>k__BackingField: 1
+    <weight>k__BackingField: 1
+    <crossFadeTime>k__BackingField: 0.2
+    <weightOverTime>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <reverseAnimation>k__BackingField: 0
+  jumpingAnimation:
+    <name>k__BackingField: 
+    <animation>k__BackingField: {fileID: 0}
+    <speed>k__BackingField: 1
+    <weight>k__BackingField: 1
+    <crossFadeTime>k__BackingField: 0.2
+    <weightOverTime>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <reverseAnimation>k__BackingField: 0
+  fallingAnimation:
+    <name>k__BackingField: 
+    <animation>k__BackingField: {fileID: 0}
+    <speed>k__BackingField: 1
+    <weight>k__BackingField: 1
+    <crossFadeTime>k__BackingField: 0.2
+    <weightOverTime>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <reverseAnimation>k__BackingField: 0
   speedMultiplier: 1
+  changeDirectionSpeedMultiplier: 3
   acceleration: 10
   deceleration: 10
-  fallingDeceleration: 2
-  dashSpeedMultiplier: 1.5
-  dashAccelerationMultiplier: 1
+  runAccelerationMultiplier: 1
+  accelerationWhileFalling: 0.5
+  decelerationWhileFalling: 0.5
+  decelerationWhileGrounded: 5
+  turnSpeed: 10
+  runSpeedMultiplier: 1.5
   canJump: 0
   jumpSpeed: 0.07
-  gravity: 0.2
   maxFallSpeed: 10
+  canGlide: 0
+  glideHorizontalSpeed: 1
+  glideFallSpeed: 1
+  fallToGlideAcceleration: 2
+  gravity: 0.2
   groundLayers:
     serializedVersion: 2
     m_Bits: 0

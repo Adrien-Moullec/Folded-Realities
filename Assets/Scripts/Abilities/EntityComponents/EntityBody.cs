@@ -24,7 +24,8 @@ namespace AbilitySystem {
         public Animation animationComponent;
 
         [Space]
-        [Header("References")]
+        [Header("Ability References")]
+        [HideInInspector] public AbilitySet abilitySet;
         [Tooltip("Interface reference for the Ability Controller.")]
         [HideInInspector] public IAbility iAbility;
     }
