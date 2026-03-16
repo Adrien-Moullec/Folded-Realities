@@ -97,37 +97,6 @@ namespace AbilitySystem {
                 }
             }
         }
-
-
-
-        /*
-        public IEnumerator RunAnimationWithEvents((AbilityAnimation anim, float start, float end)[] animsInfo, (Animation component, Transform transform) modelInfo, (IEnumerator action, float delta)[] deltaEvents = null) {
-            animsInfo.MixTransform(modelInfo);
-            AnimationState state = animsInfo.GetState(modelInfo.component);
-            (IEnumerator action, float delta)[] dEvs = deltaEvents.OrderBy(x => x.delta).ToArray();
-
-            int counter = 0;
-            if (dEvs?.Length == 0)
-                goto EndOfDeltaEvents;
-            yield return null;
-
-            while (state.enabled) {
-
-                if (state.normalizedTime >= dEvs[counter].delta) {
-                    StartCoroutine(dEvs[counter].Item1);
-                    if (dEvs.Length == ++counter) break;
-                }
-
-                animsInfo.SetWeight(modelInfo.component, animsInfo.weightOverTime.length > 0 ? animsInfo.weightOverTime.Evaluate(state.normalizedTime) : 1);
-                yield return null;
-            }
-
-        EndOfDeltaEvents:
-            while (state.enabled) {
-                animsInfo.SetWeight(modelInfo.component, animsInfo.weightOverTime.length > 0 ? animsInfo.weightOverTime.Evaluate(state.normalizedTime) : 1);
-                yield return null;
-            }
-        }*/
         #endregion
 
         public static IEnumerator CooldownSequence(CooldownData data, float cooldown, int maxCharges) {
@@ -146,5 +115,7 @@ namespace AbilitySystem {
         }
 
         public abstract EntityBody GetEntityBody();
+
+        public virtual void OnEvent(string eventMessage) { }
     }
 }
