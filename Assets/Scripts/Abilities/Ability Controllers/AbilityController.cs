@@ -5,10 +5,22 @@ using System.Linq;
 using System.Collections.Generic;
 
 namespace AbilitySystem {
-    public abstract class AbilityController : MonoBehaviour, IAbility {
+    public abstract class AbilityController : MonoBehaviour, IAbility, IHealth {
+
+        [Header("Health")]
+        [Tooltip("Max health.")]
+        [SerializeField, Min(1)] int maxHealth = 100;
+        [Tooltip("Current entity health.")]
+        protected int currentHealth = 0;
+
         [HideInInspector] protected bool canUseAbilities = true;
 
+        public float CurrentHealth => throw new System.NotImplementedException();
+
+        public float MaxHealth => throw new System.NotImplementedException();
+
         protected virtual void Awake() {
+            currentHealth = maxHealth;
             SetupAnimations();
         }
 
@@ -44,7 +56,6 @@ namespace AbilitySystem {
             );
             data.isUsing = false;
         }
-
         public IEnumerator RunAnimationsWithEvents(TimelineEvent[] timelineInfo, DeltaEvent[] timelineEvents = null) {
             float time = 0;
             float endTime = timelineInfo.Max(x => x.end);
@@ -56,14 +67,16 @@ namespace AbilitySystem {
             foreach (var n in timelineInfo)
                 isPlaying.Add(n, false);
 
-            while (time < endTime) {
+            do {
                 time += Time.deltaTime;
 
-                if (dEvs?.Length > eventCounter)
+                if (dEvs?.Length > eventCounter) {
+
                     if (time / endTime >= dEvs[eventCounter].deltaTime) {
                         StartCoroutine(dEvs[eventCounter].action);
                         if (dEvs.Length == ++eventCounter) break;
                     }
+                }
                 foreach (TimelineEvent n in timelineInfo) {
                     RunAnimationCycle(
                         n,
@@ -73,7 +86,7 @@ namespace AbilitySystem {
                     );
                 }
                 yield return null;
-            }
+            } while (time < endTime);
 
             foreach (var n in timelineInfo)
                 n.anim.Stop(n.component);
@@ -84,11 +97,10 @@ namespace AbilitySystem {
                     isPlaying[n] = true;
                     n.anim.MixTransform(n.component, n.transform);
                 }
+                float t = Mathf.InverseLerp(n.start, n.end, time);
                 n.anim.PlayOnTimeline(
                     n.component,
-                    n.reverse ?
-                    Mathf.InverseLerp(n.end, n.start, time) :
-                    Mathf.InverseLerp(n.start, n.end, time)
+                    n.reverse ? 1f - t : t
                 );
             } else {
                 if (isPlaying[n]) {
@@ -97,8 +109,6 @@ namespace AbilitySystem {
                 }
             }
         }
-        #endregion
-
         public static IEnumerator CooldownSequence(CooldownData data, float cooldown, int maxCharges) {
             data.isRecharging = true;
             data.cooldownDelta = cooldown;
@@ -113,9 +123,31 @@ namespace AbilitySystem {
             }
             data.isRecharging = false;
         }
+        #endregion
 
+        #region 
         public abstract EntityBody GetEntityBody();
-
         public virtual void OnEvent(string eventMessage) { }
+        #endregion
+
+
+        #region Health
+        public virtual void Damage(float amount) {
+            currentHealth -= (int)amount;
+            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+            if (currentHealth <= 0)
+                Die();
+        }
+
+        public virtual void Heal(float amount) {
+            currentHealth += (int)amount;
+            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        }
+
+        public virtual void Die() {
+
+        }
+        #endregion
     }
 }

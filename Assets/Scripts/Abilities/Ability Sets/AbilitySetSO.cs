@@ -6,29 +6,38 @@ using System.Collections.Generic;
 namespace AbilitySystem {
     [Serializable]
     public abstract class AbilitySet {
+        [Space]
+        [Header("Ability Options")]
         [SerializeField] public string abilitySetName;
+        [SerializeField] public HealthSO healthSettings;
         [SerializeField] public MovementAbilitySummary movement;
 
-        public AbilitySet(string name, MovementSO movementSO) {
+        public AbilitySet(string name, MovementSO movementSO, HealthSO healthSO) {
             abilitySetName = name;
 
             if (movementSO != null)
                 movement = new(movementSO);
+            if (healthSO != null)
+                healthSettings = healthSO;
         }
         public AbilitySet(AbilitySetSO abilitySet) {
             abilitySetName = abilitySet.abilitySetName;
+            healthSettings = abilitySet.healthSettings;
 
             if (abilitySet.movement != null)
                 movement = new MovementAbilitySummary(abilitySet.movement);
+
         }
     }
     public abstract class AbilitySetSO : ScriptableObject {
         [SerializeField] public string abilitySetName;
+        [SerializeField] public HealthSO healthSettings;
         [SerializeField] public MovementSO movement;
 
         public virtual void SetupAnimations(Animation anim) {
             if (anim == null) return;
             if (movement != null) AssignAnimations(anim, movement);
+            if (healthSettings != null) AssignAnimations(anim, healthSettings);
         }
         protected static void AssignAnimations(Animation anim, AbilitySO ability) {
             foreach (var clipSummary in ability.AbilityAnimationsSetup())

@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHealth : MonoBehaviour, IHealth
-{
+public class PlayerHealth : MonoBehaviour, IHealth {
     [Header("Health Settings")]
     [SerializeField] int maxHealth = 5;
     int currentHealth;
@@ -16,44 +15,36 @@ public class PlayerHealth : MonoBehaviour, IHealth
     public float CurrentHealth => currentHealth;
     public float MaxHealth => maxHealth;
 
-    void Start()
-    {
+    void Start() {
         currentHealth = maxHealth;
         UpdateHearts();
     }
 
-    public void TakeDamage(float amount)
-    {
+    public void Damage(float amount) {
         currentHealth -= Mathf.RoundToInt(amount);
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
         UpdateHearts();
 
-        if (currentHealth <= 0)
-        {
+        if (currentHealth <= 0) {
             Die();
         }
     }
 
-    public void Heal(float amount)
-    {
+    public void Heal(float amount) {
         currentHealth += Mathf.RoundToInt(amount);
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
         UpdateHearts();
     }
 
-    void UpdateHearts()
-    {
-        if (hearts == null || hearts.Length == 0)
-        {
+    void UpdateHearts() {
+        if (hearts == null || hearts.Length == 0) {
             return;
         }
 
-        for (int i = 0; i < hearts.Length; i++)
-        {
-            if (hearts[i] == null)
-            {
+        for (int i = 0; i < hearts.Length; i++) {
+            if (hearts[i] == null) {
                 continue;
             }
 
@@ -61,14 +52,12 @@ public class PlayerHealth : MonoBehaviour, IHealth
         }
     }
 
-    public void Die()
-    {
+    public void Die() {
         Debug.Log("Player died");
 
-        
+
         Collider col = GetComponent<Collider>();
-        if (col != null)
-        {
+        if (col != null) {
             col.enabled = false;
         }
     }

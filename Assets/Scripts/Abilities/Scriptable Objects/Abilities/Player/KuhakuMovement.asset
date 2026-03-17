@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   idleAnimation:
     <name>k__BackingField: 
-    <animation>k__BackingField: {fileID: 0}
+    <animation>k__BackingField: {fileID: 2323048025509794063, guid: 784239e0572055e41b419646c537bd0c, type: 3}
     <speed>k__BackingField: 1
     <weight>k__BackingField: 1
     <crossFadeTime>k__BackingField: 0.2
@@ -27,19 +27,6 @@ MonoBehaviour:
     <reverseAnimation>k__BackingField: 0
   walkingAnimation:
     <name>k__BackingField: 
-    <animation>k__BackingField: {fileID: -7307076794432317810, guid: 784239e0572055e41b419646c537bd0c, type: 3}
-    <speed>k__BackingField: 1
-    <weight>k__BackingField: 1
-    <crossFadeTime>k__BackingField: 0.2
-    <weightOverTime>k__BackingField:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    <reverseAnimation>k__BackingField: 0
-  runningAnimation:
-    <name>k__BackingField: 
     <animation>k__BackingField: {fileID: 8498131026618272491, guid: 784239e0572055e41b419646c537bd0c, type: 3}
     <speed>k__BackingField: 1
     <weight>k__BackingField: 1
@@ -51,9 +38,22 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <reverseAnimation>k__BackingField: 0
+  runningAnimation:
+    <name>k__BackingField: 2
+    <animation>k__BackingField: {fileID: 8498131026618272491, guid: 784239e0572055e41b419646c537bd0c, type: 3}
+    <speed>k__BackingField: 2
+    <weight>k__BackingField: 1
+    <crossFadeTime>k__BackingField: 0.2
+    <weightOverTime>k__BackingField:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <reverseAnimation>k__BackingField: 0
   jumpingAnimation:
     <name>k__BackingField: 
-    <animation>k__BackingField: {fileID: 0}
+    <animation>k__BackingField: {fileID: -7307076794432317810, guid: 784239e0572055e41b419646c537bd0c, type: 3}
     <speed>k__BackingField: 1
     <weight>k__BackingField: 1
     <crossFadeTime>k__BackingField: 0.2
@@ -84,12 +84,15 @@ MonoBehaviour:
   runAccelerationMultiplier: 1
   accelerationWhileFalling: 5
   decelerationWhileFalling: 5
+  decelerationWhileGrounded: 5
   turnSpeed: 5
   runSpeedMultiplier: 1.5
   canJump: 1
+  doubleJumpCount: 3
   jumpSpeed: 0.2
   maxFallSpeed: 20
   canGlide: 0
+  glideHorizontalSpeed: 1
   glideFallSpeed: 2.55
   fallToGlideAcceleration: 2
   gravity: 60

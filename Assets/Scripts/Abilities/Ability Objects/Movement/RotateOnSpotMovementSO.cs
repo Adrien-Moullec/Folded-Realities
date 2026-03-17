@@ -2,7 +2,7 @@ using UnityEngine;
 
 
 namespace AbilitySystem {
-    [CreateAssetMenu(fileName = "Rotate Towards Player", menuName = "Origami/Movement/Rotate Towards Player", order = -1)]
+    [CreateAssetMenu(fileName = "Rotate Towards Player", menuName = MenuAssetNames.MovementAbility + "/Rotate Towards Player", order = -1)]
     public class RotateTowardsPlayerSO : MovementSO {
         [SerializeField] float spinSpeed = 5;
         public override AbilityData AbilityDataSetup() => null;

@@ -1,8 +1,8 @@
 using UnityEngine;
+
 using System.Collections;
 
-public class Damage : MonoBehaviour
-{
+public class Damage : MonoBehaviour {
     public int damageAmount = 1;   // IMPORTANT: 1 heart per hit
     public float damageCooldown = 1f;
 
@@ -16,48 +16,39 @@ public class Damage : MonoBehaviour
     Color originalColor;
     bool isFlashing = false;
 
-    void Start()
-    {
+    void Start() {
         objectRenderer = GetComponent<Renderer>();
 
-        if (objectRenderer != null)
-        {
+        if (objectRenderer != null) {
             originalColor = objectRenderer.material.color;
         }
     }
 
-    void OnCollisionEnter(Collision collision)
-    {
+    void OnCollisionEnter(Collision collision) {
         TryDealDamage(collision.gameObject);
     }
 
-  
 
-    void TryDealDamage(GameObject other)
-    {
-        if (Time.time - lastDamageTime < damageCooldown)
-        {
+
+    void TryDealDamage(GameObject other) {
+        if (Time.time - lastDamageTime < damageCooldown) {
             return;
         }
 
         IHealth health = other.GetComponentInParent<IHealth>();
 
-        if (health != null)
-        {
-            health.TakeDamage(damageAmount);
+        if (health != null) {
+            health.Damage(damageAmount);
             lastDamageTime = Time.time;
 
-            if (!isFlashing)
-            {
+            if (!isFlashing) {
                 StartCoroutine(FlashRed());
             }
         }
     }
 
-    IEnumerator FlashRed()
-    {
-        if (objectRenderer == null)
-        {
+    IEnumerator FlashRed() {
+        if (objectRenderer == null) {
             yield break;
         }
 

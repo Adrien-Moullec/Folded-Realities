@@ -4,13 +4,13 @@ using UnityEngine;
 
 
 namespace AbilitySystem {
-    [CreateAssetMenu(fileName = "Health", menuName = "")]
-    public abstract class HealthSO : ScriptableObject { // : AbilitySO
+    [CreateAssetMenu(fileName = "Health", menuName = MenuAssetNames.Health)]
+    public abstract class HealthSO : AbilitySO { // : AbilitySO
         [SerializeField] public int Defense;
+        [SerializeField] public AbilityAnimation deathAnimation;
     }
 
-    /*
-    [Serializable]
+    /*[Serializable]
     public class HealthSummary : AbilitySummary {
         [SerializeField] public HealthSO healthSO;
 

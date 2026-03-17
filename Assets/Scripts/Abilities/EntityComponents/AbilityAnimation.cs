@@ -25,6 +25,8 @@ namespace AbilitySystem {
         [field: SerializeField] public AnimationCurve weightOverTime { get; private set; }
         [Tooltip("Choose to reverse the animation when it is played.")]
         [field: SerializeField] public bool reverseAnimation { get; private set; } = false;
+        [Tooltip("Choose to reverse the animation when it is played.")]
+        [field: SerializeField] public bool DebugMode { get; private set; } = false;
         public string clipName {
             get => name + (animation == null ? "" : animation.name);
         }
@@ -35,7 +37,10 @@ namespace AbilitySystem {
 
         #region Set Animation Data
         public AnimationState GetState(Animation anim) => anim[clipName];
-        public float SetWeight(Animation anim, float weight) => anim[clipName].weight = weight;
+        public void SetWeight(Animation anim, float weight) {
+            if (anim == null || animation == null) return;
+            anim[clipName].weight = weight;
+        }
         public void Setup(Animation animComponent, WrapMode wrapMode) {
             if (animComponent == null || animation == null) return;
 
@@ -44,6 +49,7 @@ namespace AbilitySystem {
             animComponent[clipName].speed = speed;
             animComponent[clipName].wrapMode = wrapMode;
         }
+        public bool IsPlaying(Animation anim) => anim.IsPlaying(clipName);
         #endregion
 
         #region Play Modes
@@ -70,7 +76,9 @@ namespace AbilitySystem {
         }
         public void PlayOnTimeline(Animation anim, float deltaTime) {
             if (anim == null || animation == null) return;
-            anim[clipName].time = deltaTime * anim[clipName].length;
+            if (!IsPlaying(anim)) Play(anim);
+            anim[clipName].normalizedTime = deltaTime;
+            anim.Sample();
         }
     }
 }
