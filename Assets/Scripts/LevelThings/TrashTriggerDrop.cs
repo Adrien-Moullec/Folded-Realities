@@ -50,13 +50,14 @@ public class TrashTriggerDrop : MonoBehaviour {
 
         activated = true;
 
-        // Hide "Over here!" when the real drop trigger happens
+        Debug.Log("Drop Trigger Activated");
+
+       
         if (overHerePrompt != null) {
             overHerePrompt.SetActive(false);
         }
 
         trashRenderer.enabled = true;
-
         watchOutText.gameObject.SetActive(true);
 
         trashRB.isKinematic = false;
@@ -107,5 +108,7 @@ public class TrashTriggerDrop : MonoBehaviour {
         if (trashRenderer != null) {
             trashRenderer.enabled = false;
         }
+
+       
     }
 }
