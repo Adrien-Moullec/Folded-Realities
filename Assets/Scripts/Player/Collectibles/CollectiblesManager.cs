@@ -1,18 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
-
 using TMPro;
-
 using System.Collections;
 
-using AbilitySystem;
-
 public class CollectiblesManager : MonoBehaviour {
+
+    public static CollectiblesManager Instance; 
+
     [Header("Normal Collectibles")]
     public int normalCount = 0;
     public TMP_Text normalCountText;
-    [SerializeField] GameObject KranePowerup;
-    PlayerAbilityController pac;
 
     [Header("Special Collectibles")]
     public Image[] puzzlePieces;
@@ -26,24 +23,30 @@ public class CollectiblesManager : MonoBehaviour {
     [Header("Audio")]
     public AudioClip pickupSound;
 
+    void Awake() {
+        Instance = this; 
+    }
+
     void Start() {
-        pac = GetComponent<PlayerAbilityController>();
+        normalCount = 0; 
         UpdateNormalUI();
         ResetPuzzleUI();
     }
 
-    // Called when star is collected
+  
     public void CollectNormal(GameObject obj) {
         normalCount++;
         UpdateNormalUI();
 
-        CurrencyManager.Instance.AddCoins(1);
-
+        
+        if (CurrencyManager.Instance != null) {
+            CurrencyManager.Instance.AddCoins(1);
+        }
 
         StartCoroutine(PlayPickupEffect(obj));
     }
 
-    // Called when puzzle piece is collected
+    
     public void CollectSpecial(GameObject obj) {
         if (specialCount < puzzlePieces.Length) {
             puzzlePieces[specialCount].enabled = true;
@@ -54,18 +57,18 @@ public class CollectiblesManager : MonoBehaviour {
     }
 
     IEnumerator PlayPickupEffect(GameObject obj) {
-        // Play pickup sound
+       
         if (pickupSound != null) {
             AudioSource.PlayClipAtPoint(pickupSound, obj.transform.position);
         }
 
-        // Disable collider
+        
         Collider col = obj.GetComponent<Collider>();
         if (col != null) {
             col.enabled = false;
         }
 
-        // Stop idle floating
+      
         CollectibleIdle idle = obj.GetComponent<CollectibleIdle>();
         if (idle != null) {
             idle.enabled = false;
@@ -96,5 +99,10 @@ public class CollectiblesManager : MonoBehaviour {
                 puzzlePieces[i].enabled = false;
             }
         }
+    }
+
+    
+    public int GetCoinCount() {
+        return normalCount;
     }
 }
