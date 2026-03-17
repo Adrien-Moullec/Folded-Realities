@@ -163,7 +163,9 @@ namespace AbilitySystem {
                 groundLayers
             ) && pmd.fallSpeed <= 0.1f;
             if (!isJumping) pmd.performedJump = false;
-
+            Collider[] colliders = Physics.OverlapSphere(feetPos, entityBody.feetSphereArea.radius, groundLayers);
+            foreach (var n in colliders)
+                Debug.Log(n.gameObject.name);
 
             // Grounded conditions
             if (pmd.isGrounded) {
