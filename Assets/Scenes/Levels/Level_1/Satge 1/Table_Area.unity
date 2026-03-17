@@ -215786,11 +215786,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80ec8f24afe4ebd4a982a4d77ba0852f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  feetTransform: {fileID: 1553647644}
-  radius: 0.25
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 64
+  gravity: -5
+  stickToGroundForce: -1
 --- !u!1001 &1540659970
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -216328,11 +216325,6 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
---- !u!4 &1553647644 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3280997533145751887, guid: a1e531976df10334380158e02a6889e7, type: 3}
-  m_PrefabInstance: {fileID: 633669565}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1554053605
 GameObject:
   m_ObjectHideFlags: 0

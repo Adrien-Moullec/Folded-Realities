@@ -1,49 +1,29 @@
 using UnityEngine;
 
-public class TestJumpThing : MonoBehaviour {
-    public Transform feetTransform;
-    public float radius = 0.25f;
-    public LayerMask groundLayers;
+[RequireComponent(typeof(CharacterController))]
+public class TestJumpFix : MonoBehaviour {
+    public float gravity = -20f;
+    public float stickToGroundForce = -2f;
 
-    private CharacterController controller;
+    private CharacterController cc;
+    private float verticalVelocity;
 
     void Start() {
-        controller = GetComponent<CharacterController>();
+        cc = GetComponent<CharacterController>();
     }
 
     void Update() {
-        if (feetTransform == null) {
-            Debug.LogWarning("Feet Transform NOT assigned!");
-            return;
-        }
-
-        Vector3 feetPos = feetTransform.position;
-
-        bool sphereGrounded = Physics.CheckSphere(feetPos, radius, groundLayers);
-        bool controllerGrounded = controller != null && controller.isGrounded;
-
-        Collider[] hits = Physics.OverlapSphere(feetPos, radius);
-
-        Debug.Log("----- GROUND DEBUG -----");
-        Debug.Log("SphereGrounded: " + sphereGrounded);
-        Debug.Log("ControllerGrounded: " + controllerGrounded);
-        Debug.Log("Feet Position: " + feetPos);
-
-        foreach (var hit in hits) {
-            Debug.Log("HIT: " + hit.name + " | Layer: " + LayerMask.LayerToName(hit.gameObject.layer));
-
-            if (hit.gameObject == gameObject) {
-                Debug.LogWarning(" HITTING SELF (PLAYER COLLIDER)");
+        // If grounded, keep player stuck to ground
+        if (cc.isGrounded) {
+            if (verticalVelocity < 0) {
+                verticalVelocity = stickToGroundForce;
             }
-        }
-    }
-
-    void OnDrawGizmos() {
-        if (feetTransform == null) {
-            return;
+        } else {
+            // Apply gravity
+            verticalVelocity += gravity * Time.deltaTime;
         }
 
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(feetTransform.position, radius);
+        // Apply vertical movement ONLY (doesn't break your system)
+        cc.Move(Vector3.up * verticalVelocity * Time.deltaTime);
     }
 }
