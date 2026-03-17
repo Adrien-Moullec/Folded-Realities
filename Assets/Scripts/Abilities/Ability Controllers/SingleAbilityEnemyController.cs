@@ -4,11 +4,14 @@ using UnityEngine.UI;
 namespace AbilitySystem {
     public class SingleAbilityEnemyController : SingleSetEnemyController {
         [Header("HEALTHBAR")]
-        [SerializeField] public Slider healthBar;
-        protected override void Awake() {
-            base.Awake();
-            healthBar.maxValue = (float)MaxHealth;
-            healthBar.value = (float)MaxHealth;
+        [SerializeField] public UnityEngine.UI.Slider healthBar;
+        private void Start() {
+            Debug.Log(healthBar + ", " + healthBar.name);
+            //base.Awake();
+            healthBar.maxValue = MaxHealth;
+            Debug.Log("TEST2");
+            healthBar.value = MaxHealth;
+            Debug.Log("TEST3");
         }
         public override void Damage(float amount) {
             currentHealth -= (int)amount;
