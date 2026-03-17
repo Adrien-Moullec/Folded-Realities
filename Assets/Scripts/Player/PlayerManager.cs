@@ -41,6 +41,7 @@ public class PlayerManager : MonoBehaviour, ICamera {
     InputAction dashInput;
     bool isDashing;
     InputAction radialWheel;
+    bool wheelActive = false;
 
     InputAction primaryAttackInput;
     bool holdPrimaryAttack;
@@ -70,9 +71,13 @@ public class PlayerManager : MonoBehaviour, ICamera {
         jumpInput.canceled += input => isJumping = false;
         dashInput.performed += input => isDashing = true;
         dashInput.canceled += input => isDashing = false;
-        radialWheel.performed += input => _RadialMenuManager?.SetWheelActive(true);
+        radialWheel.performed += input => {
+            _RadialMenuManager?.SetWheelActive(true);
+            wheelActive = true;
+        };
         radialWheel.canceled += input => {
             _RadialMenuManager?.SetWheelActive(false);
+            wheelActive = false;
             iAbility.InputTransitionName(_RadialMenuManager?.OnSegmentClicked());
         };
         primaryAttackInput.performed += input => Attack();
@@ -87,9 +92,13 @@ public class PlayerManager : MonoBehaviour, ICamera {
         jumpInput.canceled -= input => isJumping = false;
         dashInput.performed -= input => isDashing = true;
         dashInput.canceled -= input => isDashing = false;
-        radialWheel.performed -= input => _RadialMenuManager?.SetWheelActive(true);
+        radialWheel.performed -= input => {
+            _RadialMenuManager?.SetWheelActive(true);
+            wheelActive = true;
+        };
         radialWheel.canceled -= input => {
             _RadialMenuManager?.SetWheelActive(false);
+            wheelActive = false;
             iAbility.InputTransitionName(_RadialMenuManager?.OnSegmentClicked());
         };
         primaryAttackInput.performed -= input => Attack();
@@ -105,6 +114,7 @@ public class PlayerManager : MonoBehaviour, ICamera {
 
     #region Camera
     void Movement() {
+        if (wheelActive) return;
         camDir = Camera.main.transform.right * deltaMove.x + Camera.main.transform.forward * deltaMove.y;
         iAbility?.InputMove(new Vector3(camDir.x, isJumping ? 1 : 0, camDir.z), isDashing);
     }

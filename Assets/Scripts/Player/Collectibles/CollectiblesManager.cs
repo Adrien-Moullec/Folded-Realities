@@ -1,12 +1,18 @@
 using UnityEngine;
 using UnityEngine.UI;
+
 using TMPro;
+
 using System.Collections;
+
+using AbilitySystem;
 
 public class CollectiblesManager : MonoBehaviour {
     [Header("Normal Collectibles")]
     public int normalCount = 0;
     public TMP_Text normalCountText;
+    [SerializeField] GameObject KranePowerup;
+    PlayerAbilityController pac;
 
     [Header("Special Collectibles")]
     public Image[] puzzlePieces;
@@ -21,6 +27,7 @@ public class CollectiblesManager : MonoBehaviour {
     public AudioClip pickupSound;
 
     void Start() {
+        pac = GetComponent<PlayerAbilityController>();
         UpdateNormalUI();
         ResetPuzzleUI();
     }
@@ -29,10 +36,10 @@ public class CollectiblesManager : MonoBehaviour {
     public void CollectNormal(GameObject obj) {
         normalCount++;
         UpdateNormalUI();
-        
+
         CurrencyManager.Instance.AddCoins(1);
 
-        
+
         StartCoroutine(PlayPickupEffect(obj));
     }
 

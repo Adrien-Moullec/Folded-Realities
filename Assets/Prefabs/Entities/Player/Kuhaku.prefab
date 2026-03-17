@@ -594,6 +594,8 @@ GameObject:
   - component: {fileID: 6552002042681570147}
   - component: {fileID: 4601957020910338640}
   - component: {fileID: 3061592385069726717}
+  - component: {fileID: 3937765037085289841}
+  - component: {fileID: 8123097184202460271}
   - component: {fileID: 8335411899817543335}
   m_Layer: 0
   m_Name: Kuhaku
@@ -651,6 +653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff8c1c2fad136644ba2498d566b823a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 100
   SmokesAndMirrorsAnimation: {fileID: 9170826110673044228}
   transitionAnimationClip:
     <name>k__BackingField: 
@@ -665,9 +668,11 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     <reverseAnimation>k__BackingField: 0
+    <DebugMode>k__BackingField: 0
   transitionTime: 0.5
   playerSetsList:
-  - abilitySetSO: {fileID: 11400000, guid: 2e417aba74ec54441b9b591a31db43e0, type: 2}
+  - isUnlocked: 0
+    abilitySetSO: {fileID: 11400000, guid: 2e417aba74ec54441b9b591a31db43e0, type: 2}
     entityBody:
       bodyHolder: {fileID: 7211196813232357869}
       modelPrefab: {fileID: 2268757310712961369}
@@ -678,6 +683,7 @@ MonoBehaviour:
       animationComponent: {fileID: 2595476576709269853}
     playerAbilitySet:
       abilitySetName: 
+      healthSettings: {fileID: 0}
       movement:
         movementSO: {fileID: 0}
       transitionAnimation:
@@ -693,13 +699,15 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         <reverseAnimation>k__BackingField: 0
+        <DebugMode>k__BackingField: 0
       light:
         abilitySO: {fileID: 0}
       heavy:
         abilitySO: {fileID: 0}
       primary:
         abilitySO: {fileID: 0}
-  - abilitySetSO: {fileID: 11400000, guid: 89af5bf81303abc42874c73912743bda, type: 2}
+  - isUnlocked: 0
+    abilitySetSO: {fileID: 11400000, guid: 89af5bf81303abc42874c73912743bda, type: 2}
     entityBody:
       bodyHolder: {fileID: 7211196813232357869}
       modelPrefab: {fileID: 3004555409553840708}
@@ -710,6 +718,7 @@ MonoBehaviour:
       animationComponent: {fileID: 1322527647061352431}
     playerAbilitySet:
       abilitySetName: 
+      healthSettings: {fileID: 0}
       movement:
         movementSO: {fileID: 0}
       transitionAnimation:
@@ -725,6 +734,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         <reverseAnimation>k__BackingField: 0
+        <DebugMode>k__BackingField: 0
       light:
         abilitySO: {fileID: 0}
       heavy:
@@ -732,6 +742,7 @@ MonoBehaviour:
       primary:
         abilitySO: {fileID: 0}
   currentAbilitySet:
+    isUnlocked: 0
     abilitySetSO: {fileID: 0}
     entityBody:
       bodyHolder: {fileID: 0}
@@ -743,6 +754,7 @@ MonoBehaviour:
       animationComponent: {fileID: 0}
     playerAbilitySet:
       abilitySetName: 
+      healthSettings: {fileID: 0}
       movement:
         movementSO: {fileID: 0}
       transitionAnimation:
@@ -758,6 +770,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         <reverseAnimation>k__BackingField: 0
+        <DebugMode>k__BackingField: 0
       light:
         abilitySO: {fileID: 0}
       heavy:
@@ -819,6 +832,53 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &3937765037085289841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5710287258573495793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e1b59c990f0bb747852279a35b403fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  normalCount: 0
+  normalCountText: {fileID: 0}
+  KranePowerup: {fileID: 0}
+  puzzlePieces:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  pickupFloatSpeed: 2
+  pickupRotationSpeed: 360
+  destroyDelay: 0.6
+  pickupSound: {fileID: 8300000, guid: ee6fe97111ab06e45861282689f4e37d, type: 3}
+--- !u!136 &8123097184202460271
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5710287258573495793}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8335411899817543335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -862,7 +922,7 @@ Transform:
   m_GameObject: {fileID: 6297780670080176768}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.527}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

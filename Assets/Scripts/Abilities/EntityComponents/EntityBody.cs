@@ -28,5 +28,6 @@ namespace AbilitySystem {
         [HideInInspector] public AbilitySet abilitySet;
         [Tooltip("Interface reference for the Ability Controller.")]
         [HideInInspector] public IAbility iAbility;
+        [HideInInspector] public IHealth iHealth;
     }
 }

@@ -35,6 +35,7 @@ namespace AbilitySystem {
                 i.entityBody.iAbility = this;
                 i.entityBody.modelPrefab.SetActive(false);
                 i.playerAbilitySet.movement.AbilityData = playerSetsList[0].playerAbilitySet.movement.AbilityData;
+                i.entityBody.iHealth = this;
             }
             currentAbilitySet = playerSetsList[0];
             currentAbilitySet.entityBody.modelPrefab.SetActive(true);
@@ -43,10 +44,20 @@ namespace AbilitySystem {
             foreach (var n in playerSetsList)
                 n.abilitySetSO?.SetupAnimations(n.entityBody.animationComponent);
         }
+        public override void Die() {
+            base.Die();
+        }
         #endregion
 
         #region Transitions
         public override void OnEvent(string eventMessage) => InputTransitionName(eventMessage);
+        public bool UnlockSet(string name) {
+            if (playerSetsList.Any(x => x.abilitySetSO.abilitySetName == name)) {
+                playerSetsList.First(x => x.abilitySetSO.abilitySetName == name).isUnlocked = true;
+                return true;
+            }
+            return false;
+        }
         public override void InputTransitionName(string name) {
             if (isTransitioning) return;
 
@@ -56,16 +67,14 @@ namespace AbilitySystem {
             }
 
             PlayerSetSummary checkAbilitySet = playerSetsList.First(x => x.abilitySetSO.abilitySetName == name);
-            if (checkAbilitySet == currentAbilitySet) {
-                Debug.LogWarning("Currently set to this set.");
+            if (checkAbilitySet == currentAbilitySet || !checkAbilitySet.isUnlocked)
                 return;
-            }
 
             StartCoroutine(RunAnimationsWithEvents(
                 new TimelineEvent[] {
                     new TimelineEvent(currentAbilitySet.entityBody.animationComponent, currentAbilitySet.abilitySetSO.transitionAnimation, 0, transitionTime/2),
-                    new TimelineEvent(checkAbilitySet.entityBody.animationComponent, checkAbilitySet.abilitySetSO.transitionAnimation, transitionTime/2, transitionTime),
-                    new TimelineEvent(SmokesAndMirrorsAnimation, transitionAnimationClip, 0, transitionTime, true)
+                    new TimelineEvent(checkAbilitySet.entityBody.animationComponent, checkAbilitySet.abilitySetSO.transitionAnimation, transitionTime/2, transitionTime, true),
+                    new TimelineEvent(SmokesAndMirrorsAnimation, transitionAnimationClip, 0, transitionTime)
                 },
                 new DeltaEvent[] {
                     new DeltaEvent(() => {
@@ -74,16 +83,16 @@ namespace AbilitySystem {
                     }, 0),
                     new DeltaEvent(() => {
                         currentAbilitySet.entityBody.modelPrefab.SetActive(false);
+                        Debug.Log(currentAbilitySet.entityBody.modelPrefab.name);
                         checkAbilitySet.entityBody.modelPrefab.SetActive(true);
                         currentAbilitySet = checkAbilitySet;
-                    }, transitionTime/2),
+                    }, 0.5f),
                     new DeltaEvent(() => {
                         isTransitioning = false;
                         SmokesAndMirrorsAnimation.gameObject.SetActive(false);
-                    }, transitionTime)
+                    }, 1)
                 }
             ));
-            print("End");
         }
         #endregion
 
@@ -125,6 +134,7 @@ namespace AbilitySystem {
 
         [Serializable]
         public class PlayerSetSummary {
+            public bool isUnlocked = false;
             public PlayerAbilitySetSO abilitySetSO;
             public EntityBody entityBody;
             [HideInInspector] public PlayerAbilitySet playerAbilitySet;

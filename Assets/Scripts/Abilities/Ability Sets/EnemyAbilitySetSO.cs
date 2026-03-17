@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 namespace AbilitySystem {
-    [CreateAssetMenu(fileName = "Ability Set", menuName = "Origami/Ability Sets/Base Enemy Ability Set", order = 0)]
+    [CreateAssetMenu(fileName = "Ability Set", menuName = MenuAssetNames.AbilitySet + "/Base Enemy Ability Set", order = 0)]
     public class EnemyAbilitySetSO : AbilitySetSO {
         [SerializeField] public CooldownAbilitySO attack;
 
@@ -18,7 +18,7 @@ namespace AbilitySystem {
     public class EnemyAbilitySet : AbilitySet {
         [SerializeField] public ActivatedAbilitySummary attack;
 
-        public EnemyAbilitySet(EnemyAbilitySetSO abilitySet) : base(abilitySet.name, abilitySet.movement) {
+        public EnemyAbilitySet(EnemyAbilitySetSO abilitySet) : base(abilitySet.name, abilitySet.movement, abilitySet.healthSettings) {
             if (abilitySet.attack != null)
                 attack = new(abilitySet.attack);
         }

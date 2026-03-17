@@ -11,12 +11,12 @@ namespace AbilitySystem {
         [Tooltip("The effected animated transforms and the animation timeline point of the game mechanic event.")]
         [SerializeField, Range(0, 1)] float deltaEvent;
         [Header("Ability Settings")]
-        [SerializeField, Range(1, 20)] protected float cooldown;
+        [SerializeField, Range(0.1f, 20)] protected float cooldown;
         [SerializeField, Range(1, 5)] protected int charges;
         public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() =>
             new (AbilityAnimation, WrapMode)[]
             {
-                (cooldownAnim, WrapMode.Once)
+                (cooldownAnim, WrapMode.ClampForever)
             };
 
         public virtual bool TryUseAbility(EntityBody entityBody, CooldownData data) {

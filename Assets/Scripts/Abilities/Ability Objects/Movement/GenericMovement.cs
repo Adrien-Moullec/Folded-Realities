@@ -1,9 +1,11 @@
+using Unity.VisualScripting;
+
 using UnityEditor.ShaderGraph.Internal;
 
 using UnityEngine;
 
 namespace AbilitySystem {
-    [CreateAssetMenu(fileName = "GeneralMovement", menuName = "Origami/Movement/General Movement", order = -1)]
+    [CreateAssetMenu(fileName = "GeneralMovement", menuName = MenuAssetNames.MovementAbility + "/General Movement", order = -1)]
     public class GenericMovement : MovementSO {
         [Header("Animations")]
         [Tooltip("Idle animation information when model is still.")]
@@ -91,7 +93,8 @@ namespace AbilitySystem {
             {
                 (idleAnimation,WrapMode.Loop),
                 (walkingAnimation,WrapMode.Loop),
-                (runningAnimation,WrapMode.Loop)
+                (runningAnimation,WrapMode.Loop),
+                (jumpingAnimation,WrapMode.ClampForever)
             };
         }
 
@@ -113,6 +116,7 @@ namespace AbilitySystem {
         private void HorizontalMovement(GenericMovementData moveData, Vector3 inputDir, bool runInput) {
             Vector3 horizontalVelocity = new Vector3(moveData.velocity.x, 0, moveData.velocity.z);
 
+            // If move input
             if (inputDir.sqrMagnitude > 0.001f) {
                 inputDir.Normalize();
 
@@ -127,12 +131,14 @@ namespace AbilitySystem {
                 );
 
                 float accel =
-                    (moveData.isGrounded ? acceleration : accelerationWhileFalling) *
+                    (moveData.isGrounded ?
+                    acceleration :
+                    accelerationWhileFalling) *
                     (runInput ? runAccelerationMultiplier : 1f) *
                     directionMultiplier * 10;
 
                 horizontalVelocity += inputDir * accel * Time.deltaTime;
-                float maxSpeed = runInput ? runSpeed : walkSpeed;
+                float maxSpeed = moveData.isGliding ? glideHorizontalSpeed : runInput ? runSpeed : walkSpeed;
 
                 if (horizontalVelocity.magnitude > maxSpeed)
                     horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, Vector3.ClampMagnitude(horizontalVelocity, maxSpeed), moveData.isGrounded ? deceleration : decelerationWhileFalling);
@@ -155,14 +161,18 @@ namespace AbilitySystem {
                 feetPos,
                 entityBody.feetSphereArea.radius,
                 groundLayers
-            ) && pmd.fallSpeed <= 0;
+            ) && pmd.fallSpeed <= 0.1f;
             if (!isJumping) pmd.performedJump = false;
 
 
             // Grounded conditions
             if (pmd.isGrounded) {
+
+                // Grounded reset
+                pmd.isGliding = false;
                 pmd.remainingJumps = doubleJumpCount;
-                //Jumping after just pressed
+
+                // Jumping after just pressed
                 if (pmd.canJump && isJumping)
                     OnJump(pmd);
 
@@ -198,7 +208,10 @@ namespace AbilitySystem {
                         else
                             pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, -maxFallSpeed, gravity * Time.deltaTime);
                     }
-                } else {
+                }
+                // If falling
+                else {
+                    pmd.isGliding = false;
                     pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, -maxFallSpeed, gravity * Time.deltaTime);
                 }
             }
@@ -208,6 +221,7 @@ namespace AbilitySystem {
         }
 
         private void OnJump(GenericMovementData pmd) {
+            if (!canJump) return;
             pmd.fallSpeed = jumpSpeed * 100;
             pmd.isGrounded = false;
             pmd.remainingJumps--;
@@ -215,28 +229,37 @@ namespace AbilitySystem {
         }
 
         protected void AnimateAbility(GenericMovementData moveData, Animation anim) {
-            float magnitudeDelta = new Vector3(moveData.velocity.x, 0, moveData.velocity.z).magnitude / runSpeed;
-            float walkCutoff = walkSpeed / runSpeed;
+            if (moveData.isGrounded) {
+                float walkCutoff = walkSpeed / runSpeed;
+                float x = Mathf.Clamp01(new Vector3(moveData.velocity.x, 0, moveData.velocity.z).magnitude / runSpeed);
 
-            float x = Mathf.Clamp01(magnitudeDelta);
+                float weightIdle = 0f;
+                float weightWalk = 0f;
+                float weightRun = 0f;
 
-            float weightIdle = 0f;
-            float weightWalk = 0f;
-            float weightRun = 0f;
+                if (x <= walkCutoff) {
+                    float t = x / walkCutoff;
+                    weightIdle = 1f - t;
+                    weightWalk = t;
+                } else {
+                    float t = (x - walkCutoff) / (1f - walkCutoff);
+                    weightWalk = 1f - t;
+                    weightRun = t;
+                }
 
-            if (x <= walkCutoff) {
-                float t = x / walkCutoff;
-                weightIdle = 1f - t;
-                weightWalk = t;
+                idleAnimation.Blend(anim, weightIdle);
+                walkingAnimation.Blend(anim, weightWalk);
+                runningAnimation.Blend(anim, weightRun);
+                jumpingAnimation.SetWeight(anim, 0);
             } else {
-                float t = (x - walkCutoff) / (1f - walkCutoff);
-                weightWalk = 1f - t;
-                weightRun = t;
+                idleAnimation.Blend(anim, 0);
+                walkingAnimation.Blend(anim, 0);
+                runningAnimation.Blend(anim, 0);
+                jumpingAnimation.PlayOnTimeline(anim, Mathf.InverseLerp(jumpSpeed, maxFallSpeed, moveData.fallSpeed));
+                jumpingAnimation.SetWeight(anim, 1);
             }
 
-            idleAnimation.Blend(anim, weightIdle);
-            walkingAnimation.Blend(anim, weightWalk);
-            runningAnimation.Blend(anim, weightRun);
+
         }
 
         #endregion
@@ -254,7 +277,6 @@ namespace AbilitySystem {
             [HideInInspector] public bool isRunning;
             [HideInInspector] public bool isGliding;
 
-            [HideInInspector]
             public bool canJump {
                 get => !performedJump && remainingJumps > 0;
             }

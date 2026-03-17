@@ -16,6 +16,7 @@ namespace AbilitySystem {
         protected override void Awake() {
             base.Awake();
             entityBody.iAbility = this;
+            entityBody.iHealth = this;
             navMeshAgent = GetComponent<NavMeshAgent>();
             if (abilitySetSO == null) return;
             EnemyAbilitySet ab = new EnemyAbilitySet(abilitySetSO);
