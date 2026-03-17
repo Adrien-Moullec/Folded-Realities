@@ -18,18 +18,22 @@ public class TrashResetButton : MonoBehaviour {
 
         Debug.Log("Resetting trash");
 
+       
         trashRB.linearVelocity = Vector3.zero;
         trashRB.angularVelocity = Vector3.zero;
-
         trashRB.transform.position = spawnPoint.position;
 
         resetPlatform.SetActive(false);
         stuckPrompt.SetActive(false);
 
+        
         if (overHerePrompt != null) {
             overHerePrompt.SetActive(true);
         }
 
-        dropTrigger.ResetTrigger();
+        
+        if (dropTrigger != null) {
+            dropTrigger.ResetTrigger();
+        }
     }
 }
