@@ -12,7 +12,7 @@ namespace AbilitySystem {
         #endregion
 
         #region Ability Actions
-        public void OnActivateCooldownAbility(TimelineEvent[] timelineEvents, DeltaEvent[] dEvents, CooldownData data, float cooldown, int maxCharges);
+        public void ActivateIenumerator(IEnumerator enumerator);
         public void OnMoveEntity(Vector3 direction, float turnSpeed = 1);
         public void OnRotateEntity(Vector3 direction);
         public void OnEvent(string eventMessage);
@@ -20,6 +20,8 @@ namespace AbilitySystem {
 
         #region Utility Functions
         public EntityBody GetEntityBody();
+        public IEnumerator RunTimelineWithEvents(TimelineEvent[] timelineInfo, DeltaEvent[] timelineEvents = null);
+        public IEnumerator RunLoop(TimelineEvent[] timelineInfo);
         #endregion
     }
 }

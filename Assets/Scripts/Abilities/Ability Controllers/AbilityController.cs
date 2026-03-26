@@ -44,19 +44,12 @@ namespace AbilitySystem {
         #endregion
 
         #region Ability Events Manager and Interface
-        public void OnActivateCooldownAbility(TimelineEvent[] timelineEvents, DeltaEvent[] dEvents, CooldownData data, float cooldown, int maxCharges) => StartCoroutine(ActivateCooldownAbility(timelineEvents, dEvents, data, cooldown, maxCharges));
-        IEnumerator ActivateCooldownAbility(TimelineEvent[] timelineEvents, DeltaEvent[] dEvents, CooldownData data, float cooldown, int maxCharges) {
-            data.currentCharges--;
-            StartCoroutine(CooldownSequence(data, cooldown, maxCharges));
+        public void ActivateIenumerator(IEnumerator enumerator) => StartCoroutine(enumerator);
 
-            data.isUsing = true;
-            yield return RunAnimationsWithEvents(
-                timelineEvents,
-                dEvents
-            );
-            data.isUsing = false;
+        public IEnumerator RunLoop(TimelineEvent[] timelineInfo) {
+            throw new System.NotImplementedException();
         }
-        public IEnumerator RunAnimationsWithEvents(TimelineEvent[] timelineInfo, DeltaEvent[] timelineEvents = null) {
+        public IEnumerator RunTimelineWithEvents(TimelineEvent[] timelineInfo, DeltaEvent[] timelineEvents = null) {
             float time = 0;
             float endTime = timelineInfo.Max(x => x.end);
             DeltaEvent[] dEvs = timelineEvents.OrderBy(x => x.deltaTime).ToArray();
@@ -109,20 +102,6 @@ namespace AbilitySystem {
                 }
             }
         }
-        public static IEnumerator CooldownSequence(CooldownData data, float cooldown, int maxCharges) {
-            data.isRecharging = true;
-            data.cooldownDelta = cooldown;
-            while (data.currentCharges < maxCharges) {
-                yield return null;
-                data.cooldownDelta -= Time.deltaTime;
-
-                if (data.cooldownDelta <= 0) {
-                    data.currentCharges++;
-                    data.cooldownDelta = cooldown;
-                }
-            }
-            data.isRecharging = false;
-        }
         #endregion
 
         #region 
@@ -148,6 +127,7 @@ namespace AbilitySystem {
         public virtual void Die() {
 
         }
+
         #endregion
     }
 }

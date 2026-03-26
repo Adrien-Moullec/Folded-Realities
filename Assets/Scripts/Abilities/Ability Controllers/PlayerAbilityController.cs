@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -70,7 +69,7 @@ namespace AbilitySystem {
             if (checkAbilitySet == currentAbilitySet || !checkAbilitySet.isUnlocked)
                 return;
 
-            StartCoroutine(RunAnimationsWithEvents(
+            StartCoroutine(RunTimelineWithEvents(
                 new TimelineEvent[] {
                     new TimelineEvent(currentAbilitySet.entityBody.animationComponent, currentAbilitySet.abilitySetSO.transitionAnimation, 0, transitionTime/2),
                     new TimelineEvent(checkAbilitySet.entityBody.animationComponent, checkAbilitySet.abilitySetSO.transitionAnimation, transitionTime/2, transitionTime, true),
@@ -111,12 +110,11 @@ namespace AbilitySystem {
         #region Input Functions
         public override void InputMove(Vector3 moveInput, bool isRunning) {
             base.InputMove(moveInput, isRunning);
-            currentAbilitySet.
-            playerAbilitySet?.
-            movement.Activate(
+            currentAbilitySet.playerAbilitySet?.movement.Activate(
                 currentAbilitySet.entityBody,
                 moveInput,
-                isRunning);
+                isRunning
+            );
         }
         public override void InputPrimaryAttack() {
             base.InputPrimaryAttack();
