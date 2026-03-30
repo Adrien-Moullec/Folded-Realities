@@ -5,40 +5,37 @@ using System.Collections;
 
 namespace AbilitySystem {
     public abstract class CooldownAbilitySO : AbilitySO {
-        [Header("Animation")]
-        [Tooltip("The animation that will play for this ability.")]
-        [SerializeField] AbilityAnimation cooldownAnim;
-        [Tooltip("The effected animated transforms and the animation timeline point of the game mechanic event.")]
-        [SerializeField, Range(0, 1)] float deltaEvent;
         [Header("Ability Settings")]
         [SerializeField, Range(0.1f, 20)] protected float cooldown;
         [SerializeField, Range(1, 5)] protected int charges;
-        public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() =>
-            new (AbilityAnimation, WrapMode)[]
-            {
-                (cooldownAnim, WrapMode.ClampForever)
-            };
+        public override AbilityData AbilityDataSetup() => new CooldownData(charges, cooldown);
+        public static IEnumerator OnUseCooldownSequence(CooldownData data, float cooldown, int maxCharges) {
+            data.currentCharges--;
+            data.isRecharging = true;
+            data.cooldownDelta = cooldown;
+            while (data.currentCharges < maxCharges) {
+                yield return null;
+                data.cooldownDelta -= Time.deltaTime;
 
+                if (data.cooldownDelta <= 0) {
+                    data.currentCharges++;
+                    data.cooldownDelta = cooldown;
+                }
+            }
+            data.isRecharging = false;
+        }
         public virtual bool TryUseAbility(EntityBody entityBody, CooldownData data) {
             if (data.currentCharges <= 0) return false;
-            entityBody.iAbility.OnActivateCooldownAbility(
-                new TimelineEvent[] {
-                    new TimelineEvent(entityBody.animationComponent, cooldownAnim, 0, cooldownAnim.length)
-                },
-                new DeltaEvent[] {
-                    new DeltaEvent(Ability(entityBody, data), deltaEvent)
-                },
-                data, cooldown, charges
-            );
+            entityBody.iAbility.ActivateIenumerator(OnUseCooldownSequence(data, cooldown, charges));
+            entityBody.iAbility.ActivateIenumerator(UseAbility(entityBody, data));
             return true;
         }
-        protected abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
-        public override AbilityData AbilityDataSetup() {
-            CooldownData ad = new(charges, cooldown);
-            ad.currentCharges = charges;
-            ad.cooldownDelta = cooldown;
-            return ad;
+        protected IEnumerator UseAbility(EntityBody entityBody, CooldownData data) {
+            data.isUsing = true;
+            yield return Ability(entityBody, data);
+            data.isUsing = false;
         }
+        protected abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
     }
 
     [Serializable]
