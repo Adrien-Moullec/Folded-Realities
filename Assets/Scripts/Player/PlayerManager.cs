@@ -1,3 +1,5 @@
+using System.Threading;
+
 using AbilitySystem;
 
 using UnityEngine;
@@ -63,14 +65,10 @@ public class PlayerManager : MonoBehaviour, ICamera {
         primaryAttackInput = _PlayerInput.actions["PrimaryAttack"];
         radialWheel = _PlayerInput.actions["RadialMenu"];
 
-        moveInput.performed += input => deltaMove = input.ReadValue<Vector2>();
-        moveInput.canceled += input => deltaMove = input.ReadValue<Vector2>();
         lookInput.performed += input => deltaLook = input.ReadValue<Vector2>();
         lookInput.canceled += input => deltaLook = input.ReadValue<Vector2>();
-        jumpInput.performed += input => isJumping = true;
-        jumpInput.canceled += input => isJumping = false;
-        dashInput.performed += input => isDashing = true;
-        dashInput.canceled += input => isDashing = false;
+        dashInput.performed += input => iAbility.GetInputValues.isRunning = true;
+        dashInput.canceled += input => iAbility.GetInputValues.isRunning = false;
         radialWheel.performed += input => {
             _RadialMenuManager?.SetWheelActive(true);
             wheelActive = true;
@@ -80,18 +78,14 @@ public class PlayerManager : MonoBehaviour, ICamera {
             wheelActive = false;
             iAbility.InputTransitionName(_RadialMenuManager?.OnSegmentClicked());
         };
-        primaryAttackInput.performed += input => Attack();
-        primaryAttackInput.canceled += input => holdPrimaryAttack = false;
+        primaryAttackInput.performed += input => iAbility.GetInputValues.isPrimaryAttack = true;
+        primaryAttackInput.canceled += input => iAbility.GetInputValues.isPrimaryAttack = false;
     }
     void OnDisable() {
-        moveInput.performed -= input => deltaMove = input.ReadValue<Vector2>();
-        moveInput.canceled -= input => deltaMove = input.ReadValue<Vector2>();
         lookInput.performed -= input => deltaLook = input.ReadValue<Vector2>();
         lookInput.canceled -= input => deltaLook = input.ReadValue<Vector2>();
-        jumpInput.performed -= input => isJumping = true;
-        jumpInput.canceled -= input => isJumping = false;
-        dashInput.performed -= input => isDashing = true;
-        dashInput.canceled -= input => isDashing = false;
+        dashInput.performed -= input => iAbility.GetInputValues.isRunning = true;
+        dashInput.canceled -= input => iAbility.GetInputValues.isRunning = false;
         radialWheel.performed -= input => {
             _RadialMenuManager?.SetWheelActive(true);
             wheelActive = true;
@@ -101,25 +95,27 @@ public class PlayerManager : MonoBehaviour, ICamera {
             wheelActive = false;
             iAbility.InputTransitionName(_RadialMenuManager?.OnSegmentClicked());
         };
-        primaryAttackInput.performed -= input => Attack();
-        primaryAttackInput.canceled -= input => holdPrimaryAttack = false;
+        primaryAttackInput.performed -= input => iAbility.GetInputValues.isPrimaryAttack = true;
+        primaryAttackInput.canceled -= input => iAbility.GetInputValues.isPrimaryAttack = false;
     }
     #endregion
 
     #region Update Functions
     private void Update() {
-        Movement();
         if (gameplayCamera != null) CameraSettings();
+        Movement();
     }
 
     #region Camera
     void Movement() {
+
         if (wheelActive) return;
-        camDir = Camera.main.transform.right * deltaMove.x + Camera.main.transform.forward * deltaMove.y;
-        iAbility?.InputMove(new Vector3(camDir.x, isJumping ? 1 : 0, camDir.z), isDashing);
+        Vector2 m = moveInput.ReadValue<Vector2>();
+        float j = jumpInput.ReadValue<float>();
+        camDir = Camera.main.transform.right * m.x + Camera.main.transform.forward * m.y;
+        iAbility.GetInputValues.SetDirection(new Vector3(m.x, j > 0.5f ? 1 : 0, m.y));
     }
     void Attack() {
-        iAbility.InputPrimaryAttack();
         holdPrimaryAttack = true;
     }
     void CameraSettings() {

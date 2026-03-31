@@ -41,7 +41,7 @@ public class RadialMenuManager : MonoBehaviour {
 
     public void SetWheelActive(bool active) => radialMenuRoot.SetActive(active);
 
-    void Update() {
+    /*void Update() {
 
         // Toggle radial menu with E
         if (Input.GetKeyDown(KeyCode.E)) {
@@ -51,7 +51,7 @@ public class RadialMenuManager : MonoBehaviour {
         if (radialMenuRoot.activeSelf) {
             UpdateSelection();
         }
-    }
+    }*/
 
     private void UpdateSelection() {
         Vector2 centerScreenPosition = RectTransformUtility.WorldToScreenPoint(null, center.position);

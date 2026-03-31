@@ -21,6 +21,9 @@ namespace AbilitySystem {
                 (attackAnim, WrapMode.ClampForever)
             };
 
+        public override AbilityData AbilityDataSetup(EntityBody entityBody) {
+            return new CooldownData(charges, cooldown);
+        }
 
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
 

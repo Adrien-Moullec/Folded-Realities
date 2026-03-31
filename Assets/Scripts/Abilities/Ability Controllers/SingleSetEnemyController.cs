@@ -19,14 +19,14 @@ namespace AbilitySystem {
             entityBody.iHealth = this;
             navMeshAgent = GetComponent<NavMeshAgent>();
             if (abilitySetSO == null) return;
-            EnemyAbilitySet ab = new EnemyAbilitySet(abilitySetSO);
+            EnemyAbilitySet ab = new EnemyAbilitySet(abilitySetSO, entityBody);
             abilitySetList = ab;
         }
         private void Update() {
-            InputMove(PlayerManager.player.transform.position - transform.position, false);
+            InputMove();
         }
 
-        public override void OnMoveEntity(Vector3 direction, float turnSpeed) {
+        public override void OnMoveEntity(Vector3 direction) {
             navMeshAgent.Move(direction);
             direction.y = 0;
             if (direction != Vector3.zero) entityBody.bodyHolder.transform.forward = direction;
@@ -36,13 +36,9 @@ namespace AbilitySystem {
             if (direction != Vector3.zero) entityBody.bodyHolder.transform.forward = direction;
         }
 
-        public override void InputMove(Vector3 direction, bool isRunning) {
-            abilitySetList?.movement.movementSO.Move(
-                entityBody,
-                abilitySetList?.movement.AbilityData,
-                Vector3.Distance(PlayerManager.player.transform.position, transform.position) > playerDist ? direction : Vector3.zero,
-                isRunning);
-        }
+        public override void InputMove() =>
+            abilitySetList?.movement.Activate(entityBody);
+
 
         public override void InputPrimaryAttack() {
             throw new NotImplementedException();
