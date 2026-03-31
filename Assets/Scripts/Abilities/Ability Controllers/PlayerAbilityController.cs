@@ -30,14 +30,20 @@ namespace AbilitySystem {
             foreach (var i in playerSetsList) {
                 if (i.abilitySetSO == null)
                     continue;
-                i.playerAbilitySet = new PlayerAbilitySet(i.abilitySetSO);
+
                 i.entityBody.iAbility = this;
                 i.entityBody.modelPrefab.SetActive(false);
-                i.playerAbilitySet.movement.AbilityData = playerSetsList[0].playerAbilitySet.movement.AbilityData;
                 i.entityBody.iHealth = this;
+
+                i.playerAbilitySet = new PlayerAbilitySet(i.abilitySetSO, i.entityBody);
+                i.playerAbilitySet.movement.AbilityData = playerSetsList[0].playerAbilitySet.movement.AbilityData;
             }
             currentAbilitySet = playerSetsList[0];
             currentAbilitySet.entityBody.modelPrefab.SetActive(true);
+        }
+        protected override void Update() {
+            base.Update();
+            if (GetInputValues.isPrimaryAttack) InputPrimaryAttack();
         }
         public override void SetupAnimations() {
             foreach (var n in playerSetsList)
@@ -48,8 +54,19 @@ namespace AbilitySystem {
         }
         #endregion
 
+        #region 
+        public override void InputMove() {
+            base.InputMove();
+            currentAbilitySet?.playerAbilitySet.movement.Activate(currentAbilitySet.entityBody);
+        }
+        public override void InputPrimaryAttack() {
+            base.InputPrimaryAttack();
+            currentAbilitySet?.playerAbilitySet.light.Activate(currentAbilitySet.entityBody);
+        }
+        #endregion
+
         #region Transitions
-        public override void OnEvent(string eventMessage) => InputTransitionName(eventMessage);
+        public override void OnAbilityEvent(string eventMessage) => InputTransitionName(eventMessage);
         public bool UnlockSet(string name) {
             if (playerSetsList.Any(x => x.abilitySetSO.abilitySetName == name)) {
                 playerSetsList.First(x => x.abilitySetSO.abilitySetName == name).isUnlocked = true;
@@ -96,7 +113,7 @@ namespace AbilitySystem {
         #endregion
 
         #region Movement Functions
-        public override void OnMoveEntity(Vector3 direction, float turnSpeed) {
+        public override void OnMoveEntity(Vector3 direction) {
             characterController.Move(direction);
             direction.y = 0;
             if (direction != Vector3.zero) currentAbilitySet.entityBody.bodyHolder.transform.forward = direction;
@@ -104,26 +121,6 @@ namespace AbilitySystem {
         public override void OnRotateEntity(Vector3 direction) {
             direction.y = 0;
             if (direction != Vector3.zero) currentAbilitySet.entityBody.bodyHolder.transform.forward = direction;
-        }
-        #endregion
-
-        #region Input Functions
-        public override void InputMove(Vector3 moveInput, bool isRunning) {
-            base.InputMove(moveInput, isRunning);
-            currentAbilitySet.playerAbilitySet?.movement.Activate(
-                currentAbilitySet.entityBody,
-                moveInput,
-                isRunning
-            );
-        }
-        public override void InputPrimaryAttack() {
-            base.InputPrimaryAttack();
-            currentAbilitySet.playerAbilitySet?.light.Activate(currentAbilitySet.entityBody);
-        }
-
-        public override void InputPrimaryAbility() {
-            base.InputPrimaryAbility();
-            currentAbilitySet.playerAbilitySet?.primary.Activate(currentAbilitySet.entityBody);
         }
         #endregion
 

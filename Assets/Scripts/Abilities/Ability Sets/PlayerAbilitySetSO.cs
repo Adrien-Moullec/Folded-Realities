@@ -28,15 +28,15 @@ namespace AbilitySystem {
         [SerializeField] public ActivatedAbilitySummary heavy;
         [SerializeField] public ActivatedAbilitySummary primary;
 
-        public PlayerAbilitySet(PlayerAbilitySetSO abilitySet) : base(abilitySet.name, abilitySet.movement, abilitySet.healthSettings) {
+        public PlayerAbilitySet(PlayerAbilitySetSO abilitySet, EntityBody eb) : base(abilitySet.name, abilitySet.movement, abilitySet.healthSettings, eb) {
             if (abilitySet.light != null)
-                light = new(abilitySet.light);
+                light = new(abilitySet.light, eb);
 
             if (abilitySet.heavy != null)
-                heavy = new(abilitySet.heavy);
+                heavy = new(abilitySet.heavy, eb);
 
             if (abilitySet.primary != null)
-                primary = new(abilitySet.primary);
+                primary = new(abilitySet.primary, eb);
         }
     }
 }

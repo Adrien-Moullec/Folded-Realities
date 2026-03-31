@@ -19,6 +19,7 @@ namespace AbilitySystem {
         [Tooltip("Fall animation information when model is falling.")]
         [SerializeField] AbilityAnimation fallingAnimation;
 
+        [Space]
         [Header("Speed Settings")]
 
         [Tooltip("Adjust the overall speed.")]
@@ -49,6 +50,7 @@ namespace AbilitySystem {
         [Tooltip("Run speed multiplier.")]
         [SerializeField] protected float runSpeedMultiplier = 1.5f;
 
+        [Space]
         [Header("Speed References")]
 
         protected static float baseSpeed = 5f;
@@ -78,12 +80,18 @@ namespace AbilitySystem {
         [Tooltip("Layers that count as ground.")]
         [SerializeField] protected LayerMask groundLayers;
 
+        [Space]
+        [Header("Movement Events")]
+        [Tooltip("Layers that count as ground.")]
+        [SerializeField] protected string onHitGround;
+        [SerializeField] protected string onGlide;
+        [SerializeField] protected string onFreeFall;
+        [SerializeField] protected string onHitWall;
         #region Setup
 
-        public override AbilityData AbilityDataSetup() {
+        public override AbilityData AbilityDataSetup(EntityBody eb) {
             return new GenericMovementData();
         }
-
         public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() {
             return new (AbilityAnimation, WrapMode)[]
             {
@@ -98,47 +106,74 @@ namespace AbilitySystem {
 
         #region Movement Logic
 
-        public override void Move(EntityBody entityBody, AbilityData data, Vector3 moveInput, bool runInput) {
+        public override bool NormalMovement(EntityBody entityBody, AbilityData data) {
             GenericMovementData moveData = (GenericMovementData)data;
+            AbilityInputValues inpVals = entityBody.iAbility.GetInputValues;
 
-            HorizontalMovement(moveData, new Vector3(moveInput.x, 0, moveInput.z), runInput);
-            VerticalMovement(moveData, entityBody, moveInput.y > 0);
-
+            float maxSpeed = moveData.isGliding ? glideHorizontalSpeed : inpVals.isRunning ? runSpeed : walkSpeed;
+            moveData.velocity = HorizontalMovement(
+                moveData,
+                new Vector3(inpVals.inputDirection.x, 0, inpVals.inputDirection.z),
+                maxSpeed,
+                inpVals.isRunning, inpVals.isAccelerating
+            );
+            VerticalMovement(moveData, entityBody, inpVals.inputDirection.y > 0);
             AnimateAbility(moveData, entityBody.animationComponent);
 
-            entityBody.iAbility.OnMoveEntity(moveData.velocity * Time.deltaTime, turnSpeed);
+            entityBody.iAbility.OnMoveEntity(moveData.velocity * Time.deltaTime);
+            return true;
+        }
+        public override bool ChargeMovement(EntityBody entityBody, AbilityData data) {
+            throw new System.NotImplementedException();
+        }
+        public override bool AutoTrackMovement(EntityBody entityBody, AbilityData data) {
+            throw new System.NotImplementedException();
         }
 
-        private void HorizontalMovement(GenericMovementData moveData, Vector3 inputDir, bool runInput) {
+
+        private Vector3 HorizontalMovement(GenericMovementData moveData, Vector3 inputDir, float maxSpeed, bool runInput, bool accelerate) {
             Vector3 horizontalVelocity = new Vector3(moveData.velocity.x, 0, moveData.velocity.z);
 
             // If move input
             if (inputDir.sqrMagnitude > 0.001f) {
                 inputDir.Normalize();
+                moveData.inputDirection = inputDir;
 
-                Vector3 currentDir = horizontalVelocity.sqrMagnitude > 0.001f
-                    ? horizontalVelocity.normalized
-                    : inputDir;
 
-                float directionMultiplier = Mathf.Lerp(
-                    changeDirectionSpeedMultiplier,
-                    1f,
-                    Vector3.Dot(currentDir, inputDir)
-                );
+                // Accelerate if acceleration is turned on
+                if (accelerate) {
 
-                float accel =
-                    (moveData.isGrounded ?
-                    acceleration :
-                    accelerationWhileFalling) *
-                    (runInput ? runAccelerationMultiplier : 1f) *
-                    directionMultiplier * 10;
+                    // Acceleration calculations based on current travel direction
+                    Vector3 currentDir = horizontalVelocity.sqrMagnitude > 0.001f
+                        ? horizontalVelocity.normalized
+                        : inputDir;
+                    float directionMultiplier = Mathf.Lerp(
+                        changeDirectionSpeedMultiplier,
+                        1f,
+                        Vector3.Dot(currentDir, inputDir)
+                    );
+                    float accel =
+                        (moveData.isGrounded ?
+                        acceleration :
+                        accelerationWhileFalling) *
+                        (runInput ? runAccelerationMultiplier : 1f) *
+                        directionMultiplier * 10 * Time.deltaTime;
 
-                horizontalVelocity += inputDir * accel * Time.deltaTime;
-                float maxSpeed = moveData.isGliding ? glideHorizontalSpeed : runInput ? runSpeed : walkSpeed;
+                    horizontalVelocity += inputDir * accel;
+                    if (horizontalVelocity.magnitude > maxSpeed)
+                        horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, Vector3.ClampMagnitude(horizontalVelocity, maxSpeed), moveData.isGrounded ? deceleration : decelerationWhileFalling);
+                }
 
-                if (horizontalVelocity.magnitude > maxSpeed)
-                    horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, Vector3.ClampMagnitude(horizontalVelocity, maxSpeed), moveData.isGrounded ? deceleration : decelerationWhileFalling);
-            } else {
+                // Go to full speed
+                else {
+                    horizontalVelocity = inputDir * maxSpeed;
+                }
+
+            }
+
+            // If no Input
+            else {
+                moveData.inputDirection =
                 horizontalVelocity = Vector3.MoveTowards(
                     horizontalVelocity,
                     Vector3.zero,
@@ -146,8 +181,7 @@ namespace AbilitySystem {
                 );
             }
 
-            moveData.velocity.x = horizontalVelocity.x;
-            moveData.velocity.z = horizontalVelocity.z;
+            return new Vector3(horizontalVelocity.x, 0, horizontalVelocity.z);
         }
 
         private void VerticalMovement(GenericMovementData pmd, EntityBody entityBody, bool isJumping) {
@@ -159,9 +193,10 @@ namespace AbilitySystem {
                 groundLayers
             ) && pmd.fallSpeed <= 0.1f;
             if (!isJumping) pmd.performedJump = false;
-            Collider[] colliders = Physics.OverlapSphere(feetPos, entityBody.feetSphereArea.radius, groundLayers);
+            entityBody.iAbility.OnAbilityEvent(onHitGround);
+            /*Collider[] colliders = Physics.OverlapSphere(feetPos, entityBody.feetSphereArea.radius, groundLayers);
             foreach (var n in colliders)
-                Debug.Log(n.gameObject.name);
+                Debug.Log(n.gameObject.name);*/
 
             // Grounded conditions
             if (pmd.isGrounded) {
@@ -193,7 +228,8 @@ namespace AbilitySystem {
                     else {
 
                         // If glide is activated
-                        if (canGlide) {
+                        if (canGlide && pmd.fallSpeed < 0) {
+                            entityBody.iAbility.OnAbilityEvent(onGlide);
                             pmd.isGliding = true;
                             pmd.fallSpeed = Mathf.MoveTowards(
                                 pmd.fallSpeed,
@@ -203,8 +239,10 @@ namespace AbilitySystem {
                         }
 
                         //If Glide isn't activated
-                        else
+                        else {
+                            entityBody.iAbility.OnAbilityEvent(onGlide);
                             pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, -maxFallSpeed, gravity * Time.deltaTime);
+                        }
                     }
                 }
                 // If falling
@@ -214,6 +252,7 @@ namespace AbilitySystem {
                 }
             }
 
+            //Set fallspeed
             pmd.fallSpeed = Mathf.Clamp(pmd.fallSpeed, -maxFallSpeed, maxFallSpeed);
             pmd.velocity.y = pmd.fallSpeed;
         }
@@ -265,6 +304,7 @@ namespace AbilitySystem {
         public class GenericMovementData : AbilityData {
             [HideInInspector] public Vector3 velocity;
             [HideInInspector] public float fallSpeed;
+            [HideInInspector] public Vector3 inputDirection;
 
             //Jumping
             [HideInInspector] public int remainingJumps;
@@ -284,6 +324,7 @@ namespace AbilitySystem {
                 fallSpeed = 0;
                 isGrounded = false;
                 isRunning = false;
+                performedJump = false;
                 remainingJumps = 0;
             }
         }
