@@ -8,6 +8,9 @@ public class NPCDialogue : MonoBehaviour {
     public TextMeshProUGUI dialogueText;
     public GameObject continuePrompt;
 
+    [Header("Editor Settings")]
+    public bool hideCanvasInEditor = true; 
+
     [Header("Dialogue")]
     [TextArea(2, 5)]
     public string[] lines;
@@ -20,7 +23,7 @@ public class NPCDialogue : MonoBehaviour {
     [Header("Audio")]
     public AudioSource audioSource;
     public AudioClip popSound;
-    public AudioClip[] speechSounds; 
+    public AudioClip[] speechSounds;
     public float minPitch = 0.8f;
     public float maxPitch = 1.0f;
 
@@ -31,9 +34,21 @@ public class NPCDialogue : MonoBehaviour {
     private Vector3 originalScale;
 
     void Start() {
+
+        
+#if UNITY_EDITOR
+        if (!Application.isPlaying && hideCanvasInEditor && dialogueUI != null) {
+            dialogueUI.SetActive(false);
+        }
+#endif
+
+        
+        if (Application.isPlaying && dialogueUI != null) {
+            dialogueUI.SetActive(false); // stays hidden until triggered
+        }
+
         originalScale = dialogueUI.transform.localScale;
         dialogueUI.transform.localScale = Vector3.zero;
-        dialogueUI.SetActive(false);
 
         if (continuePrompt != null) {
             continuePrompt.SetActive(false);
@@ -82,7 +97,6 @@ public class NPCDialogue : MonoBehaviour {
         StopAllCoroutines();
         StartCoroutine(PopIn());
 
-       
         if (audioSource != null && popSound != null) {
             audioSource.PlayOneShot(popSound);
         }
@@ -116,10 +130,8 @@ public class NPCDialogue : MonoBehaviour {
         foreach (char c in lines[currentLine]) {
             dialogueText.text += c;
 
-            
             if (audioSource != null && speechSounds.Length > 0 && c != ' ') {
-                if (Random.value > 0.6f) 
-                {
+                if (Random.value > 0.6f) {
                     audioSource.pitch = Random.Range(minPitch, maxPitch);
                     audioSource.PlayOneShot(speechSounds[Random.Range(0, speechSounds.Length)]);
                 }
