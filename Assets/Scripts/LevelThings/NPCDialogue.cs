@@ -3,29 +3,27 @@ using UnityEngine;
 using TMPro;
 
 public class NPCDialogue : MonoBehaviour {
-    [Header("UI")]
     public GameObject dialogueUI;
     public TextMeshProUGUI dialogueText;
     public GameObject continuePrompt;
 
-    [Header("Editor Settings")]
-    public bool hideCanvasInEditor = true; 
+    public bool hideCanvasInEditor = true;
 
-    [Header("Dialogue")]
     [TextArea(2, 5)]
     public string[] lines;
     public float typingSpeed = 0.03f;
 
-    [Header("Animation")]
     public float popSpeed = 6f;
     public float popScale = 1.2f;
 
-    [Header("Audio")]
     public AudioSource audioSource;
     public AudioClip popSound;
     public AudioClip[] speechSounds;
     public float minPitch = 0.8f;
     public float maxPitch = 1.0f;
+
+    public System.Action onDialogueFinished;
+    public bool preventAutoClose = false;
 
     private int currentLine = 0;
     private bool playerNearby = false;
@@ -33,18 +31,18 @@ public class NPCDialogue : MonoBehaviour {
     private bool dialogueActive = false;
     private Vector3 originalScale;
 
+    public CameraFocus cameraFocus;
+
     void Start() {
 
-        
 #if UNITY_EDITOR
         if (!Application.isPlaying && hideCanvasInEditor && dialogueUI != null) {
             dialogueUI.SetActive(false);
         }
 #endif
 
-        
         if (Application.isPlaying && dialogueUI != null) {
-            dialogueUI.SetActive(false); // stays hidden until triggered
+            dialogueUI.SetActive(false);
         }
 
         originalScale = dialogueUI.transform.localScale;
@@ -90,6 +88,10 @@ public class NPCDialogue : MonoBehaviour {
     }
 
     void StartDialogue() {
+        if (dialogueActive) {
+            return;
+        }
+
         dialogueActive = true;
         currentLine = 0;
 
@@ -99,6 +101,10 @@ public class NPCDialogue : MonoBehaviour {
 
         if (audioSource != null && popSound != null) {
             audioSource.PlayOneShot(popSound);
+        }
+
+        if (cameraFocus != null) {
+            cameraFocus.ResetToPlayer();
         }
 
         ShowLine();
@@ -151,7 +157,15 @@ public class NPCDialogue : MonoBehaviour {
         currentLine++;
 
         if (currentLine >= lines.Length) {
-            EndDialogue();
+
+            if (!preventAutoClose) {
+                EndDialogue();
+            }
+
+            if (onDialogueFinished != null) {
+                onDialogueFinished.Invoke();
+            }
+
         } else {
             ShowLine();
         }
