@@ -12,20 +12,20 @@ namespace AbilitySystem {
         [SerializeField] public HealthSO healthSettings;
         [SerializeField] public MovementAbilitySummary movement;
 
-        public AbilitySet(string name, MovementSO movementSO, HealthSO healthSO) {
+        public AbilitySet(string name, MovementSO movementSO, HealthSO healthSO, EntityBody eb) {
             abilitySetName = name;
 
             if (movementSO != null)
-                movement = new(movementSO);
+                movement = new(movementSO, eb);
             if (healthSO != null)
                 healthSettings = healthSO;
         }
-        public AbilitySet(AbilitySetSO abilitySet) {
+        public AbilitySet(AbilitySetSO abilitySet, EntityBody eb) {
             abilitySetName = abilitySet.abilitySetName;
             healthSettings = abilitySet.healthSettings;
 
             if (abilitySet.movement != null)
-                movement = new MovementAbilitySummary(abilitySet.movement);
+                movement = new MovementAbilitySummary(abilitySet.movement, eb);
 
         }
     }

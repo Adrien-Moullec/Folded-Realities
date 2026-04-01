@@ -11,24 +11,29 @@ namespace AbilitySystem {
         [Tooltip("Max health.")]
         [SerializeField, Min(1)] int maxHealth = 100;
         [Tooltip("Current entity health.")]
-        protected int currentHealth = 0;
-
+        [HideInInspector] protected int currentHealth = 0;
+        [Tooltip("Current entity health.")]
         [HideInInspector] protected bool canUseAbilities = true;
-
+        public AbilityInputValues GetInputValues { get; set; } = new();
+        protected delegate void FrameEvents();
+        protected FrameEvents frameEvents;
         public float CurrentHealth => throw new System.NotImplementedException();
-
         public float MaxHealth => throw new System.NotImplementedException();
 
         protected virtual void Awake() {
             currentHealth = maxHealth;
             SetupAnimations();
         }
+        protected virtual void Update() {
+            frameEvents.Invoke();
+            InputMove();
+        }
 
         public abstract void SetupAnimations();
         #region Input Interface
         public virtual void InputTransitionName(string back) { }
-        public virtual void InputMove(Vector3 direction, bool isRunning) {
-            if (!canUseAbilities) return;
+        public virtual void InputMove() {
+
         }
         public virtual void InputPrimaryAttack() {
             if (!canUseAbilities) return;
@@ -40,7 +45,7 @@ namespace AbilitySystem {
 
         #region Movement Interface
         public abstract void OnRotateEntity(Vector3 movement);
-        public abstract void OnMoveEntity(Vector3 direction, float turnSpeed = 1);
+        public abstract void OnMoveEntity(Vector3 direction);
         #endregion
 
         #region Ability Events Manager and Interface
@@ -52,16 +57,19 @@ namespace AbilitySystem {
         public IEnumerator RunTimelineWithEvents(TimelineEvent[] timelineInfo, DeltaEvent[] timelineEvents = null) {
             float time = 0;
             float endTime = timelineInfo.Max(x => x.end);
-            DeltaEvent[] dEvs = timelineEvents.OrderBy(x => x.deltaTime).ToArray();
+            DeltaEvent[] dEvs = timelineEvents;
+            if (dEvs != null) dEvs = timelineEvents.OrderBy(x => x.deltaTime).ToArray();
             Dictionary<TimelineEvent, bool> isPlaying = new();
 
             int eventCounter = 0;
+            bool canPlay = false;
 
             foreach (var n in timelineInfo)
                 isPlaying.Add(n, false);
 
             do {
                 time += Time.deltaTime;
+                Debug.Log(time);
 
                 if (dEvs?.Length > eventCounter) {
 
@@ -71,18 +79,26 @@ namespace AbilitySystem {
                     }
                 }
                 foreach (TimelineEvent n in timelineInfo) {
+                    canPlay = time >= n.start && time <= n.end;
+                    if (canPlay) {
+                        n.action?.Invoke();
+                        if (n.stopCondition != null)
+                            if (n.stopCondition())
+                                time = endTime;
+                    }
                     RunAnimationCycle(
                         n,
                         time,
-                        time >= n.start && time <= n.end,
+                        canPlay,
                         isPlaying
                     );
                 }
                 yield return null;
             } while (time < endTime);
 
-            foreach (var n in timelineInfo)
+            foreach (var n in timelineInfo) {
                 n.anim.Stop(n.component);
+            }
         }
         private void RunAnimationCycle(TimelineEvent n, float time, bool canPlay, Dictionary<TimelineEvent, bool> isPlaying) {
             if (canPlay) {
@@ -106,7 +122,7 @@ namespace AbilitySystem {
 
         #region 
         public abstract EntityBody GetEntityBody();
-        public virtual void OnEvent(string eventMessage) { }
+        public virtual void OnAbilityEvent(string eventMessage) { }
         #endregion
 
 
