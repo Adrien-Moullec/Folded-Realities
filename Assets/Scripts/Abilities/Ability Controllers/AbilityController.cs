@@ -15,6 +15,8 @@ namespace AbilitySystem {
         [Tooltip("Current entity health.")]
         [HideInInspector] protected bool canUseAbilities = true;
         public AbilityInputValues GetInputValues { get; set; } = new();
+        protected delegate void FrameEvents();
+        protected FrameEvents frameEvents;
         public float CurrentHealth => throw new System.NotImplementedException();
         public float MaxHealth => throw new System.NotImplementedException();
 
@@ -23,6 +25,7 @@ namespace AbilitySystem {
             SetupAnimations();
         }
         protected virtual void Update() {
+            frameEvents.Invoke();
             InputMove();
         }
 

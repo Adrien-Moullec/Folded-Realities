@@ -24,6 +24,9 @@ namespace AbilitySystem {
         public override AbilityData AbilityDataSetup(EntityBody entityBody) {
             return new CooldownData(charges, cooldown);
         }
+        public override bool PassEvent(EntityBody entityBody, AbilityData data) {
+            throw new NotImplementedException();
+        }
 
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
 
@@ -35,6 +38,14 @@ namespace AbilitySystem {
                     new DeltaEvent(() => Damage(entityBody), deltaEvent)
                 }
             );
+        }
+
+        protected override void OnHold(EntityBody entityBody, CooldownData data) {
+            throw new NotImplementedException();
+        }
+
+        protected override void RePress(EntityBody entityBody, CooldownData data) {
+            throw new NotImplementedException();
         }
 
         private void Damage(EntityBody entityBody) {
