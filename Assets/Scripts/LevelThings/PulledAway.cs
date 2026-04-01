@@ -1,34 +1,39 @@
 using UnityEngine;
+using System.Collections;
+using TMPro;
 
 public class PulledAway : MonoBehaviour {
-    [Header("Movement")]
+    public NPCDialogue npcDialogue;
+    public CameraFocus cameraFocus;
+
+    public GameObject dialogueUI;
+    public TextMeshProUGUI dialogueText;
+    public GameObject continuePrompt;
+
     public Transform targetPoint;
     public float speed = 3f;
-    public bool isBeingPulled = false;
 
-    [Header("Struggle Rotation")]
-    public float wobbleAmount = 15f;  
-    public float wobbleSpeed = 8f;     
+    public float wobbleAmount = 15f;
+    public float wobbleSpeed = 8f;
 
-    [Header("Sound")]
-    public AudioSource audioSource;    
-    public AudioClip pullSound;       
+    public AudioSource audioSource;
+    public AudioClip pullSound;
 
-    [Header("Dialogue")]
-    public GameObject helpText;        
+    public float helpDisplayTime = 5f;
 
+    private bool isBeingPulled = false;
     private Vector3 startRotation;
 
     void Start() {
         startRotation = transform.eulerAngles;
 
-        if (helpText != null)
-            helpText.SetActive(false);
+        if (npcDialogue != null) {
+            npcDialogue.onDialogueFinished += StartPullSequence;
+        }
     }
 
     void Update() {
         if (isBeingPulled && targetPoint != null) {
-          
             transform.position = Vector3.MoveTowards(
                 transform.position,
                 targetPoint.position,
@@ -44,16 +49,45 @@ public class PulledAway : MonoBehaviour {
         }
     }
 
-    public void StartPull() {
+    void StartPullSequence() {
+        StartCoroutine(PullRoutine());
+    }
+
+    IEnumerator PullRoutine() {
+        if (npcDialogue != null) {
+            npcDialogue.preventAutoClose = true;
+        }
+
         isBeingPulled = true;
+
+        if (cameraFocus != null) {
+            cameraFocus.FocusOn(transform);
+        }
 
         if (audioSource != null && pullSound != null) {
             audioSource.PlayOneShot(pullSound);
         }
 
-        
-        if (helpText != null) {
-            helpText.SetActive(true);
+        if (dialogueUI != null) {
+            dialogueUI.SetActive(true);
+        }
+
+        if (dialogueText != null) {
+            dialogueText.text = "aaaahhh— help!!";
+        }
+
+        if (continuePrompt != null) {
+            continuePrompt.SetActive(false);
+        }
+
+        yield return new WaitForSeconds(helpDisplayTime);
+
+        if (cameraFocus != null) {
+            cameraFocus.ResetToPlayer();
+        }
+
+        if (dialogueUI != null) {
+            dialogueUI.SetActive(false);
         }
     }
 }
