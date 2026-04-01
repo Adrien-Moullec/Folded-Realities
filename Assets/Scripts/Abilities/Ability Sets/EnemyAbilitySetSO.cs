@@ -16,11 +16,11 @@ namespace AbilitySystem {
 
     [Serializable]
     public class EnemyAbilitySet : AbilitySet {
-        [SerializeField] public ActivatedAbilitySummary attack;
+        [SerializeField] public CooldownAbilitySummary attack;
 
-        public EnemyAbilitySet(EnemyAbilitySetSO abilitySet) : base(abilitySet.name, abilitySet.movement, abilitySet.healthSettings) {
+        public EnemyAbilitySet(EnemyAbilitySetSO abilitySet, EntityBody eb) : base(abilitySet.name, abilitySet.movement, abilitySet.healthSettings, eb) {
             if (abilitySet.attack != null)
-                attack = new(abilitySet.attack);
+                attack = new(abilitySet.attack, eb);
         }
     }
 }
