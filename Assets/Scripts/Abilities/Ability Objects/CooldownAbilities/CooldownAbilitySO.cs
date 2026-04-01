@@ -9,7 +9,6 @@ namespace AbilitySystem {
         [SerializeField, Range(0.1f, 20)] protected float cooldown;
         [SerializeField, Range(1, 5)] protected int charges;
 
-        public override AbilityData AbilityDataSetup(EntityBody eb) => new CooldownData(charges, cooldown);
         public override bool Execute(EntityBody entityBody, AbilityData data) {
             CooldownData cdd = (CooldownData)data;
             if (cdd.currentCharges <= 0 || cdd.isUsing)

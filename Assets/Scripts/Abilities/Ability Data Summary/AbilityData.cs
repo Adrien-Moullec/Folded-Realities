@@ -1,10 +1,6 @@
 using System;
 
-namespace AbilitySystem
-{
+namespace AbilitySystem {
     [Serializable]
-    public class AbilityData
-    {
-
-    }
+    public class AbilityData { }
 }
