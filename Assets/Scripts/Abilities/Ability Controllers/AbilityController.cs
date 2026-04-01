@@ -25,7 +25,7 @@ namespace AbilitySystem {
             SetupAnimations();
         }
         protected virtual void Update() {
-            frameEvents.Invoke();
+            frameEvents?.Invoke();
             InputMove();
         }
 
