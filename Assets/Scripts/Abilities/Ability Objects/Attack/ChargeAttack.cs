@@ -33,21 +33,34 @@ namespace AbilitySystem {
             return cad;
         }
 
+
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
             ChargeAttackData cad = (ChargeAttackData)data;
             float time = 0;
-            entityBody.iAbility.GetInputValues.isAccelerating = false;
+            MovementType mt = entityBody.iAbility.GetInputValues.movementType;
+            entityBody.iAbility.GetInputValues.movementType = MovementType.Charge;
             if (entityBody.iAbility.GetInputValues.inputDirection == Vector3.zero)
                 entityBody.iAbility.GetInputValues.inputDirection = entityBody.modelPrefab.transform.forward;
-            entityBody.iAbility.GetInputValues.LockValues = true;
+            Debug.Log("Activate charge");
             while (time < maxChargeDuration) {
                 time += Time.deltaTime;
                 yield return null;
             }
-            entityBody.iAbility.GetInputValues.LockValues = false;
-            entityBody.iAbility.GetInputValues.isAccelerating = true;
+            entityBody.iAbility.GetInputValues.movementType = mt;
         }
 
+        protected override void OnHold(EntityBody entityBody, CooldownData data) {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void RePress(EntityBody entityBody, CooldownData data) {
+
+            throw new System.NotImplementedException();
+        }
+
+        public override bool PassEvent(EntityBody entityBody, AbilityData data) {
+            throw new System.NotImplementedException();
+        }
         public class ChargeAttackData : CooldownData {
             //public TimelineEvent[] chargeTimeline;
             public ChargeAttackData(int charges, float cooldown) : base(charges, cooldown) {

@@ -37,6 +37,15 @@ namespace AbilitySystem {
 
                 i.playerAbilitySet = new PlayerAbilitySet(i.abilitySetSO, i.entityBody);
                 i.playerAbilitySet.movement.AbilityData = playerSetsList[0].playerAbilitySet.movement.AbilityData;
+
+                if (i.playerAbilitySet.movement?.movementSO != null)
+                    frameEvents += i.playerAbilitySet.movement.FrameEvent;
+                if (i.playerAbilitySet.light?.abilitySO != null)
+                    frameEvents += i.playerAbilitySet.light.FrameEvent;
+                if (i.playerAbilitySet.heavy?.abilitySO != null)
+                    frameEvents += i.playerAbilitySet.heavy.FrameEvent;
+                if (i.playerAbilitySet.primary?.abilitySO != null)
+                    frameEvents += i.playerAbilitySet.primary.FrameEvent;
             }
             currentAbilitySet = playerSetsList[0];
             currentAbilitySet.entityBody.modelPrefab.SetActive(true);
@@ -57,11 +66,11 @@ namespace AbilitySystem {
         #region 
         public override void InputMove() {
             base.InputMove();
-            currentAbilitySet?.playerAbilitySet.movement.Activate(currentAbilitySet.entityBody);
+            currentAbilitySet?.playerAbilitySet.movement.Activate(currentAbilitySet.entityBody, true);
         }
         public override void InputPrimaryAttack() {
             base.InputPrimaryAttack();
-            currentAbilitySet?.playerAbilitySet.light.Activate(currentAbilitySet.entityBody);
+            currentAbilitySet?.playerAbilitySet.light.Activate(currentAbilitySet.entityBody, GetInputValues.isPrimaryAttack);
         }
         #endregion
 

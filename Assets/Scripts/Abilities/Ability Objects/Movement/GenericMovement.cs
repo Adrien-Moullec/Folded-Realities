@@ -50,6 +50,9 @@ namespace AbilitySystem {
         [Tooltip("Run speed multiplier.")]
         [SerializeField] protected float runSpeedMultiplier = 1.5f;
 
+        [Tooltip("Charge speed.")]
+        [SerializeField] protected float chargeSpeedMultiplier = 2f;
+
         [Space]
         [Header("Speed References")]
 
@@ -57,6 +60,7 @@ namespace AbilitySystem {
 
         protected float walkSpeed => baseSpeed * speedMultiplier;
         protected float runSpeed => baseSpeed * speedMultiplier * runSpeedMultiplier;
+        protected float chargeSpeed => baseSpeed * speedMultiplier * chargeSpeedMultiplier;
 
         [Header("Vertical Settings")]
         [Tooltip("Controls if entity can jump.")]
@@ -106,74 +110,76 @@ namespace AbilitySystem {
 
         #region Movement Logic
 
-        public override bool NormalMovement(EntityBody entityBody, AbilityData data) {
+        public override bool NormalMovement(EntityBody entityBody, AbilityData data, AbilityInputValues inpVals) {
             GenericMovementData moveData = (GenericMovementData)data;
-            AbilityInputValues inpVals = entityBody.iAbility.GetInputValues;
+            moveData.chargeDirection = inpVals.inputDirection;
+            Debug.Log("NORMAL");
 
             float maxSpeed = moveData.isGliding ? glideHorizontalSpeed : inpVals.isRunning ? runSpeed : walkSpeed;
-            moveData.velocity = HorizontalMovement(
+
+            moveData.velocity = AccelerationMovement(
                 moveData,
                 new Vector3(inpVals.inputDirection.x, 0, inpVals.inputDirection.z),
                 maxSpeed,
-                inpVals.isRunning, inpVals.isAccelerating
+                inpVals.isRunning,
+                inpVals.isAccelerating
             );
-            VerticalMovement(moveData, entityBody, inpVals.inputDirection.y > 0);
+            Gravity(moveData, entityBody, inpVals.inputDirection.y > 0);
             AnimateAbility(moveData, entityBody.animationComponent);
 
             entityBody.iAbility.OnMoveEntity(moveData.velocity * Time.deltaTime);
             return true;
         }
-        public override bool ChargeMovement(EntityBody entityBody, AbilityData data) {
+        public override bool ChargeMovement(EntityBody entityBody, AbilityData data, AbilityInputValues inpVals) {
+            GenericMovementData moveData = (GenericMovementData)data;
+            Debug.Log("CHARGE");
+            if (moveData.chargeDirection == Vector3.zero) {
+                moveData.chargeDirection = entityBody.modelPrefab.transform.forward;
+                moveData.chargeDirection.y = 0;
+            }
+            moveData.velocity = moveData.chargeDirection.normalized * chargeSpeed;
+            Gravity(moveData, entityBody, false);
+            entityBody.iAbility.OnMoveEntity(moveData.velocity * Time.deltaTime);
+            return true;
+        }
+        public override bool AutoTrackMovement(EntityBody entityBody, AbilityData data, AbilityInputValues inpVals) {
             throw new System.NotImplementedException();
         }
-        public override bool AutoTrackMovement(EntityBody entityBody, AbilityData data) {
+        public override bool FlightMovement(EntityBody entityBody, AbilityData data, AbilityInputValues inpVals) {
             throw new System.NotImplementedException();
         }
 
 
-        private Vector3 HorizontalMovement(GenericMovementData moveData, Vector3 inputDir, float maxSpeed, bool runInput, bool accelerate) {
+        private Vector3 AccelerationMovement(GenericMovementData moveData, Vector3 inputDir, float maxSpeed, bool runInput, bool accelerate) {
             Vector3 horizontalVelocity = new Vector3(moveData.velocity.x, 0, moveData.velocity.z);
 
             // If move input
             if (inputDir.sqrMagnitude > 0.001f) {
                 inputDir.Normalize();
-                moveData.inputDirection = inputDir;
 
+                // Acceleration calculations based on current travel direction
+                Vector3 currentDir = horizontalVelocity.sqrMagnitude > 0.001f
+                    ? horizontalVelocity.normalized
+                    : inputDir;
+                float directionMultiplier = Mathf.Lerp(
+                    changeDirectionSpeedMultiplier,
+                    1f,
+                    Vector3.Dot(currentDir, inputDir)
+                );
+                float accel =
+                    (moveData.isGrounded ?
+                    acceleration :
+                    accelerationWhileFalling) *
+                    (runInput ? runAccelerationMultiplier : 1f) *
+                    directionMultiplier * 10 * Time.deltaTime;
 
-                // Accelerate if acceleration is turned on
-                if (accelerate) {
-
-                    // Acceleration calculations based on current travel direction
-                    Vector3 currentDir = horizontalVelocity.sqrMagnitude > 0.001f
-                        ? horizontalVelocity.normalized
-                        : inputDir;
-                    float directionMultiplier = Mathf.Lerp(
-                        changeDirectionSpeedMultiplier,
-                        1f,
-                        Vector3.Dot(currentDir, inputDir)
-                    );
-                    float accel =
-                        (moveData.isGrounded ?
-                        acceleration :
-                        accelerationWhileFalling) *
-                        (runInput ? runAccelerationMultiplier : 1f) *
-                        directionMultiplier * 10 * Time.deltaTime;
-
-                    horizontalVelocity += inputDir * accel;
-                    if (horizontalVelocity.magnitude > maxSpeed)
-                        horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, Vector3.ClampMagnitude(horizontalVelocity, maxSpeed), moveData.isGrounded ? deceleration : decelerationWhileFalling);
-                }
-
-                // Go to full speed
-                else {
-                    horizontalVelocity = inputDir * maxSpeed;
-                }
-
+                horizontalVelocity += inputDir * accel;
+                if (horizontalVelocity.magnitude > maxSpeed)
+                    horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, Vector3.ClampMagnitude(horizontalVelocity, maxSpeed), moveData.isGrounded ? deceleration : decelerationWhileFalling);
             }
 
             // If no Input
             else {
-                moveData.inputDirection =
                 horizontalVelocity = Vector3.MoveTowards(
                     horizontalVelocity,
                     Vector3.zero,
@@ -184,7 +190,7 @@ namespace AbilitySystem {
             return new Vector3(horizontalVelocity.x, 0, horizontalVelocity.z);
         }
 
-        private void VerticalMovement(GenericMovementData pmd, EntityBody entityBody, bool isJumping) {
+        private void Gravity(GenericMovementData pmd, EntityBody entityBody, bool isJumping) {
             Vector3 feetPos = entityBody.feetSphereArea.transform.position + entityBody.feetSphereArea.center;
 
             pmd.isGrounded = Physics.CheckSphere(
@@ -299,12 +305,17 @@ namespace AbilitySystem {
 
         }
 
+        public override bool PassEvent(EntityBody entityBody, AbilityData data) {
+            throw new System.NotImplementedException();
+        }
+
+
         #endregion
 
         public class GenericMovementData : AbilityData {
             [HideInInspector] public Vector3 velocity;
             [HideInInspector] public float fallSpeed;
-            [HideInInspector] public Vector3 inputDirection;
+            [HideInInspector] public Vector3 chargeDirection;
 
             //Jumping
             [HideInInspector] public int remainingJumps;

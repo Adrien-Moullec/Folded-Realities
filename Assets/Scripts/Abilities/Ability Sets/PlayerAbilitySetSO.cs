@@ -24,9 +24,9 @@ namespace AbilitySystem {
 
     [Serializable]
     public class PlayerAbilitySet : AbilitySet {
-        [SerializeField] public AbilityAnimation transitionAnimation; [SerializeField] public ActivatedAbilitySummary light;
-        [SerializeField] public ActivatedAbilitySummary heavy;
-        [SerializeField] public ActivatedAbilitySummary primary;
+        [SerializeField] public AbilityAnimation transitionAnimation; [SerializeField] public CooldownAbilitySummary light;
+        [SerializeField] public CooldownAbilitySummary heavy;
+        [SerializeField] public CooldownAbilitySummary primary;
 
         public PlayerAbilitySet(PlayerAbilitySetSO abilitySet, EntityBody eb) : base(abilitySet.name, abilitySet.movement, abilitySet.healthSettings, eb) {
             if (abilitySet.light != null)

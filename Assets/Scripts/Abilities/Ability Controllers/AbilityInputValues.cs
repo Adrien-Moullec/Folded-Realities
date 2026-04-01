@@ -9,7 +9,7 @@ namespace AbilitySystem {
         [Header("Movement Values")]
         [Tooltip("Current directional input for movement scripts.")]
         public Vector3 inputDirection;
-        public MovementType movementType;
+        public MovementType movementType = MovementType.Normal;
         public void SetDirection(Vector3 dir) {
             if (!LockValues) inputDirection = dir;
         }

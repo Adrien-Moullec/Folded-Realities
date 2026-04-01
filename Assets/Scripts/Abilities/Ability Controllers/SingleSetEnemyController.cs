@@ -22,7 +22,8 @@ namespace AbilitySystem {
             EnemyAbilitySet ab = new EnemyAbilitySet(abilitySetSO, entityBody);
             abilitySetList = ab;
         }
-        private void Update() {
+        protected override void Update() {
+            base.Update();
             InputMove();
         }
 
@@ -37,7 +38,7 @@ namespace AbilitySystem {
         }
 
         public override void InputMove() =>
-            abilitySetList?.movement.Activate(entityBody);
+            abilitySetList?.movement.Activate(entityBody, true);
 
 
         public override void InputPrimaryAttack() {
