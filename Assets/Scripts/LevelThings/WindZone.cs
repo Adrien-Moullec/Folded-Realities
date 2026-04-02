@@ -1,28 +1,52 @@
 using UnityEngine;
 
 public class WindZone : MonoBehaviour {
-    public float windStrength = 10f;
+    public float windStrength = 14f;
     public float maxDistance = 10f;
-    public float upwardLift = 2f;
+    public float upwardLift = 0.8f;
 
     public float againstWindMultiplier = 0.4f;
-    public float withWindBoost = 1.2f;
+    public float withWindBoost = 1.05f;
 
     public float windOnTime = 3f;
-    public float windOffTime = 2f;
+    public float windOffTime = 5f;
+
+    public ParticleSystem[] windParticles;
 
     private float timer;
-    private bool windActive = true;
+    private bool windActive;
+
+    private void Start() {
+        SetWind(false);
+    }
 
     private void Update() {
         timer += Time.deltaTime;
 
         if (windActive && timer >= windOnTime) {
-            windActive = false;
-            timer = 0f;
+            SetWind(false);
         } else if (!windActive && timer >= windOffTime) {
-            windActive = true;
-            timer = 0f;
+            SetWind(true);
+        }
+    }
+
+    private void SetWind(bool state) {
+        windActive = state;
+        timer = 0f;
+
+        if (windParticles != null) {
+            for (int i = 0; i < windParticles.Length; i++) {
+                if (windParticles[i] == null) {
+                    continue;
+                }
+
+                if (state) {
+                    windParticles[i].Clear();
+                    windParticles[i].Play();
+                } else {
+                    windParticles[i].Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                }
+            }
         }
     }
 
