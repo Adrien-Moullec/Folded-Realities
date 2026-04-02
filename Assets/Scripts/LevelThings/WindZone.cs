@@ -42,7 +42,7 @@ public class WindZone : MonoBehaviour {
 
                 if (state) {
                     windParticles[i].Clear();
-                    windParticles[i].Play();
+                    windParticles[i].Play(true);
                 } else {
                     windParticles[i].Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
                 }
