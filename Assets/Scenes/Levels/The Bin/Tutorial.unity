@@ -2673,15 +2673,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.05
+      value: -8.16
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 37.58
+      value: 31.71
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.28
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14382,6 +14382,7 @@ MonoBehaviour:
   textShakeAmount: 2
   cameraShakeAmount: 0.05
   overHerePrompt: {fileID: 1219214138}
+  dropVelocity: 12
 --- !u!65 &1314611592
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14401,8 +14402,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1.4671571}
-  m_Center: {x: 0, y: 0, z: -0.23357856}
+  m_Size: {x: 2.2493553, y: 1, z: 1.4671571}
+  m_Center: {x: 0.62467766, y: 0, z: -0.23357856}
 --- !u!4 &1314611593
 Transform:
   m_ObjectHideFlags: 0
@@ -15493,7 +15494,7 @@ GameObject:
   - component: {fileID: 1403089505}
   m_Layer: 6
   m_Name: Sphere
-  m_TagString: Trash
+  m_TagString: Pushable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15506,7 +15507,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1403089499}
   serializedVersion: 4
-  m_Mass: 4
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -15521,7 +15522,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -21622,7 +21623,6 @@ MonoBehaviour:
   dialogueUI: {fileID: 152716384}
   dialogueText: {fileID: 688643041}
   continuePrompt: {fileID: 614631055}
-  hideCanvasInEditor: 1
   lines:
   - "My name\u2019s Sully. You see these arms? I\u2019m an Origami, just like you. "
   - " And I got thrown out. It\u2019s the spring cleaning season."
@@ -21637,6 +21637,9 @@ MonoBehaviour:
   speechSounds: []
   minPitch: 0.1
   maxPitch: 0.2
+  preventAutoClose: 0
+  cameraFocus: {fileID: 0}
+  cameraZoom: {fileID: 0}
 --- !u!4 &1985035088 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4a0a614a62ef9d345b2acdc049dc5a31, type: 3}
@@ -23234,7 +23237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d96c700ed0298ca4287e8d45a8b7c108, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pushPower: 3
+  pushForce: 5
 --- !u!1 &2110667187
 GameObject:
   m_ObjectHideFlags: 0
