@@ -8,16 +8,44 @@ public class WindZone : MonoBehaviour {
     public float againstWindMultiplier = 0.4f;
     public float withWindBoost = 1.2f;
 
+    public float windOnTime = 3f;
+    public float windOffTime = 2f;
+
+    private float timer;
+    private bool windActive = true;
+
+    private void Update() {
+        timer += Time.deltaTime;
+
+        if (windActive && timer >= windOnTime) {
+            windActive = false;
+            timer = 0f;
+        } else if (!windActive && timer >= windOffTime) {
+            windActive = true;
+            timer = 0f;
+        }
+    }
+
     private void OnTriggerStay(Collider other) {
-        if (!other.CompareTag("Player")) return;
+        if (!windActive) {
+            return;
+        }
+
+        if (!other.CompareTag("Player")) {
+            return;
+        }
 
         CharacterController controller = other.GetComponent<CharacterController>();
-        if (controller == null) return;
+        if (controller == null) {
+            return;
+        }
 
         Vector3 toPlayer = (other.transform.position - transform.position).normalized;
 
         float alignment = Vector3.Dot(transform.forward, toPlayer);
-        if (alignment <= 0) return;
+        if (alignment <= 0) {
+            return;
+        }
 
         float distance = Vector3.Distance(transform.position, other.transform.position);
         float falloff = 1 - Mathf.Clamp01(distance / maxDistance);
