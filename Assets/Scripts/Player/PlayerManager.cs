@@ -117,8 +117,11 @@ public class PlayerManager : MonoBehaviour, ICamera {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         iAbility.GetInputValues.SetDirection(new Vector3(camDir.x, j > 0.5f ? 1 : 0, camDir.y));
 =======
+=======
+>>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
@@ -133,6 +136,9 @@ public class PlayerManager : MonoBehaviour, ICamera {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
+=======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
