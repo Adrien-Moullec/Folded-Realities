@@ -4,6 +4,7 @@ using System.Collections;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 using Unity.Mathematics;
 
@@ -20,6 +21,8 @@ namespace AbilitySystem {
         [Tooltip("Number of projectile objects in current pool.")]
         [SerializeField] protected int poolSize;
 =======
+=======
+>>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
@@ -44,6 +47,9 @@ namespace AbilitySystem {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
+=======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
@@ -65,11 +71,15 @@ namespace AbilitySystem {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         public override AbilityData AbilityDataSetup(EntityBody entityBody) {
             ProjectileData projectileData = new ProjectileData(charges, cooldown);
             projectileData.pooledProjectiles.SetPool(Projectile, poolSize);
             return projectileData;
         }
+=======
+        public override AbilityData AbilityDataSetup(EntityBody entityBody) => new ProjectileData(entityBody, projectilePoolInfo, charges, cooldown);
+>>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
         public override AbilityData AbilityDataSetup(EntityBody entityBody) => new ProjectileData(entityBody, projectilePoolInfo, charges, cooldown);
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
@@ -92,11 +102,14 @@ namespace AbilitySystem {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             ProjectileData pd = (ProjectileData)data;
             float deltaTime = 0;
             PoolObject poolObject = pd.pooledProjectiles.SpawnFromPool(entityBody.modelPrefab.transform.position, quaternion.identity);
 
 =======
+=======
+>>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
@@ -112,6 +125,9 @@ namespace AbilitySystem {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
+=======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
@@ -127,6 +143,7 @@ namespace AbilitySystem {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             throw new System.NotImplementedException();
         }
 
@@ -143,6 +160,8 @@ namespace AbilitySystem {
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
+=======
+>>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
             throw new NotImplementedException();
         }
 
@@ -155,6 +174,9 @@ namespace AbilitySystem {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
+=======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
@@ -170,10 +192,13 @@ namespace AbilitySystem {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             public ObjectPool pooledProjectiles;
 
             public ProjectileData(int charges, float cooldown) : base(charges, cooldown) { }
 =======
+=======
+>>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
@@ -187,6 +212,9 @@ namespace AbilitySystem {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
+=======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
 =======
 >>>>>>> 60d1f65c6cd3674953f3255e2389ed6c7150d419
