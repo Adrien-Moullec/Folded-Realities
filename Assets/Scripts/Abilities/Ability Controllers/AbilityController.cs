@@ -6,6 +6,10 @@ using System.Collections.Generic;
 
 namespace AbilitySystem {
     public abstract class AbilityController : MonoBehaviour, IAbility, IHealth {
+        [Header("Team")]
+        [Tooltip("The 'team' the entity is on.")]
+        [SerializeField] EntityTeam entityTeam;
+        public EntityTeam GetEntityTeam => entityTeam;
 
         [Header("Health")]
         [Tooltip("Max health.")]
@@ -20,12 +24,13 @@ namespace AbilitySystem {
         public float CurrentHealth => throw new System.NotImplementedException();
         public float MaxHealth => throw new System.NotImplementedException();
 
+
         protected virtual void Awake() {
             currentHealth = maxHealth;
             SetupAnimations();
         }
         protected virtual void Update() {
-            frameEvents.Invoke();
+            frameEvents?.Invoke();
             InputMove();
         }
 
@@ -120,22 +125,22 @@ namespace AbilitySystem {
         }
         #endregion
 
-        #region 
+        #region Utility
         public abstract EntityBody GetEntityBody();
         public virtual void OnAbilityEvent(string eventMessage) { }
         #endregion
 
-
         #region Health
-        public virtual void Damage(float amount) {
-            currentHealth -= (int)amount;
+        public virtual void Damage(float amount, EntityBody otherBody = null) {
+            if ((otherBody.iAbility.GetEntityTeam & GetEntityTeam) != 0) //If both contain same flag then result = true
+                currentHealth -= (int)amount;
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
             if (currentHealth <= 0)
                 Die();
         }
 
-        public virtual void Heal(float amount) {
+        public virtual void Heal(float amount, EntityBody otherBody = null) {
             currentHealth += (int)amount;
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         }
