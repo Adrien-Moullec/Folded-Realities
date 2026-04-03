@@ -3,20 +3,14 @@ using UnityEngine.UI;
 
 namespace AbilitySystem {
     public class SingleAbilityEnemyController : SingleSetEnemyController {
-        [Header("HEALTHBAR")]
-        [SerializeField] public UnityEngine.UI.Slider healthBar;
+        [Header("Health bar")]
+        [SerializeField] public Slider healthBar;
         private void Start() {
-            Debug.Log(healthBar + ", " + healthBar.name);
-            //base.Awake();
             healthBar.maxValue = MaxHealth;
-            Debug.Log("TEST2");
             healthBar.value = MaxHealth;
-            Debug.Log("TEST3");
         }
-        public override void Damage(float amount) {
-            currentHealth -= (int)amount;
-            if (currentHealth <= 0)
-                Die();
+        public override void Damage(float amount, EntityBody otherBody = null) {
+            base.Damage(amount);
             UpdateHealth();
         }
 
@@ -24,7 +18,7 @@ namespace AbilitySystem {
             Destroy(gameObject);
         }
 
-        public override void Heal(float amount) {
+        public override void Heal(float amount, EntityBody otherBody = null) {
             currentHealth = (int)Mathf.Clamp(currentHealth + (int)amount, 0, MaxHealth);
             UpdateHealth();
         }
