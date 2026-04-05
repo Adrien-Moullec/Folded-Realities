@@ -21,6 +21,10 @@ namespace AbilitySystem {
         [Tooltip("The max speed of the projectile.")]
         [SerializeField] protected float projectileSpeed;
         [Tooltip("The max amount of time that projectiles will stay spawned in.")]
+        [SerializeField] protected float shootInterval = 1f;
+        [SerializeField] protected float burstInterval = 0.25f;
+        [SerializeField, Min(1)] protected int burstAmount = 5;
+        [SerializeField] bool automaticShooting = false;
         [SerializeField] protected float lifetime;
 
 
@@ -32,25 +36,30 @@ namespace AbilitySystem {
         #endregion
 
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
-            if (projectilePoolInfo.poolObject == null) yield break;
+            if (projectilePoolInfo.poolObject == null || (data.isHoldingInput && !automaticShooting)) yield break;
             ProjectileData pd = (ProjectileData)data;
 
-            IPoolObjectAS projectile = pd.pooledProjectiles.Get();
-            yield return new WaitForSeconds(2);
-            pd.pooledProjectiles.Release(projectile);
+            for (int i = 0; i < burstAmount; i++) {
+                entityBody.iAbility.GetAbilityController.StartCoroutine(Projectile(pd));
+                yield return new WaitForSeconds(burstInterval);
+            }
+
+            yield return new WaitForSeconds(shootInterval - burstInterval);
 
             yield return null;
         }
-        public override bool PassEvent(EntityBody entityBody, AbilityData data) {
-            throw new NotImplementedException();
+        IEnumerator Projectile(ProjectileData pd) {
+            IPoolObjectAS projectile = pd.pooledProjectiles.Get();
+            yield return new WaitForSeconds(2);
+            pd.pooledProjectiles.Release(projectile);
         }
 
         protected override void OnHold(EntityBody entityBody, CooldownData data) {
-            throw new NotImplementedException();
+
         }
 
-        protected override void RePress(EntityBody entityBody, CooldownData data) {
-            throw new NotImplementedException();
+        protected override void OnPressWhileUsing(EntityBody entityBody, CooldownData data) {
+
         }
 
         [Serializable]

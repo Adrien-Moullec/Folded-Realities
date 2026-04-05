@@ -4,6 +4,7 @@ using System;
 
 namespace AbilitySystem {
     public class Bullet : Projectile {
+        EntityTeam entityTeam = EntityTeam.None;
         Vector3 direction;
 
         public override void GetIPoolObj(EntityBody body) {
@@ -11,6 +12,7 @@ namespace AbilitySystem {
             entityBody = body;
             direction = entityBody.modelPrefab.transform.forward;
             transform.position = body.bodyHolder.transform.position;
+            entityTeam = body == null ? EntityTeam.None : body.iAbility.GetEntityTeam;
         }
 
         void Update() {
@@ -27,8 +29,16 @@ namespace AbilitySystem {
 
         public override void OnTriggerEnter(Collider other) {
             if (other.TryGetComponent(out IHealth ihealth)) {
-                ihealth.Damage(50);
-            }
+                ihealth.Damage(
+                    new EntityDamage(
+                        50,
+                        entityBody,
+                        entityBody.iAbility.GetEntityTeam,
+                        EntityDamageType.Melee
+                    )
+                );
+            } else if ((stopBulletLayer.value & (1 << other.gameObject.layer)) != 0)
+                ReleaseIPoolObj(entityBody);
         }
     }
 }

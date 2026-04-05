@@ -9,8 +9,8 @@ namespace AbilitySystem {
             healthBar.maxValue = MaxHealth;
             healthBar.value = MaxHealth;
         }
-        public override void Damage(float amount, EntityBody otherBody = null) {
-            base.Damage(amount);
+        public override void Damage(EntityDamage damage) {
+            base.Damage(damage);
             UpdateHealth();
         }
 
@@ -18,8 +18,8 @@ namespace AbilitySystem {
             Destroy(gameObject);
         }
 
-        public override void Heal(float amount, EntityBody otherBody = null) {
-            currentHealth = (int)Mathf.Clamp(currentHealth + (int)amount, 0, MaxHealth);
+        public override void Heal(EntityDamage heal) {
+            currentHealth = (int)Mathf.Clamp(currentHealth + (int)heal.amount, 0, MaxHealth);
             UpdateHealth();
         }
 

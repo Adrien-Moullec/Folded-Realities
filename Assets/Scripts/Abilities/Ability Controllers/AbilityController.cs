@@ -4,6 +4,8 @@ using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 
+using Unity.VisualScripting;
+
 namespace AbilitySystem {
     public abstract class AbilityController : MonoBehaviour, IAbility, IHealth {
         [Header("Team")]
@@ -15,7 +17,7 @@ namespace AbilitySystem {
         [Tooltip("Max health.")]
         [SerializeField, Min(1)] int maxHealth = 100;
         [Tooltip("Current entity health.")]
-        [HideInInspector] protected int currentHealth = 0;
+        [HideInInspector] protected int currentHealth = 100;
         [Tooltip("Current entity health.")]
         [HideInInspector] protected bool canUseAbilities = true;
         public AbilityInputValues GetInputValues { get; set; } = new();
@@ -24,6 +26,7 @@ namespace AbilitySystem {
         public float CurrentHealth => throw new System.NotImplementedException();
         public float MaxHealth => throw new System.NotImplementedException();
 
+        public AbilityController GetAbilityController { get => this; }
 
         protected virtual void Awake() {
             currentHealth = maxHealth;
@@ -74,8 +77,6 @@ namespace AbilitySystem {
 
             do {
                 time += Time.deltaTime;
-                Debug.Log(time);
-
                 if (dEvs?.Length > eventCounter) {
 
                     if (time / endTime >= dEvs[eventCounter].deltaTime) {
@@ -131,17 +132,18 @@ namespace AbilitySystem {
         #endregion
 
         #region Health
-        public virtual void Damage(float amount, EntityBody otherBody = null) {
-            if ((otherBody.iAbility.GetEntityTeam & GetEntityTeam) != 0) //If both contain same flag then result = true
-                currentHealth -= (int)amount;
+        public virtual void Damage(EntityDamage damage) {
+            if (!EntityTeamFunctions.HasCommonTeam(GetEntityTeam, damage.team))
+                currentHealth -= (int)damage.amount;
+
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
             if (currentHealth <= 0)
                 Die();
         }
 
-        public virtual void Heal(float amount, EntityBody otherBody = null) {
-            currentHealth += (int)amount;
+        public virtual void Heal(EntityDamage heal) {
+            currentHealth += (int)heal.amount;
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         }
 

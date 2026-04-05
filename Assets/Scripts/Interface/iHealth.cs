@@ -4,7 +4,7 @@ public interface IHealth {
     float CurrentHealth { get; }
     float MaxHealth { get; }
 
-    void Damage(float amount, EntityBody otherBody = null);
-    void Heal(float amount, EntityBody otherBody = null);
+    void Damage(EntityDamage damage);
+    void Heal(EntityDamage heal);
     void Die();
 }

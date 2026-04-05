@@ -11,22 +11,33 @@ namespace AbilitySystem {
 
         public override bool Execute(EntityBody entityBody, AbilityData data) {
             CooldownData cdd = (CooldownData)data;
-            if (cdd.currentCharges <= 0 || cdd.isUsing)
+            if (data.usingAbility) {
+                if (data.isHoldingInput)
+                    OnHold(entityBody, cdd);
+                else
+                    OnPressWhileUsing(entityBody, cdd);
+                return false;
+            } else if (cdd.currentCharges <= 0)
                 return false;
 
             cdd.currentCharges--;
             entityBody.iAbility.ActivateIenumerator(UseAbility(entityBody, cdd));
             return true;
         }
+        public override bool PassEvent(EntityBody entityBody, AbilityData data) {
+            CooldownData cdd = (CooldownData)data;
+            cdd.isHoldingInput = false;
+            return true;
+        }
         protected IEnumerator UseAbility(EntityBody entityBody, CooldownData data) {
-            data.hasReleasedInput = false;
-            data.isUsing = true;
+            data.usingAbility = true;
             yield return Ability(entityBody, data);
-            data.isUsing = false;
+            data.isHoldingInput = true;
+            data.usingAbility = false;
         }
         protected abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
         protected abstract void OnHold(EntityBody entityBody, CooldownData data);
-        protected abstract void RePress(EntityBody entityBody, CooldownData data);
+        protected abstract void OnPressWhileUsing(EntityBody entityBody, CooldownData data);
         public override void FrameEvent(AbilityData abData) {
             CooldownData data = (CooldownData)abData;
 
@@ -61,11 +72,9 @@ namespace AbilitySystem {
         }
     }
     public class CooldownData : AbilityData {
-        [HideInInspector] public float cooldownDelta;
-        [HideInInspector] public int currentCharges;
-        [HideInInspector] public bool isRecharging = false;
-        [HideInInspector] public bool isUsing = false;
-        [HideInInspector] public bool hasReleasedInput = false;
+        public float cooldownDelta;
+        public int currentCharges;
+        public bool isRecharging = false;
         public CooldownData(int charges, float cooldown) {
             currentCharges = charges;
             cooldownDelta = cooldown;

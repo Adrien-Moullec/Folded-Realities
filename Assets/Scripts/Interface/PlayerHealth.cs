@@ -22,8 +22,8 @@ public class PlayerHealth : MonoBehaviour, IHealth {
         UpdateHearts();
     }
 
-    public void Damage(float amount, EntityBody entityBody = null) {
-        currentHealth -= Mathf.RoundToInt(amount);
+    public void Damage(EntityDamage damage) {
+        currentHealth -= Mathf.RoundToInt(damage.amount);
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
         UpdateHearts();
@@ -33,8 +33,8 @@ public class PlayerHealth : MonoBehaviour, IHealth {
         }
     }
 
-    public void Heal(float amount, EntityBody entityBody = null) {
-        currentHealth += Mathf.RoundToInt(amount);
+    public void Heal(EntityDamage heal) {
+        currentHealth += Mathf.RoundToInt(heal.amount);
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
         UpdateHearts();

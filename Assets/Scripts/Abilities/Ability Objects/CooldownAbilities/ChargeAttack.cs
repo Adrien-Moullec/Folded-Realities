@@ -53,7 +53,7 @@ namespace AbilitySystem {
             throw new System.NotImplementedException();
         }
 
-        protected override void RePress(EntityBody entityBody, CooldownData data) {
+        protected override void OnPressWhileUsing(EntityBody entityBody, CooldownData data) {
 
             throw new System.NotImplementedException();
         }
