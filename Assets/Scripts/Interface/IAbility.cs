@@ -21,6 +21,7 @@ namespace AbilitySystem {
         public IEnumerator RunTimelineWithEvents(TimelineEvent[] timelineInfo, DeltaEvent[] timelineEvents = null);
         public IEnumerator RunLoop(TimelineEvent[] timelineInfo);
         public AbilityInputValues GetInputValues { get; set; }
+        public AbilityController GetAbilityController { get; }
         #endregion
     }
 }

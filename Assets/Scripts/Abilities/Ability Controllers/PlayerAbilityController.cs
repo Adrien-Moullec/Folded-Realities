@@ -52,7 +52,7 @@ namespace AbilitySystem {
         }
         protected override void Update() {
             base.Update();
-            if (GetInputValues.isPrimaryAttack) InputPrimaryAttack();
+            InputPrimaryAttack();
         }
         public override void SetupAnimations() {
             foreach (var n in playerSetsList)
@@ -75,7 +75,11 @@ namespace AbilitySystem {
         #endregion
 
         #region Transitions
-        public override void OnAbilityEvent(string eventMessage) => InputTransitionName(eventMessage);
+        public override void OnAbilityEvent(string eventMessage) {
+            if (eventMessage == "") return;
+            Debug.Log(eventMessage);
+            InputTransitionName(eventMessage);
+        }
         public bool UnlockSet(string name) {
             if (playerSetsList.Any(x => x.abilitySetSO.abilitySetName == name)) {
                 playerSetsList.First(x => x.abilitySetSO.abilitySetName == name).isUnlocked = true;
@@ -130,6 +134,13 @@ namespace AbilitySystem {
         public override void OnRotateEntity(Vector3 direction) {
             direction.y = 0;
             if (direction != Vector3.zero) currentAbilitySet.entityBody.bodyHolder.transform.forward = direction;
+        }
+        #endregion
+
+        #region Health
+        public override void Damage(EntityDamage damage) {
+        }
+        public override void Heal(EntityDamage heal) {
         }
         #endregion
 

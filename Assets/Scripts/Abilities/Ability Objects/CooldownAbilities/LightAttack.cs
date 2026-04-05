@@ -44,7 +44,7 @@ namespace AbilitySystem {
             throw new NotImplementedException();
         }
 
-        protected override void RePress(EntityBody entityBody, CooldownData data) {
+        protected override void OnPressWhileUsing(EntityBody entityBody, CooldownData data) {
             throw new NotImplementedException();
         }
 
@@ -53,7 +53,13 @@ namespace AbilitySystem {
             foreach (var n in colliders)
                 if (n.transform.TryGetComponent(out IHealth iHealth))
                     if (iHealth != entityBody.iHealth)
-                        iHealth.Damage(damage);
+                        iHealth.Damage(
+                            new EntityDamage(
+                                damage,
+                                entityBody,
+                                entityBody.iAbility.GetEntityTeam, EntityDamageType.Melee
+                            )
+                        );
         }
     }
 }

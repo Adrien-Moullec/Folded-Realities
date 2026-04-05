@@ -116,8 +116,7 @@ public class PlayerManager : MonoBehaviour, ICamera {
         camDir.y = 0;
         camDir.Normalize();
         camDir.y = j > 0.5f ? 1 : 0;
-        iAbility.GetInputValues.SetDirection(camDir); ///new Vector3(camDir.x, j > 0.5f ? 1 : 0, camDir.y));
-        Debug.Log(camDir);
+        iAbility.GetInputValues.SetDirection(camDir);
     }
     void Attack() {
         holdPrimaryAttack = true;
