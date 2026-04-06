@@ -2,63 +2,33 @@ using UnityEngine;
 
 public class CameraFocus : MonoBehaviour {
     public Transform player;
-    public float rotateSpeed = 6f;
+    public float followSpeed = 5f;
+    public Vector3 offset;
 
-    [Header("Offsets")]
-    public Vector3 focusOffset = new Vector3(0f, 1.5f, -2f);
-
-    [Header("Tilt")]
-    public float tiltAmount = 10f;
-
-    private Transform npc;
-    private bool focusing = false;
-
-    private Vector3 originalLocalPosition;
-    private Quaternion originalRotation;
+    private Transform currentTarget;
 
     void Start() {
-        originalLocalPosition = transform.localPosition;
-        originalRotation = transform.rotation;
+        currentTarget = player;
     }
 
-    public void FocusOn(Transform npcTarget) {
-        npc = npcTarget;
-        focusing = true;
-
-        originalLocalPosition = transform.localPosition;
-        originalRotation = transform.rotation;
-
-        transform.localPosition = focusOffset;
+    public void FocusOn(Transform target) {
+        currentTarget = target;
     }
 
-    public void StopFocus() {
-        focusing = false;
-        npc = null;
-
-        transform.localPosition = originalLocalPosition;
-        transform.rotation = originalRotation;
+    public void ResetToPlayer() {
+        currentTarget = player;
     }
 
     void LateUpdate() {
-        if (!focusing || npc == null || player == null) {
-            return;
+        if (currentTarget != null) {
+            Vector3 desiredPosition = currentTarget.position
+                                    + currentTarget.forward * offset.z
+                                    + currentTarget.right * offset.x
+                                    + Vector3.up * offset.y;
+
+            transform.position = Vector3.Lerp(transform.position, desiredPosition, followSpeed * Time.deltaTime);
+
+            transform.LookAt(currentTarget.position + Vector3.up * 1.5f);
         }
-
-        Vector3 midpoint = (player.position + npc.position) / 2f;
-        Vector3 lookPoint = midpoint + Vector3.up * 1.5f;
-
-        Quaternion targetRotation = Quaternion.LookRotation(lookPoint - transform.position);
-
-        targetRotation = Quaternion.Euler(
-            targetRotation.eulerAngles.x + tiltAmount,
-            targetRotation.eulerAngles.y,
-            targetRotation.eulerAngles.z
-        );
-
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            targetRotation,
-            rotateSpeed * Time.deltaTime
-        );
     }
 }
