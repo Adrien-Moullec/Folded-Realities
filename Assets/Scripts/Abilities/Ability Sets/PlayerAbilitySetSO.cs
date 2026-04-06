@@ -8,15 +8,11 @@ namespace AbilitySystem {
         [SerializeField] public CooldownAbilitySO light;
         [SerializeField] public CooldownAbilitySO heavy;
         [SerializeField] public CooldownAbilitySO primary;
-
-        [Space]
-        [Header("Transition options")]
-        [SerializeField] public AbilityAnimation transitionAnimation;
     }
 
     [Serializable]
     public class PlayerAbilitySet : AbilitySet {
-        [SerializeField] public AbilityAnimation transitionAnimation; [SerializeField] public CooldownAbilitySummary light;
+        [SerializeField] public CooldownAbilitySummary light;
         [SerializeField] public CooldownAbilitySummary heavy;
         [SerializeField] public CooldownAbilitySummary primary;
 

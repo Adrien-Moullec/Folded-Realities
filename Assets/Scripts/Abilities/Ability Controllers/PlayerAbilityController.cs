@@ -11,7 +11,6 @@ namespace AbilitySystem {
         [Space]
         [Header("Transition Animation")]
         [SerializeField] Animation SmokesAndMirrorsAnimation;
-        [SerializeField] AbilityAnimation transitionAnimationClip;
         [SerializeField] float transitionTime = 0.5f;
         private bool isTransitioning = false;
 
@@ -26,7 +25,6 @@ namespace AbilitySystem {
             base.Awake();
             SmokesAndMirrorsAnimation.gameObject.SetActive(false);
             characterController = GetComponent<CharacterController>();
-            transitionAnimationClip.Setup(SmokesAndMirrorsAnimation, WrapMode.Once);
             foreach (var i in playerSetsList) {
                 if (i.abilitySetSO == null)
                     continue;
