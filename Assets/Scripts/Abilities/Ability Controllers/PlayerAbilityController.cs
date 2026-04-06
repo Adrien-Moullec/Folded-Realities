@@ -53,10 +53,7 @@ namespace AbilitySystem {
         protected override void Update() {
             base.Update();
             InputPrimaryAttack();
-        }
-        public override void SetupAnimations() {
-            foreach (var n in playerSetsList)
-                n.abilitySetSO?.SetupAnimations(n.entityBody.animationComponent);
+            currentAbilitySet?.playerAbilitySet.heavy.Activate(currentAbilitySet.entityBody, GetInputValues.isPrimaryAbility);
         }
         public override void Die() {
             base.Die();
@@ -77,7 +74,7 @@ namespace AbilitySystem {
         #region Transitions
         public override void OnAbilityEvent(string eventMessage) {
             if (eventMessage == "") return;
-            Debug.Log(eventMessage);
+            //Debug.Log(eventMessage);
             InputTransitionName(eventMessage);
         }
         public bool UnlockSet(string name) {
@@ -86,42 +83,6 @@ namespace AbilitySystem {
                 return true;
             }
             return false;
-        }
-        public override void InputTransitionName(string name) {
-            if (isTransitioning) return;
-
-            if (!playerSetsList.Any(x => x.abilitySetSO.abilitySetName == name)) {
-                Debug.LogWarning("No ability set of that name.");
-                return;
-            }
-
-            PlayerSetSummary checkAbilitySet = playerSetsList.First(x => x.abilitySetSO.abilitySetName == name);
-            if (checkAbilitySet == currentAbilitySet || !checkAbilitySet.isUnlocked)
-                return;
-
-            StartCoroutine(RunTimelineWithEvents(
-                new TimelineEvent[] {
-                    new TimelineEvent(currentAbilitySet.entityBody.animationComponent, currentAbilitySet.abilitySetSO.transitionAnimation, 0, transitionTime/2),
-                    new TimelineEvent(checkAbilitySet.entityBody.animationComponent, checkAbilitySet.abilitySetSO.transitionAnimation, transitionTime/2, transitionTime, true),
-                    new TimelineEvent(SmokesAndMirrorsAnimation, transitionAnimationClip, 0, transitionTime)
-                },
-                new DeltaEvent[] {
-                    new DeltaEvent(() => {
-                        isTransitioning = true;
-                        SmokesAndMirrorsAnimation.gameObject.SetActive(true);
-                    }, 0),
-                    new DeltaEvent(() => {
-                        currentAbilitySet.entityBody.modelPrefab.SetActive(false);
-                        Debug.Log(currentAbilitySet.entityBody.modelPrefab.name);
-                        checkAbilitySet.entityBody.modelPrefab.SetActive(true);
-                        currentAbilitySet = checkAbilitySet;
-                    }, 0.5f),
-                    new DeltaEvent(() => {
-                        isTransitioning = false;
-                        SmokesAndMirrorsAnimation.gameObject.SetActive(false);
-                    }, 1)
-                }
-            ));
         }
         #endregion
 

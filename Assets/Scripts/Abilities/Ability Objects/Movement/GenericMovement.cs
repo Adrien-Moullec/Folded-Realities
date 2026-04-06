@@ -3,21 +3,6 @@ using UnityEngine;
 namespace AbilitySystem {
     [CreateAssetMenu(fileName = "GeneralMovement", menuName = MenuAssetNames.MovementAbility + "/General Movement", order = -1)]
     public class GenericMovement : MovementSO {
-        [Header("Animations")]
-        [Tooltip("Idle animation information when model is still.")]
-        [SerializeField] AbilityAnimation idleAnimation;
-
-        [Tooltip("Walk animation information when model is walking.")]
-        [SerializeField] AbilityAnimation walkingAnimation;
-
-        [Tooltip("Run animation information when model is running.")]
-        [SerializeField] AbilityAnimation runningAnimation;
-
-        [Tooltip("Jump animation information when model is jumping.")]
-        [SerializeField] AbilityAnimation jumpingAnimation;
-
-        [Tooltip("Fall animation information when model is falling.")]
-        [SerializeField] AbilityAnimation fallingAnimation;
 
         [Space]
         [Header("Speed Settings")]
@@ -96,16 +81,6 @@ namespace AbilitySystem {
         public override AbilityData AbilityDataSetup(EntityBody eb) {
             return new GenericMovementData();
         }
-        public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() {
-            return new (AbilityAnimation, WrapMode)[]
-            {
-                (idleAnimation,WrapMode.Loop),
-                (walkingAnimation,WrapMode.Loop),
-                (runningAnimation,WrapMode.Loop),
-                (jumpingAnimation,WrapMode.ClampForever)
-            };
-        }
-
         #endregion
 
         #region Movement Logic
@@ -124,7 +99,7 @@ namespace AbilitySystem {
                 inpVals.isAccelerating
             );
             Gravity(moveData, entityBody, inpVals.inputDirection.y > 0);
-            AnimateAbility(moveData, entityBody.animationComponent);
+            AnimateAbility(moveData, entityBody.animatorManager);
 
             entityBody.iAbility.OnMoveEntity(moveData.velocity * Time.deltaTime);
             return true;
@@ -268,38 +243,16 @@ namespace AbilitySystem {
             pmd.performedJump = true;
         }
 
-        protected void AnimateAbility(GenericMovementData moveData, Animation anim) {
-            if (moveData.isGrounded) {
-                float walkCutoff = walkSpeed / runSpeed;
-                float x = Mathf.Clamp01(new Vector3(moveData.velocity.x, 0, moveData.velocity.z).magnitude / runSpeed);
+        protected void AnimateAbility(GenericMovementData moveData, AnimatorManager anim) {
+            float walkCutoff = walkSpeed / runSpeed;
+            float delta = Mathf.Clamp01(new Vector3(moveData.velocity.x, 0, moveData.velocity.z).magnitude / runSpeed);
 
-                float weightIdle = 0f;
-                float weightWalk = 0f;
-                float weightRun = 0f;
+            float weight = 0;
+            if (delta <= walkCutoff) weight = Mathf.InverseLerp(0, walkCutoff, delta) / 2;
+            else weight = (Mathf.InverseLerp(walkCutoff, 1, delta) / 2) + 0.5f;
+            float deltaFall = Mathf.Lerp(maxFallSpeed, -maxFallSpeed, moveData.fallSpeed);
 
-                if (x <= walkCutoff) {
-                    float t = x / walkCutoff;
-                    weightIdle = 1f - t;
-                    weightWalk = t;
-                } else {
-                    float t = (x - walkCutoff) / (1f - walkCutoff);
-                    weightWalk = 1f - t;
-                    weightRun = t;
-                }
-
-                idleAnimation.Blend(anim, weightIdle);
-                walkingAnimation.Blend(anim, weightWalk);
-                runningAnimation.Blend(anim, weightRun);
-                jumpingAnimation.SetWeight(anim, 0);
-            } else {
-                idleAnimation.Blend(anim, 0);
-                walkingAnimation.Blend(anim, 0);
-                runningAnimation.Blend(anim, 0);
-                jumpingAnimation.PlayOnTimeline(anim, Mathf.InverseLerp(jumpSpeed, maxFallSpeed, moveData.fallSpeed));
-                jumpingAnimation.SetWeight(anim, 1);
-            }
-
-
+            anim.SetMovement(delta, Mathf.Lerp(maxFallSpeed, -maxFallSpeed, moveData.fallSpeed), moveData.isGrounded);
         }
 
         public override bool PassEvent(EntityBody entityBody, AbilityData data) {

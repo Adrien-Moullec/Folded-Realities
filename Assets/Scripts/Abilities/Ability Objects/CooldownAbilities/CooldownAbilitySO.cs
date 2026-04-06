@@ -19,9 +19,8 @@ namespace AbilitySystem {
                 return false;
             } else if (cdd.currentCharges <= 0)
                 return false;
-
             cdd.currentCharges--;
-            entityBody.iAbility.ActivateIenumerator(UseAbility(entityBody, cdd));
+            entityBody.iAbility.GetAbilityController.StartCoroutine(UseAbility(entityBody, cdd));
             return true;
         }
         public override bool PassEvent(EntityBody entityBody, AbilityData data) {

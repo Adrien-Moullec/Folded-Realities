@@ -40,8 +40,9 @@ public class PlayerManager : MonoBehaviour, ICamera {
     Vector2 deltaLook;
     InputAction jumpInput;
     bool isJumping;
-    InputAction dashInput;
-    bool isDashing;
+    InputAction runInput;
+    bool isRunning;
+    InputAction ability1Input;
     InputAction radialWheel;
     bool wheelActive = false;
 
@@ -61,14 +62,15 @@ public class PlayerManager : MonoBehaviour, ICamera {
         moveInput = _PlayerInput.actions["Move"];
         lookInput = _PlayerInput.actions["Look"];
         jumpInput = _PlayerInput.actions["Jump"];
-        dashInput = _PlayerInput.actions["Sprint"];
+        runInput = _PlayerInput.actions["Sprint"];
         primaryAttackInput = _PlayerInput.actions["PrimaryAttack"];
         radialWheel = _PlayerInput.actions["RadialMenu"];
+        ability1Input = _PlayerInput.actions["Ability1"];
 
         lookInput.performed += input => deltaLook = input.ReadValue<Vector2>();
         lookInput.canceled += input => deltaLook = input.ReadValue<Vector2>();
-        dashInput.performed += input => iAbility.GetInputValues.isRunning = true;
-        dashInput.canceled += input => iAbility.GetInputValues.isRunning = false;
+        runInput.performed += input => iAbility.GetInputValues.isRunning = true;
+        runInput.canceled += input => iAbility.GetInputValues.isRunning = false;
         radialWheel.performed += input => {
             _RadialMenuManager?.SetWheelActive(true);
             wheelActive = true;
@@ -80,12 +82,14 @@ public class PlayerManager : MonoBehaviour, ICamera {
         };
         primaryAttackInput.performed += input => iAbility.GetInputValues.isPrimaryAttack = true;
         primaryAttackInput.canceled += input => iAbility.GetInputValues.isPrimaryAttack = false;
+        ability1Input.performed += input => iAbility.GetInputValues.isPrimaryAbility = true;
+        ability1Input.canceled += input => iAbility.GetInputValues.isPrimaryAbility = false;
     }
     void OnDisable() {
         lookInput.performed -= input => deltaLook = input.ReadValue<Vector2>();
         lookInput.canceled -= input => deltaLook = input.ReadValue<Vector2>();
-        dashInput.performed -= input => iAbility.GetInputValues.isRunning = true;
-        dashInput.canceled -= input => iAbility.GetInputValues.isRunning = false;
+        runInput.performed -= input => iAbility.GetInputValues.isRunning = true;
+        runInput.canceled -= input => iAbility.GetInputValues.isRunning = false;
         radialWheel.performed -= input => {
             _RadialMenuManager?.SetWheelActive(true);
             wheelActive = true;

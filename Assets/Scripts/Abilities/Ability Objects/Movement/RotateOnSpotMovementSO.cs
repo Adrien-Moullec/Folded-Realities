@@ -6,9 +6,6 @@ namespace AbilitySystem {
     public class RotateTowardsPlayerSO : MovementSO {
         [SerializeField] float spinSpeed = 5;
         public override AbilityData AbilityDataSetup(EntityBody eb) => null;
-        public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() {
-            throw new System.NotImplementedException();
-        }
         public override bool Execute(EntityBody eb, AbilityData data) {
             if (eb.iAbility.GetInputValues.inputDirection == Vector3.zero) return false;
             Vector3 dir = eb.iAbility.GetInputValues.inputDirection;

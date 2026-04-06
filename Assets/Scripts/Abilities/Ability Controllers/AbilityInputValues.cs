@@ -31,8 +31,10 @@ namespace AbilitySystem {
         [Header("Ability inputs.")]
         [Tooltip("If the primary attack button is being pressed.")]
         public bool isPrimaryAttack = false;
-        [Tooltip("Locks the values.")]
+        [Tooltip("If the primary ability button is being pressed.")]
+        public bool isPrimaryAbility = false;
 
+        [Tooltip("Locks the values.")]
         public bool LockValues = false;
     }
 }

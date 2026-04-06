@@ -47,9 +47,6 @@ namespace AbilitySystem {
         public override void InputPrimaryAbility() {
             throw new NotImplementedException();
         }
-
-        public override void SetupAnimations() => abilitySetSO?.SetupAnimations(entityBody.animationComponent);
-
         public override EntityBody GetEntityBody() => entityBody;
     }
 }

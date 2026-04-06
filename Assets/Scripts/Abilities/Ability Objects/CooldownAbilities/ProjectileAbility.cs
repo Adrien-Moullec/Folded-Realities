@@ -13,8 +13,6 @@ namespace AbilitySystem {
         [Header("Projectile Management")]
         [Tooltip("Info about the projectile pool.")]
         [SerializeField] protected ObjectPoolInfo projectilePoolInfo;
-        [Tooltip("Animation that will play when throwing projectile.")]
-        [SerializeField] protected AbilityAnimation projectileAnimation;
 
         [Space]
         [Header("Projectile Settings")]
@@ -30,14 +28,14 @@ namespace AbilitySystem {
 
         #region Data Setup
         public override AbilityData AbilityDataSetup(EntityBody entityBody) => new ProjectileData(entityBody, projectilePoolInfo, charges, cooldown);
-        public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() => new (AbilityAnimation, WrapMode)[] {
-                (projectileAnimation,WrapMode.ClampForever)
-            };
         #endregion
 
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
             if (projectilePoolInfo.poolObject == null || (data.isHoldingInput && !automaticShooting)) yield break;
             ProjectileData pd = (ProjectileData)data;
+            Debug.Log("Projectile");
+
+            entityBody.animatorManager.Attack1();
 
             for (int i = 0; i < burstAmount; i++) {
                 entityBody.iAbility.GetAbilityController.StartCoroutine(Projectile(pd));

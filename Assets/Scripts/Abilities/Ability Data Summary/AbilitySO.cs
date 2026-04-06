@@ -9,7 +9,6 @@ namespace AbilitySystem {
         public abstract bool PassEvent(EntityBody entityBody, AbilityData data);
         public abstract void FrameEvent(AbilityData data);
         public abstract AbilityData AbilityDataSetup(EntityBody entityBody);
-        public abstract (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup();
         public virtual float AbilityCost() { return 0; }
     }
     [Serializable]
