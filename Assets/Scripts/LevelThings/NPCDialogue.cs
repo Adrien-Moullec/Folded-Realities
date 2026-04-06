@@ -7,8 +7,6 @@ public class NPCDialogue : MonoBehaviour {
     public TextMeshProUGUI dialogueText;
     public GameObject continuePrompt;
 
-    public bool hideCanvasInEditor = true;
-
     [TextArea(2, 5)]
     public string[] lines;
     public float typingSpeed = 0.03f;
@@ -32,16 +30,10 @@ public class NPCDialogue : MonoBehaviour {
     private Vector3 originalScale;
 
     public CameraFocus cameraFocus;
+    public CameraZoom cameraZoom;
 
     void Start() {
-
-#if UNITY_EDITOR
-        if (!Application.isPlaying && hideCanvasInEditor && dialogueUI != null) {
-            dialogueUI.SetActive(false);
-        }
-#endif
-
-        if (Application.isPlaying && dialogueUI != null) {
+        if (dialogueUI != null) {
             dialogueUI.SetActive(false);
         }
 
@@ -50,6 +42,14 @@ public class NPCDialogue : MonoBehaviour {
 
         if (continuePrompt != null) {
             continuePrompt.SetActive(false);
+        }
+
+        if (cameraFocus == null) {
+            cameraFocus = FindAnyObjectByType<CameraFocus>();
+        }
+
+        if (cameraZoom == null) {
+            cameraZoom = FindAnyObjectByType<CameraZoom>();
         }
     }
 
@@ -76,6 +76,15 @@ public class NPCDialogue : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
             playerNearby = true;
+
+            if (cameraFocus != null) {
+                cameraFocus.FocusOn(transform);
+            }
+
+            if (cameraZoom != null) {
+                cameraZoom.ZoomIn();
+            }
+
             StartDialogue();
         }
     }
@@ -83,6 +92,15 @@ public class NPCDialogue : MonoBehaviour {
     void OnTriggerExit(Collider other) {
         if (other.CompareTag("Player")) {
             playerNearby = false;
+
+            if (cameraFocus != null) {
+                cameraFocus.StopFocus();
+            }
+
+            if (cameraZoom != null) {
+                cameraZoom.ZoomOut();
+            }
+
             EndDialogue();
         }
     }
@@ -101,10 +119,6 @@ public class NPCDialogue : MonoBehaviour {
 
         if (audioSource != null && popSound != null) {
             audioSource.PlayOneShot(popSound);
-        }
-
-        if (cameraFocus != null) {
-            cameraFocus.ResetToPlayer();
         }
 
         ShowLine();

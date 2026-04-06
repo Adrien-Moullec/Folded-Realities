@@ -1,3 +1,5 @@
+using System;
+
 using UnityEngine;
 
 
@@ -9,5 +11,11 @@ namespace AbilitySystem {
         public abstract AbilityData AbilityDataSetup(EntityBody entityBody);
         public abstract (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup();
         public virtual float AbilityCost() { return 0; }
+    }
+    [Serializable]
+    public abstract class AbilitySummary {
+        public AbilityData AbilityData;
+        public abstract void Activate(EntityBody entityBody, bool AbilityPressed);
+        public abstract void FrameEvent();
     }
 }
