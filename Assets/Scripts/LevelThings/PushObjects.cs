@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PushObjects : MonoBehaviour {
 
-    public float pushForce = 5f;
+    public float pushSpeed = 3f;
 
     void OnControllerColliderHit(ControllerColliderHit hit) {
 
@@ -15,12 +15,31 @@ public class PushObjects : MonoBehaviour {
             return;
         }
 
-        Vector3 moveDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+        
+        Vector3 moveDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z).normalized;
 
-        if (moveDir.magnitude < 0.1f) {
+        
+        Vector3 cubeForward = hit.collider.transform.forward;
+
+        
+        float dot = Vector3.Dot(moveDir, cubeForward);
+
+       
+        if (Mathf.Abs(dot) < 0.8f) {
             return;
         }
 
-        rb.AddForce(moveDir * pushForce, ForceMode.Impulse);
+       
+        Vector3 pushDir = cubeForward * Mathf.Sign(dot);
+
+        
+        Vector3 move = pushDir * pushSpeed * Time.deltaTime;
+        rb.MovePosition(rb.position + move);
+
+       
+        PushableBlock block = hit.collider.GetComponent<PushableBlock>();
+        if (block != null) {
+            block.SetPushed();
+        }
     }
 }

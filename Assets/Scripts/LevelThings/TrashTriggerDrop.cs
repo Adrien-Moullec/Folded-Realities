@@ -13,8 +13,6 @@ public class TrashTriggerDrop : MonoBehaviour {
 
     [SerializeField] GameObject overHerePrompt;
 
-    [SerializeField] float dropVelocity = 12f;
-
     Vector3 textStartPos;
     Vector3 cameraStartPos;
 
@@ -37,7 +35,6 @@ public class TrashTriggerDrop : MonoBehaviour {
 
         if (trashRB != null) {
             trashRB.isKinematic = true;
-            trashRB.useGravity = false;
         }
     }
 
@@ -55,6 +52,7 @@ public class TrashTriggerDrop : MonoBehaviour {
 
         Debug.Log("Drop Trigger Activated");
 
+       
         if (overHerePrompt != null) {
             overHerePrompt.SetActive(false);
         }
@@ -63,9 +61,6 @@ public class TrashTriggerDrop : MonoBehaviour {
         watchOutText.gameObject.SetActive(true);
 
         trashRB.isKinematic = false;
-        trashRB.useGravity = true;
-        trashRB.linearVelocity = Vector3.down * dropVelocity;
-        trashRB.angularVelocity = Vector3.zero;
 
         StartCoroutine(Shake());
     }
@@ -108,13 +103,12 @@ public class TrashTriggerDrop : MonoBehaviour {
 
         if (trashRB != null) {
             trashRB.isKinematic = true;
-            trashRB.useGravity = false;
-            trashRB.linearVelocity = Vector3.zero;
-            trashRB.angularVelocity = Vector3.zero;
         }
 
         if (trashRenderer != null) {
             trashRenderer.enabled = false;
         }
+
+       
     }
 }

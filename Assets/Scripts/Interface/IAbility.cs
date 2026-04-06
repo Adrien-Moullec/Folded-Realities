@@ -17,7 +17,6 @@ namespace AbilitySystem {
 
         #region Utility Functions
         public EntityBody GetEntityBody();
-        public EntityTeam GetEntityTeam { get; }
         public IEnumerator RunTimelineWithEvents(TimelineEvent[] timelineInfo, DeltaEvent[] timelineEvents = null);
         public IEnumerator RunLoop(TimelineEvent[] timelineInfo);
         public AbilityInputValues GetInputValues { get; set; }
