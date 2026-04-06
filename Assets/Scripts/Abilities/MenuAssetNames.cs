@@ -2,11 +2,23 @@ using UnityEngine;
 
 namespace AbilitySystem {
     public static class MenuAssetNames {
+        #region Base Names
         public const string Root = "Origami";
         public const string Health = Root + "/Health";
         public const string AbilitySet = Root + "/Ability Set";
-        public const string MovementAbility = Root + "/Movement Ability";
+        #endregion
+
+        #region Movement Names
+        public const string MovementAbility = Root + "/Movement";
+        #endregion
+
+        #region Attacks
         public const string AttackAbility = Root + "/Attacks";
-        public const string CooldownAbility = Root + "/Cooldown Ability";
+        #endregion
+
+        #region Cooldown Names
+        public const string CooldownAbility = Root + "/Cooldown";
+        public const string Projectiles = CooldownAbility + "/Projectile";
+        #endregion
     }
 }
