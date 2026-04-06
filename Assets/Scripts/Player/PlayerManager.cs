@@ -113,7 +113,19 @@ public class PlayerManager : MonoBehaviour, ICamera {
         Vector2 m = moveInput.ReadValue<Vector2>();
         float j = jumpInput.ReadValue<float>();
         camDir = Camera.main.transform.right * m.x + Camera.main.transform.forward * m.y;
+<<<<<<< HEAD
         iAbility.GetInputValues.SetDirection(new Vector3(m.x, j > 0.5f ? 1 : 0, m.y));
+=======
+
+        iAbility.GetInputValues.SetDirection(new Vector3(camDir.x, j > 0.5f ? 1 : 0, camDir.y));
+
+        camDir.y = 0;
+        camDir.Normalize();
+        camDir.y = j > 0.5f ? 1 : 0;
+        iAbility.GetInputValues.SetDirection(camDir); ///new Vector3(camDir.x, j > 0.5f ? 1 : 0, camDir.y));
+        Debug.Log(camDir);
+
+>>>>>>> d63a96348acdbf449fa586deb1149e871f18c258
     }
     void Attack() {
         holdPrimaryAttack = true;
