@@ -21,7 +21,7 @@ namespace AbilitySystem {
         [Tooltip("Reference to the component that animates the body prefab.")]
         public Transform upperBody;
         public Transform lowerBody;
-        public Animation animationComponent;
+        public AnimatorManager animatorManager;
 
         [Space]
         [Header("Ability References")]

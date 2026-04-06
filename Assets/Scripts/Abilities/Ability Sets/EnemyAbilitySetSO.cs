@@ -7,11 +7,6 @@ namespace AbilitySystem {
     [CreateAssetMenu(fileName = "Ability Set", menuName = MenuAssetNames.AbilitySet + "/Base Enemy Ability Set", order = 0)]
     public class EnemyAbilitySetSO : AbilitySetSO {
         [SerializeField] public CooldownAbilitySO attack;
-
-        public override void SetupAnimations(Animation anim) {
-            base.SetupAnimations(anim);
-            if (attack != null) AssignAnimations(anim, attack);
-        }
     }
 
     [Serializable]

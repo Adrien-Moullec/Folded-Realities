@@ -5,22 +5,10 @@ using UnityEngine;
 namespace AbilitySystem {
     [CreateAssetMenu(fileName = "ChargeAttack", menuName = MenuAssetNames.CooldownAbility + "/Charge Attack")]
     public class ChargeAttack : CooldownAbilitySO {
-        [Header("Animations")]
-        [Tooltip("The animation that will play for this ability.")]
-        [SerializeField] AbilityAnimation chargeUpChargeAnim;
-        [SerializeField] AbilityAnimation chargeAnim;
-        [SerializeField] AbilityAnimation chargeDownChargeAnim;
         [SerializeField, Min(0)] int chargeDamage = 10;
         [SerializeField, Range(0, 10)] float chargeUpDuration = 1;
         [SerializeField, Range(0, 2)] float maxChargeDuration = 1;
         [SerializeField, Range(2, 10)] float chargeDownDuration = 1;
-
-        public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() =>
-            new (AbilityAnimation, WrapMode)[]
-            {
-                (chargeAnim, WrapMode.ClampForever),
-                (chargeUpChargeAnim, WrapMode.Loop)
-            };
 
         public override AbilityData AbilityDataSetup(EntityBody entityBody) {
             ChargeAttackData cad = new ChargeAttackData(charges, cooldown);
@@ -41,7 +29,6 @@ namespace AbilitySystem {
             entityBody.iAbility.GetInputValues.movementType = MovementType.Charge;
             if (entityBody.iAbility.GetInputValues.inputDirection == Vector3.zero)
                 entityBody.iAbility.GetInputValues.inputDirection = entityBody.modelPrefab.transform.forward;
-            Debug.Log("Activate charge");
             while (time < maxChargeDuration) {
                 time += Time.deltaTime;
                 yield return null;
@@ -50,16 +37,15 @@ namespace AbilitySystem {
         }
 
         protected override void OnHold(EntityBody entityBody, CooldownData data) {
-            throw new System.NotImplementedException();
+
         }
 
         protected override void OnPressWhileUsing(EntityBody entityBody, CooldownData data) {
 
-            throw new System.NotImplementedException();
         }
 
         public override bool PassEvent(EntityBody entityBody, AbilityData data) {
-            throw new System.NotImplementedException();
+            return true;
         }
         public class ChargeAttackData : CooldownData {
             //public TimelineEvent[] chargeTimeline;

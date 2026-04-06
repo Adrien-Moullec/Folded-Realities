@@ -592,12 +592,13 @@ GameObject:
   - component: {fileID: 1225429674322778145}
   - component: {fileID: 4765679296051737577}
   - component: {fileID: 6552002042681570147}
-  - component: {fileID: 4601957020910338640}
+  - component: {fileID: 451851009117621574}
+  - component: {fileID: 9062826113523825797}
   - component: {fileID: 3061592385069726717}
-  - component: {fileID: 3937765037085289841}
+  - component: {fileID: 4601957020910338640}
   - component: {fileID: 8123097184202460271}
   - component: {fileID: 2727822172339987053}
-  - component: {fileID: 7023901162686543901}
+  - component: {fileID: 3937765037085289841}
   - component: {fileID: 8493529438444136099}
   - component: {fileID: 2727441906488567744}
   m_Layer: 0
@@ -656,6 +657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff8c1c2fad136644ba2498d566b823a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityTeam: 2
   maxHealth: 100
   SmokesAndMirrorsAnimation: {fileID: 2595476576709269853}
   transitionAnimationClip:
@@ -683,7 +685,7 @@ MonoBehaviour:
       attackCubeArea: {fileID: 5184620146362688147}
       upperBody: {fileID: 0}
       lowerBody: {fileID: 0}
-      animationComponent: {fileID: 2595476576709269853}
+      animatorManager: {fileID: 9062826113523825797}
     playerAbilitySet:
       abilitySetName: 
       healthSettings: {fileID: 0}
@@ -718,7 +720,7 @@ MonoBehaviour:
       attackCubeArea: {fileID: 5184620146362688147}
       upperBody: {fileID: 0}
       lowerBody: {fileID: 0}
-      animationComponent: {fileID: 0}
+      animatorManager: {fileID: 9062826113523825797}
     playerAbilitySet:
       abilitySetName: 
       healthSettings: {fileID: 0}
@@ -754,7 +756,7 @@ MonoBehaviour:
       attackCubeArea: {fileID: 0}
       upperBody: {fileID: 0}
       lowerBody: {fileID: 0}
-      animationComponent: {fileID: 0}
+      animatorManager: {fileID: 0}
     playerAbilitySet:
       abilitySetName: 
       healthSettings: {fileID: 0}
@@ -780,31 +782,40 @@ MonoBehaviour:
         abilitySO: {fileID: 0}
       primary:
         abilitySO: {fileID: 0}
---- !u!143 &4601957020910338640
-CharacterController:
+--- !u!95 &451851009117621574
+Animator:
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5710287258573495793}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Avatar: {fileID: 9000000, guid: 784239e0572055e41b419646c537bd0c, type: 3}
+  m_Controller: {fileID: 9100000, guid: eb4299bedf9921948870032f27e4f286, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &9062826113523825797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5710287258573495793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5487b8afb1024d141a458dfdfbee8b9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3061592385069726717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -835,29 +846,31 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &3937765037085289841
-MonoBehaviour:
+--- !u!143 &4601957020910338640
+CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5710287258573495793}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e1b59c990f0bb747852279a35b403fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  normalCount: 0
-  normalCountText: {fileID: 0}
-  puzzlePieces:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  pickupFloatSpeed: 2
-  pickupRotationSpeed: 360
-  destroyDelay: 0.6
-  pickupSound: {fileID: 8300000, guid: ee6fe97111ab06e45861282689f4e37d, type: 3}
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &8123097184202460271
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -902,7 +915,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.49
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7023901162686543901
+--- !u!114 &3937765037085289841
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

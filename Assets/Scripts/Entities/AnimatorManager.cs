@@ -10,20 +10,25 @@ public class AnimatorManager : MonoBehaviour {
     #region Parameters
     public const string deltaSpeed = "deltaSpeed";
     public const string deltaFall = "deltaFall";
-    public const string isFalling = "isFalling";
-    #endregion
-
-    #region States
-    public void SetMovement(float dSpeed, float dFall, bool isFalling) {
-        animator.SetFloat("deltaSpeed", Mathf.Clamp01(dSpeed));
-        animator.SetFloat("deltaFall", Mathf.Clamp01(dFall));
-        animator.SetBool("isFalling", isFalling);
-    }
+    public const string isGrounded = "isGrounded";
+    public const string fallState = "Fall";
     #endregion
 
     void Awake() {
         animator = GetComponent<Animator>();
     }
+    #region States
+    public void SetMovement(float dSpeed, float dFall, bool isGround) {
+        animator.SetFloat(deltaSpeed, Mathf.Clamp01(dSpeed));
+        animator.Play(fallState, 1, Mathf.Clamp01(dFall));
+        animator.SetFloat(deltaFall, Mathf.Clamp01(dFall));
+        animator.SetBool(isGrounded, isGround);
+    }
+    public void Attack1() {
+        animator.CrossFade("Attack1", 0.3f);
+    }
+    #endregion
+
 
     #region OUTTAKE
     /* 

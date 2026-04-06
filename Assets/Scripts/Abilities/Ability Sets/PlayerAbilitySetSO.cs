@@ -12,14 +12,6 @@ namespace AbilitySystem {
         [Space]
         [Header("Transition options")]
         [SerializeField] public AbilityAnimation transitionAnimation;
-
-        public override void SetupAnimations(Animation anim) {
-            base.SetupAnimations(anim);
-            transitionAnimation.Setup(anim, WrapMode.ClampForever);
-            if (light != null) AssignAnimations(anim, light);
-            if (heavy != null) AssignAnimations(anim, heavy);
-            if (primary != null) AssignAnimations(anim, primary);
-        }
     }
 
     [Serializable]
