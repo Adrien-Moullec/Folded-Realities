@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LobbySpawn : MonoBehaviour {
+public class DoorTeleport : MonoBehaviour {
+    [SerializeField] string sceneToLoad;
     [SerializeField] int doorID;
 
     private void OnTriggerEnter(Collider other) {
@@ -9,16 +10,11 @@ public class LobbySpawn : MonoBehaviour {
             return;
         }
 
-        string returnScene = PlayerPrefs.GetString("LastScene", "");
-
-        if (string.IsNullOrEmpty(returnScene)) {
-            Debug.Log("No previous level stored");
-            return;
-        }
-
         PlayerPrefs.SetInt("SpawnDoorID", doorID);
+        PlayerPrefs.SetString("LastScene", SceneManager.GetActiveScene().name);
+
         PlayerPrefs.Save();
 
-        SceneManager.LoadScene(returnScene);
+        SceneManager.LoadScene(sceneToLoad);
     }
 }
