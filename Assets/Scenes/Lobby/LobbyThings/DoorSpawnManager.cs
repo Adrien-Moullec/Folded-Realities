@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class DoorSpawnManager : MonoBehaviour {
     [SerializeField] Transform[] doorSpawnPoints;
-    [SerializeField] float spawnOffset = 1.5f; // push player forward
+    [SerializeField] Transform defaultSpawnPoint;
+    [SerializeField] float spawnOffset = 1.5f;
 
     void Start() {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -10,16 +11,25 @@ public class DoorSpawnManager : MonoBehaviour {
             return;
         }
 
-        int doorID = PlayerPrefs.GetInt("SpawnDoorID", 0);
+        
+        if (PlayerPrefs.GetInt("UseDoorSpawn", 0) == 1) {
+            int doorID = PlayerPrefs.GetInt("SpawnDoorID", 0);
 
-        if (doorID >= 0 && doorID < doorSpawnPoints.Length) {
-            Transform spawn = doorSpawnPoints[doorID];
+            if (doorID >= 0 && doorID < doorSpawnPoints.Length) {
+                Transform spawn = doorSpawnPoints[doorID];
 
-            // push player OUT of  trigger
-            Vector3 safePos = spawn.position + spawn.forward * spawnOffset;
+                Vector3 safePos = spawn.position + spawn.forward * spawnOffset;
 
-            player.transform.position = safePos;
-            player.transform.rotation = spawn.rotation;
+                player.transform.position = safePos;
+                player.transform.rotation = spawn.rotation;
+            }
+
+            
+            PlayerPrefs.SetInt("UseDoorSpawn", 0);
+        } else if (defaultSpawnPoint != null) {
+            // normal play mode start
+            player.transform.position = defaultSpawnPoint.position;
+            player.transform.rotation = defaultSpawnPoint.rotation;
         }
     }
 }

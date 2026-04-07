@@ -3,6 +3,7 @@ using UnityEngine;
 public class CameraSwitch : MonoBehaviour {
     [Header("Camera Target")]
     [SerializeField] Vector3 targetLocalOffset = new Vector3(0, 3, -10);
+    [SerializeField] Vector3 targetRotation = new Vector3(10, 0, 0);
     [SerializeField] float targetZoom = 5f;
 
     [Header("Transition")]
@@ -15,15 +16,12 @@ public class CameraSwitch : MonoBehaviour {
     bool returning;
 
     Vector3 originalLocalPos;
+    Quaternion originalRotation;
     float originalZoom;
 
     void Start() {
         cam = Camera.main;
-
         focusScript = cam.GetComponent<CameraFocus>();
-
-        originalLocalPos = cam.transform.localPosition;
-        originalZoom = cam.orthographicSize;
     }
 
     void OnTriggerEnter(Collider other) {
@@ -34,7 +32,11 @@ public class CameraSwitch : MonoBehaviour {
         playerInside = true;
         returning = false;
 
-       
+        
+        originalLocalPos = cam.transform.localPosition;
+        originalRotation = cam.transform.localRotation;
+        originalZoom = cam.orthographicSize;
+
         if (focusScript != null) {
             focusScript.enabled = false;
         }
@@ -47,8 +49,6 @@ public class CameraSwitch : MonoBehaviour {
 
         playerInside = false;
         returning = true;
-
-        
     }
 
     void LateUpdate() {
@@ -56,7 +56,6 @@ public class CameraSwitch : MonoBehaviour {
             return;
         }
 
-        
         if (playerInside) {
             cam.transform.localPosition = Vector3.Lerp(
                 cam.transform.localPosition,
@@ -64,15 +63,9 @@ public class CameraSwitch : MonoBehaviour {
                 Time.deltaTime * moveSpeed
             );
 
-            Vector3 lookTarget = transform.position + Vector3.up * 1.5f;
-
-            Quaternion lookRot = Quaternion.LookRotation(
-                lookTarget - cam.transform.position
-            );
-
-            cam.transform.rotation = Quaternion.Lerp(
-                cam.transform.rotation,
-                lookRot,
+            cam.transform.localRotation = Quaternion.Lerp(
+                cam.transform.localRotation,
+                Quaternion.Euler(targetRotation),
                 Time.deltaTime * moveSpeed
             );
 
@@ -83,11 +76,16 @@ public class CameraSwitch : MonoBehaviour {
             );
         }
 
-        //  RETURN TO NORMAL
         else if (returning) {
             cam.transform.localPosition = Vector3.Lerp(
                 cam.transform.localPosition,
                 originalLocalPos,
+                Time.deltaTime * moveSpeed
+            );
+
+            cam.transform.localRotation = Quaternion.Lerp(
+                cam.transform.localRotation,
+                originalRotation,
                 Time.deltaTime * moveSpeed
             );
 
@@ -97,12 +95,12 @@ public class CameraSwitch : MonoBehaviour {
                 Time.deltaTime * moveSpeed
             );
 
-            // once back  re-enable CameraFocus
             if (Vector3.Distance(cam.transform.localPosition, originalLocalPos) < 0.05f) {
                 returning = false;
 
-                if (focusScript != null)
+                if (focusScript != null) {
                     focusScript.enabled = true;
+                }
             }
         }
     }
