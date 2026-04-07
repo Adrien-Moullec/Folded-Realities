@@ -2,17 +2,13 @@ using System;
 
 using UnityEngine;
 using UnityEngine.Pool;
-
 namespace AbilitySystem {
-
     [Serializable]
     public struct ObjectPoolInfo {
-
-        public PoolObject2 poolObject;  
+        public PoolObject poolObject;
         public int startingAmount;
         public int maxAmount;
         public bool collectionCheck;
-
         public static ObjectPool<IPoolObjectAS> CreateObjectPool(EntityBody entityBody, ObjectPoolInfo poolInfo) =>
             new ObjectPool<IPoolObjectAS>(
                 () => CreateIPoolObject(poolInfo.poolObject),
@@ -24,8 +20,6 @@ namespace AbilitySystem {
                 poolInfo.maxAmount
             );
 
-        public static IPoolObjectAS CreateIPoolObject(PoolObject2 obj) {
-            return GameObject.Instantiate(obj);
-        }
+        public static IPoolObjectAS CreateIPoolObject<T>(T obj) where T : PoolObject => GameObject.Instantiate(obj);
     }
 }

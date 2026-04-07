@@ -6,7 +6,7 @@ using UnityEngine.Pool;
 
 namespace AbilitySystem {
 
-    [CreateAssetMenu(fileName = "Projectile Ability", menuName = MenuAssetNames.Projectiles + "/Generic Bullet")]
+    [CreateAssetMenu(fileName = "Projectile Ability", menuName = "Abilities/Projectiles/Generic Bullet")]
     public class ProjectileAbility : CooldownAbilitySO {
 
         [Header("Projectile Management")]
@@ -35,20 +35,16 @@ namespace AbilitySystem {
 
             ProjectileData pd = (ProjectileData)data;
 
-            // Spawn projectile
-            IPoolObjectAS projectile = pd.pooledProjectiles.Get();
+            PoolObject projectile = (PoolObject)pd.pooledProjectiles.Get();
 
-            if (projectile is MonoBehaviour projMono) {
+            Transform spawnPoint = entityBody.modelPrefab.transform;
 
-                // Use modelPrefab instead of transform (your system)
-                projMono.transform.position = entityBody.modelPrefab.transform.position;
-                projMono.transform.rotation = Quaternion.identity;
+            projectile.transform.position = spawnPoint.position;
+            projectile.transform.rotation = spawnPoint.rotation;
 
-                // Apply movement if Rigidbody exists
-                Rigidbody rb = projMono.GetComponent<Rigidbody>();
-                if (rb != null) {
-                    rb.linearVelocity = entityBody.modelPrefab.transform.forward * projectileSpeed;
-                }
+            Rigidbody rb = projectile.GetComponent<Rigidbody>();
+            if (rb != null) {
+                rb.linearVelocity = spawnPoint.forward * projectileSpeed;
             }
 
             yield return new WaitForSeconds(lifetime);
