@@ -105336,48 +105336,52 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2018248727075489413, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.09
+      value: 10.3
       objectReference: {fileID: 0}
     - target: {fileID: 2018248727075489413, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.19
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2018248727075489413, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.27
+      value: -6.9
       objectReference: {fileID: 0}
     - target: {fileID: 2018248727075489413, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.81101704
+      value: 0.85987735
       objectReference: {fileID: 0}
     - target: {fileID: 2018248727075489413, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.3021578
+      value: 0.0982796
       objectReference: {fileID: 0}
     - target: {fileID: 2018248727075489413, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.46664387
+      value: -0.49676278
       objectReference: {fileID: 0}
     - target: {fileID: 2018248727075489413, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.18219651
+      value: 0.06464414
       objectReference: {fileID: 0}
     - target: {fileID: 2018248727075489413, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 41.311
+      value: 13.488
       objectReference: {fileID: 0}
     - target: {fileID: 2018248727075489413, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -59.442
+      value: -59.937
       objectReference: {fileID: 0}
     - target: {fileID: 2018248727075489413, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 1.032
+      value: 0.797
       objectReference: {fileID: 0}
     - target: {fileID: 3937765037085289841, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: normalCountText
       value: 
       objectReference: {fileID: 1071393792}
+    - target: {fileID: 4401643024094209340, guid: a1e531976df10334380158e02a6889e7, type: 3}
+      propertyPath: field of view
+      value: 69.2
+      objectReference: {fileID: 0}
     - target: {fileID: 4601957020910338640, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_StepOffset
       value: 0
@@ -233326,6 +233330,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1900804128}
+  - component: {fileID: 1900804129}
+  - component: {fileID: 1900804130}
   m_Layer: 9
   m_Name: CameraSwitch
   m_TagString: Untagged
@@ -233342,12 +233348,48 @@ Transform:
   m_GameObject: {fileID: 1900804127}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7069415, y: -0.7069413, z: -0.015295275, w: -0.0152949765}
-  m_LocalPosition: {x: 77.15138, y: 10.099998, z: -72.93097}
+  m_LocalPosition: {x: 118.5, y: 3.6, z: -71.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1900804129
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900804127}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 17.338717, y: 12.575339, z: 39.280148}
+  m_Center: {x: 8.169358, y: -5.787714, z: -5.9145975}
+--- !u!114 &1900804130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900804127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3edf058f7a315a14b863b9c20d59ef8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetLocalOffset: {x: 10, y: 10, z: -5}
+  targetZoom: 5
+  moveSpeed: 5
 --- !u!43 &1911628055
 Mesh:
   m_ObjectHideFlags: 0

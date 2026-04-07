@@ -1,10 +1,8 @@
-
 using UnityEngine;
 
 public class CameraSwitch : MonoBehaviour {
     [Header("Camera Target")]
-    [SerializeField] Vector3 targetOffset = new Vector3(0, 3, -10);
-    [SerializeField] Vector3 targetRotation = new Vector3(20, 0, 0);
+    [SerializeField] Vector3 targetLocalOffset = new Vector3(0, 3, -10);
     [SerializeField] float targetZoom = 5f;
 
     [Header("Transition")]
@@ -12,44 +10,60 @@ public class CameraSwitch : MonoBehaviour {
 
     Camera cam;
     bool playerInside;
+    bool returning;
 
-    Vector3 originalPos;
-    Quaternion originalRot;
+    Vector3 originalLocalPos;
     float originalZoom;
 
     void Start() {
         cam = Camera.main;
 
-        originalPos = cam.transform.position;
-        originalRot = cam.transform.rotation;
+        // store ORIGINAL local position (relative to player)
+        originalLocalPos = cam.transform.localPosition;
         originalZoom = cam.orthographicSize;
     }
 
-    void OnTriggerStay(Collider other) {
-        if (!other.CompareTag("Player")) return;
+    void OnTriggerEnter(Collider other) {
+        if (!other.CompareTag("Player")) {
+            return;
+        }
+
         playerInside = true;
+        returning = false;
     }
 
     void OnTriggerExit(Collider other) {
-        if (!other.CompareTag("Player")) return;
+        if (!other.CompareTag("Player")) {
+            return;
+        }
+
         playerInside = false;
+        returning = true;
     }
 
     void LateUpdate() {
-        if (cam == null) return;
+        if (cam == null) {
+            return;
+        }
 
         if (playerInside) {
-            Vector3 targetPos = transform.position + targetOffset;
-
-            cam.transform.position = Vector3.Lerp(
-                cam.transform.position,
-                targetPos,
+            // move relative to player
+            cam.transform.localPosition = Vector3.Lerp(
+                cam.transform.localPosition,
+                targetLocalOffset,
                 Time.deltaTime * moveSpeed
+            );
+
+            // ALWAYS look at this trigger 
+            Vector3 lookTarget = transform.position;
+
+            Quaternion lookRot = Quaternion.LookRotation(
+                lookTarget - cam.transform.position
             );
 
             cam.transform.rotation = Quaternion.Lerp(
                 cam.transform.rotation,
-                Quaternion.Euler(targetRotation),
+                lookRot,
                 Time.deltaTime * moveSpeed
             );
 
@@ -58,16 +72,13 @@ public class CameraSwitch : MonoBehaviour {
                 targetZoom,
                 Time.deltaTime * moveSpeed
             );
-        } else {
-            cam.transform.position = Vector3.Lerp(
-                cam.transform.position,
-                originalPos,
-                Time.deltaTime * moveSpeed
-            );
+        }
 
-            cam.transform.rotation = Quaternion.Lerp(
-                cam.transform.rotation,
-                originalRot,
+       
+        else if (returning) {
+            cam.transform.localPosition = Vector3.Lerp(
+                cam.transform.localPosition,
+                originalLocalPos,
                 Time.deltaTime * moveSpeed
             );
 
@@ -76,6 +87,11 @@ public class CameraSwitch : MonoBehaviour {
                 originalZoom,
                 Time.deltaTime * moveSpeed
             );
+
+            // stop returning when close enough
+            if (Vector3.Distance(cam.transform.localPosition, originalLocalPos) < 0.05f) {
+                returning = false;
+            }
         }
     }
 }
