@@ -9,6 +9,8 @@ public class CameraSwitch : MonoBehaviour {
     [SerializeField] float moveSpeed = 5f;
 
     Camera cam;
+    CameraFocus focusScript;
+
     bool playerInside;
     bool returning;
 
@@ -18,7 +20,8 @@ public class CameraSwitch : MonoBehaviour {
     void Start() {
         cam = Camera.main;
 
-        // store ORIGINAL local position (relative to player)
+        focusScript = cam.GetComponent<CameraFocus>();
+
         originalLocalPos = cam.transform.localPosition;
         originalZoom = cam.orthographicSize;
     }
@@ -30,6 +33,11 @@ public class CameraSwitch : MonoBehaviour {
 
         playerInside = true;
         returning = false;
+
+       
+        if (focusScript != null) {
+            focusScript.enabled = false;
+        }
     }
 
     void OnTriggerExit(Collider other) {
@@ -39,6 +47,8 @@ public class CameraSwitch : MonoBehaviour {
 
         playerInside = false;
         returning = true;
+
+        
     }
 
     void LateUpdate() {
@@ -46,16 +56,15 @@ public class CameraSwitch : MonoBehaviour {
             return;
         }
 
+        
         if (playerInside) {
-            // move relative to player
             cam.transform.localPosition = Vector3.Lerp(
                 cam.transform.localPosition,
                 targetLocalOffset,
                 Time.deltaTime * moveSpeed
             );
 
-            // ALWAYS look at this trigger 
-            Vector3 lookTarget = transform.position;
+            Vector3 lookTarget = transform.position + Vector3.up * 1.5f;
 
             Quaternion lookRot = Quaternion.LookRotation(
                 lookTarget - cam.transform.position
@@ -74,7 +83,7 @@ public class CameraSwitch : MonoBehaviour {
             );
         }
 
-       
+        //  RETURN TO NORMAL
         else if (returning) {
             cam.transform.localPosition = Vector3.Lerp(
                 cam.transform.localPosition,
@@ -88,9 +97,12 @@ public class CameraSwitch : MonoBehaviour {
                 Time.deltaTime * moveSpeed
             );
 
-            // stop returning when close enough
+            // once back  re-enable CameraFocus
             if (Vector3.Distance(cam.transform.localPosition, originalLocalPos) < 0.05f) {
                 returning = false;
+
+                if (focusScript != null)
+                    focusScript.enabled = true;
             }
         }
     }
