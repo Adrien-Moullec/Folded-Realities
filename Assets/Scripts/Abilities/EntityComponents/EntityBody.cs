@@ -29,5 +29,7 @@ namespace AbilitySystem {
         [Tooltip("Interface reference for the Ability Controller.")]
         [HideInInspector] public IAbility iAbility;
         [HideInInspector] public IHealth iHealth;
+        public bool UsingAbility = false;
+        public bool MoveOverride = false;
     }
 }

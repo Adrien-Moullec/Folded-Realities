@@ -38,10 +38,10 @@ namespace AbilitySystem {
 
                 if (i.playerAbilitySet.movement?.movementSO != null)
                     frameEvents += i.playerAbilitySet.movement.FrameEvent;
-                if (i.playerAbilitySet.light?.abilitySO != null)
-                    frameEvents += i.playerAbilitySet.light.FrameEvent;
-                if (i.playerAbilitySet.heavy?.abilitySO != null)
-                    frameEvents += i.playerAbilitySet.heavy.FrameEvent;
+                if (i.playerAbilitySet.primary?.abilitySO != null)
+                    frameEvents += i.playerAbilitySet.primary.FrameEvent;
+                if (i.playerAbilitySet.secondary?.abilitySO != null)
+                    frameEvents += i.playerAbilitySet.secondary.FrameEvent;
                 if (i.playerAbilitySet.primary?.abilitySO != null)
                     frameEvents += i.playerAbilitySet.primary.FrameEvent;
             }
@@ -50,22 +50,12 @@ namespace AbilitySystem {
         }
         protected override void Update() {
             base.Update();
-            InputPrimaryAttack();
-            currentAbilitySet?.playerAbilitySet.heavy.Activate(currentAbilitySet.entityBody, GetInputValues.isPrimaryAbility);
+            currentAbilitySet?.playerAbilitySet?.movement?.Activate(currentAbilitySet.entityBody, true);
+            currentAbilitySet?.playerAbilitySet?.primary?.Activate(currentAbilitySet.entityBody, GetInputValues.isPrimaryAttack);
+            currentAbilitySet?.playerAbilitySet?.secondary?.Activate(currentAbilitySet.entityBody, GetInputValues.isSecondaryAttack);
         }
         public override void Die() {
             base.Die();
-        }
-        #endregion
-
-        #region 
-        public override void InputMove() {
-            base.InputMove();
-            currentAbilitySet?.playerAbilitySet.movement.Activate(currentAbilitySet.entityBody, true);
-        }
-        public override void InputPrimaryAttack() {
-            base.InputPrimaryAttack();
-            currentAbilitySet?.playerAbilitySet.light.Activate(currentAbilitySet.entityBody, GetInputValues.isPrimaryAttack);
         }
         #endregion
 

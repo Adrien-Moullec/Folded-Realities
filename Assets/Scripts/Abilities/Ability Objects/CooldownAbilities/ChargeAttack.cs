@@ -24,16 +24,16 @@ namespace AbilitySystem {
 
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
             ChargeAttackData cad = (ChargeAttackData)data;
+            AbilityControllerValues controlValues = entityBody.iAbility.GetInputValues;
             float time = 0;
-            MovementType mt = entityBody.iAbility.GetInputValues.movementType;
-            entityBody.iAbility.GetInputValues.movementType = MovementType.Charge;
-            if (entityBody.iAbility.GetInputValues.inputDirection == Vector3.zero)
-                entityBody.iAbility.GetInputValues.inputDirection = entityBody.modelPrefab.transform.forward;
+            controlValues.isOverrideActive = true;
+            controlValues.SetMovementTypeToggle(MovementType.Charge, true);
+            controlValues.SetDirection(entityBody.modelPrefab.transform.forward, true);
             while (time < maxChargeDuration) {
                 time += Time.deltaTime;
                 yield return null;
             }
-            entityBody.iAbility.GetInputValues.movementType = mt;
+            controlValues.isOverrideActive = false;
         }
 
         protected override void OnHold(EntityBody entityBody, CooldownData data) {
