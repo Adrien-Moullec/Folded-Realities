@@ -69,8 +69,8 @@ public class PlayerManager : MonoBehaviour, ICamera {
 
         lookInput.performed += input => deltaLook = input.ReadValue<Vector2>();
         lookInput.canceled += input => deltaLook = input.ReadValue<Vector2>();
-        runInput.performed += input => iAbility.GetInputValues.isRunning = true;
-        runInput.canceled += input => iAbility.GetInputValues.isRunning = false;
+        runInput.performed += input => iAbility.GetInputValues.SetRunToggle(true);
+        runInput.canceled += input => iAbility.GetInputValues.SetRunToggle(false);
         radialWheel.performed += input => {
             _RadialMenuManager?.SetWheelActive(true);
             wheelActive = true;
@@ -82,14 +82,14 @@ public class PlayerManager : MonoBehaviour, ICamera {
         };
         primaryAttackInput.performed += input => iAbility.GetInputValues.isPrimaryAttack = true;
         primaryAttackInput.canceled += input => iAbility.GetInputValues.isPrimaryAttack = false;
-        ability1Input.performed += input => iAbility.GetInputValues.isPrimaryAbility = true;
-        ability1Input.canceled += input => iAbility.GetInputValues.isPrimaryAbility = false;
+        ability1Input.performed += input => iAbility.GetInputValues.isTertiaryAbility = true;
+        ability1Input.canceled += input => iAbility.GetInputValues.isTertiaryAbility = false;
     }
     void OnDisable() {
         lookInput.performed -= input => deltaLook = input.ReadValue<Vector2>();
         lookInput.canceled -= input => deltaLook = input.ReadValue<Vector2>();
-        runInput.performed -= input => iAbility.GetInputValues.isRunning = true;
-        runInput.canceled -= input => iAbility.GetInputValues.isRunning = false;
+        runInput.performed -= input => iAbility.GetInputValues.SetRunToggle(true);
+        runInput.canceled -= input => iAbility.GetInputValues.SetRunToggle(false);
         radialWheel.performed -= input => {
             _RadialMenuManager?.SetWheelActive(true);
             wheelActive = true;

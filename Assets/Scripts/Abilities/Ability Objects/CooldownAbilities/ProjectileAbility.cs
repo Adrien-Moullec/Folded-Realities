@@ -33,10 +33,10 @@ namespace AbilitySystem {
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
             if (projectilePoolInfo.poolObject == null || (data.isHoldingInput && !automaticShooting)) yield break;
             ProjectileData pd = (ProjectileData)data;
-            Debug.Log("Projectile");
 
-            entityBody.animatorManager.Attack1();
+            yield return AttackAnimation(entityBody, data, AnimationType.Attack1);
 
+            /*
             for (int i = 0; i < burstAmount; i++) {
                 entityBody.iAbility.GetAbilityController.StartCoroutine(Projectile(pd));
                 yield return new WaitForSeconds(burstInterval);
@@ -44,7 +44,7 @@ namespace AbilitySystem {
 
             yield return new WaitForSeconds(shootInterval - burstInterval);
 
-            yield return null;
+            yield return null;*/
         }
         IEnumerator Projectile(ProjectileData pd) {
             IPoolObjectAS projectile = pd.pooledProjectiles.Get();

@@ -14,30 +14,22 @@ namespace AbilitySystem {
         public override AbilityData AbilityDataSetup(EntityBody entityBody) {
             return new CooldownData(charges, cooldown);
         }
-        public override bool PassEvent(EntityBody entityBody, AbilityData data) {
-            throw new NotImplementedException();
-        }
 
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
-            entityBody.animatorManager.Attack1();
-            yield return null;
-            /*
-            yield return entityBody.iAbility.RunTimelineWithEvents(
-                new TimelineEvent[] {
-                    new TimelineEvent(entityBody.animationComponent, attackAnim, 0, attackAnim.length)
-                },
-                new DeltaEvent[] {
-                    new DeltaEvent(() => Damage(entityBody), deltaEvent)
-                }
-            );*/
+            yield return AttackAnimation(entityBody, data, AnimationType.Attack1);
         }
 
+        public override void AnimationEvent(AbilityAnimationData animationData, EntityBody entityBody, AbilityData abilityData) {
+            Damage(entityBody);
+        }
+
+
         protected override void OnHold(EntityBody entityBody, CooldownData data) {
-            throw new NotImplementedException();
+
         }
 
         protected override void OnPressWhileUsing(EntityBody entityBody, CooldownData data) {
-            throw new NotImplementedException();
+
         }
 
         private void Damage(EntityBody entityBody) {
@@ -49,7 +41,8 @@ namespace AbilitySystem {
                             new EntityDamage(
                                 damage,
                                 entityBody,
-                                entityBody.iAbility.GetEntityTeam, EntityDamageType.Melee
+                                entityBody.iAbility.GetEntityTeam,
+                                EntityDamageType.Melee
                             )
                         );
         }

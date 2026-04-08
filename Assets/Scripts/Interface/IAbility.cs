@@ -17,7 +17,7 @@ namespace AbilitySystem {
         #region Utility Functions
         public EntityBody GetEntityBody();
         public EntityTeam GetEntityTeam { get; }
-        public AbilityInputValues GetInputValues { get; set; }
+        public AbilityControllerValues GetInputValues { get; set; }
         public AbilityController GetAbilityController { get; }
         #endregion
     }

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace AbilitySystem {
-    public class SingleAbilityEnemyController : SingleSetEnemyController {
+    public class SingleAbilityEnemyController : SingleSetBaseEnemyController {
         [Header("Health bar")]
         [SerializeField] public Slider healthBar;
         private void Start() {

@@ -78,33 +78,31 @@ namespace AbilitySystem {
         [SerializeField] protected string onHitWall;
         #region Setup
 
-        public override AbilityData AbilityDataSetup(EntityBody eb) {
-            return new GenericMovementData();
-        }
+        public override AbilityData AbilityDataSetup(EntityBody eb) => new GenericMovementData();
         #endregion
 
         #region Movement Logic
 
-        public override bool NormalMovement(EntityBody entityBody, AbilityData data, AbilityInputValues inpVals) {
+        public override bool NormalMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             GenericMovementData moveData = (GenericMovementData)data;
-            moveData.chargeDirection = inpVals.inputDirection;
+            moveData.chargeDirection = inpVals.Direction;
 
-            float maxSpeed = moveData.isGliding ? glideHorizontalSpeed : inpVals.isRunning ? runSpeed : walkSpeed;
+            float maxSpeed = moveData.isGliding ? glideHorizontalSpeed : inpVals.IsRunning ? runSpeed : walkSpeed;
 
             moveData.velocity = AccelerationMovement(
                 moveData,
-                new Vector3(inpVals.inputDirection.x, 0, inpVals.inputDirection.z),
+                new Vector3(inpVals.Direction.x, 0, inpVals.Direction.z),
                 maxSpeed,
-                inpVals.isRunning,
-                inpVals.isAccelerating
+                inpVals.IsRunning,
+                inpVals.IsAccelerating
             );
-            Gravity(moveData, entityBody, inpVals.inputDirection.y > 0);
+            Gravity(moveData, entityBody, inpVals.Direction.y > 0);
             AnimateAbility(moveData, entityBody.animatorManager);
 
             entityBody.iAbility.OnMoveEntity(moveData.velocity * Time.deltaTime);
             return true;
         }
-        public override bool ChargeMovement(EntityBody entityBody, AbilityData data, AbilityInputValues inpVals) {
+        public override bool ChargeMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             GenericMovementData moveData = (GenericMovementData)data;
             if (moveData.chargeDirection == Vector3.zero) {
                 moveData.chargeDirection = entityBody.modelPrefab.transform.forward;
@@ -115,10 +113,10 @@ namespace AbilitySystem {
             entityBody.iAbility.OnMoveEntity(moveData.velocity * Time.deltaTime);
             return true;
         }
-        public override bool AutoTrackMovement(EntityBody entityBody, AbilityData data, AbilityInputValues inpVals) {
+        public override bool AutoTrackMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             throw new System.NotImplementedException();
         }
-        public override bool FlightMovement(EntityBody entityBody, AbilityData data, AbilityInputValues inpVals) {
+        public override bool FlightMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             throw new System.NotImplementedException();
         }
 

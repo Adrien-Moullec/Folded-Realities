@@ -73,7 +73,7 @@ namespace AbilitySystem {
                     nestedSO != null) {
                     foldouts[prop.propertyPath] = EditorGUILayout.Foldout(
                         foldouts[prop.propertyPath],
-                        "",
+                        "", //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         true
                     );
 

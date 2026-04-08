@@ -5,13 +5,13 @@ using UnityEngine.AI;
 
 namespace AbilitySystem {
     [RequireComponent(typeof(NavMeshAgent))]
-    public abstract class SingleSetEnemyController : AbilityController {
+    public abstract class SingleSetBaseEnemyController : AbilityController {
         [Space]
         [Header("Settings")]
         [SerializeField] EnemyAbilitySetSO abilitySetSO;
         [SerializeField] internal EntityBody entityBody;
         [SerializeField] float playerDist = 3;
-        [HideInInspector] AbilitySet abilitySetList;
+        [HideInInspector] protected AbilitySet abilitySetList;
         private NavMeshAgent navMeshAgent;
         protected override void Awake() {
             base.Awake();
@@ -24,7 +24,6 @@ namespace AbilitySystem {
         }
         protected override void Update() {
             base.Update();
-            InputMove();
         }
 
         public override void OnMoveEntity(Vector3 direction) {
@@ -35,17 +34,6 @@ namespace AbilitySystem {
         public override void OnRotateEntity(Vector3 direction) {
             direction.y = 0;
             if (direction != Vector3.zero) entityBody.bodyHolder.transform.forward = direction;
-        }
-
-        public override void InputMove() =>
-            abilitySetList?.movement.Activate(entityBody, true);
-
-
-        public override void InputPrimaryAttack() {
-            throw new NotImplementedException();
-        }
-        public override void InputPrimaryAbility() {
-            throw new NotImplementedException();
         }
         public override EntityBody GetEntityBody() => entityBody;
     }
