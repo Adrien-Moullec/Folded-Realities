@@ -1,12 +1,8 @@
 using UnityEngine;
 
-public class DebrisSpawnerAndWind : MonoBehaviour {
-    [Header("Debris")]
+public class DebrisSpawner : MonoBehaviour {
+    [Header("Prefabs")]
     public GameObject[] debrisPrefabs;
-
-    [Header("Wind")]
-    public GameObject windPrefab;
-    public int windCount = 20;
 
     [Header("References")]
     public Transform npc;
@@ -19,17 +15,12 @@ public class DebrisSpawnerAndWind : MonoBehaviour {
     public float npcSafeRadius = 3f;
 
     void Start() {
-        // Spawn debris
         for (int i = 0; i < spawnCount; i++) {
             SpawnDebris(false);
         }
 
         for (int i = 0; i < spawnCount; i++) {
-            SpawnDebris(true);
-        }
-
-        for (int i = 0; i < windCount; i++) {
-            SpawnWind();
+            SpawnDebris(true); 
         }
     }
 
@@ -61,27 +52,5 @@ public class DebrisSpawnerAndWind : MonoBehaviour {
 
         float scale = Random.Range(2f, 3.5f);
         obj.transform.localScale = Vector3.one * scale;
-    }
-
-
-    void SpawnWind() {
-        if (windPrefab == null) {
-            return;
-        }
-
-        float halfWidth = areaSize.x / 2f;
-
-        // Spawn near LEFT or RIGHT edges
-        float side = Random.value > 0.5f ? -1f : 1f;
-
-        float x = transform.position.x + side * (halfWidth - 1f);
-
-        float y = transform.position.y + Random.Range(-areaSize.y / 2f, areaSize.y / 2f);
-
-        float z = transform.position.z + Random.Range(-areaSize.z / 2f, areaSize.z / 2f);
-
-        Vector3 pos = new Vector3(x, y, z);
-
-        Instantiate(windPrefab, pos, Quaternion.identity);
     }
 }

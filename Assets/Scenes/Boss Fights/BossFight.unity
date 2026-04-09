@@ -459,16 +459,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2747816494645658159, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.617
+      objectReference: {fileID: 0}
+    - target: {fileID: 2747816494645658159, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 43.3
+      value: 143
       objectReference: {fileID: 0}
     - target: {fileID: 2747816494645658159, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 92.8
+      value: -326
       objectReference: {fileID: 0}
     - target: {fileID: 2747816494645658159, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -100.7
+      value: 234
       objectReference: {fileID: 0}
     - target: {fileID: 2747816494645658159, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
       propertyPath: m_LocalRotation.w
@@ -503,12 +507,32 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5107311820233970233, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
+      propertyPath: ShapeModule.type
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5107311820233970233, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
       propertyPath: InitialModule.size3D
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5107311820233970233, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
+      propertyPath: VelocityModule.y.scalar
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5107311820233970233, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
       propertyPath: InitialModule.rotation3D
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5107311820233970233, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
+      propertyPath: ShapeModule.m_Rotation.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5107311820233970233, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
+      propertyPath: ShapeModule.m_Rotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5107311820233970233, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
       objectReference: {fileID: 0}
     - target: {fileID: 5107311820233970233, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
       propertyPath: InitialModule.startSize.scalar
@@ -524,7 +548,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5107311820233970233, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
       propertyPath: InitialModule.startSpeed.scalar
-      value: 1
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5107311820233970233, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
       propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.scalar
@@ -890,8 +914,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 10
-  m_fontSizeBase: 10
+  m_fontSize: 5
+  m_fontSizeBase: 5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1154,6 +1178,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitCooldown: 0.5
+--- !u!1 &2044144480 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8477050753565930691, guid: afba77a8d9e156e4986a2860d133e9aa, type: 3}
+  m_PrefabInstance: {fileID: 509576926}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2112399211 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2969896672581243912, guid: a1e531976df10334380158e02a6889e7, type: 3}
@@ -1326,6 +1355,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debrisPrefabs:
   - {fileID: 8665654444288148674, guid: a224b22b40511844f984dd78b4d921f2, type: 3}
+  windPrefab: {fileID: 2044144480}
+  windCount: 20
   npc: {fileID: 804208742}
   spawnCount: 30
   areaSize: {x: 25, y: 70, z: 3}
