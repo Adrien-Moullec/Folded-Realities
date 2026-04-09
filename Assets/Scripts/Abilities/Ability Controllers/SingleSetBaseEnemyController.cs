@@ -9,7 +9,7 @@ namespace AbilitySystem {
         [Space]
         [Header("Settings")]
         [SerializeField] EnemyAbilitySetSO abilitySetSO;
-        [SerializeField] internal EntityBody entityBody;
+        [SerializeField] protected EntityBody entityBody;
         [SerializeField] float playerDist = 3;
         [HideInInspector] protected AbilitySet abilitySetList;
         private NavMeshAgent navMeshAgent;
@@ -18,6 +18,7 @@ namespace AbilitySystem {
             entityBody.iAbility = this;
             entityBody.iHealth = this;
             navMeshAgent = GetComponent<NavMeshAgent>();
+            entityBody.animatorManager = GetComponent<AnimatorManager>();
             if (abilitySetSO == null) return;
             EnemyAbilitySet ab = new EnemyAbilitySet(abilitySetSO, entityBody);
             abilitySetList = ab;
