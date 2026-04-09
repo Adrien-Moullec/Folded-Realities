@@ -2,47 +2,73 @@ using UnityEngine;
 
 public class FallingNPC : MonoBehaviour {
     public Transform player;
+    public Transform ground; 
 
     [Header("Movement")]
     public float fallSpeed = 2f;
-    public float sideSpeed = 2f;
+    public float slowFallSpeed = 0.8f;
+
     public float sideAmplitude = 2f;
+    public float sideSpeed = 2f;
+
     public float verticalOffset = -5f;
 
-    [Header("Avoidance")]
-    public float avoidanceRadius = 3f;
-    public float avoidanceStrength = 2f;
-    public LayerMask debrisLayer;
+    [Header("Catch")]
+    public float slowDistanceFromGround = 4f;
+    public float catchDistance = 2f;
 
     private float randomOffset;
+    private bool caught = false;
 
     void Start() {
         randomOffset = Random.Range(0f, 100f);
     }
 
     void Update() {
-        if (player == null) return;
+        if (player == null || ground == null || caught) return;
 
-        // Base side movement
+        float groundY = ground.position.y;
+        float distanceToGround = transform.position.y - groundY;
+
+        float currentSpeed = fallSpeed;
+
+        
+        if (distanceToGround <= slowDistanceFromGround) {
+            currentSpeed = slowFallSpeed;
+            verticalOffset = -2f; // bring closer to player
+        }
+
         float side = Mathf.Sin(Time.time * sideSpeed + randomOffset) * sideAmplitude;
 
         float targetY = player.position.y + verticalOffset;
-        float newY = Mathf.Lerp(transform.position.y, targetY, Time.deltaTime * fallSpeed);
+        float newY = Mathf.Lerp(transform.position.y, targetY, Time.deltaTime * currentSpeed);
 
-        Vector3 pos = new Vector3(
+       
+        if (newY < groundY + 1f)
+            newY = groundY + 1f;
+
+        Vector3 newPos = new Vector3(
             player.position.x + side,
             newY,
             player.position.z
         );
 
+        transform.position = newPos;
+
        
-        Collider[] nearby = Physics.OverlapSphere(transform.position, avoidanceRadius, debrisLayer);
+        float distToPlayer = Vector3.Distance(transform.position, player.position);
 
-        foreach (Collider col in nearby) {
-            Vector3 dir = transform.position - col.transform.position;
-            pos.x += dir.normalized.x * avoidanceStrength;
+        if (distanceToGround <= 2f && distToPlayer <= catchDistance) {
+            CatchPlayer();
         }
+    }
 
-        transform.position = pos;
+    void CatchPlayer() {
+        caught = true;
+
+        transform.SetParent(player);
+        transform.localPosition = new Vector3(0.5f, 1f, 0.5f);
+
+        Debug.Log("NPC CAUGHT!");
     }
 }
