@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +11,7 @@ namespace AbilitySystem {
 
         [Space]
         [Header("Transition Animation")]
-        [SerializeField] Animation SmokesAndMirrorsAnimation;
+        [SerializeField] private PaperParticles paperParticleDelta;
         [SerializeField] float transitionTime = 0.5f;
         private bool isTransitioning = false;
 
@@ -23,8 +24,10 @@ namespace AbilitySystem {
         #region OnStart
         protected override void Awake() {
             base.Awake();
-            SmokesAndMirrorsAnimation.gameObject.SetActive(false);
+
+            currentAbilitySet = null;
             characterController = GetComponent<CharacterController>();
+
             foreach (var i in playerSetsList) {
                 if (i.abilitySetSO == null)
                     continue;
@@ -45,8 +48,10 @@ namespace AbilitySystem {
                 if (i.playerAbilitySet.primary?.abilitySO != null)
                     frameEvents += i.playerAbilitySet.primary.FrameEvent;
             }
-            currentAbilitySet = playerSetsList[0];
-            currentAbilitySet.entityBody.modelPrefab.SetActive(true);
+            SetNewSummary(playerSetsList[0]);
+        }
+        void Start() {
+            //OnAbilityEvent("Crane");
         }
         protected override void Update() {
             base.Update();
@@ -61,15 +66,49 @@ namespace AbilitySystem {
 
         #region Transitions
         public override void OnAbilityEvent(string eventMessage) {
-            if (eventMessage == "") return;
-            //Debug.Log(eventMessage);
-            InputTransitionName(eventMessage);
+            if (!TryGetSetSummary(eventMessage, out PlayerSetSummary playerSetSummary) || playerSetSummary == currentAbilitySet) return;
+
+            print("TURN INTO: " + eventMessage);
+            StartCoroutine(Transition(playerSetSummary));
+        }
+        private IEnumerator Transition(PlayerSetSummary newSummary) {
+            paperParticleDelta.StartDelta();
+            yield return currentAbilitySet.entityBody.animatorManager.InitiateOneOffAnimation(
+                null,
+                (f) => { paperParticleDelta.UpdateDelta(f); },
+                null,
+                null,
+                AnimationType.TransitionOut
+            );
+            SetNewSummary(newSummary);
+            yield return currentAbilitySet.entityBody.animatorManager.InitiateOneOffAnimation(
+                null,
+                (f) => { paperParticleDelta.UpdateDelta(1 - f); },
+                null,
+                null,
+                AnimationType.TransitionIn,
+                false
+            );
+            paperParticleDelta.EndDelta();
+        }
+        private void SetNewSummary(PlayerSetSummary playerSetSummary) {
+            currentAbilitySet?.entityBody.modelPrefab.SetActive(false);
+            currentAbilitySet = playerSetSummary;
+            currentAbilitySet?.entityBody.modelPrefab.SetActive(true);
         }
         public bool UnlockSet(string name) {
-            if (playerSetsList.Any(x => x.abilitySetSO.abilitySetName == name)) {
-                playerSetsList.First(x => x.abilitySetSO.abilitySetName == name).isUnlocked = true;
+            if (TryGetSetSummary(name, out PlayerSetSummary playerSetSummary)) {
+                playerSetSummary.isUnlocked = true;
                 return true;
             }
+            return false;
+        }
+        private bool TryGetSetSummary(string nameCheck, out PlayerSetSummary playerSetSummary) {
+            if (playerSetsList.Any(x => x.abilitySetSO.abilitySetName == nameCheck)) {
+                playerSetSummary = playerSetsList.First(x => x.abilitySetSO.abilitySetName == nameCheck);
+                return true;
+            }
+            playerSetSummary = null;
             return false;
         }
         #endregion

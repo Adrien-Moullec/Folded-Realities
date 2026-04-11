@@ -16,10 +16,13 @@ namespace AbilitySystem {
             if (animatorManager == null)
                 animator.TryGetComponent(out animatorManager);
 
-            animatorManager?.OnStartAnim();
+            animatorManager?.OnStartAnim(stateInfo.shortNameHash);
+        }
+        public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+            animatorManager?.OnUpdateAnim(stateInfo.shortNameHash, stateInfo.normalizedTime);
         }
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-            animatorManager?.OnEndAnim();
+            animatorManager?.OnEndAnim(stateInfo.shortNameHash);
         }
     }
 }

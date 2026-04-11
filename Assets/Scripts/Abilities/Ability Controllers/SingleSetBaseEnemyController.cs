@@ -10,7 +10,6 @@ namespace AbilitySystem {
         [Header("Settings")]
         [SerializeField] EnemyAbilitySetSO abilitySetSO;
         [SerializeField] protected EntityBody entityBody;
-        [SerializeField] float playerDist = 3;
         [HideInInspector] protected AbilitySet abilitySetList;
         private NavMeshAgent navMeshAgent;
         protected override void Awake() {
