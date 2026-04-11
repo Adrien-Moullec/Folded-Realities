@@ -35,19 +35,15 @@ public class PlayerManager : MonoBehaviour, ICamera {
     [Space]
     [Header("Inputs")]
     InputAction moveInput;
-    Vector2 deltaMove;
     InputAction lookInput;
     Vector2 deltaLook;
     InputAction jumpInput;
-    bool isJumping;
     InputAction runInput;
-    bool isRunning;
     InputAction ability1Input;
     InputAction radialWheel;
     bool wheelActive = false;
 
     InputAction primaryAttackInput;
-    bool holdPrimaryAttack;
     #endregion
 
     void Awake() {
@@ -121,9 +117,6 @@ public class PlayerManager : MonoBehaviour, ICamera {
         camDir.Normalize();
         camDir.y = j > 0.5f ? 1 : 0;
         iAbility.GetInputValues.SetDirection(camDir);
-    }
-    void Attack() {
-        holdPrimaryAttack = true;
     }
     void CameraSettings() {
         camYTilt = Mathf.Clamp(camYTilt - deltaLook.y, cameraTiltMin, cameraTiltMax);

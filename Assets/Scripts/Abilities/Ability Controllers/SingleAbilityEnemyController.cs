@@ -5,10 +5,11 @@ namespace AbilitySystem {
     public class SingleAbilityEnemyController : SingleSetBaseEnemyController {
         [Header("Health bar")]
         [SerializeField] public Slider healthBar;
+        /*
         private void Start() {
             healthBar.maxValue = MaxHealth;
             healthBar.value = MaxHealth;
-        }
+        }*/
         public override void Damage(EntityDamage damage) {
             base.Damage(damage);
             UpdateHealth();

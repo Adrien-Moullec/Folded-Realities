@@ -1,5 +1,5 @@
 public interface IDelta {
-    public void Start();
-    public void SetDelta(float delta);
-    public void End();
+    public void StartDelta();
+    public void UpdateDelta(float delta);
+    public void EndDelta();
 }

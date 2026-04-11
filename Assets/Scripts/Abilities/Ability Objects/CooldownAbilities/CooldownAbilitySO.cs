@@ -12,7 +12,6 @@ namespace AbilitySystem {
         #region Call Logic
         public override bool Execute(EntityBody entityBody, AbilityData data) {
             CooldownData cdd = (CooldownData)data;
-            Debug.Log("ab using = " + data.usingAbility + ", ent body using = " + entityBody.UsingAbility + ", holding = " + data.isHoldingInput + ", charges = " + cdd.currentCharges);
             if (data.usingAbility) {
                 if (data.isHoldingInput)
                     OnHold(entityBody, cdd);
@@ -63,7 +62,10 @@ namespace AbilitySystem {
         protected abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
         protected virtual IEnumerator AttackAnimation(EntityBody entityBody, AbilityData data, AnimationType attackAnimation) {
             yield return entityBody.animatorManager.InitiateOneOffAnimation(
+                null,
+                null,
                 (AbilityAnimationData animationData) => AnimationEvent(animationData, entityBody, data),
+                null,
                 attackAnimation
             );
         }

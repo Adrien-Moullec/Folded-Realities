@@ -4,27 +4,21 @@ using UnityEngine;
 using UnityEngine.VFX;
 
 public class PaperParticles : MonoBehaviour, IDelta {
-
-    [SerializeField] float speed = 2;
     VisualEffect visualEffect;
-    float time = 0;
-    float scale = 0;
     void Awake() {
         TryGetComponent(out visualEffect);
-        SetDelta(1);
+        EndDelta();
     }
-    void Update() {
-        time += Time.deltaTime * speed;
-        scale = (Mathf.Sin(time) * 0.5f) + 0.5f;
-        SetDelta(scale);
-    }
-    public void Start() {
+    public void StartDelta() {
         visualEffect.Play();
+        visualEffect.enabled = true;
     }
-    public void SetDelta(float delta) {
-        gameObject.transform.localScale = new Vector3(scale, scale, scale);
+    public void UpdateDelta(float delta) {
+        gameObject.transform.localScale = new Vector3(delta, delta, delta);
     }
-    public void End() {
+    public void EndDelta() {
+        UpdateDelta(0);
         visualEffect.Stop();
+        visualEffect.enabled = false;
     }
 }

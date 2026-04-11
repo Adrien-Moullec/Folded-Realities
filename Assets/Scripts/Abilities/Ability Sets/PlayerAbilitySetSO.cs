@@ -16,7 +16,7 @@ namespace AbilitySystem {
         [SerializeField] public CooldownAbilitySummary secondary;
         [SerializeField] public CooldownAbilitySummary tertiary;
 
-        public PlayerAbilitySet(PlayerAbilitySetSO abilitySet, EntityBody eb) : base(abilitySet.name, abilitySet.movement, abilitySet.healthSettings, eb) {
+        public PlayerAbilitySet(PlayerAbilitySetSO abilitySet, EntityBody eb) : base(abilitySet.abilitySetName, abilitySet.movement, abilitySet.healthSettings, eb) {
             if (abilitySet.primary != null)
                 primary = new(abilitySet.primary, eb);
 

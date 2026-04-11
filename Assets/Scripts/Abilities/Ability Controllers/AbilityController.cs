@@ -33,9 +33,6 @@ namespace AbilitySystem {
         protected virtual void Update() {
             frameEvents?.Invoke();
         }
-        #region Input Interface
-        public virtual void InputTransitionName(string back) { }
-        #endregion
 
         #region Movement Interface
         public abstract void OnRotateEntity(Vector3 movement);
@@ -65,6 +62,10 @@ namespace AbilitySystem {
 
         public virtual void Die() {
 
+        }
+
+        public void InputTransitionName(string name) {
+            throw new System.NotImplementedException();
         }
 
         #endregion
