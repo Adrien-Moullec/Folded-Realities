@@ -43,7 +43,15 @@ namespace AbilitySystem {
             AnimationType animType,
             bool overrideState
         ) {
-            (int stateHashCode, int layer) info = (Animator.StringToHash(animType.ToString()), 0);
+
+            (int stateHashCode, int layer) info =
+                (Animator.StringToHash(animType.ToString()),
+                animType switch {
+                    AnimationType.Attack1 => 1,
+                    AnimationType.TransformIn => 0,
+                    AnimationType.TransformOut => 0,
+                    _ => -1,
+                });
 
             if (!CanStartAnimation(info))
                 yield break;
