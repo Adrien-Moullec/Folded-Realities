@@ -86,10 +86,18 @@ namespace AbilitySystem {
             layers[layerIndex].state.updateFunction?.Invoke(1);
             layers[layerIndex].state.endFunction?.Invoke();
             layers[layerIndex].state = new AnimatorFunctions("", null, null, null, null);
-            Debug.Log("Ended - " + layerIndex + ":" + layers[layerIndex].state.currentState);
         }
-        public void ReceiveEvent(int hashCode, int layerIndex, AnimationEvent animationEvent) {
-            layers[layerIndex].state.eventFunction?.Invoke(new AbilityAnimationEventData(animationEvent));
+        public void ReceiveEvent(AnimationEvent animationEvent) {
+
+            for (int i = 0; i < animator.layerCount; i++) {
+                AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(i);
+
+                if (stateInfo.IsName(animationEvent.animatorClipInfo.clip.name)) {
+                    Debug.Log("Triggered from layer: " + i);
+                }
+            }
+            //layers[layerIndex].state.eventFunction?.Invoke(new AbilityAnimationEventData(animationEvent));
+            Debug.Log("EVENT");
         }
         #endregion
     }
