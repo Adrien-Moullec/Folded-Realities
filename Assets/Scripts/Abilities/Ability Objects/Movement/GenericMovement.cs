@@ -82,6 +82,11 @@ namespace AbilitySystem {
         #endregion
 
         #region Movement Logic
+        public override void Startup(EntityBody entityBody, AbilityData data) {
+            GenericMovementData pmd = (GenericMovementData)data;
+            if (pmd.isGrounded) entityBody.iAbility.OnAbilityEvent(onHitGround);
+            if (!pmd.isGrounded && !pmd.isGliding) entityBody.iAbility.OnAbilityEvent(onFreeFall);
+        }
         public override void FrameEvent(AbilityData data) {
             GenericMovementData pmd = (GenericMovementData)data;
             pmd.queueJump = Mathf.Clamp(Time.deltaTime, 0, 0.2f);
@@ -100,7 +105,7 @@ namespace AbilitySystem {
                 inpVals.IsRunning
             );
             Gravity(moveData, entityBody);
-            AnimateAbility(moveData, entityBody.animatorManager);
+            AnimateAbility(entityBody, moveData);
 
             entityBody.iAbility.OnMoveEntity(moveData.velocity * Time.deltaTime);
             return true;
@@ -108,7 +113,7 @@ namespace AbilitySystem {
         public override bool ChargeMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             GenericMovementData moveData = (GenericMovementData)data;
             if (moveData.chargeDirection == Vector3.zero) {
-                moveData.chargeDirection = entityBody.modelPrefab.transform.forward;
+                moveData.chargeDirection = entityBody.animatorManager.transform.forward;
                 moveData.chargeDirection.y = 0;
             }
             moveData.velocity = moveData.chargeDirection.normalized * chargeSpeed;
@@ -173,7 +178,7 @@ namespace AbilitySystem {
                 entityBody.feetSphereArea.radius,
                 groundLayers
             ) && pmd.fallSpeed <= 0.1f;
-            if (!pmd.isGrounded && hitGround) {
+            if (hitGround && !pmd.isGrounded) {
                 entityBody.iAbility.OnAbilityEvent(onHitGround);
                 pmd.isGrounded = true;
             } else {
@@ -202,10 +207,12 @@ namespace AbilitySystem {
             pmd.isGliding = false;
         }
         private void OnArial(EntityBody entityBody, GenericMovementData pmd) {
-            if (pmd.hasAlreadyJumped)
+            if (pmd.isJumpingButtonPressed)
                 JumpInputArial(entityBody, pmd);
-            else
+            else {
                 pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, -maxFallSpeed, gravity * Time.deltaTime);
+                entityBody.iAbility.OnAbilityEvent(onFreeFall);
+            }
         }
         private void JumpInputArial(EntityBody entityBody, GenericMovementData pmd) {
 
@@ -242,10 +249,10 @@ namespace AbilitySystem {
             pmd.hasAlreadyJumped = true;
         }
 
-        protected void AnimateAbility(GenericMovementData moveData, AnimatorManager anim) {
+        protected void AnimateAbility(EntityBody entityBody, GenericMovementData moveData) {
             float delta = Mathf.Clamp01(new Vector3(moveData.velocity.x, 0, moveData.velocity.z).magnitude / runSpeed);
 
-            anim.SetMovement(delta, Mathf.Lerp(maxFallSpeed, -maxFallSpeed, moveData.fallSpeed), moveData.isGrounded);
+            entityBody.animatorManager.SetMovement(delta, Mathf.Lerp(maxFallSpeed, -maxFallSpeed, moveData.fallSpeed), moveData.isGrounded);
         }
 
         public override bool PassEvent(EntityBody entityBody, AbilityData data) {

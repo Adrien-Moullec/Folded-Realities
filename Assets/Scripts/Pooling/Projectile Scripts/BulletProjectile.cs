@@ -10,7 +10,7 @@ namespace AbilitySystem {
         public override void GetIPoolObj(EntityBody body) {
             gameObject.SetActive(true);
             entityBody = body;
-            direction = entityBody.modelPrefab.transform.forward;
+            direction = entityBody.bodyHolder.transform.forward;
             transform.position = body.bodyHolder.transform.position;
             entityTeam = body == null ? EntityTeam.None : body.iAbility.GetEntityTeam;
         }

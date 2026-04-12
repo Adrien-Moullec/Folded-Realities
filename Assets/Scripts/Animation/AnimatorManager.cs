@@ -20,7 +20,10 @@ namespace AbilitySystem {
         public const string fallState = "Fall";
         #endregion
 
-        private Dictionary<int, AnimatorFunctions> animatorFunctionList = new();
+        private (int layer, AnimatorFunctions state)[] layers = new (int layer, AnimatorFunctions)[] {
+            (0, new AnimatorFunctions("",null,null,null,null)),
+            (1, new AnimatorFunctions("",null,null,null,null))
+        };
 
         void Awake() {
             animator = GetComponent<Animator>();
@@ -35,72 +38,50 @@ namespace AbilitySystem {
         public IEnumerator InitiateOneOffAnimation(
             Action startF,
             Action<float> updateF,
-            Action<AbilityAnimationData> eventF,
+            Action<AbilityAnimationEventData> eventF,
             Action endF,
             AnimationType animType,
-            bool enableStateOverride = true
+            bool overrideState
         ) {
-            string state = animType switch {
-                AnimationType.TransitionIn => "TransformIn",
-                AnimationType.TransitionOut => "TransformOut",
-                AnimationType.Attack1 => "Attack1",
-                _ => null
-            };
+            (int stateHashCode, int layer) info = (Animator.StringToHash(animType.ToString()), 0);
 
-            if (string.IsNullOrEmpty(state))
-                yield break;
-
-            if (!TryStartAnimation(state, enableStateOverride, out int hashCode))
+            if (!CanStartAnimation(info))
                 yield break;
 
             // If already playing, stop it first
-            if (animatorFunctionList.ContainsKey(hashCode)) {
-                OnEndAnim(hashCode);
-                Debug.Log("Force End state " + state);
+            if (layers[info.layer].state.currentState != "") {
+                OnEndAnim(info.stateHashCode, 0);
+                yield return null;
             }
 
-            Debug.Log("Play State " + state);
-
-            animator.CrossFade(state, 0);
-
-            animatorFunctionList[hashCode] =
-                new AnimatorFunctions(startF, updateF, eventF, endF);
-
-            //startF?.Invoke();
-
-            // Wait until animation is removed
-            while (animatorFunctionList.ContainsKey(hashCode))
-                yield return null;
+            layers[info.layer].state = new AnimatorFunctions(animType.ToString(), startF, updateF, eventF, endF);
+            animator.CrossFade(animType.ToString(), 0);
         }
 
-        bool TryStartAnimation(string stateName, bool overrideState, out int hashCode) {
-            hashCode = Animator.StringToHash(stateName);
+        bool CanStartAnimation((int hashCode, int layer) info) {
 
-            if (string.IsNullOrEmpty(stateName))
-                return false;
-
-            if (animatorFunctionList.ContainsKey(hashCode) && !overrideState) {
-                Debug.Log("Animation already playing and override disabled");
+            if (layers[info.layer].state.currentState != "") { // || animator.HasState(0, hashCode)) {
+                Debug.Log("Animation already playing and override disabled " + layers[info.layer].state.currentState);
                 return false;
             }
-
             return true;
         }
 
-        public void OnStartAnim(int hashCode) {
-            animatorFunctionList[hashCode].startFunction?.Invoke();
-            animatorFunctionList[hashCode].updateFunction?.Invoke(0);
+        public void OnStartAnim(int hashCode, int layerIndex) {
+            layers[layerIndex].state.startFunction?.Invoke();
+            layers[layerIndex].state.updateFunction?.Invoke(0);
         }
-        public void OnUpdateAnim(int hashCode, float delta) {
-            animatorFunctionList[hashCode].updateFunction?.Invoke(delta);
+        public void OnUpdateAnim(int hashCode, int layerIndex, float delta) {
+            layers[layerIndex].state.updateFunction?.Invoke(delta);
         }
-        public void OnEndAnim(int hashCode) {
-            animatorFunctionList[hashCode].updateFunction?.Invoke(1);
-            animatorFunctionList[hashCode].endFunction?.Invoke();
-            animatorFunctionList.Remove(hashCode);
+        public void OnEndAnim(int hashCode, int layerIndex) {
+            layers[layerIndex].state.updateFunction?.Invoke(1);
+            layers[layerIndex].state.endFunction?.Invoke();
+            layers[layerIndex].state = new AnimatorFunctions("", null, null, null, null);
+            Debug.Log("Ended - " + layerIndex + ":" + layers[layerIndex].state.currentState);
         }
-        public void ReceiveEvent(int hashCode, AnimationEvent animationEvent) {
-            animatorFunctionList[hashCode].eventFunction?.Invoke(new AbilityAnimationData(animationEvent));
+        public void ReceiveEvent(int hashCode, int layerIndex, AnimationEvent animationEvent) {
+            layers[layerIndex].state.eventFunction?.Invoke(new AbilityAnimationEventData(animationEvent));
         }
         #endregion
     }

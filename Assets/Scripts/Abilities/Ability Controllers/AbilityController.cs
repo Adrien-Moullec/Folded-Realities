@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 
 namespace AbilitySystem {
-    [RequireComponent(typeof(AnimatorManager))]
     public abstract class AbilityController : MonoBehaviour, IAbility, IHealth {
         [Header("Team")]
         [Tooltip("The 'team' the entity is on.")]

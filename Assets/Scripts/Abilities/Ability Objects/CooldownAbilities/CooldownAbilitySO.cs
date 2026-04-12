@@ -28,6 +28,7 @@ namespace AbilitySystem {
             entityBody.iAbility.GetAbilityController.StartCoroutine(UseAbility(entityBody, cdd));
             return true;
         }
+        public override void Startup(EntityBody entityBody, AbilityData data) { }
         public override bool PassEvent(EntityBody entityBody, AbilityData data) {
             data.isHoldingInput = false;
             return true;
@@ -50,7 +51,7 @@ namespace AbilitySystem {
         #endregion
 
         #region Ability Logic
-        public override void AnimationEvent(AbilityAnimationData animationData, EntityBody entityBody, AbilityData abilityData) {
+        public override void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData) {
 
         }
         protected IEnumerator UseAbility(EntityBody entityBody, CooldownData data) {
@@ -64,10 +65,12 @@ namespace AbilitySystem {
             yield return entityBody.animatorManager.InitiateOneOffAnimation(
                 null,
                 null,
-                (AbilityAnimationData animationData) => AnimationEvent(animationData, entityBody, data),
+                (AbilityAnimationEventData animationData) => AnimationEvent(animationData, entityBody, data),
                 null,
-                attackAnimation
+                attackAnimation,
+                false
             );
+            yield return null;
         }
         #endregion
     }
@@ -77,11 +80,14 @@ namespace AbilitySystem {
         [SerializeField] public CooldownAbilitySO abilitySO;
 
         public override void Activate(EntityBody entityBody, bool abilityPressed) {
-            if (abilityPressed) abilitySO.Execute(entityBody, AbilityData);
-            else abilitySO.PassEvent(entityBody, AbilityData);
+            if (abilityPressed) abilitySO?.Execute(entityBody, AbilityData);
+            else abilitySO?.PassEvent(entityBody, AbilityData);
         }
+        public override void StartUp(EntityBody entityBody) =>
+            abilitySO?.Startup(entityBody, AbilityData);
+
         public override void FrameEvent() =>
-            abilitySO.FrameEvent(AbilityData);
+            abilitySO?.FrameEvent(AbilityData);
 
         public CooldownAbilitySummary(CooldownAbilitySO m, EntityBody eb) {
             abilitySO = m;

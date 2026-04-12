@@ -17,8 +17,10 @@ namespace AbilitySystem {
                 default: Debug.LogError("No correct movement types"); return false;
             }
         }
+        public override void Startup(EntityBody entityBody, AbilityData data) {
+        }
         public override void FrameEvent(AbilityData data) { }
-        public override void AnimationEvent(AbilityAnimationData animationData, EntityBody entityBody, AbilityData abilityData) {
+        public override void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData) {
             throw new NotImplementedException();
         }
         public abstract bool NormalMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals);
@@ -43,6 +45,10 @@ namespace AbilitySystem {
 
         public override void FrameEvent() =>
             movementSO?.FrameEvent(AbilityData);
+
+        public override void StartUp(EntityBody entityBody) {
+            movementSO?.Startup(entityBody, AbilityData);
+        }
 
         public MovementAbilitySummary(MovementSO m, EntityBody eb) {
             movementSO = m;

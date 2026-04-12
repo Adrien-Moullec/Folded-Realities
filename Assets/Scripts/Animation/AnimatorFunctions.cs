@@ -7,13 +7,15 @@ using UnityEngine;
 
 namespace AbilitySystem {
     [Serializable]
-    public struct AnimatorFunctions {
+    public class AnimatorFunctions {
+        public string currentState;
         public Action startFunction;
-        public Action<AbilityAnimationData> eventFunction;
+        public Action<AbilityAnimationEventData> eventFunction;
         public Action<float> updateFunction;
         public Action endFunction;
 
-        public AnimatorFunctions(Action startF, Action<float> updateF, Action<AbilityAnimationData> eventF, Action endF) {
+        public AnimatorFunctions(string currentState, Action startF, Action<float> updateF, Action<AbilityAnimationEventData> eventF, Action endF) {
+            this.currentState = currentState;
             startFunction = startF;
             updateFunction = updateF;
             eventFunction = eventF;

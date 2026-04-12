@@ -19,7 +19,7 @@ namespace AbilitySystem {
             yield return AttackAnimation(entityBody, data, AnimationType.Attack1);
         }
 
-        public override void AnimationEvent(AbilityAnimationData animationData, EntityBody entityBody, AbilityData abilityData) {
+        public override void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData) {
             Damage(entityBody);
         }
 

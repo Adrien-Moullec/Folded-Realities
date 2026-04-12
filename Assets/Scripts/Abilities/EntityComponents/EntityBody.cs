@@ -9,15 +9,12 @@ namespace AbilitySystem {
         [Header("Body")]
         [Tooltip("Gameobject that parents the body prefab.")]
         public GameObject bodyHolder;
-        [Tooltip("Gameobject of the prefab body.")]
-        public GameObject modelPrefab;
         [Tooltip("Gameobject that has the Collider for the feet collisions.")]
         public SphereCollider feetSphereArea;
         [Tooltip("Attack cube area.")]
         public BoxCollider attackCubeArea;
-
-        [Space]
-        [HideInInspector] public AnimatorManager animatorManager;
+        [Tooltip("AnimatorManager.")]
+        public AnimatorManager animatorManager;
 
         [Space]
         [Header("Ability References")]

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace AbilitySystem {
     [CreateAssetMenu(fileName = "ChargeAttack", menuName = MenuAssetNames.CooldownAbility + "/Charge Attack")]
     public class ChargeAttack : CooldownAbilitySO {
-        [SerializeField, Min(0)] int chargeDamage = 10;
+        //[SerializeField, Min(0)] int chargeDamage = 10;
         [SerializeField, Range(0, 2)] float maxChargeDuration = 1;
 
         public override AbilityData AbilityDataSetup(EntityBody entityBody) {
@@ -20,7 +20,7 @@ namespace AbilitySystem {
             float time = 0;
             controlValues.isOverrideActive = true;
             controlValues.SetMovementTypeToggle(MovementType.Charge, true);
-            controlValues.SetDirection(entityBody.modelPrefab.transform.forward, true);
+            controlValues.SetDirection(entityBody.bodyHolder.transform.forward, true);
             while (time < maxChargeDuration) {
                 time += Time.deltaTime;
                 yield return null;
