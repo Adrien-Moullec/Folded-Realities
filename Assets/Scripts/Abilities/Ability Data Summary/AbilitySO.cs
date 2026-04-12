@@ -14,17 +14,19 @@ namespace AbilitySystem {
 
         #region Data Setup
         public abstract AbilityData AbilityDataSetup(EntityBody entityBody);
+        public abstract void Startup(EntityBody entityBody, AbilityData data);
         public virtual float AbilityCost() { return 0; }
         #endregion
 
         #region Abilities
-        public abstract void AnimationEvent(AbilityAnimationData animationData, EntityBody entityBody, AbilityData abilityData);
+        public abstract void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData);
         #endregion
     }
     [Serializable]
     public abstract class AbilitySummary {
         public AbilityData AbilityData;
         public abstract void Activate(EntityBody entityBody, bool AbilityPressed);
+        public abstract void StartUp(EntityBody entityBody);
         public abstract void FrameEvent();
     }
 }

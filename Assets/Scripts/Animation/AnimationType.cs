@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace AbilitySystem {
     public enum AnimationType {
-        TransitionIn,
-        TransitionOut,
+        TransformIn,
+        TransformOut,
         Attack1,
     }
 }

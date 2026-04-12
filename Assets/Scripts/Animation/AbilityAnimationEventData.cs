@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace AbilitySystem {
     [Serializable]
-    public struct AbilityAnimationData {
+    public struct AbilityAnimationEventData {
         public string a_functionName;
         public float a_float;
         public int a_int;
         public string a_string;
         public UnityEngine.Object a_Object;
 
-        public AbilityAnimationData(AnimationEvent animationEvent) {
+        public AbilityAnimationEventData(AnimationEvent animationEvent) {
             a_functionName = animationEvent.functionName;
             a_float = animationEvent.floatParameter;
             a_int = animationEvent.intParameter;
