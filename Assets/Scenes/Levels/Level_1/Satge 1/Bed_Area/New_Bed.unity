@@ -7830,7 +7830,7 @@ GameObject:
   - component: {fileID: 252890613}
   - component: {fileID: 252890612}
   m_Layer: 0
-  m_Name: BinCamera
+  m_Name: SideOfBed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7845,10 +7845,11 @@ Transform:
   m_GameObject: {fileID: 252890610}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -213, y: 96.643135, z: 43.11738}
+  m_LocalPosition: {x: -213, y: 96.643135, z: 47.2}
   m_LocalScale: {x: 1, y: 6.5632, z: 48}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 747839343}
   m_Father: {fileID: 1133679893}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &252890612
@@ -7864,13 +7865,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 0
-  mainCamera: {fileID: 0}
-  cameraPoint: {fileID: 0}
+  mainCamera: {fileID: 719968475}
+  cameraPoint: {fileID: 747839343}
   moveSpeed: 5
   useZoom: 0
   targetZoom: 5
   zoomSpeed: 5
-  playerController: {fileID: 0}
+  playerController: {fileID: 1229388549}
   freezePlayer: 0
   freezeTime: 2
   lookTarget: {fileID: 0}
@@ -7904,7 +7905,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 252890610}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -69274,15 +69275,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -20.44
+      value: -21.8
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.37
+      value: -3.5
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -44.77
+      value: -48.2
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -71382,7 +71383,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &703882640
 Transform:
   m_ObjectHideFlags: 0
@@ -72285,6 +72286,53 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &747839342
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 747839343}
+  - component: {fileID: 747839344}
+  m_Layer: 0
+  m_Name: CamPoint2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &747839343
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747839342}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.028634999, y: 0.7304773, z: 0.030686332, w: 0.68164605}
+  m_LocalPosition: {x: -20.03, y: 0.253, z: 0.076}
+  m_LocalScale: {x: 0.024806207, y: 0.15192203, z: 0.11536177}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 252890611}
+  m_LocalEulerAnglesHint: {x: -4.811, y: 93.961, z: 0}
+--- !u!114 &747839344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747839342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b58cb512ca422af4e92927bdb7a22e4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fov: 100
+  range: 20
+  gizmoColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1001 &749881343
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -119574,7 +119622,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1133679893
 Transform:
   m_ObjectHideFlags: 0
