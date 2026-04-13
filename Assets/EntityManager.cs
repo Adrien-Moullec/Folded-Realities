@@ -29,6 +29,7 @@ public class EntityManager : MonoBehaviour {
         return abilityControllers;
     }
 }
+#if UNITY_EDITOR
 [CustomEditor(typeof(EntityManager))]
 [CanEditMultipleObjects]
 public class EntityManagerEditor : Editor {
@@ -40,3 +41,4 @@ public class EntityManagerEditor : Editor {
         }
     }
 }
+#endif
