@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class BossEnemy : MonoBehaviour {
     public float moveSpeed = 4f;
@@ -10,26 +11,32 @@ public class BossEnemy : MonoBehaviour {
     public Transform shootPoint;
 
     public float shootInterval = 2f;
+    public float shootPauseTime = 1.2f;
 
     public Transform player;
 
     private float timer;
     private bool movingRight = true;
+    private bool isAttacking = false;
 
-    void Update() {
-        Move();
-
-        timer += Time.deltaTime;
-
-        if (timer >= shootInterval) {
-            ShootAtPlayerPlatform();
-            timer = 0f;
-        }
-    }
     float centerX;
 
     void Start() {
         centerX = transform.position.x;
+        Debug.Log("Boss started");
+    }
+
+    void Update() {
+        if (!isAttacking) {
+            Move();
+
+            timer += Time.deltaTime;
+
+            if (timer >= shootInterval) {
+                StartCoroutine(AttackRoutine());
+                timer = 0f;
+            }
+        }
     }
 
     void Move() {
@@ -52,24 +59,58 @@ public class BossEnemy : MonoBehaviour {
         transform.position = pos;
     }
 
-    void ShootAtPlayerPlatform() {
-        if (projectilePrefab == null || shootPoint == null || player == null)
+    IEnumerator AttackRoutine() {
+        isAttacking = true;
+
+        Debug.Log("Boss attacking");
+
+        yield return new WaitForSeconds(shootPauseTime);
+
+        ShootAtNearestPlatform();
+
+        yield return new WaitForSeconds(0.3f);
+
+        isAttacking = false;
+    }
+
+    void ShootAtNearestPlatform() {
+        if (projectilePrefab == null || shootPoint == null || player == null) {
+            Debug.LogError("Missing references");
             return;
+        }
 
-        RaycastHit hit;
+        GameObject[] platforms = GameObject.FindGameObjectsWithTag("Platform");
 
-        if (Physics.Raycast(player.position, Vector3.down, out hit, 20f)) {
-            Debug.DrawRay(player.position, Vector3.down * 20f, Color.red, 1f);
+        if (platforms.Length == 0) {
+            Debug.LogError("No platforms found");
+            return;
+        }
 
-            if (hit.collider.CompareTag("Platform")) {
-                GameObject proj = Instantiate(projectilePrefab, shootPoint.position, Quaternion.identity);
+        Transform closestPlatform = null;
+        float closestDistance = Mathf.Infinity;
 
-                BossProjectile bp = proj.GetComponent<BossProjectile>();
+        foreach (GameObject p in platforms) {
+            float dist = Vector3.Distance(player.position, p.transform.position);
 
-                if (bp != null) {
-                    bp.SetTarget(hit.collider.transform.position + Vector3.up * 0.5f);
-                }
+            if (dist < closestDistance) {
+                closestDistance = dist;
+                closestPlatform = p.transform;
             }
+        }
+
+        if (closestPlatform == null) {
+            Debug.LogWarning("No platform selected");
+            return;
+        }
+
+        Debug.Log("Targeting platform: " + closestPlatform.name);
+
+        GameObject proj = Instantiate(projectilePrefab, shootPoint.position, Quaternion.identity);
+
+        BossProjectile bp = proj.GetComponent<BossProjectile>();
+
+        if (bp != null) {
+            bp.SetTarget(closestPlatform);
         }
     }
 }

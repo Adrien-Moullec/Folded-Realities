@@ -8,6 +8,20 @@ public class TeleportTrigger : MonoBehaviour {
     [SerializeField] private GameObject phase1;
     [SerializeField] private GameObject phase2;
 
+    [Header("Camera")]
+    [SerializeField] private Transform bossCamPoint;
+
+    private Camera mainCam;
+    private CameraFocus focusScript;
+
+    private void Start() {
+        mainCam = Camera.main;
+
+        if (mainCam != null) {
+            focusScript = mainCam.GetComponent<CameraFocus>();
+        }
+    }
+
     private void OnTriggerEnter(Collider other) {
         if (!other.CompareTag("Player")) {
             return;
@@ -33,10 +47,23 @@ public class TeleportTrigger : MonoBehaviour {
             phase2.SetActive(true);
         }
 
-        GameObject[] debris = GameObject.FindGameObjectsWithTag("Debris");
+        if (focusScript != null) {
+            focusScript.enabled = false;
+        }
 
+        if (mainCam != null && bossCamPoint != null) {
+            mainCam.transform.position = bossCamPoint.position;
+            mainCam.transform.rotation = bossCamPoint.rotation;
+        }
+
+        GameObject[] debris = GameObject.FindGameObjectsWithTag("Debris");
         foreach (GameObject d in debris) {
             d.SetActive(false);
+        }
+
+        GameObject[] wind = GameObject.FindGameObjectsWithTag("Wind");
+        foreach (GameObject w in wind) {
+            w.SetActive(false);
         }
     }
 }
