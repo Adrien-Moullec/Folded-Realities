@@ -7,45 +7,29 @@ using UnityEngine;
 namespace AbilitySystem {
     [CreateAssetMenu(fileName = "Light Attack", menuName = MenuAssetNames.AttackAbility + "/Light attack")]
     public class LightAttack : CooldownAbilitySO {
-        [Header("Animation")]
-        [Tooltip("The animation that will play for this ability.")]
-        [SerializeField] AbilityAnimation attackAnim;
         [Tooltip("The effected animated transforms and the animation timeline point of the game mechanic event.")]
         [SerializeField, Range(0, 1)] float deltaEvent;
 
         [SerializeField] int damage = 10;
-
-        public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() =>
-            new (AbilityAnimation, WrapMode)[]
-            {
-                (attackAnim, WrapMode.ClampForever)
-            };
-
         public override AbilityData AbilityDataSetup(EntityBody entityBody) {
             return new CooldownData(charges, cooldown);
         }
-        public override bool PassEvent(EntityBody entityBody, AbilityData data) {
-            throw new NotImplementedException();
-        }
 
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
-
-            yield return entityBody.iAbility.RunTimelineWithEvents(
-                new TimelineEvent[] {
-                    new TimelineEvent(entityBody.animationComponent, attackAnim, 0, attackAnim.length)
-                },
-                new DeltaEvent[] {
-                    new DeltaEvent(() => Damage(entityBody), deltaEvent)
-                }
-            );
+            yield return AttackAnimation(entityBody, data, AnimationType.Attack1);
         }
+
+        public override void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData) {
+            Damage(entityBody);
+        }
+
 
         protected override void OnHold(EntityBody entityBody, CooldownData data) {
-            throw new NotImplementedException();
+
         }
 
-        protected override void RePress(EntityBody entityBody, CooldownData data) {
-            throw new NotImplementedException();
+        protected override void OnPressWhileUsing(EntityBody entityBody, CooldownData data) {
+
         }
 
         private void Damage(EntityBody entityBody) {
@@ -53,7 +37,14 @@ namespace AbilitySystem {
             foreach (var n in colliders)
                 if (n.transform.TryGetComponent(out IHealth iHealth))
                     if (iHealth != entityBody.iHealth)
-                        iHealth.Damage(damage);
+                        iHealth.Damage(
+                            new EntityDamage(
+                                damage,
+                                entityBody,
+                                entityBody.iAbility.GetEntityTeam,
+                                EntityDamageType.Melee
+                            )
+                        );
         }
     }
 }

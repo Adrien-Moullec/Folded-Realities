@@ -5,64 +5,45 @@ using UnityEngine;
 namespace AbilitySystem {
     [CreateAssetMenu(fileName = "ChargeAttack", menuName = MenuAssetNames.CooldownAbility + "/Charge Attack")]
     public class ChargeAttack : CooldownAbilitySO {
-        [Header("Animations")]
-        [Tooltip("The animation that will play for this ability.")]
-        [SerializeField] AbilityAnimation chargeUpChargeAnim;
-        [SerializeField] AbilityAnimation chargeAnim;
-        [SerializeField] AbilityAnimation chargeDownChargeAnim;
-        [SerializeField, Min(0)] int chargeDamage = 10;
-        [SerializeField, Range(0, 10)] float chargeUpDuration = 1;
+        //[SerializeField, Min(0)] int chargeDamage = 10;
         [SerializeField, Range(0, 2)] float maxChargeDuration = 1;
-        [SerializeField, Range(2, 10)] float chargeDownDuration = 1;
-
-        public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() =>
-            new (AbilityAnimation, WrapMode)[]
-            {
-                (chargeAnim, WrapMode.ClampForever),
-                (chargeUpChargeAnim, WrapMode.Loop)
-            };
 
         public override AbilityData AbilityDataSetup(EntityBody entityBody) {
             ChargeAttackData cad = new ChargeAttackData(charges, cooldown);
-            // cad.chargeTimeline = new TimelineEvent[] {
-            //new TimelineEvent(entityBody.animationComponent, chargeUpChargeAnim, 0, chargeUpChargeAnim.length),
-            //new TimelineEvent(entityBody.animationComponent, chargeUpChargeAnim, chargeUpChargeAnim.length, chargeUpChargeAnim.length + maxChargeDuration, false, () => OnCharge(entityBody, cad), () => StopCharge(entityBody, cad)),
-            //new TimelineEvent(entityBody.animationComponent, chargeUpChargeAnim, 0, 1),
-            //new TimelineEvent(entityBody.animationComponent, chargeUpChargeAnim, 0, 1, false, () => OnCharge(entityBody, cad), () => StopCharge(entityBody, cad)),
-            //};
             return cad;
         }
 
 
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
             ChargeAttackData cad = (ChargeAttackData)data;
+            AbilityControllerValues controlValues = entityBody.iAbility.GetInputValues;
             float time = 0;
-            MovementType mt = entityBody.iAbility.GetInputValues.movementType;
-            entityBody.iAbility.GetInputValues.movementType = MovementType.Charge;
-            if (entityBody.iAbility.GetInputValues.inputDirection == Vector3.zero)
-                entityBody.iAbility.GetInputValues.inputDirection = entityBody.modelPrefab.transform.forward;
-            Debug.Log("Activate charge");
+            controlValues.isOverrideActive = true;
+            controlValues.SetMovementTypeToggle(MovementType.Charge, true);
+            controlValues.SetDirection(entityBody.bodyHolder.transform.forward, true);
             while (time < maxChargeDuration) {
                 time += Time.deltaTime;
                 yield return null;
             }
-            entityBody.iAbility.GetInputValues.movementType = mt;
+            controlValues.isOverrideActive = false;
         }
 
         protected override void OnHold(EntityBody entityBody, CooldownData data) {
-            throw new System.NotImplementedException();
+
         }
 
-        protected override void RePress(EntityBody entityBody, CooldownData data) {
+        protected override void OnPressWhileUsing(EntityBody entityBody, CooldownData data) {
 
-            throw new System.NotImplementedException();
         }
 
         public override bool PassEvent(EntityBody entityBody, AbilityData data) {
-            throw new System.NotImplementedException();
+            return true;
         }
+
+        public override void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData) {
+        }
+
         public class ChargeAttackData : CooldownData {
-            //public TimelineEvent[] chargeTimeline;
             public ChargeAttackData(int charges, float cooldown) : base(charges, cooldown) {
 
             }

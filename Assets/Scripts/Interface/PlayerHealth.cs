@@ -1,3 +1,5 @@
+using AbilitySystem;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,8 +22,8 @@ public class PlayerHealth : MonoBehaviour, IHealth {
         UpdateHearts();
     }
 
-    public void Damage(float amount) {
-        currentHealth -= Mathf.RoundToInt(amount);
+    public void Damage(EntityDamage damage) {
+        currentHealth -= Mathf.RoundToInt(damage.amount);
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
         UpdateHearts();
@@ -31,8 +33,8 @@ public class PlayerHealth : MonoBehaviour, IHealth {
         }
     }
 
-    public void Heal(float amount) {
-        currentHealth += Mathf.RoundToInt(amount);
+    public void Heal(EntityDamage heal) {
+        currentHealth += Mathf.RoundToInt(heal.amount);
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
         UpdateHearts();

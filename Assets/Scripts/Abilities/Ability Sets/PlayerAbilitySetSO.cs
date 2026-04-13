@@ -5,38 +5,26 @@ using UnityEngine;
 namespace AbilitySystem {
     [CreateAssetMenu(fileName = "Ability Set", menuName = MenuAssetNames.AbilitySet + "/Player Ability Set", order = 0)]
     public class PlayerAbilitySetSO : AbilitySetSO {
-        [SerializeField] public CooldownAbilitySO light;
-        [SerializeField] public CooldownAbilitySO heavy;
         [SerializeField] public CooldownAbilitySO primary;
-
-        [Space]
-        [Header("Transition options")]
-        [SerializeField] public AbilityAnimation transitionAnimation;
-
-        public override void SetupAnimations(Animation anim) {
-            base.SetupAnimations(anim);
-            transitionAnimation.Setup(anim, WrapMode.ClampForever);
-            if (light != null) AssignAnimations(anim, light);
-            if (heavy != null) AssignAnimations(anim, heavy);
-            if (primary != null) AssignAnimations(anim, primary);
-        }
+        [SerializeField] public CooldownAbilitySO secondary;
+        [SerializeField] public CooldownAbilitySO tertiary;
     }
 
     [Serializable]
     public class PlayerAbilitySet : AbilitySet {
-        [SerializeField] public AbilityAnimation transitionAnimation; [SerializeField] public CooldownAbilitySummary light;
-        [SerializeField] public CooldownAbilitySummary heavy;
         [SerializeField] public CooldownAbilitySummary primary;
+        [SerializeField] public CooldownAbilitySummary secondary;
+        [SerializeField] public CooldownAbilitySummary tertiary;
 
-        public PlayerAbilitySet(PlayerAbilitySetSO abilitySet, EntityBody eb) : base(abilitySet.name, abilitySet.movement, abilitySet.healthSettings, eb) {
-            if (abilitySet.light != null)
-                light = new(abilitySet.light, eb);
-
-            if (abilitySet.heavy != null)
-                heavy = new(abilitySet.heavy, eb);
-
+        public PlayerAbilitySet(PlayerAbilitySetSO abilitySet, EntityBody eb) : base(abilitySet.abilitySetName, abilitySet.movement, abilitySet.healthSettings, eb) {
             if (abilitySet.primary != null)
                 primary = new(abilitySet.primary, eb);
+
+            if (abilitySet.secondary != null)
+                secondary = new(abilitySet.secondary, eb);
+
+            if (abilitySet.tertiary != null)
+                tertiary = new(abilitySet.tertiary, eb);
         }
     }
 }
