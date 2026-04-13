@@ -15,7 +15,7 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     removeConstantScaleCurves: 0
-    motionNodeName: 
+    motionNodeName: Torso
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -30,35 +30,6 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations:
-    - serializedVersion: 16
-      name: Kuhaku_Run.
-      takeName: Kuhaku_Run.
-      internalID: 8498131026618272491
-      firstFrame: 0
-      lastFrame: 39
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Kuhaku_Jump
       takeName: Kuhaku_Jump
@@ -129,7 +100,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -170,9 +141,122 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
-      transformMask: []
-      maskType: 3
+      events:
+      - time: 0.5013405
+        functionName: ReceiveEvent
+        data: Attack
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask:
+      - path: 
+        weight: 1
+      - path: ArmLeft.001
+        weight: 1
+      - path: ArmLeft.002
+        weight: 1
+      - path: ArmLeft.003
+        weight: 1
+      - path: ArmLeft.004
+        weight: 1
+      - path: eyes
+        weight: 1
+      - path: hair
+        weight: 1
+      - path: head
+        weight: 1
+      - path: Kuhaku
+        weight: 1
+      - path: Kuhaku/$Foot.L
+        weight: 1
+      - path: Kuhaku/$Foot.L/foot.L
+        weight: 1
+      - path: Kuhaku/$Foot.L/foot.L/foot.L_end
+        weight: 1
+      - path: Kuhaku/$Foot.L/foot.L/foot.L_end/foot.L_end_end
+        weight: 1
+      - path: Kuhaku/$Foot.R
+        weight: 1
+      - path: Kuhaku/$Foot.R/foot.R
+        weight: 1
+      - path: Kuhaku/$Foot.R/foot.R/foot.R_end
+        weight: 1
+      - path: Kuhaku/$Foot.R/foot.R/foot.R_end/foot.R_end_end
+        weight: 1
+      - path: Kuhaku/meta_root
+        weight: 1
+      - path: Kuhaku/meta_root/root
+        weight: 1
+      - path: Kuhaku/meta_root/root/root_end
+        weight: 1
+      - path: Kuhaku/meta_root/root/root_end/root_end_end
+        weight: 1
+      - path: Kuhaku/Pelvis_move
+        weight: 1
+      - path: Kuhaku/Pelvis_move/#Knee.L
+        weight: 1
+      - path: Kuhaku/Pelvis_move/#Knee.L/#Knee.L_end
+        weight: 1
+      - path: Kuhaku/Pelvis_move/#Knee.L/#Knee.L_end/#Knee.L_end_end
+        weight: 1
+      - path: Kuhaku/Pelvis_move/#Knee.R
+        weight: 1
+      - path: Kuhaku/Pelvis_move/#Knee.R/#Knee.R_end
+        weight: 1
+      - path: Kuhaku/Pelvis_move/#Knee.R/#Knee.R_end/#Knee.R_end_end
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Chest
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Chest/head
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Chest/head/head_end
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Chest/head/head_end/head_end_end
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Chest/Shoulder.L
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Chest/Shoulder.L/Arm.L
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Chest/Shoulder.L/Arm.L/hand.L
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Chest/Shoulder.L/Arm.L/hand.L/hand.L_end
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Chest/Shoulder.L/Arm.L/hand.L/hand.L_end/hand.L_end_end
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Chest/Shoulder.R
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Chest/Shoulder.R/Arm.R
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Chest/Shoulder.R/Arm.R/hand.R
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Chest/Shoulder.R/Arm.R/hand.R/hand.R_end
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Chest/Shoulder.R/Arm.R/hand.R/hand.R_end/hand.R_end_end
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Femur.L
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Femur.L/Tibia.L
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Femur.L/Tibia.L/Tibia.L_end
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Femur.L/Tibia.L/Tibia.L_end/Tibia.L_end_end
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Femur.R
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Femur.R/Tibia.R
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Femur.R/Tibia.R/Tibia.R_end
+        weight: 1
+      - path: Kuhaku/Pelvis_move/Pelvis/Femur.R/Tibia.R/Tibia.R_end/Tibia.R_end_end
+        weight: 1
+      - path: Legs
+        weight: 0
+      - path: Torso
+        weight: 1
+      maskType: 0
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
@@ -210,6 +294,64 @@ ModelImporter:
       internalID: 218193097674715383
       firstFrame: 0
       lastFrame: 29
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Kuhaku_Run.
+      takeName: Kuhaku_Run.
+      internalID: 5764872627436349046
+      firstFrame: 0
+      lastFrame: 39
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Kuhaku_Transform (1)
+      takeName: Kuhaku_Transform
+      internalID: 2407380069255136881
+      firstFrame: 0
+      lastFrame: 14
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -292,7 +434,7 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
-    rootMotionBoneName: 
+    rootMotionBoneName: Kuhaku
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
@@ -300,7 +442,7 @@ ModelImporter:
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 0
+  avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0

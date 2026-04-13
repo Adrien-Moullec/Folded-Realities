@@ -1,73 +1,73 @@
 using System;
 using System.Collections;
+using UnityEngine.Pool;
+using Unity.Mathematics;
 
 using UnityEngine;
-using UnityEngine.Pool;
+using Unity.VisualScripting;
 
 namespace AbilitySystem {
-
-    [CreateAssetMenu(fileName = "Projectile Ability", menuName = "Abilities/Projectiles/Generic Bullet")]
+    [CreateAssetMenu(fileName = "Projectile Ability", menuName = MenuAssetNames.Projectiles + "/Generic Bullet")]
     public class ProjectileAbility : CooldownAbilitySO {
 
         [Header("Projectile Management")]
+        [Tooltip("Info about the projectile pool.")]
         [SerializeField] protected ObjectPoolInfo projectilePoolInfo;
-        [SerializeField] protected AbilityAnimation projectileAnimation;
 
+        [Space]
         [Header("Projectile Settings")]
+        [Tooltip("The max speed of the projectile.")]
         [SerializeField] protected float projectileSpeed;
-        [SerializeField] protected float lifetime = 2f;
+        [Tooltip("The max amount of time that projectiles will stay spawned in.")]
+        [SerializeField] protected float shootInterval = 1f;
+        [SerializeField] protected float burstInterval = 0.25f;
+        [SerializeField, Min(1)] protected int burstAmount = 5;
+        [SerializeField] bool automaticShooting = false;
+        [SerializeField] protected float lifetime;
+
 
         #region Data Setup
-
-        public override AbilityData AbilityDataSetup(EntityBody entityBody) {
-            return new ProjectileData(entityBody, projectilePoolInfo, charges, cooldown);
-        }
-
-        public override (AbilityAnimation, WrapMode)[] AbilityAnimationsSetup() {
-            return new (AbilityAnimation, WrapMode)[] {
-                (projectileAnimation, WrapMode.ClampForever)
-            };
-        }
-
+        public override AbilityData AbilityDataSetup(EntityBody entityBody) => new ProjectileData(entityBody, projectilePoolInfo, charges, cooldown);
         #endregion
 
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
-
+            if (projectilePoolInfo.poolObject == null || (data.isHoldingInput && !automaticShooting)) yield break;
             ProjectileData pd = (ProjectileData)data;
 
-            PoolObject projectile = (PoolObject)pd.pooledProjectiles.Get();
+            yield return AttackAnimation(entityBody, data, AnimationType.Attack1);
 
-            Transform spawnPoint = entityBody.modelPrefab.transform;
-
-            projectile.transform.position = spawnPoint.position;
-            projectile.transform.rotation = spawnPoint.rotation;
-
-            Rigidbody rb = projectile.GetComponent<Rigidbody>();
-            if (rb != null) {
-                rb.linearVelocity = spawnPoint.forward * projectileSpeed;
+            /*
+            for (int i = 0; i < burstAmount; i++) {
+                entityBody.iAbility.GetAbilityController.StartCoroutine(Projectile(pd));
+                yield return new WaitForSeconds(burstInterval);
             }
 
-            yield return new WaitForSeconds(lifetime);
+            yield return new WaitForSeconds(shootInterval - burstInterval);
 
+            yield return null;*/
+        }
+        IEnumerator Projectile(ProjectileData pd) {
+            IPoolObjectAS projectile = pd.pooledProjectiles.Get();
+            yield return new WaitForSeconds(2);
             pd.pooledProjectiles.Release(projectile);
         }
 
-        public override bool PassEvent(EntityBody entityBody, AbilityData data) {
-            return true;
+        protected override void OnHold(EntityBody entityBody, CooldownData data) {
+
         }
 
-        protected override void OnHold(EntityBody entityBody, CooldownData data) { }
+        protected override void OnPressWhileUsing(EntityBody entityBody, CooldownData data) {
 
-        protected override void RePress(EntityBody entityBody, CooldownData data) { }
+        }
+
+        public override void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData) {
+            throw new NotImplementedException();
+        }
 
         [Serializable]
         public class ProjectileData : CooldownData {
-
             public ObjectPool<IPoolObjectAS> pooledProjectiles;
-
-            public ProjectileData(EntityBody entityBody, ObjectPoolInfo poolInfo, int charges, float cooldown)
-                : base(charges, cooldown) {
-
+            public ProjectileData(EntityBody entityBody, ObjectPoolInfo poolInfo, int charges, float cooldown) : base(charges, cooldown) {
                 pooledProjectiles = ObjectPoolInfo.CreateObjectPool(entityBody, poolInfo);
             }
         }

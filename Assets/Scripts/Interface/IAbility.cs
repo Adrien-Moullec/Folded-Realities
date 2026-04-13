@@ -9,7 +9,6 @@ namespace AbilitySystem {
         #endregion
 
         #region Ability Actions
-        public void ActivateIenumerator(IEnumerator enumerator);
         public void OnMoveEntity(Vector3 direction);
         public void OnRotateEntity(Vector3 direction);
         public void OnAbilityEvent(string eventMessage);
@@ -17,9 +16,9 @@ namespace AbilitySystem {
 
         #region Utility Functions
         public EntityBody GetEntityBody();
-        public IEnumerator RunTimelineWithEvents(TimelineEvent[] timelineInfo, DeltaEvent[] timelineEvents = null);
-        public IEnumerator RunLoop(TimelineEvent[] timelineInfo);
-        public AbilityInputValues GetInputValues { get; set; }
+        public EntityTeam GetEntityTeam { get; }
+        public AbilityControllerValues GetInputValues { get; set; }
+        public AbilityController GetAbilityController { get; }
         #endregion
     }
 }
