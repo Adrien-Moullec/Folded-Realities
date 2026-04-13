@@ -2,6 +2,7 @@ using System;
 
 using UnityEngine;
 using UnityEngine.Pool;
+using AbilitySystem;
 
 namespace AbilitySystem {
     public abstract class PoolObject : MonoBehaviour, IPoolObjectAS {
