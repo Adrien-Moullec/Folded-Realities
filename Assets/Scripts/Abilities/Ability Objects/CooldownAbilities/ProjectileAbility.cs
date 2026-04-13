@@ -60,6 +60,10 @@ namespace AbilitySystem {
 
         }
 
+        public override void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData) {
+            throw new NotImplementedException();
+        }
+
         [Serializable]
         public class ProjectileData : CooldownData {
             public ObjectPool<IPoolObjectAS> pooledProjectiles;

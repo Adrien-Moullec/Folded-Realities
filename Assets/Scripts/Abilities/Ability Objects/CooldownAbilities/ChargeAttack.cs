@@ -39,6 +39,10 @@ namespace AbilitySystem {
         public override bool PassEvent(EntityBody entityBody, AbilityData data) {
             return true;
         }
+
+        public override void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData) {
+        }
+
         public class ChargeAttackData : CooldownData {
             public ChargeAttackData(int charges, float cooldown) : base(charges, cooldown) {
 
