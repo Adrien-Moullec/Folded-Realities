@@ -1,8 +1,17 @@
+using System.Collections;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerLevelSpawn : MonoBehaviour {
     void Start() {
+        StartCoroutine(ApplySpawn());
+    }
+
+    IEnumerator ApplySpawn() {
+        yield return null;
+        yield return null;
+
         string savedScene = PlayerPrefs.GetString("SpawnScene", "");
 
         if (savedScene == SceneManager.GetActiveScene().name) {
@@ -13,6 +22,8 @@ public class PlayerLevelSpawn : MonoBehaviour {
             transform.position = new Vector3(x, y, z);
 
             PlayerPrefs.DeleteKey("SpawnScene");
+
+            Debug.Log("Spawn applied at: " + transform.position);
         }
     }
 }

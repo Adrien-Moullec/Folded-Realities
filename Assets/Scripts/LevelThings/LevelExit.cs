@@ -20,7 +20,7 @@ public class LevelExit : MonoBehaviour {
 
         Debug.Log("Player entered level exit.");
 
-        
+
         if (CollectiblesManager.Instance != null) {
             int coins = CollectiblesManager.Instance.GetCoinCount();
             PlayerPrefs.SetInt("FinalCoins", coins);
@@ -29,7 +29,7 @@ public class LevelExit : MonoBehaviour {
             Debug.LogWarning("CollectiblesManager not found!");
         }
 
-        
+
         if (useSpawnPoint) {
             PlayerPrefs.SetFloat("SpawnX", spawnPositionInNextScene.x);
             PlayerPrefs.SetFloat("SpawnY", spawnPositionInNextScene.y);
@@ -42,6 +42,6 @@ public class LevelExit : MonoBehaviour {
         }
 
         Debug.Log("Loading scene: " + nextSceneName);
-        SceneManager.LoadScene(nextSceneName);
+        SceneManager.LoadScene(1);
     }
 }
