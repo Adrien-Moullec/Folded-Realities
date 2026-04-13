@@ -43,16 +43,18 @@ namespace AbilitySystem {
                     frameEvents += i.playerAbilitySet.primary.FrameEvent;
                 if (i.playerAbilitySet.secondary?.abilitySO != null)
                     frameEvents += i.playerAbilitySet.secondary.FrameEvent;
-                if (i.playerAbilitySet.primary?.abilitySO != null)
-                    frameEvents += i.playerAbilitySet.primary.FrameEvent;
+                if (i.playerAbilitySet.tertiary?.abilitySO != null)
+                    frameEvents += i.playerAbilitySet.tertiary.FrameEvent;
             }
             SetNewSummary(playerSetsList[0]);
         }
         protected override void Update() {
             base.Update();
             currentAbilitySet?.playerAbilitySet?.movement?.Activate(currentAbilitySet.entityBody, true);
-            currentAbilitySet?.playerAbilitySet?.primary?.Activate(currentAbilitySet.entityBody, GetInputValues.isPrimaryAttack);
-            currentAbilitySet?.playerAbilitySet?.secondary?.Activate(currentAbilitySet.entityBody, GetInputValues.isSecondaryAttack);
+            currentAbilitySet?.playerAbilitySet?.primary?.Activate(currentAbilitySet.entityBody, GetInputValues.isPrimaryAbility);
+            currentAbilitySet?.playerAbilitySet?.secondary?.Activate(currentAbilitySet.entityBody, GetInputValues.isSecondaryAbility);
+            currentAbilitySet?.playerAbilitySet?.tertiary?.Activate(currentAbilitySet.entityBody, GetInputValues.isTertiaryAbility);
+            //Debug.Log()
         }
         public override void Die() {
             base.Die();
@@ -120,6 +122,9 @@ namespace AbilitySystem {
         public override void OnRotateEntity(Vector3 direction) {
             direction.y = 0;
             if (direction != Vector3.zero) currentAbilitySet.entityBody.bodyHolder.transform.forward = direction;
+        }
+        public override void OnEntityTrack(Vector3 location) {
+            Debug.Log("TRACK");
         }
         #endregion
 

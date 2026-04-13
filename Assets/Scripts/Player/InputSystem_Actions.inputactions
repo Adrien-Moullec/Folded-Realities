@@ -43,9 +43,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "PrimaryAttack",
+                    "name": "Ability1",
                     "type": "Button",
                     "id": "6c2ab1b8-8984-453a-af3d-a3c78ae1679a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Ability2",
+                    "type": "Button",
+                    "id": "34a93165-27b3-4bae-9a33-2638d9a14d58",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Ability3",
+                    "type": "Button",
+                    "id": "246718a9-23e2-455d-b4b4-62115d4b590a",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -82,15 +100,6 @@
                     "name": "RadialMenu",
                     "type": "Button",
                     "id": "5b3161d1-7fcc-4f4b-a082-36c839f805ea",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Ability1",
-                    "type": "Button",
-                    "id": "34a93165-27b3-4bae-9a33-2638d9a14d58",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -270,7 +279,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "PrimaryAttack",
+                    "action": "Ability1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -281,7 +290,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "PrimaryAttack",
+                    "action": "Ability1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -292,7 +301,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Touch",
-                    "action": "PrimaryAttack",
+                    "action": "Ability1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -303,7 +312,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Joystick",
-                    "action": "PrimaryAttack",
+                    "action": "Ability1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -314,7 +323,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "XR",
-                    "action": "PrimaryAttack",
+                    "action": "Ability1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -457,7 +466,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Ability1",
+                    "action": "Ability2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "22046656-109e-4733-ae12-22b7b1497559",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Ability3",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

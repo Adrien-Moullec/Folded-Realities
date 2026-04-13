@@ -1,16 +1,10 @@
 using UnityEngine;
 
-using System.Collections;
-using System.Linq;
-using System.Collections.Generic;
-
-using Unity.VisualScripting;
-
 namespace AbilitySystem {
     public abstract class AbilityController : MonoBehaviour, IAbility, IHealth {
         [Header("Team")]
         [Tooltip("The 'team' the entity is on.")]
-        [SerializeField] EntityTeam entityTeam;
+        [SerializeField] public EntityTeam entityTeam;
         public EntityTeam GetEntityTeam => entityTeam;
 
         [Header("Health")]
@@ -36,6 +30,7 @@ namespace AbilitySystem {
         #region Movement Interface
         public abstract void OnRotateEntity(Vector3 movement);
         public abstract void OnMoveEntity(Vector3 direction);
+        public abstract void OnEntityTrack(Vector3 location);
         #endregion
 
         #region Utility

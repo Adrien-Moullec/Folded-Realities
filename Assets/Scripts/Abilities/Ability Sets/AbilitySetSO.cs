@@ -12,6 +12,8 @@ namespace AbilitySystem {
         [SerializeField] public HealthSO healthSettings;
         [SerializeField] public MovementAbilitySummary movement;
 
+        public virtual void ExecuteBestAbility() { }
+
         public AbilitySet(string name, MovementSO movementSO, HealthSO healthSO, EntityBody eb) {
             abilitySetName = name;
 

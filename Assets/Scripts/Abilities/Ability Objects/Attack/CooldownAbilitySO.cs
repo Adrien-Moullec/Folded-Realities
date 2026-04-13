@@ -8,9 +8,11 @@ namespace AbilitySystem {
         [Header("Ability Settings")]
         [SerializeField, Range(0.1f, 20)] protected float cooldown;
         [SerializeField, Range(1, 5)] protected int charges;
+        protected bool animationPlaying = false;
 
         #region Call Logic
         public override bool Execute(EntityBody entityBody, AbilityData data) {
+            Debug.Log("EXECUTE");
             CooldownData cdd = (CooldownData)data;
             if (data.usingAbility) {
                 if (data.isHoldingInput)
@@ -18,13 +20,11 @@ namespace AbilitySystem {
                 else
                     OnPressWhileUsing(entityBody, cdd);
                 return false;
-            } else if (entityBody.UsingAbility || cdd.currentCharges <= 0 || data.isHoldingInput)
+            } else if (entityBody.UsingAbility || cdd.currentCharges <= 0 || data.isHoldingInput) {
+                Debug.Log("Can't Use: " + (entityBody.UsingAbility) + (cdd.currentCharges <= 0) + (data.isHoldingInput));
                 return false;
+            }
 
-            data.isHoldingInput = true;
-            data.usingAbility = true;
-            entityBody.UsingAbility = true;
-            cdd.currentCharges--;
             entityBody.iAbility.GetAbilityController.StartCoroutine(UseAbility(entityBody, cdd));
             return true;
         }
@@ -33,8 +33,12 @@ namespace AbilitySystem {
             data.isHoldingInput = false;
             return true;
         }
-        protected abstract void OnHold(EntityBody entityBody, CooldownData data);
-        protected abstract void OnPressWhileUsing(EntityBody entityBody, CooldownData data);
+        protected virtual void OnHold(EntityBody entityBody, CooldownData data) {
+            Debug.Log("OnHold");
+        }
+        protected virtual void OnPressWhileUsing(EntityBody entityBody, CooldownData data) {
+            Debug.Log("OnPressWhileUsing");
+        }
         public override void FrameEvent(AbilityData abData) {
             CooldownData data = (CooldownData)abData;
 
@@ -52,22 +56,30 @@ namespace AbilitySystem {
 
         #region Ability Logic
         protected IEnumerator UseAbility(EntityBody entityBody, CooldownData data) {
+            data.isHoldingInput = true;
+            data.usingAbility = true;
+            entityBody.UsingAbility = true;
+            data.currentCharges--;
+            Debug.Log("StartAbil");
             yield return Ability(entityBody, data);
+            Debug.Log("EndAbil");
             data.usingAbility = false;
             entityBody.UsingAbility = false;
             entityBody.MoveOverride = false;
         }
         protected abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
         protected virtual IEnumerator AttackAnimation(EntityBody entityBody, AbilityData data, AnimationType attackAnimation) {
+            animationPlaying = true;
             yield return entityBody.animatorManager.InitiateOneOffAnimation(
                 null,
                 null,
                 (AbilityAnimationEventData animationData) => AnimationEvent(animationData, entityBody, data),
-                null,
+                () => animationPlaying = false,
                 attackAnimation,
                 false
             );
-            yield return null;
+            while (animationPlaying)
+                yield return null;
         }
         public abstract void AnimationEvent(AbilityAnimationEventData animationEvent, EntityBody entityBody, AbilityData animationType);
         #endregion
