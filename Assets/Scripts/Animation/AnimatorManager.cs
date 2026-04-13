@@ -92,12 +92,9 @@ namespace AbilitySystem {
             for (int i = 0; i < animator.layerCount; i++) {
                 AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(i);
 
-                if (stateInfo.IsName(animationEvent.animatorClipInfo.clip.name)) {
-                    Debug.Log("Triggered from layer: " + i);
-                }
+                if (Animator.StringToHash(layers[i].state.currentState) == stateInfo.shortNameHash)
+                    layers[i].state.eventFunction?.Invoke(new AbilityAnimationEventData(animationEvent));
             }
-            //layers[layerIndex].state.eventFunction?.Invoke(new AbilityAnimationEventData(animationEvent));
-            Debug.Log("EVENT");
         }
         #endregion
     }

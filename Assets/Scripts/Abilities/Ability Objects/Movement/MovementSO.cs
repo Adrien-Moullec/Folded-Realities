@@ -20,9 +20,6 @@ namespace AbilitySystem {
         public override void Startup(EntityBody entityBody, AbilityData data) {
         }
         public override void FrameEvent(AbilityData data) { }
-        public override void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData) {
-            throw new NotImplementedException();
-        }
         public abstract bool NormalMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals);
         public abstract bool ChargeMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals);
         public abstract bool AutoTrackMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals);

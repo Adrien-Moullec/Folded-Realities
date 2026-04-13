@@ -51,9 +51,6 @@ namespace AbilitySystem {
         #endregion
 
         #region Ability Logic
-        public override void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData) {
-
-        }
         protected IEnumerator UseAbility(EntityBody entityBody, CooldownData data) {
             yield return Ability(entityBody, data);
             data.usingAbility = false;
@@ -72,6 +69,7 @@ namespace AbilitySystem {
             );
             yield return null;
         }
+        public abstract void AnimationEvent(AbilityAnimationEventData animationEvent, EntityBody entityBody, AbilityData animationType);
         #endregion
     }
 

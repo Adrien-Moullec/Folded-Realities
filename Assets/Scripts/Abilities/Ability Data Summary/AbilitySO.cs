@@ -19,7 +19,6 @@ namespace AbilitySystem {
         #endregion
 
         #region Abilities
-        public abstract void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData);
         #endregion
     }
     [Serializable]
