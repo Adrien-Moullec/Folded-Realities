@@ -1,27 +1,54 @@
+using System.Collections;
+
 using UnityEngine;
 
 public class CameraSwitch : MonoBehaviour {
-    [Header("Camera Target")]
-    [SerializeField] Vector3 targetLocalOffset = new Vector3(0, 3, -10);
-    [SerializeField] Vector3 targetRotation = new Vector3(10, 0, 0);
-    [SerializeField] float targetZoom = 5f;
+    public enum CameraMode { Position, Fixed, Security }
+
+    [Header("Mode")]
+    public CameraMode mode = CameraMode.Position;
+
+    [Header("Main Camera")]
+    [SerializeField] Camera mainCamera;
+
+    [Header("Reference Camera (Editor Placement)")]
+    [SerializeField] Transform cameraPoint;
 
     [Header("Transition")]
     [SerializeField] float moveSpeed = 5f;
 
-    Camera cam;
+    [Header("Zoom")]
+    [SerializeField] bool useZoom = false;
+    [SerializeField] float targetZoom = 5f;
+    [SerializeField] float zoomSpeed = 5f;
+
+    [Header("Player Control")]
+    [SerializeField] MonoBehaviour playerController;
+    [SerializeField] bool freezePlayer = false;
+    [SerializeField] float freezeTime = 2f;
+
+    [Header("Security Cam")]
+    [SerializeField] Transform lookTarget;
+    [SerializeField] float lookSpeed = 5f;
+
+    [Header("Ground Fix")]
+    [SerializeField] float forceGroundSnap = -2f;
+
     CameraFocus focusScript;
 
-    bool playerInside;
+    static CameraSwitch currentZone;
+
+    bool active;
     bool returning;
 
-    Vector3 originalLocalPos;
-    Quaternion originalRotation;
     float originalZoom;
 
     void Start() {
-        cam = Camera.main;
-        focusScript = cam.GetComponent<CameraFocus>();
+        if (mainCamera == null) {
+            mainCamera = Camera.main;
+        }
+
+        focusScript = mainCamera.GetComponent<CameraFocus>();
     }
 
     void OnTriggerEnter(Collider other) {
@@ -29,16 +56,37 @@ public class CameraSwitch : MonoBehaviour {
             return;
         }
 
-        playerInside = true;
+        if (currentZone != null && currentZone != this) {
+            currentZone.ForceExit();
+        }
+
+        currentZone = this;
+
+        originalZoom = mainCamera.orthographicSize;
+
+        active = true;
         returning = false;
 
-        
-        originalLocalPos = cam.transform.localPosition;
-        originalRotation = cam.transform.localRotation;
-        originalZoom = cam.orthographicSize;
+        ForceGroundPlayer(other.gameObject);
 
         if (focusScript != null) {
             focusScript.enabled = false;
+        }
+
+        if (freezePlayer) {
+            StartCoroutine(DisablePlayerTemp());
+        }
+    }
+
+    IEnumerator DisablePlayerTemp() {
+        if (playerController != null) {
+            playerController.enabled = false;
+        }
+
+        yield return new WaitForSeconds(freezeTime);
+
+        if (playerController != null) {
+            playerController.enabled = true;
         }
     }
 
@@ -47,61 +95,114 @@ public class CameraSwitch : MonoBehaviour {
             return;
         }
 
-        playerInside = false;
+        active = false;
         returning = true;
     }
 
+    public void ForceExit() {
+        StopAllCoroutines();
+
+        active = false;
+        returning = true;
+
+        if (playerController != null) {
+            playerController.enabled = true;
+        }
+    }
+
+    void ForceGroundPlayer(GameObject player) {
+        CharacterController cc = player.GetComponent<CharacterController>();
+
+        if (cc != null) {
+            Vector3 downward = new Vector3(0f, forceGroundSnap, 0f);
+            cc.Move(downward);
+        }
+    }
+
     void LateUpdate() {
-        if (cam == null) {
-            return;
-        }
+        if (mode == CameraMode.Security) {
+            if (active) {
+                if (cameraPoint != null) {
+                    mainCamera.transform.position = Vector3.Lerp(
+                        mainCamera.transform.position,
+                        cameraPoint.position,
+                        Time.deltaTime * moveSpeed
+                    );
 
-        if (playerInside) {
-            cam.transform.localPosition = Vector3.Lerp(
-                cam.transform.localPosition,
-                targetLocalOffset,
-                Time.deltaTime * moveSpeed
-            );
+                    if (lookTarget != null) {
+                        Vector3 dir = lookTarget.position - mainCamera.transform.position;
+                        Quaternion lookRot = Quaternion.LookRotation(dir);
 
-            cam.transform.localRotation = Quaternion.Lerp(
-                cam.transform.localRotation,
-                Quaternion.Euler(targetRotation),
-                Time.deltaTime * moveSpeed
-            );
-
-            cam.orthographicSize = Mathf.Lerp(
-                cam.orthographicSize,
-                targetZoom,
-                Time.deltaTime * moveSpeed
-            );
-        }
-
-        else if (returning) {
-            cam.transform.localPosition = Vector3.Lerp(
-                cam.transform.localPosition,
-                originalLocalPos,
-                Time.deltaTime * moveSpeed
-            );
-
-            cam.transform.localRotation = Quaternion.Lerp(
-                cam.transform.localRotation,
-                originalRotation,
-                Time.deltaTime * moveSpeed
-            );
-
-            cam.orthographicSize = Mathf.Lerp(
-                cam.orthographicSize,
-                originalZoom,
-                Time.deltaTime * moveSpeed
-            );
-
-            if (Vector3.Distance(cam.transform.localPosition, originalLocalPos) < 0.05f) {
-                returning = false;
-
-                if (focusScript != null) {
-                    focusScript.enabled = true;
+                        mainCamera.transform.rotation = Quaternion.Lerp(
+                            mainCamera.transform.rotation,
+                            lookRot,
+                            Time.deltaTime * lookSpeed
+                        );
+                    }
                 }
             }
+        }
+
+        if (mode == CameraMode.Fixed) {
+            if (active) {
+                if (cameraPoint != null) {
+                    mainCamera.transform.position = Vector3.Lerp(
+                        mainCamera.transform.position,
+                        cameraPoint.position,
+                        Time.deltaTime * moveSpeed
+                    );
+
+                    mainCamera.transform.rotation = Quaternion.Lerp(
+                        mainCamera.transform.rotation,
+                        cameraPoint.rotation,
+                        Time.deltaTime * moveSpeed
+                    );
+                }
+            }
+        }
+
+        if (mode == CameraMode.Position) {
+            if (active) {
+                if (cameraPoint != null) {
+                    mainCamera.transform.position = Vector3.Lerp(
+                        mainCamera.transform.position,
+                        cameraPoint.position,
+                        Time.deltaTime * moveSpeed
+                    );
+
+                    mainCamera.transform.rotation = Quaternion.Lerp(
+                        mainCamera.transform.rotation,
+                        cameraPoint.rotation,
+                        Time.deltaTime * moveSpeed
+                    );
+                }
+            }
+        }
+
+        if (useZoom) {
+            if (active) {
+                mainCamera.orthographicSize = Mathf.Lerp(
+                    mainCamera.orthographicSize,
+                    targetZoom,
+                    Time.deltaTime * zoomSpeed
+                );
+            }
+        }
+
+        if (returning) {
+            if (useZoom) {
+                mainCamera.orthographicSize = Mathf.Lerp(
+                    mainCamera.orthographicSize,
+                    originalZoom,
+                    Time.deltaTime * zoomSpeed
+                );
+            }
+
+            if (focusScript != null) {
+                focusScript.enabled = true;
+            }
+
+            returning = false;
         }
     }
 }
