@@ -113,6 +113,7 @@ namespace AbilitySystem {
         public override bool NormalMovement(EntityBody entityBody, AbilityData data, AbilityInputValues inpVals) {
             GenericMovementData moveData = (GenericMovementData)data;
             moveData.chargeDirection = inpVals.inputDirection;
+            Debug.Log("NORMAL");
 
             float maxSpeed = moveData.isGliding ? glideHorizontalSpeed : inpVals.isRunning ? runSpeed : walkSpeed;
 
@@ -131,6 +132,7 @@ namespace AbilitySystem {
         }
         public override bool ChargeMovement(EntityBody entityBody, AbilityData data, AbilityInputValues inpVals) {
             GenericMovementData moveData = (GenericMovementData)data;
+            Debug.Log("CHARGE");
             if (moveData.chargeDirection == Vector3.zero) {
                 moveData.chargeDirection = entityBody.modelPrefab.transform.forward;
                 moveData.chargeDirection.y = 0;
@@ -199,7 +201,8 @@ namespace AbilitySystem {
             if (!isJumping) pmd.performedJump = false;
             entityBody.iAbility.OnAbilityEvent(onHitGround);
             Collider[] colliders = Physics.OverlapSphere(feetPos, entityBody.feetSphereArea.radius, groundLayers);
-            //foreach (var n in colliders) Debug.Log(n.gameObject.name);
+            foreach (var n in colliders)
+                Debug.Log(n.gameObject.name);
 
             // Grounded conditions
             if (pmd.isGrounded) {

@@ -25,6 +25,7 @@ public class CameraFocus : MonoBehaviour {
         npc = npcTarget;
         focusing = true;
 
+        // save current state BEFORE changing
         originalLocalPosition = transform.localPosition;
         originalRotation = transform.rotation;
 
@@ -34,20 +35,32 @@ public class CameraFocus : MonoBehaviour {
     public void StopFocus() {
         focusing = false;
         npc = null;
-
-        transform.localPosition = originalLocalPosition;
-        transform.rotation = originalRotation;
     }
 
     void LateUpdate() {
         if (!focusing || npc == null || player == null) {
+            transform.localPosition = Vector3.Lerp(
+                transform.localPosition,
+                originalLocalPosition,
+                Time.deltaTime * rotateSpeed
+            );
+
+            transform.rotation = Quaternion.Lerp(
+                transform.rotation,
+                originalRotation,
+                Time.deltaTime * rotateSpeed
+            );
+
             return;
         }
 
+       
         Vector3 midpoint = (player.position + npc.position) / 2f;
         Vector3 lookPoint = midpoint + Vector3.up * 1.5f;
 
-        Quaternion targetRotation = Quaternion.LookRotation(lookPoint - transform.position);
+        Quaternion targetRotation = Quaternion.LookRotation(
+            lookPoint - transform.position
+        );
 
         targetRotation = Quaternion.Euler(
             targetRotation.eulerAngles.x + tiltAmount,
