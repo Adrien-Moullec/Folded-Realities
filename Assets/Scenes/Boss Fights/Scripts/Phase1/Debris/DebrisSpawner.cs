@@ -12,19 +12,21 @@ public class DebrisSpawnerAndWind : MonoBehaviour {
     public Transform npc;
 
     [Header("Spawn Settings")]
-    public int spawnCount = 50;
+    public int totalDebris = 15;
     public Vector3 areaSize = new Vector3(20, 50, 20);
 
     [Header("NPC Safe Zone")]
     public float npcSafeRadius = 3f;
 
     void Start() {
-        // Spawn debris
-        for (int i = 0; i < spawnCount; i++) {
+        int bottomCount = totalDebris / 2;
+        int topCount = totalDebris - bottomCount;
+
+        for (int i = 0; i < topCount; i++) {
             SpawnDebris(false);
         }
 
-        for (int i = 0; i < spawnCount; i++) {
+        for (int i = 0; i < bottomCount; i++) {
             SpawnDebris(true);
         }
 
@@ -63,7 +65,6 @@ public class DebrisSpawnerAndWind : MonoBehaviour {
         obj.transform.localScale = Vector3.one * scale;
     }
 
-
     void SpawnWind() {
         if (windPrefab == null) {
             return;
@@ -71,7 +72,6 @@ public class DebrisSpawnerAndWind : MonoBehaviour {
 
         float halfWidth = areaSize.x / 2f;
 
-        // Spawn near LEFT or RIGHT edges
         float side = Random.value > 0.5f ? -1f : 1f;
 
         float x = transform.position.x + side * (halfWidth - 1f);
