@@ -1,10 +1,8 @@
 using System;
 
-namespace AbilitySystem
-{
-    [Serializable]
-    public class AbilityData
-    {
-
+namespace AbilitySystem {
+    public class AbilityData {
+        public bool isHoldingInput = false;
+        public bool usingAbility = false;
     }
 }

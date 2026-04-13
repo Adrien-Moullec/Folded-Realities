@@ -9,25 +9,32 @@ namespace AbilitySystem {
         [SerializeField, Range(0.1f, 20)] protected float cooldown;
         [SerializeField, Range(1, 5)] protected int charges;
 
-        public override AbilityData AbilityDataSetup(EntityBody eb) => new CooldownData(charges, cooldown);
+        #region Call Logic
         public override bool Execute(EntityBody entityBody, AbilityData data) {
             CooldownData cdd = (CooldownData)data;
-            if (cdd.currentCharges <= 0 || cdd.isUsing)
+            if (data.usingAbility) {
+                if (data.isHoldingInput)
+                    OnHold(entityBody, cdd);
+                else
+                    OnPressWhileUsing(entityBody, cdd);
+                return false;
+            } else if (entityBody.UsingAbility || cdd.currentCharges <= 0 || data.isHoldingInput)
                 return false;
 
+            data.isHoldingInput = true;
+            data.usingAbility = true;
+            entityBody.UsingAbility = true;
             cdd.currentCharges--;
-            entityBody.iAbility.ActivateIenumerator(UseAbility(entityBody, cdd));
+            entityBody.iAbility.GetAbilityController.StartCoroutine(UseAbility(entityBody, cdd));
             return true;
         }
-        protected IEnumerator UseAbility(EntityBody entityBody, CooldownData data) {
-            data.hasReleasedInput = false;
-            data.isUsing = true;
-            yield return Ability(entityBody, data);
-            data.isUsing = false;
+        public override void Startup(EntityBody entityBody, AbilityData data) { }
+        public override bool PassEvent(EntityBody entityBody, AbilityData data) {
+            data.isHoldingInput = false;
+            return true;
         }
-        protected abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
         protected abstract void OnHold(EntityBody entityBody, CooldownData data);
-        protected abstract void RePress(EntityBody entityBody, CooldownData data);
+        protected abstract void OnPressWhileUsing(EntityBody entityBody, CooldownData data);
         public override void FrameEvent(AbilityData abData) {
             CooldownData data = (CooldownData)abData;
 
@@ -41,6 +48,29 @@ namespace AbilitySystem {
                 data.cooldownDelta += Time.deltaTime;
             }
         }
+        #endregion
+
+        #region Ability Logic
+        protected IEnumerator UseAbility(EntityBody entityBody, CooldownData data) {
+            yield return Ability(entityBody, data);
+            data.usingAbility = false;
+            entityBody.UsingAbility = false;
+            entityBody.MoveOverride = false;
+        }
+        protected abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
+        protected virtual IEnumerator AttackAnimation(EntityBody entityBody, AbilityData data, AnimationType attackAnimation) {
+            yield return entityBody.animatorManager.InitiateOneOffAnimation(
+                null,
+                null,
+                (AbilityAnimationEventData animationData) => AnimationEvent(animationData, entityBody, data),
+                null,
+                attackAnimation,
+                false
+            );
+            yield return null;
+        }
+        public abstract void AnimationEvent(AbilityAnimationEventData animationEvent, EntityBody entityBody, AbilityData animationType);
+        #endregion
     }
 
     [Serializable]
@@ -48,13 +78,14 @@ namespace AbilitySystem {
         [SerializeField] public CooldownAbilitySO abilitySO;
 
         public override void Activate(EntityBody entityBody, bool abilityPressed) {
-            if (abilityPressed) abilitySO.Execute(entityBody, AbilityData);
-            else abilitySO.PassEvent(entityBody, AbilityData);
-            abilitySO.FrameEvent(AbilityData);
+            if (abilityPressed) abilitySO?.Execute(entityBody, AbilityData);
+            else abilitySO?.PassEvent(entityBody, AbilityData);
         }
-        public override void FrameEvent() =>
-            abilitySO.FrameEvent(AbilityData);
+        public override void StartUp(EntityBody entityBody) =>
+            abilitySO?.Startup(entityBody, AbilityData);
 
+        public override void FrameEvent() =>
+            abilitySO?.FrameEvent(AbilityData);
 
         public CooldownAbilitySummary(CooldownAbilitySO m, EntityBody eb) {
             abilitySO = m;
@@ -62,11 +93,9 @@ namespace AbilitySystem {
         }
     }
     public class CooldownData : AbilityData {
-        [HideInInspector] public float cooldownDelta;
-        [HideInInspector] public int currentCharges;
-        [HideInInspector] public bool isRecharging = false;
-        [HideInInspector] public bool isUsing = false;
-        [HideInInspector] public bool hasReleasedInput = false;
+        public float cooldownDelta;
+        public int currentCharges;
+        public bool isRecharging = false;
         public CooldownData(int charges, float cooldown) {
             currentCharges = charges;
             cooldownDelta = cooldown;

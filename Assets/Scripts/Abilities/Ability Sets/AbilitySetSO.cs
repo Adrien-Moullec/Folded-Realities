@@ -33,19 +33,10 @@ namespace AbilitySystem {
         [SerializeField] public string abilitySetName;
         [SerializeField] public HealthSO healthSettings;
         [SerializeField] public MovementSO movement;
-
-        public virtual void SetupAnimations(Animation anim) {
-            if (anim == null) return;
-            if (movement != null) AssignAnimations(anim, movement);
-            if (healthSettings != null) AssignAnimations(anim, healthSettings);
-        }
-        protected static void AssignAnimations(Animation anim, AbilitySO ability) {
-            foreach (var clipSummary in ability.AbilityAnimationsSetup())
-                clipSummary.Item1.Setup(anim, clipSummary.Item2);
-        }
     }
 
     #region Editor
+#if UNITY_EDITOR
     // Editor for ScriptBase and all derived types
     [CustomEditor(typeof(AbilitySetSO), true)]
     public class AbilitySetSOEditor : Editor {
@@ -82,7 +73,7 @@ namespace AbilitySystem {
                     nestedSO != null) {
                     foldouts[prop.propertyPath] = EditorGUILayout.Foldout(
                         foldouts[prop.propertyPath],
-                        "",
+                        "", //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         true
                     );
 
@@ -105,5 +96,6 @@ namespace AbilitySystem {
             }
         }
     }
+#endif
     #endregion
 }
