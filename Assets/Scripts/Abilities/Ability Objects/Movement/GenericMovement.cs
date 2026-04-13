@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.Interactions;
 
 namespace AbilitySystem {
     [CreateAssetMenu(fileName = "GeneralMovement", menuName = MenuAssetNames.MovementAbility + "/General Movement", order = -1)]
@@ -71,7 +72,7 @@ namespace AbilitySystem {
 
         [Space]
         [Header("Movement Events")]
-        [Tooltip("Layers that count as ground.")]
+        [SerializeField] protected bool DebugLog = false;
         [SerializeField] protected string onHitGround;
         [SerializeField] protected string onGlide;
         [SerializeField] protected string onFreeFall;
@@ -187,7 +188,10 @@ namespace AbilitySystem {
             if (pmd.isJumpingButtonPressed && !pmd.hasAlreadyJumped) OnJump(pmd);
             if (!pmd.isJumpingButtonPressed) pmd.hasAlreadyJumped = false;
 
-            //Collider[] colliders = Physics.OverlapSphere(feetPos, entityBody.feetSphereArea.radius, groundLayers);
+            if (DebugLog) {
+                Collider[] colliders = Physics.OverlapSphere(feetPos, entityBody.feetSphereArea.radius, groundLayers);
+                foreach (var c in colliders) Debug.Log(c.name);
+            }
 
             // Grounded conditions
             if (hitGround)
