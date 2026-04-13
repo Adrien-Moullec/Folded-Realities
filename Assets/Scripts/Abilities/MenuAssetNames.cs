@@ -8,5 +8,6 @@ namespace AbilitySystem {
         public const string MovementAbility = Root + "/Movement Ability";
         public const string AttackAbility = Root + "/Attacks";
         public const string CooldownAbility = Root + "/Cooldown Ability";
+        public const string Projectiles = CooldownAbility + "/Projectiles";
     }
 }
