@@ -123,7 +123,8 @@ namespace AbilitySystem {
             return true;
         }
         public override bool AutoTrackMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
-            throw new System.NotImplementedException();
+            entityBody.iAbility.OnEntityTrack(inpVals.Destination);
+            return true;
         }
         public override bool FlightMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             throw new System.NotImplementedException();

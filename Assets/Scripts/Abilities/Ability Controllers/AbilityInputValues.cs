@@ -57,9 +57,9 @@ namespace AbilitySystem {
 
         [Header("Ability inputs.")]
         [Tooltip("If the primary ability button is being pressed.")]
-        public bool isPrimaryAttack = false;
+        public bool isPrimaryAbility = false;
         [Tooltip("If the secondary ability button is being pressed.")]
-        public bool isSecondaryAttack = false;
+        public bool isSecondaryAbility = false;
         [Tooltip("If the tertiary ability button is being pressed.")]
         public bool isTertiaryAbility = false;
     }

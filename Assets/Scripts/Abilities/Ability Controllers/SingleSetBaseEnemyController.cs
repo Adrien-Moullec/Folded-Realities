@@ -19,11 +19,11 @@ namespace AbilitySystem {
             navMeshAgent = GetComponent<NavMeshAgent>();
             entityBody.animatorManager = GetComponent<AnimatorManager>();
             if (abilitySetSO == null) return;
-            EnemyAbilitySet ab = new EnemyAbilitySet(abilitySetSO, entityBody);
-            abilitySetList = ab;
+            abilitySetList = new EnemyAbilitySet(abilitySetSO, entityBody);
         }
         protected override void Update() {
             base.Update();
+            abilitySetList.movement.Activate(entityBody, true);
         }
 
         public override void OnMoveEntity(Vector3 direction) {
@@ -34,6 +34,9 @@ namespace AbilitySystem {
         public override void OnRotateEntity(Vector3 direction) {
             direction.y = 0;
             if (direction != Vector3.zero) entityBody.bodyHolder.transform.forward = direction;
+        }
+        public override void OnEntityTrack(Vector3 location) {
+            navMeshAgent.destination = location;
         }
         public override EntityBody GetEntityBody() => entityBody;
     }

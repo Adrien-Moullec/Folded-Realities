@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
-using UnityEngine.Pool;
-using Unity.Mathematics;
 
+using UnityEngine.Pool;
 using UnityEngine;
-using Unity.VisualScripting;
 
 namespace AbilitySystem {
     [CreateAssetMenu(fileName = "Projectile Ability", menuName = MenuAssetNames.Projectiles + "/Generic Bullet")]
@@ -31,20 +29,25 @@ namespace AbilitySystem {
         #endregion
 
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
-            if (projectilePoolInfo.poolObject == null || (data.isHoldingInput && !automaticShooting)) yield break;
+            Debug.Log("StartEventProjectile");
+            //if (projectilePoolInfo.poolObject == null || (data.isHoldingInput && !automaticShooting)) yield break;
             ProjectileData pd = (ProjectileData)data;
 
             yield return AttackAnimation(entityBody, data, AnimationType.Attack1);
+        }
+        public override void FrameEvent(AbilityData abData) {
+            base.FrameEvent(abData);
+            Debug.Log("PASS EVENT " + ((CooldownData)abData).cooldownDelta);
+        }
+        IEnumerator Shoot(EntityBody entityBody, AbilityData abilityData) {
 
-            /*
+            ProjectileData pd = (ProjectileData)abilityData;
             for (int i = 0; i < burstAmount; i++) {
                 entityBody.iAbility.GetAbilityController.StartCoroutine(Projectile(pd));
                 yield return new WaitForSeconds(burstInterval);
             }
 
             yield return new WaitForSeconds(shootInterval - burstInterval);
-
-            yield return null;*/
         }
         IEnumerator Projectile(ProjectileData pd) {
             IPoolObjectAS projectile = pd.pooledProjectiles.Get();
@@ -61,8 +64,10 @@ namespace AbilitySystem {
         }
 
         public override void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData) {
-            throw new NotImplementedException();
+            Debug.Log("EVENT - Projectile");
+            entityBody.iAbility.GetAbilityController.StartCoroutine(Shoot(entityBody, abilityData));
         }
+
 
         [Serializable]
         public class ProjectileData : CooldownData {
