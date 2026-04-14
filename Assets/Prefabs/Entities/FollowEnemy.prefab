@@ -303,6 +303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AbilityController: {fileID: 6866967023358552067}
+  playerStopDistance: 5
 --- !u!114 &6866967023358552067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,13 +321,11 @@ MonoBehaviour:
   abilitySetSO: {fileID: 11400000, guid: c629a897cbeedc944a16b070e04af81a, type: 2}
   entityBody:
     bodyHolder: {fileID: 7211196813232357869}
-    modelPrefab: {fileID: 5738576657225903137}
     feetSphereArea: {fileID: 6536683569106103474}
     attackCubeArea: {fileID: 0}
-    upperBody: {fileID: 0}
-    lowerBody: {fileID: 0}
-    animationComponent: {fileID: 4537163182784589563}
-  playerDist: 3
+    animatorManager: {fileID: 0}
+    UsingAbility: 0
+    MoveOverride: 0
   healthBar: {fileID: 6639439452371771787}
 --- !u!195 &3769690474327977817
 NavMeshAgent:
@@ -810,7 +809,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 306ebdc398a2a904a8d450d31438db0b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4537163182784589563}
+      addedObject: {fileID: 3832065267282758842}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 306ebdc398a2a904a8d450d31438db0b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 479767336150429291}
   m_SourcePrefab: {fileID: 100100000, guid: 306ebdc398a2a904a8d450d31438db0b, type: 3}
 --- !u!4 &4965312856611108507 stripped
 Transform:
@@ -822,19 +824,37 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 306ebdc398a2a904a8d450d31438db0b, type: 3}
   m_PrefabInstance: {fileID: 4855703662573474160}
   m_PrefabAsset: {fileID: 0}
---- !u!111 &4537163182784589563
-Animation:
+--- !u!114 &3832065267282758842
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5738576657225903137}
   m_Enabled: 1
-  serializedVersion: 4
-  m_Animation: {fileID: 0}
-  m_Animations: []
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5487b8afb1024d141a458dfdfbee8b9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &479767336150429291
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5738576657225903137}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
   m_UpdateMode: 0
-  m_CullingType: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

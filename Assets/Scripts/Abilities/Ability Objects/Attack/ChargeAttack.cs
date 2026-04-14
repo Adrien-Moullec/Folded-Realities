@@ -13,7 +13,6 @@ namespace AbilitySystem {
             return cad;
         }
 
-
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
             ChargeAttackData cad = (ChargeAttackData)data;
             AbilityControllerValues controlValues = entityBody.iAbility.GetInputValues;
@@ -34,10 +33,6 @@ namespace AbilitySystem {
 
         protected override void OnPressWhileUsing(EntityBody entityBody, CooldownData data) {
 
-        }
-
-        public override bool PassEvent(EntityBody entityBody, AbilityData data) {
-            return true;
         }
 
         public override void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData) {
