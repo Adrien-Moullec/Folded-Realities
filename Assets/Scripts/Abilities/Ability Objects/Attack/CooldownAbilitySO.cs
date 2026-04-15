@@ -12,7 +12,6 @@ namespace AbilitySystem {
 
         #region Call Logic
         public override bool Execute(EntityBody entityBody, AbilityData data) {
-            Debug.Log("EXECUTE");
             CooldownData cdd = (CooldownData)data;
             if (data.usingAbility) {
                 if (data.isHoldingInput)
@@ -21,7 +20,6 @@ namespace AbilitySystem {
                     OnPressWhileUsing(entityBody, cdd);
                 return false;
             } else if (entityBody.UsingAbility || cdd.currentCharges <= 0 || data.isHoldingInput) {
-                Debug.Log("Can't Use: " + (entityBody.UsingAbility) + (cdd.currentCharges <= 0) + (data.isHoldingInput));
                 return false;
             }
 
@@ -33,12 +31,8 @@ namespace AbilitySystem {
             data.isHoldingInput = false;
             return true;
         }
-        protected virtual void OnHold(EntityBody entityBody, CooldownData data) {
-            Debug.Log("OnHold");
-        }
-        protected virtual void OnPressWhileUsing(EntityBody entityBody, CooldownData data) {
-            Debug.Log("OnPressWhileUsing");
-        }
+        protected virtual void OnHold(EntityBody entityBody, CooldownData data) { }
+        protected virtual void OnPressWhileUsing(EntityBody entityBody, CooldownData data) { }
         public override void FrameEvent(AbilityData abData) {
             CooldownData data = (CooldownData)abData;
 
@@ -60,9 +54,7 @@ namespace AbilitySystem {
             data.usingAbility = true;
             entityBody.UsingAbility = true;
             data.currentCharges--;
-            Debug.Log("StartAbil");
             yield return Ability(entityBody, data);
-            Debug.Log("EndAbil");
             data.usingAbility = false;
             entityBody.UsingAbility = false;
             entityBody.MoveOverride = false;

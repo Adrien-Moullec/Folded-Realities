@@ -2,27 +2,28 @@ using System.Threading;
 
 using AbilitySystem;
 
+using Unity.Cinemachine;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerAbilityController))]
-public class PlayerManager : MonoBehaviour, ICamera {
+public class PlayerManager : MonoBehaviour {
     public static PlayerManager player;
     #region Variables
     [Space]
     [Header("Camera Settings")]
     [SerializeField] Camera gameplayCamera;
-    [SerializeField] Transform cameraHolder;
     [SerializeField] Transform cameraHolderCentre;
     [SerializeField, Range(-100, 0)] float cameraTiltMin;
     [SerializeField, Range(0, 100)] float cameraTiltMax;
     [SerializeField, Min(5)] float lerpSpeed = 10;
     float camYTilt = 30;
-    private Vector3 GetCameraPosition {
-        get => camArea != null ?
-        camArea.GetCameraPosition(gameplayCamera, cameraHolder.position) + camArea.transform.position : cameraHolder.position;
-    }
+    //private Vector3 GetCameraPosition {
+    //get => camArea != null ?
+    //camArea.GetCameraPosition(gameplayCamera, cameraHolder.position) + camArea.transform.position : cameraHolder.position;
+    //}
     CameraArea camArea;
     private Vector3 camDir;
 
@@ -54,6 +55,7 @@ public class PlayerManager : MonoBehaviour, ICamera {
     private void OnEnable() {
         iAbility = GetComponent<PlayerAbilityController>();
         _PlayerInput = GetComponent<PlayerInput>();
+        Cursor.lockState = CursorLockMode.Locked;
 
         moveInput = _PlayerInput.actions["Move"];
         lookInput = _PlayerInput.actions["Look"];
@@ -109,7 +111,6 @@ public class PlayerManager : MonoBehaviour, ICamera {
 
     #region Update Functions
     private void Update() {
-        if (gameplayCamera != null) CameraSettings();
         Movement();
     }
 
@@ -119,42 +120,11 @@ public class PlayerManager : MonoBehaviour, ICamera {
         if (wheelActive) return;
         Vector2 m = moveInput.ReadValue<Vector2>();
         float j = jumpInput.ReadValue<float>();
-        camDir = Camera.main.transform.right * m.x + Camera.main.transform.forward * m.y;
+        camDir = gameplayCamera.transform.right * m.x + gameplayCamera.transform.forward * m.y;
         camDir.y = 0;
         camDir.Normalize();
         camDir.y = j > 0.5f ? 1 : 0;
         iAbility.GetInputValues.SetDirection(camDir);
-    }
-    void CameraSettings() {
-        camYTilt = Mathf.Clamp(camYTilt - deltaLook.y, cameraTiltMin, cameraTiltMax);
-        cameraHolderCentre.eulerAngles = new Vector3(
-            camYTilt,
-            cameraHolderCentre.eulerAngles.y + deltaLook.x,
-            cameraHolderCentre.eulerAngles.x);
-        gameplayCamera.transform.position = Vector3.MoveTowards(
-            gameplayCamera.transform.position,
-            GetCameraPosition,
-            lerpSpeed * Time.deltaTime
-        );
-        Vector3 target = GetCameraPosition;
-        gameplayCamera.transform.position = Vector3.MoveTowards(
-            gameplayCamera.transform.position,
-            target,
-            lerpSpeed * Time.deltaTime * Vector3.Distance(target, gameplayCamera.transform.position)
-        );
-        gameplayCamera.transform.forward = (transform.position - GetCameraPosition).normalized;
-    }
-
-    public void OnCameraAreaEnter(CameraArea cameraArea) {
-        camArea = cameraArea;
-    }
-
-    public void OnCameraAreaExit() {
-        camArea = null;
-    }
-    private void OnDrawGizmos() {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(cameraHolder.transform.position, cameraHolderCentre.transform.position);
     }
     #endregion
     #endregion

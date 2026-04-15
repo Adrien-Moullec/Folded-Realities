@@ -10,8 +10,8 @@ public class PaperParticles : MonoBehaviour, IDelta {
         EndDelta();
     }
     public void StartDelta() {
-        visualEffect.Play();
         visualEffect.enabled = true;
+        visualEffect.Play();
     }
     public void UpdateDelta(float delta) {
         gameObject.transform.localScale = new Vector3(delta, delta, delta);

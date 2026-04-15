@@ -68,10 +68,11 @@ namespace AbilitySystem {
             StartCoroutine(Transition(playerSetSummary));
         }
         private IEnumerator Transition(PlayerSetSummary newSummary) {
-            paperParticleDelta.StartDelta();
+            if (!newSummary.isUnlocked) yield break;
+            paperParticleDelta?.StartDelta();
             yield return currentAbilitySet.entityBody.animatorManager.InitiateOneOffAnimation(
                 () => { Debug.Log(currentAbilitySet.abilitySetSO.abilitySetName + ": Start"); },
-                (f) => { paperParticleDelta.UpdateDelta(f); },
+                (f) => { paperParticleDelta?.UpdateDelta(f); },
                 null,
                 () => {
                 },
@@ -84,9 +85,9 @@ namespace AbilitySystem {
 
             yield return currentAbilitySet.entityBody.animatorManager.InitiateOneOffAnimation(
                 () => { Debug.Log(currentAbilitySet.abilitySetSO.abilitySetName + ": new summary start"); },
-                (f) => { paperParticleDelta.UpdateDelta(1 - f); },
+                (f) => { paperParticleDelta?.UpdateDelta(1 - f); },
                 null,
-                () => { paperParticleDelta.EndDelta(); Debug.Log(currentAbilitySet.abilitySetSO.abilitySetName + ": new summary end"); },
+                () => { paperParticleDelta?.EndDelta(); Debug.Log(currentAbilitySet.abilitySetSO.abilitySetName + ": new summary end"); },
                 AnimationType.TransformIn,
                 false
             );
