@@ -12,76 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89498978a5163564984da6a9f23b4e81, type: 3}
   m_Name: CraneMovement
   m_EditorClassIdentifier: 
-  idleAnimation:
-    <name>k__BackingField: 
-    <animation>k__BackingField: {fileID: 0}
-    <speed>k__BackingField: 1
-    <weight>k__BackingField: 1
-    <crossFadeTime>k__BackingField: 0.2
-    <weightOverTime>k__BackingField:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    <reverseAnimation>k__BackingField: 0
-    <DebugMode>k__BackingField: 0
-  walkingAnimation:
-    <name>k__BackingField: 
-    <animation>k__BackingField: {fileID: 0}
-    <speed>k__BackingField: 1
-    <weight>k__BackingField: 1
-    <crossFadeTime>k__BackingField: 0.2
-    <weightOverTime>k__BackingField:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    <reverseAnimation>k__BackingField: 0
-    <DebugMode>k__BackingField: 0
-  runningAnimation:
-    <name>k__BackingField: 
-    <animation>k__BackingField: {fileID: 0}
-    <speed>k__BackingField: 1
-    <weight>k__BackingField: 1
-    <crossFadeTime>k__BackingField: 0.2
-    <weightOverTime>k__BackingField:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    <reverseAnimation>k__BackingField: 0
-    <DebugMode>k__BackingField: 0
-  jumpingAnimation:
-    <name>k__BackingField: 
-    <animation>k__BackingField: {fileID: 0}
-    <speed>k__BackingField: 1
-    <weight>k__BackingField: 1
-    <crossFadeTime>k__BackingField: 0.2
-    <weightOverTime>k__BackingField:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    <reverseAnimation>k__BackingField: 0
-    <DebugMode>k__BackingField: 0
-  fallingAnimation:
-    <name>k__BackingField: 
-    <animation>k__BackingField: {fileID: 0}
-    <speed>k__BackingField: 1
-    <weight>k__BackingField: 1
-    <crossFadeTime>k__BackingField: 0.2
-    <weightOverTime>k__BackingField:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    <reverseAnimation>k__BackingField: 0
-    <DebugMode>k__BackingField: 0
   speedMultiplier: 1
   changeDirectionSpeedMultiplier: 1
   acceleration: 0.01
@@ -99,12 +29,56 @@ MonoBehaviour:
   maxFallSpeed: 20
   canGlide: 1
   glideHorizontalSpeed: 28.7
+  maxGlideTime: 1
   glideFallSpeed: 2.5
+  glideFallSpeedOverTime:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.7234474
+      value: 1
+      inSlope: -0.010914915
+      outSlope: -0.010914915
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13862568
+      outWeight: 0.40221637
+    - serializedVersion: 3
+      time: 0.94920856
+      value: 0.5724764
+      inSlope: -5.409202
+      outSlope: -5.409202
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.10248587
+      outWeight: 1
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -7.1430817
+      outSlope: -7.1430817
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14490871
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   fallToGlideAcceleration: 2
   gravity: 60
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
+  DebugLog: 0
   onHitGround: Kuhaku
   onGlide: 
   onFreeFall: Kuhaku
