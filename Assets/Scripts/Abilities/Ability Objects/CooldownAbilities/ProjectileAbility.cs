@@ -37,7 +37,6 @@ namespace AbilitySystem {
         }
         public override void FrameEvent(AbilityData abData) {
             base.FrameEvent(abData);
-            Debug.Log("PASS EVENT " + ((CooldownData)abData).cooldownDelta);
         }
         IEnumerator Shoot(EntityBody entityBody, AbilityData abilityData) {
 
