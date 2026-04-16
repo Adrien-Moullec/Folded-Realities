@@ -1,35 +1,31 @@
 using UnityEngine;
 
 public class DoorSpawnManager : MonoBehaviour {
-    [SerializeField] Transform[] doorSpawnPoints;
-    [SerializeField] Transform defaultSpawnPoint;
-    [SerializeField] float spawnOffset = 1.5f;
+    public Transform[] spawnPoints;
 
     void Start() {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player == null) {
-            return;
+        StartCoroutine(SetSpawn());
+    }
+
+    System.Collections.IEnumerator SetSpawn() {
+        yield return null; // wait 1 frame
+
+        int spawnID = PlayerPrefs.GetInt("SpawnPoint", 0);
+
+        if (spawnID >= spawnPoints.Length) {
+            spawnID = 0;
         }
 
-        
-        if (PlayerPrefs.GetInt("UseDoorSpawn", 0) == 1) {
-            int doorID = PlayerPrefs.GetInt("SpawnDoorID", 0);
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
 
-            if (doorID >= 0 && doorID < doorSpawnPoints.Length) {
-                Transform spawn = doorSpawnPoints[doorID];
+        if (player != null) {
+            CharacterController cc = player.GetComponent<CharacterController>();
 
-                Vector3 safePos = spawn.position + spawn.forward * spawnOffset;
+            if (cc != null) cc.enabled = false;
 
-                player.transform.position = safePos;
-                player.transform.rotation = spawn.rotation;
-            }
+            player.transform.position = spawnPoints[spawnID].position;
 
-            
-            PlayerPrefs.SetInt("UseDoorSpawn", 0);
-        } else if (defaultSpawnPoint != null) {
-            // normal play mode start
-            player.transform.position = defaultSpawnPoint.position;
-            player.transform.rotation = defaultSpawnPoint.rotation;
+            if (cc != null) cc.enabled = true;
         }
     }
 }
