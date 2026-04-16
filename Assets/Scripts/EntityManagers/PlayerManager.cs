@@ -32,6 +32,8 @@ public class PlayerManager : MonoBehaviour {
     [SerializeField] IAbility iAbility;
     [SerializeField] RadialMenuManager _RadialMenuManager;
     private PlayerInput _PlayerInput;
+    [SerializeField] private AreaColliderCheck interactArea;
+    private PlayerAbilityController _playerAbilityController;
 
     [Space]
     [Header("Inputs")]
@@ -127,5 +129,10 @@ public class PlayerManager : MonoBehaviour {
         iAbility.GetInputValues.SetDirection(camDir);
     }
     #endregion
+
+    private void OnDrawGizmos() {
+        if (_playerAbilityController == null) _playerAbilityController = GetComponent<PlayerAbilityController>();
+        interactArea.Gizmo(_playerAbilityController.BodyHolder);
+    }
     #endregion
 }

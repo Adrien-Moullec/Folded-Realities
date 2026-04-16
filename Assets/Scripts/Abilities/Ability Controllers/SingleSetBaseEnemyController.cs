@@ -39,5 +39,7 @@ namespace AbilitySystem {
             navMeshAgent.destination = location;
         }
         public override EntityBody GetEntityBody() => entityBody;
+        public override void OnDrawGizmos() {
+        }
     }
 }

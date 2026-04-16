@@ -20,7 +20,7 @@ namespace AbilitySystem {
         [SerializeField] protected float shootInterval = 1f;
         [SerializeField] protected float burstInterval = 0.25f;
         [SerializeField, Min(1)] protected int burstAmount = 5;
-        [SerializeField] bool automaticShooting = false;
+        //[SerializeField] bool automaticShooting = false;
         [SerializeField] protected float lifetime;
 
 
@@ -35,8 +35,8 @@ namespace AbilitySystem {
 
             yield return AttackAnimation(entityBody, data, AnimationType.Attack1);
         }
-        public override void FrameEvent(AbilityData abData) {
-            base.FrameEvent(abData);
+        public override void FrameEvent(EntityBody entityBody, AbilityData abData) {
+            base.FrameEvent(entityBody, abData);
         }
         IEnumerator Shoot(EntityBody entityBody, AbilityData abilityData) {
 

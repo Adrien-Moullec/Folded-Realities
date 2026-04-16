@@ -11,16 +11,13 @@ namespace AbilitySystem {
         [SerializeField, Range(0, 1)] float deltaEvent;
 
         [SerializeField] int damage = 10;
-        public override AbilityData AbilityDataSetup(EntityBody entityBody) {
-            return new CooldownData(charges, cooldown);
-        }
 
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
             yield return AttackAnimation(entityBody, data, AnimationType.Attack1);
         }
 
         public override void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData) {
-            Damage(entityBody);
+            Damage(entityBody, (CooldownData)abilityData);
         }
 
 
@@ -32,9 +29,11 @@ namespace AbilitySystem {
 
         }
 
-        private void Damage(EntityBody entityBody) {
-            Collider[] colliders = Physics.OverlapSphere(entityBody.attackCubeArea.transform.position, entityBody.attackCubeArea.size.x);
-            foreach (var n in colliders)
+        private void Damage(EntityBody entityBody, CooldownData data) {
+            attackArea.GetColliders(entityBody.bodyHolder).Invoke(data.raycastHits);
+
+            foreach (var n in data.raycastHits) {
+                if (n.transform == null) continue;
                 if (n.transform.TryGetComponent(out IHealth iHealth))
                     if (iHealth != entityBody.iHealth)
                         iHealth.Damage(
@@ -45,6 +44,10 @@ namespace AbilitySystem {
                                 EntityDamageType.Melee
                             )
                         );
+            }
+        }
+        public override void GizmoEvent(EntityBody entityBody) {
+            attackArea.Gizmo(entityBody.bodyHolder);
         }
     }
 }

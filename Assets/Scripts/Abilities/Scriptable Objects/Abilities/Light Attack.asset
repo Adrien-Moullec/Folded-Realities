@@ -12,21 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c188eb406ea1d4dae266455dc5121d, type: 3}
   m_Name: Light Attack
   m_EditorClassIdentifier: 
-  cooldownAnim:
-    <name>k__BackingField: 
-    <animation>k__BackingField: {fileID: 960481744137391156, guid: 784239e0572055e41b419646c537bd0c, type: 3}
-    <speed>k__BackingField: 4
-    <weight>k__BackingField: 1
-    <crossFadeTime>k__BackingField: 0.2
-    <weightOverTime>k__BackingField:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    <reverseAnimation>k__BackingField: 0
-    <DebugMode>k__BackingField: 0
-  deltaEvent: 0.622
   cooldown: 0.1
   charges: 1
+  attackArea:
+    checkShape: 1
+    centerOffset: {x: 0, y: 0, z: 0}
+    size1: 16.64
+    halfExtents: {x: 1, y: 1, z: 1}
+    layers:
+      serializedVersion: 2
+      m_Bits: 1
+    doDrawGizmo: 1
+  deltaEvent: 0.622
   damage: 40
