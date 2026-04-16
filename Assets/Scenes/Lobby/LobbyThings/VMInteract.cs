@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class VMInteract : MonoBehaviour {
+public class VMInteract : CinemachineInteract {
     public GameObject shopUI;
     public GameObject interactText;
 
@@ -10,19 +10,17 @@ public class VMInteract : MonoBehaviour {
     public Camera mainCamera;
     public Transform cameraPoint;
 
-    private Vector3 originalCamPos;
-    private Quaternion originalCamRot;
-
-    private bool playerInRange = false;
-
-    void Start() {
+    private void Awake() {
         interactText.SetActive(false);
     }
 
-    void Update() {
-        if (playerInRange && Input.GetKeyDown(KeyCode.X)) {
-            OpenShop();
-        }
+    public override void OnInteract() {
+        SetCameraHighPriority();
+        OpenShop();
+    }
+    public override void OnCancelInteract() {
+        SetCameraDefaultPriority();
+        CloseShop();
     }
 
     void OpenShop() {
@@ -35,13 +33,6 @@ public class VMInteract : MonoBehaviour {
         if (playerVisuals != null) {
             playerVisuals.SetActive(false);
         }
-
-        originalCamPos = mainCamera.transform.position;
-        originalCamRot = mainCamera.transform.rotation;
-
-        mainCamera.transform.position = cameraPoint.position;
-        mainCamera.transform.rotation = cameraPoint.rotation;
-
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
@@ -59,23 +50,20 @@ public class VMInteract : MonoBehaviour {
             playerVisuals.SetActive(true);
         }
 
-        mainCamera.transform.position = originalCamPos;
-        mainCamera.transform.rotation = originalCamRot;
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        OnCancelInteract();
     }
 
     void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            playerInRange = true;
             interactText.SetActive(true);
         }
     }
 
     void OnTriggerExit(Collider other) {
         if (other.CompareTag("Player")) {
-            playerInRange = false;
             interactText.SetActive(false);
         }
     }
