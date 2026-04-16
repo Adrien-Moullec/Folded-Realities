@@ -7,22 +7,24 @@ using UnityEditor;
 [Serializable]
 public class AreaColliderCheck {
     public CheckShape checkShape;
-    public bool DrawGizmo = false;
     public Vector3 centerOffset = Vector3.zero;
     public float size1 = 1;
     public Vector3 halfExtents = Vector3.one;
     public LayerMask layers = 1;
+    public bool doDrawGizmo = true;
 
     public Action<RaycastHit[]> GetColliders(GameObject gameObject) => GetColliders(gameObject.transform.position, gameObject.transform.forward);
 
     public Action<RaycastHit[]> GetColliders(Vector3 location, Vector3 direction) {
+        Quaternion rotation = Quaternion.LookRotation(direction);
+        Vector3 pos = location + rotation * centerOffset;
         return checkShape switch {
             CheckShape.Sphere => (RaycastHit[] x) => {
-                Physics.SphereCastNonAlloc(location + centerOffset, size1, direction, x, size1, layers);
+                Physics.SphereCastNonAlloc(pos, size1, direction, x, size1, layers);
             }
             ,
             CheckShape.Cube => (RaycastHit[] x) => {
-                Physics.BoxCastNonAlloc(location + centerOffset, halfExtents, direction, x, Quaternion.Euler(direction), Mathf.Max(halfExtents.y, halfExtents.z), layers);
+                Physics.BoxCastNonAlloc(pos, halfExtents, direction, x, rotation, Mathf.Max(halfExtents.y, halfExtents.z), layers);
             }
             ,
             _ => null,
@@ -30,7 +32,7 @@ public class AreaColliderCheck {
     }
     public void Gizmo(GameObject gameObject) => Gizmo(gameObject.transform.position, gameObject.transform.forward);
     public void Gizmo(Vector3 location, Vector3 direction) {
-        if (!DrawGizmo) return;
+        if (!doDrawGizmo) return;
         Quaternion rotation = Quaternion.LookRotation(direction);
 
         Gizmos.matrix = Matrix4x4.TRS(location + rotation * centerOffset, rotation, Vector3.one);
@@ -76,7 +78,7 @@ public class AreaAffectsDrawer : PropertyDrawer {
                 DrawProp(ref y, position, property, "halfExtents");
 
             DrawProp(ref y, position, property, "layers");
-            DrawProp(ref y, position, property, "DrawGizmo");
+            DrawProp(ref y, position, property, "doDrawGizmo");
 
             EditorGUI.indentLevel--;
         }
