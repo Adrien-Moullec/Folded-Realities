@@ -1,31 +1,22 @@
 using UnityEngine;
 
 using Unity.Cinemachine;
-using UnityEngine.UI;
-using UnityEditor;
 
-public class CinemachineArea : MonoBehaviour {
-    [SerializeField] private CinemachineCamera vcamToActivate;
-    [SerializeField] private int areaPriority = 10;
-    [SerializeField] private int defaultPriority = 0;
-
-    [Space]
-    [TextArea]
-    public string CinemachineBreakdown = "Check this script for notes about how to use cinemachine components.";
-
+public class CinemachineArea : CinemachineOrigami {
 
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            vcamToActivate.Priority = areaPriority;
+            SetCameraHighPriority();
         }
     }
 
     private void OnTriggerExit(Collider other) {
         if (other.CompareTag("Player")) {
-            vcamToActivate.Priority = defaultPriority;
+            SetCameraDefaultPriority();
         }
     }
 }
+
 /// Cinemachine Brain:
 /// 
 // DAMPING - will stop camera jittering. normally use 0.1 -> 1
