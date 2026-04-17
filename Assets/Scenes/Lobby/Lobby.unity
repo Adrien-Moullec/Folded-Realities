@@ -2210,19 +2210,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2517601206403958104, guid: 98ba98a9f1436754196d25f43830f232, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.27574992
+      value: 0.290858
       objectReference: {fileID: 0}
     - target: {fileID: 2517601206403958104, guid: 98ba98a9f1436754196d25f43830f232, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.048371237
+      value: 0.048039667
       objectReference: {fileID: 0}
     - target: {fileID: 2517601206403958104, guid: 98ba98a9f1436754196d25f43830f232, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9254537
+      value: 0.9236474
       objectReference: {fileID: 0}
     - target: {fileID: 2517601206403958104, guid: 98ba98a9f1436754196d25f43830f232, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.25526002
+      value: -0.24488655
       objectReference: {fileID: 0}
     - target: {fileID: 2517601206403958104, guid: 98ba98a9f1436754196d25f43830f232, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3326,15 +3326,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1225429674322778145, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 118.7
+      value: 117.139
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 15.89
+      value: 16.8
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -75.7
+      value: -75.68
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3441,9 +3441,41 @@ PrefabInstance:
       value: 0.15920597
       objectReference: {fileID: 0}
     - target: {fileID: 4765679296051737577, guid: a1e531976df10334380158e02a6889e7, type: 3}
+      propertyPath: body
+      value: 
+      objectReference: {fileID: 1805158014}
+    - target: {fileID: 4765679296051737577, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: gameplayCamera
       value: 
       objectReference: {fileID: 1805158013}
+    - target: {fileID: 4765679296051737577, guid: a1e531976df10334380158e02a6889e7, type: 3}
+      propertyPath: interactionArea.size1
+      value: 1.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 4765679296051737577, guid: a1e531976df10334380158e02a6889e7, type: 3}
+      propertyPath: interactionArea.wireFrame
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4765679296051737577, guid: a1e531976df10334380158e02a6889e7, type: 3}
+      propertyPath: interactionArea.checkShape
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4765679296051737577, guid: a1e531976df10334380158e02a6889e7, type: 3}
+      propertyPath: interactionArea.halfExtents.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4765679296051737577, guid: a1e531976df10334380158e02a6889e7, type: 3}
+      propertyPath: interactionArea.halfExtents.y
+      value: 1.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 4765679296051737577, guid: a1e531976df10334380158e02a6889e7, type: 3}
+      propertyPath: interactionArea.halfExtents.z
+      value: 0.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 4765679296051737577, guid: a1e531976df10334380158e02a6889e7, type: 3}
+      propertyPath: interactionArea.centerOffset.z
+      value: 0.48
+      objectReference: {fileID: 0}
     - target: {fileID: 4877715707548625843, guid: a1e531976df10334380158e02a6889e7, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
@@ -3596,6 +3628,11 @@ MonoBehaviour:
 --- !u!20 &1805158013 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 4401643024094209340, guid: a1e531976df10334380158e02a6889e7, type: 3}
+  m_PrefabInstance: {fileID: 1805158010}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1805158014 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7211196813232357869, guid: a1e531976df10334380158e02a6889e7, type: 3}
   m_PrefabInstance: {fileID: 1805158010}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1842236810 stripped
