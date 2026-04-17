@@ -87,7 +87,6 @@ Transform:
   m_Children:
   - {fileID: 3280997533145751887}
   - {fileID: 331717626950139581}
-  - {fileID: 8477785806138111636}
   m_Father: {fileID: 1726812301455353388}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1768793327603475908
@@ -373,7 +372,7 @@ Transform:
   m_GameObject: {fileID: 2969896672581243912}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2534014, y: -0.000000024601642, z: 0.000000006444428, w: 0.9673612}
-  m_LocalPosition: {x: -4.1234503, y: 5.5757446, z: -11.695636}
+  m_LocalPosition: {x: -0.17656589, y: 1.8057445, z: -4.575636}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1041,12 +1040,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 404e4c537b6cc3441a44ee27130107ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameplayCamera: {fileID: 4214461246217570419}
+  gameplayCamera: {fileID: 4401643024094209340}
   cameraHolderCentre: {fileID: 547844563530938474}
   cameraTiltMin: 0
   cameraTiltMax: 0
   lerpSpeed: 10
   _RadialMenuManager: {fileID: 8914686993175740339}
+  interactArea:
+    checkShape: 0
+    centerOffset: {x: 0, y: 0, z: 0}
+    size1: 1
+    halfExtents: {x: 1, y: 1, z: 1}
+    layers:
+      serializedVersion: 2
+      m_Bits: 1
+    doDrawGizmo: 1
 --- !u!114 &6552002042681570147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1068,7 +1076,7 @@ MonoBehaviour:
     entityBody:
       bodyHolder: {fileID: 7211196813232357869}
       feetSphereArea: {fileID: 6536683569106103474}
-      attackCubeArea: {fileID: 5184620146362688147}
+      attackCubeArea: {fileID: 0}
       animatorManager: {fileID: 5674947353833146646}
       UsingAbility: 0
       MoveOverride: 0
@@ -1088,7 +1096,7 @@ MonoBehaviour:
     entityBody:
       bodyHolder: {fileID: 7211196813232357869}
       feetSphereArea: {fileID: 6536683569106103474}
-      attackCubeArea: {fileID: 5184620146362688147}
+      attackCubeArea: {fileID: 0}
       animatorManager: {fileID: 1844541384722774070}
       UsingAbility: 0
       MoveOverride: 0
@@ -1124,6 +1132,7 @@ MonoBehaviour:
         abilitySO: {fileID: 0}
       tertiary:
         abilitySO: {fileID: 0}
+  BodyHolder: {fileID: 0}
 --- !u!114 &3061592385069726717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1331,7 +1340,7 @@ Transform:
   m_GameObject: {fileID: 5875144431828711502}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2534014, y: -0.000000024601642, z: 0.000000006444428, w: 0.9673612}
-  m_LocalPosition: {x: -3.9468842, y: 6.02, z: -11.12}
+  m_LocalPosition: {x: 0, y: 2.25, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1369,59 +1378,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
---- !u!1 &6297780670080176768
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8477785806138111636}
-  - component: {fileID: 5184620146362688147}
-  m_Layer: 0
-  m_Name: AttackArea
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8477785806138111636
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6297780670080176768}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.527}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5963095729506294720}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &5184620146362688147
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6297780670080176768}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7211196813232357869
 GameObject:
   m_ObjectHideFlags: 0

@@ -63,5 +63,7 @@ namespace AbilitySystem {
         }
 
         #endregion
+
+        public abstract void OnDrawGizmos();
     }
 }

@@ -99,7 +99,7 @@ namespace AbilitySystem {
             if (pmd.isGrounded) entityBody.iAbility.OnAbilityEvent(onHitGround);
             if (!pmd.isGrounded && !pmd.isJumpButtonRePressed) entityBody.iAbility.OnAbilityEvent(onFreeFall);
         }
-        public override void FrameEvent(AbilityData data) {
+        public override void FrameEvent(EntityBody entityBody, AbilityData data) {
             TransformingPlayerData pmd = (TransformingPlayerData)data;
             pmd.queueJump = Mathf.Clamp(Time.deltaTime, 0, 0.2f);
         }
