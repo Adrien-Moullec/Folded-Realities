@@ -9,8 +9,7 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerAbilityController))]
-public class PlayerManager : MonoBehaviour
-{
+public class PlayerManager : MonoBehaviour {
     public static PlayerManager player;
     #region Variables
     [Space]
@@ -54,14 +53,12 @@ public class PlayerManager : MonoBehaviour
     bool wheelActive = false;
     #endregion
 
-    void Awake()
-    {
+    void Awake() {
         player = this;
         iAbility = GetComponent<IAbility>();
     }
     #region On Start
-    private void OnEnable()
-    {
+    private void OnEnable() {
         iAbility = GetComponent<PlayerAbilityController>();
         _PlayerInput = GetComponent<PlayerInput>();
         Cursor.lockState = CursorLockMode.Locked;
@@ -80,13 +77,11 @@ public class PlayerManager : MonoBehaviour
         lookInput.canceled += input => deltaLook = input.ReadValue<Vector2>();
         runInput.performed += input => iAbility.GetInputValues.SetRunToggle(true);
         runInput.canceled += input => iAbility.GetInputValues.SetRunToggle(false);
-        radialWheel.performed += input =>
-        {
+        radialWheel.performed += input => {
             _RadialMenuManager?.SetWheelActive(true);
             wheelActive = true;
         };
-        radialWheel.canceled += input =>
-        {
+        radialWheel.canceled += input => {
             _RadialMenuManager?.SetWheelActive(false);
             wheelActive = false;
             iAbility.InputTransitionName(_RadialMenuManager?.OnSegmentClicked());
@@ -98,19 +93,16 @@ public class PlayerManager : MonoBehaviour
         ability3Input.performed += input => iAbility.GetInputValues.isTertiaryAbility = true;
         ability3Input.canceled += input => iAbility.GetInputValues.isTertiaryAbility = false;
     }
-    void OnDisable()
-    {
+    void OnDisable() {
         lookInput.performed -= input => deltaLook = input.ReadValue<Vector2>();
         lookInput.canceled -= input => deltaLook = input.ReadValue<Vector2>();
         runInput.performed -= input => iAbility.GetInputValues.SetRunToggle(true);
         runInput.canceled -= input => iAbility.GetInputValues.SetRunToggle(false);
-        radialWheel.performed -= input =>
-        {
+        radialWheel.performed -= input => {
             _RadialMenuManager?.SetWheelActive(true);
             wheelActive = true;
         };
-        radialWheel.canceled -= input =>
-        {
+        radialWheel.canceled -= input => {
             _RadialMenuManager?.SetWheelActive(false);
             wheelActive = false;
             iAbility.InputTransitionName(_RadialMenuManager?.OnSegmentClicked());
@@ -124,8 +116,7 @@ public class PlayerManager : MonoBehaviour
     }
     #endregion
 
-    void OnInteract()
-    {
+    void OnInteract() {
         RaycastHit[] hits = new RaycastHit[4];
         interactionArea.GetColliders(body).Invoke(hits);
         foreach (var n in hits)
@@ -134,14 +125,12 @@ public class PlayerManager : MonoBehaviour
     }
 
     #region Update Functions
-    private void Update()
-    {
+    private void Update() {
         Movement();
     }
 
     #region Camera
-    void Movement()
-    {
+    void Movement() {
 
         if (wheelActive) return;
         Vector2 m = moveInput.ReadValue<Vector2>();
@@ -155,8 +144,7 @@ public class PlayerManager : MonoBehaviour
     #endregion
     #endregion
 
-    private void OnDrawGizmos()
-    {
+    private void OnDrawGizmos() {
         interactionArea.Gizmo(body);
     }
 }
