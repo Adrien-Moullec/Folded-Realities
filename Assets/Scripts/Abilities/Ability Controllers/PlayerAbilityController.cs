@@ -17,7 +17,9 @@ namespace AbilitySystem {
         [Header("Abilities")]
         [SerializeField] List<PlayerSetSummary> playerSetsList;
         [HideInInspector] public PlayerSetSummary currentAbilitySet;
+        public GameObject BodyHolder;
         private CharacterController characterController;
+        private Action aaaa;
 
         #region OnStart
         protected override void Awake() {
@@ -38,14 +40,14 @@ namespace AbilitySystem {
                 i.playerAbilitySet.movement.AbilityData = playerSetsList[0].playerAbilitySet.movement.AbilityData;
 
                 if (i.playerAbilitySet.movement?.movementSO != null)
-                    frameEvents += i.playerAbilitySet.movement.FrameEvent;
+                    frameEvents += () => { i.playerAbilitySet.movement.FrameEvent(i.entityBody); };
                 if (i.playerAbilitySet.primary?.abilitySO != null)
-                    frameEvents += i.playerAbilitySet.primary.FrameEvent;
+                    frameEvents += () => { i.playerAbilitySet.primary.FrameEvent(i.entityBody); };
                 if (i.playerAbilitySet.secondary?.abilitySO != null)
-                    frameEvents += i.playerAbilitySet.secondary.FrameEvent;
+                    frameEvents += () => { i.playerAbilitySet.secondary.FrameEvent(i.entityBody); };
                 if (i.playerAbilitySet.tertiary?.abilitySO != null)
-                    frameEvents += i.playerAbilitySet.tertiary.FrameEvent;
-            }
+                    frameEvents += () => { i.playerAbilitySet.tertiary.FrameEvent(i.entityBody); };
+}
             SetNewSummary(playerSetsList[0]);
         }
         protected override void Update() {
@@ -137,7 +139,18 @@ namespace AbilitySystem {
         #endregion
 
         #region Data
-        public override EntityBody GetEntityBody() => currentAbilitySet.entityBody;
+        public override EntityBody GetEntityBody() {
+            if (currentAbilitySet != null) return currentAbilitySet.entityBody;
+            else return playerSetsList[0].entityBody;
+        }
+        public override void OnDrawGizmos() {
+            foreach (var n in playerSetsList) {
+                n?.abilitySetSO?.movement?.GizmoEvent(n.entityBody);
+                n?.abilitySetSO?.primary?.GizmoEvent(n.entityBody);
+                n?.abilitySetSO?.secondary?.GizmoEvent(n.entityBody);
+                n?.abilitySetSO?.tertiary?.GizmoEvent(n.entityBody);
+            }
+        }
 
         [Serializable]
         public class PlayerSetSummary {

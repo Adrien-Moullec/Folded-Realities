@@ -9,7 +9,10 @@ namespace AbilitySystem {
         [SerializeField, Range(0.1f, 20)] protected float cooldown;
         [SerializeField, Range(1, 5)] protected int charges;
         protected bool animationPlaying = false;
-
+        [SerializeField] protected AreaColliderCheck attackArea;
+        public override AbilityData AbilityDataSetup(EntityBody entityBody) {
+            return new CooldownData(charges, cooldown);
+        }
         #region Call Logic
         public override bool Execute(EntityBody entityBody, AbilityData data) {
             CooldownData cdd = (CooldownData)data;
@@ -33,17 +36,17 @@ namespace AbilitySystem {
         }
         protected virtual void OnHold(EntityBody entityBody, CooldownData data) { }
         protected virtual void OnPressWhileUsing(EntityBody entityBody, CooldownData data) { }
-        public override void FrameEvent(AbilityData abData) {
-            CooldownData data = (CooldownData)abData;
+        public override void FrameEvent(EntityBody entityBody, AbilityData data) {
+            CooldownData cdd = (CooldownData)data;
 
-            if (data.currentCharges >= charges) {
-                data.currentCharges = charges;
-                data.cooldownDelta = 0;
-            } else if (data.cooldownDelta > cooldown) {
-                data.cooldownDelta = 0;
-                data.currentCharges++;
+            if (cdd.currentCharges >= charges) {
+                cdd.currentCharges = charges;
+                cdd.cooldownDelta = 0;
+            } else if (cdd.cooldownDelta > cooldown) {
+                cdd.cooldownDelta = 0;
+                cdd.currentCharges++;
             } else {
-                data.cooldownDelta += Time.deltaTime;
+                cdd.cooldownDelta += Time.deltaTime;
             }
         }
         #endregion
@@ -88,9 +91,10 @@ namespace AbilitySystem {
         public override void StartUp(EntityBody entityBody) =>
             abilitySO?.Startup(entityBody, AbilityData);
 
-        public override void FrameEvent() =>
-            abilitySO?.FrameEvent(AbilityData);
-
+        public override void FrameEvent(EntityBody entityBody) =>
+            abilitySO?.FrameEvent(entityBody, AbilityData);
+        public override void OnDrawGizmos(EntityBody entityBody) =>
+            abilitySO?.GizmoEvent(entityBody);
         public CooldownAbilitySummary(CooldownAbilitySO m, EntityBody eb) {
             abilitySO = m;
             AbilityData = m.AbilityDataSetup(eb);
@@ -100,9 +104,11 @@ namespace AbilitySystem {
         public float cooldownDelta;
         public int currentCharges;
         public bool isRecharging = false;
+        public RaycastHit[] raycastHits;
         public CooldownData(int charges, float cooldown) {
             currentCharges = charges;
             cooldownDelta = cooldown;
+            raycastHits = new RaycastHit[10];
         }
     }
 }
