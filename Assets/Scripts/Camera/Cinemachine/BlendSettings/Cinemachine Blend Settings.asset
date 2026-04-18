@@ -72,7 +72,7 @@ MonoBehaviour:
     To: RedShirtCamera2
     Blend:
       Style: 2
-      Time: 1
+      Time: 0.5
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -150,6 +150,149 @@ MonoBehaviour:
     Blend:
       Style: 5
       Time: 0.5
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: CraneCamera
+    To: RedShirtCamera4
+    Blend:
+      Style: 2
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: RedShirtCamera4
+    To: RedShirtCamera
+    Blend:
+      Style: 2
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: RedShirtCamera4_Bridge
+    To: RedShirtCamera
+    Blend:
+      Style: 2
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: RedShirtCamera4_Bridge
+    To: BackPillowCamera
+    Blend:
+      Style: 2
+      Time: 0.5
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: BackPillowCamera
+    To: RedShirtCamera4_Bridge
+    Blend:
+      Style: 2
+      Time: 0.5
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: BackPillowCamera
+    To: PuzzlePillowCamera
+    Blend:
+      Style: 2
+      Time: 0.5
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: BackPillowCamera_under
+    To: PuzzlePillowCamera
+    Blend:
+      Style: 2
+      Time: 0.5
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: PuzzlePillowCamera
+    To: BackPillowCamera
+    Blend:
+      Style: 2
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: PuzzlePillowCamera
+    To: BackPillowCamera_under
+    Blend:
+      Style: 2
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: BackPillowCamera_right
+    To: BackPillowCamera_View
+    Blend:
+      Style: 2
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: BackPillowCamera_View
+    To: BackPillowCamera_View2
+    Blend:
+      Style: 2
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: BackPillowCamera_View2
+    To: BackPillowCamera_View
+    Blend:
+      Style: 2
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: BackPillowCamera_View
+    To: BackPillowCamera_right
+    Blend:
+      Style: 2
+      Time: 1
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
