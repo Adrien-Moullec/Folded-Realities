@@ -26,21 +26,12 @@ public class NPCDialogue : MonoBehaviour {
     public bool autoAdvance = false;
     public float autoAdvanceDelay = 1.5f;
 
-    
-    public bool triggerOnce = false;
-    public string uniqueID;
-    public bool disableColliderAfterUse = true;
-
     private int currentLine = 0;
     private bool playerNearby = false;
     private bool isTyping = false;
     private bool dialogueActive = false;
-    private bool hasTriggered = false;
 
     private Vector3 originalScale;
-
-    public CameraFocus cameraFocus;
-    public CameraZoom cameraZoom;
 
     void Start() {
         if (dialogueUI != null) {
@@ -52,24 +43,6 @@ public class NPCDialogue : MonoBehaviour {
 
         if (continuePrompt != null) {
             continuePrompt.SetActive(false);
-        }
-
-        if (cameraFocus == null) {
-            cameraFocus = FindAnyObjectByType<CameraFocus>();
-        }
-
-        if (cameraZoom == null) {
-            cameraZoom = FindAnyObjectByType<CameraZoom>();
-        }
-
-        if (triggerOnce && !string.IsNullOrEmpty(uniqueID)) {
-            if (PlayerPrefs.GetInt(uniqueID, 0) == 1) {
-                hasTriggered = true;
-
-                if (disableColliderAfterUse) {
-                    GetComponent<Collider>().enabled = false;
-                }
-            }
         }
     }
 
@@ -94,9 +67,11 @@ public class NPCDialogue : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
         if (!other.CompareTag("Player")) return;
 
-        if (triggerOnce && hasTriggered) return;
-
         playerNearby = true;
+
+        
+        GetComponent<Collider>().enabled = false;
+
         StartDialogue();
     }
 
@@ -104,7 +79,6 @@ public class NPCDialogue : MonoBehaviour {
         if (!other.CompareTag("Player")) return;
 
         playerNearby = false;
-        EndDialogue();
     }
 
     void StartDialogue() {
@@ -177,18 +151,6 @@ public class NPCDialogue : MonoBehaviour {
 
         if (currentLine >= lines.Length) {
 
-            if (triggerOnce) {
-                hasTriggered = true;
-
-                if (!string.IsNullOrEmpty(uniqueID)) {
-                    PlayerPrefs.SetInt(uniqueID, 1);
-                }
-
-                if (disableColliderAfterUse) {
-                    GetComponent<Collider>().enabled = false;
-                }
-            }
-
             if (!preventAutoClose) {
                 EndDialogue();
             }
@@ -197,9 +159,22 @@ public class NPCDialogue : MonoBehaviour {
                 onDialogueFinished.Invoke();
             }
 
+            
+            StartCoroutine(DestroyAfter());
+
         } else {
             ShowLine();
         }
+    }
+
+    IEnumerator DestroyAfter() {
+        yield return new WaitForSeconds(0.3f);
+
+        if (dialogueUI != null) {
+            dialogueUI.SetActive(false);
+        }
+
+        Destroy(gameObject);
     }
 
     IEnumerator PopIn() {
