@@ -12,18 +12,18 @@ namespace AbilitySystem {
         [SerializeField] protected EntityBody entityBody;
         [HideInInspector] protected AbilitySet abilitySetList;
         [HideInInspector] protected EnemyAbilitySet abilitySet;
-        private NavMeshAgent navMeshAgent;
+        [SerializeField] private NavMeshAgent navMeshAgent;
         protected override void Awake() {
             base.Awake();
             entityBody.iAbility = this;
             entityBody.iHealth = this;
             navMeshAgent = GetComponent<NavMeshAgent>();
-            entityBody.animatorManager = GetComponent<AnimatorManager>();
             if (abilitySetSO == null) return;
             abilitySet = new EnemyAbilitySet(abilitySetSO, entityBody);
         }
         protected override void Update() {
             base.Update();
+            Debug.Log(entityBody.animatorManager.name);
             abilitySet?.movement?.Activate(entityBody, true);
             abilitySet?.attack?.Activate(entityBody, GetInputValues.isPrimaryAbility);
         }
