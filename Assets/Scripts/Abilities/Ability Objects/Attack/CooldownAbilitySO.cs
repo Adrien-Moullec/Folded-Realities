@@ -65,6 +65,10 @@ namespace AbilitySystem {
         protected abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
         protected virtual IEnumerator AttackAnimation(EntityBody entityBody, AbilityData data, AnimationType attackAnimation) {
             animationPlaying = true;
+            if (entityBody.animatorManager != null) {
+                AnimationEvent(new AbilityAnimationEventData(), entityBody, data);
+                yield break;
+            }
             yield return entityBody.animatorManager.InitiateOneOffAnimation(
                 null,
                 null,
@@ -75,6 +79,7 @@ namespace AbilitySystem {
             );
             while (animationPlaying)
                 yield return null;
+
         }
         public abstract void AnimationEvent(AbilityAnimationEventData animationEvent, EntityBody entityBody, AbilityData animationType);
         #endregion

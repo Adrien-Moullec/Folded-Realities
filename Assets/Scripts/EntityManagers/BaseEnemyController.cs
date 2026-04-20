@@ -34,7 +34,10 @@ public class BaseEnemyController : MonoBehaviour {
             opposingTeam.OrderBy(x => Vector3.Distance(transform.position, x.transform.position))
             .First()
             .transform.position;
-        if (distanceToEntity > playerStopDistance)
+        if (distanceToEntity > playerStopDistance) {
             AbilityController.GetInputValues.SetDestination(location);
+            AbilityController.GetInputValues.isPrimaryAbility = false;
+        } else
+            AbilityController.GetInputValues.isPrimaryAbility = true;
     }
 }

@@ -11,6 +11,7 @@ namespace AbilitySystem {
         [SerializeField] EnemyAbilitySetSO abilitySetSO;
         [SerializeField] protected EntityBody entityBody;
         [HideInInspector] protected AbilitySet abilitySetList;
+        [HideInInspector] protected EnemyAbilitySet abilitySet;
         private NavMeshAgent navMeshAgent;
         protected override void Awake() {
             base.Awake();
@@ -19,11 +20,12 @@ namespace AbilitySystem {
             navMeshAgent = GetComponent<NavMeshAgent>();
             entityBody.animatorManager = GetComponent<AnimatorManager>();
             if (abilitySetSO == null) return;
-            abilitySetList = new EnemyAbilitySet(abilitySetSO, entityBody);
+            abilitySet = new EnemyAbilitySet(abilitySetSO, entityBody);
         }
         protected override void Update() {
             base.Update();
-            abilitySetList.movement.Activate(entityBody, true);
+            abilitySet?.movement?.Activate(entityBody, true);
+            abilitySet?.attack?.Activate(entityBody, GetInputValues.isPrimaryAbility);
         }
 
         public override void OnMoveEntity(Vector3 direction) {
