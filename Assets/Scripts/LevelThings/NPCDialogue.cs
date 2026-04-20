@@ -23,10 +23,20 @@ public class NPCDialogue : MonoBehaviour {
     public System.Action onDialogueFinished;
     public bool preventAutoClose = false;
 
+    public bool autoAdvance = false;
+    public float autoAdvanceDelay = 1.5f;
+
+    
+    public bool triggerOnce = false;
+    public string uniqueID;
+    public bool disableColliderAfterUse = true;
+
     private int currentLine = 0;
     private bool playerNearby = false;
     private bool isTyping = false;
     private bool dialogueActive = false;
+    private bool hasTriggered = false;
+
     private Vector3 originalScale;
 
     public CameraFocus cameraFocus;
@@ -37,7 +47,6 @@ public class NPCDialogue : MonoBehaviour {
             dialogueUI.SetActive(false);
         }
 
-        // FIX: ensure scale isn't broken
         originalScale = Vector3.one;
         dialogueUI.transform.localScale = Vector3.zero;
 
@@ -52,10 +61,20 @@ public class NPCDialogue : MonoBehaviour {
         if (cameraZoom == null) {
             cameraZoom = FindAnyObjectByType<CameraZoom>();
         }
+
+        if (triggerOnce && !string.IsNullOrEmpty(uniqueID)) {
+            if (PlayerPrefs.GetInt(uniqueID, 0) == 1) {
+                hasTriggered = true;
+
+                if (disableColliderAfterUse) {
+                    GetComponent<Collider>().enabled = false;
+                }
+            }
+        }
     }
 
     void Update() {
-        if (!playerNearby) return;
+        if (!playerNearby || autoAdvance) return;
 
         if (dialogueActive && Input.GetKeyDown(KeyCode.X)) {
             if (isTyping) {
@@ -73,42 +92,18 @@ public class NPCDialogue : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
-        Debug.Log("DIALOGUE TRIGGER HIT: " + other.name);
-
         if (!other.CompareTag("Player")) return;
 
-        Debug.Log("PLAYER ENTERED DIALOGUE TRIGGER");
+        if (triggerOnce && hasTriggered) return;
 
         playerNearby = true;
-
-        // CAMERA DISABLED FOR DEBUG
-        // if (cameraFocus != null) {
-        //     cameraFocus.FocusOn(transform);
-        // }
-
-        // if (cameraZoom != null) {
-        //     cameraZoom.ZoomIn();
-        // }
-
         StartDialogue();
     }
 
     void OnTriggerExit(Collider other) {
-        Debug.Log("DIALOGUE TRIGGER EXIT: " + other.name);
-
         if (!other.CompareTag("Player")) return;
 
         playerNearby = false;
-
-        // CAMERA DISABLED FOR DEBUG
-        // if (cameraFocus != null) {
-        //     cameraFocus.StopFocus();
-        // }
-
-        // if (cameraZoom != null) {
-        //     cameraZoom.ZoomOut();
-        // }
-
         EndDialogue();
     }
 
@@ -167,8 +162,13 @@ public class NPCDialogue : MonoBehaviour {
 
         isTyping = false;
 
-        if (continuePrompt != null) {
-            continuePrompt.SetActive(true);
+        if (autoAdvance) {
+            yield return new WaitForSeconds(autoAdvanceDelay);
+            NextLine();
+        } else {
+            if (continuePrompt != null) {
+                continuePrompt.SetActive(true);
+            }
         }
     }
 
@@ -176,6 +176,18 @@ public class NPCDialogue : MonoBehaviour {
         currentLine++;
 
         if (currentLine >= lines.Length) {
+
+            if (triggerOnce) {
+                hasTriggered = true;
+
+                if (!string.IsNullOrEmpty(uniqueID)) {
+                    PlayerPrefs.SetInt(uniqueID, 1);
+                }
+
+                if (disableColliderAfterUse) {
+                    GetComponent<Collider>().enabled = false;
+                }
+            }
 
             if (!preventAutoClose) {
                 EndDialogue();
