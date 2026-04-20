@@ -365,6 +365,28 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 4
+  - From: FirstEnemyCamera
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 2
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: '**ANY CAMERA**'
+    To: FirstEnemyCamera
+    Blend:
+      Style: 2
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
   - From: StartLevelCamera
     To: StartLevelCamera2
     Blend:
@@ -651,8 +673,8 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 4
-  - From: '**ANY CAMERA**'
-    To: FirstEnemyCamera
+  - From: BedLampCamera
+    To: '**ANY CAMERA**'
     Blend:
       Style: 2
       Time: 1
@@ -662,7 +684,51 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 4
-  - From: FirstEnemyCamera
+  - From: BedLampCamera2
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 2
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: BedLampCameraTop
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 2
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: CurtainCamera
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 2
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: BearCamera
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 2
+      Time: 0.5
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: BearCamera2
     To: '**ANY CAMERA**'
     Blend:
       Style: 2

@@ -23,39 +23,31 @@ public class NPCDialogue : MonoBehaviour {
     public System.Action onDialogueFinished;
     public bool preventAutoClose = false;
 
+    public bool autoAdvance = false;
+    public float autoAdvanceDelay = 1.5f;
+
     private int currentLine = 0;
     private bool playerNearby = false;
     private bool isTyping = false;
     private bool dialogueActive = false;
-    private Vector3 originalScale;
 
-    public CameraFocus cameraFocus;
-    public CameraZoom cameraZoom;
+    private Vector3 originalScale;
 
     void Start() {
         if (dialogueUI != null) {
             dialogueUI.SetActive(false);
         }
 
-        // FIX: ensure scale isn't broken
         originalScale = Vector3.one;
         dialogueUI.transform.localScale = Vector3.zero;
 
         if (continuePrompt != null) {
             continuePrompt.SetActive(false);
         }
-
-        if (cameraFocus == null) {
-            cameraFocus = FindAnyObjectByType<CameraFocus>();
-        }
-
-        if (cameraZoom == null) {
-            cameraZoom = FindAnyObjectByType<CameraZoom>();
-        }
     }
 
     void Update() {
-        if (!playerNearby) return;
+        if (!playerNearby || autoAdvance) return;
 
         if (dialogueActive && Input.GetKeyDown(KeyCode.X)) {
             if (isTyping) {
@@ -73,43 +65,20 @@ public class NPCDialogue : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
-        Debug.Log("DIALOGUE TRIGGER HIT: " + other.name);
-
         if (!other.CompareTag("Player")) return;
-
-        Debug.Log("PLAYER ENTERED DIALOGUE TRIGGER");
 
         playerNearby = true;
 
-        // CAMERA DISABLED FOR DEBUG
-        // if (cameraFocus != null) {
-        //     cameraFocus.FocusOn(transform);
-        // }
-
-        // if (cameraZoom != null) {
-        //     cameraZoom.ZoomIn();
-        // }
+        
+        GetComponent<Collider>().enabled = false;
 
         StartDialogue();
     }
 
     void OnTriggerExit(Collider other) {
-        Debug.Log("DIALOGUE TRIGGER EXIT: " + other.name);
-
         if (!other.CompareTag("Player")) return;
 
         playerNearby = false;
-
-        // CAMERA DISABLED FOR DEBUG
-        // if (cameraFocus != null) {
-        //     cameraFocus.StopFocus();
-        // }
-
-        // if (cameraZoom != null) {
-        //     cameraZoom.ZoomOut();
-        // }
-
-        EndDialogue();
     }
 
     void StartDialogue() {
@@ -167,8 +136,13 @@ public class NPCDialogue : MonoBehaviour {
 
         isTyping = false;
 
-        if (continuePrompt != null) {
-            continuePrompt.SetActive(true);
+        if (autoAdvance) {
+            yield return new WaitForSeconds(autoAdvanceDelay);
+            NextLine();
+        } else {
+            if (continuePrompt != null) {
+                continuePrompt.SetActive(true);
+            }
         }
     }
 
@@ -185,9 +159,22 @@ public class NPCDialogue : MonoBehaviour {
                 onDialogueFinished.Invoke();
             }
 
+            
+            StartCoroutine(DestroyAfter());
+
         } else {
             ShowLine();
         }
+    }
+
+    IEnumerator DestroyAfter() {
+        yield return new WaitForSeconds(0.3f);
+
+        if (dialogueUI != null) {
+            dialogueUI.SetActive(false);
+        }
+
+        Destroy(gameObject);
     }
 
     IEnumerator PopIn() {
