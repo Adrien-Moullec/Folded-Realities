@@ -10,19 +10,22 @@ namespace AbilitySystem {
         [SerializeField, Range(1, 5)] protected int charges;
         protected bool animationPlaying = false;
         [SerializeField] protected AreaColliderCheck attackArea;
+        [SerializeField] bool mustRePressToUse = false;
+        [SerializeField] bool debug = false;
         public override AbilityData AbilityDataSetup(EntityBody entityBody) {
             return new CooldownData(charges, cooldown);
         }
         #region Call Logic
         public override bool Execute(EntityBody entityBody, AbilityData data) {
             CooldownData cdd = (CooldownData)data;
+            if (debug) Debug.Log("using = " + entityBody.UsingAbility + ", charges = " + cdd.currentCharges);
             if (data.usingAbility) {
                 if (data.isHoldingInput)
                     OnHold(entityBody, cdd);
                 else
                     OnPressWhileUsing(entityBody, cdd);
                 return false;
-            } else if (entityBody.UsingAbility || cdd.currentCharges <= 0 || data.isHoldingInput) {
+            } else if (entityBody.UsingAbility || cdd.currentCharges <= 0 || (mustRePressToUse && data.isHoldingInput)) {
                 return false;
             }
 
@@ -65,7 +68,7 @@ namespace AbilitySystem {
         protected abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
         protected virtual IEnumerator AttackAnimation(EntityBody entityBody, AbilityData data, AnimationType attackAnimation) {
             animationPlaying = true;
-            if (entityBody.animatorManager != null) {
+            if (entityBody.animatorManager == null) {
                 AnimationEvent(new AbilityAnimationEventData(), entityBody, data);
                 yield break;
             }
