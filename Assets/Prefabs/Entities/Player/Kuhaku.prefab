@@ -1046,7 +1046,8 @@ MonoBehaviour:
   cameraTiltMax: 0
   lerpSpeed: 10
   _RadialMenuManager: {fileID: 8914686993175740339}
-  interactArea:
+  body: {fileID: 7211196813232357869}
+  interactionArea:
     checkShape: 0
     centerOffset: {x: 0, y: 0, z: 0}
     size1: 1
@@ -1055,6 +1056,7 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 1
     doDrawGizmo: 1
+    wireFrame: 1
 --- !u!114 &6552002042681570147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1076,7 +1078,6 @@ MonoBehaviour:
     entityBody:
       bodyHolder: {fileID: 7211196813232357869}
       feetSphereArea: {fileID: 6536683569106103474}
-      attackCubeArea: {fileID: 0}
       animatorManager: {fileID: 5674947353833146646}
       UsingAbility: 0
       MoveOverride: 0
@@ -1096,7 +1097,6 @@ MonoBehaviour:
     entityBody:
       bodyHolder: {fileID: 7211196813232357869}
       feetSphereArea: {fileID: 6536683569106103474}
-      attackCubeArea: {fileID: 0}
       animatorManager: {fileID: 1844541384722774070}
       UsingAbility: 0
       MoveOverride: 0
@@ -1117,7 +1117,6 @@ MonoBehaviour:
     entityBody:
       bodyHolder: {fileID: 0}
       feetSphereArea: {fileID: 0}
-      attackCubeArea: {fileID: 0}
       animatorManager: {fileID: 0}
       UsingAbility: 0
       MoveOverride: 0
@@ -1244,8 +1243,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e1b59c990f0bb747852279a35b403fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelID: 0
   normalCount: 0
   normalCountText: {fileID: 0}
+  specialCanvas: {fileID: 0}
   puzzlePieces:
   - {fileID: 0}
   - {fileID: 0}
