@@ -20,6 +20,11 @@ namespace AbilitySystem {
             navMeshAgent = GetComponent<NavMeshAgent>();
             if (abilitySetSO == null) return;
             abilitySet = new EnemyAbilitySet(abilitySetSO, entityBody);
+
+            if (abilitySet.movement?.movementSO != null)
+                frameEvents += () => { abilitySet.movement.FrameEvent(entityBody); };
+            if (abilitySet?.attack?.abilitySO != null)
+                frameEvents += () => { abilitySet.attack.FrameEvent(entityBody); };
         }
         protected override void Update() {
             base.Update();
