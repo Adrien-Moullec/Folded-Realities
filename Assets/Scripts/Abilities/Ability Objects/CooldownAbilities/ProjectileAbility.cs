@@ -29,7 +29,6 @@ namespace AbilitySystem {
         #endregion
 
         protected override IEnumerator Ability(EntityBody entityBody, CooldownData data) {
-            Debug.Log("StartEventProjectile");
             //if (projectilePoolInfo.poolObject == null || (data.isHoldingInput && !automaticShooting)) yield break;
             ProjectileData pd = (ProjectileData)data;
 
@@ -63,7 +62,6 @@ namespace AbilitySystem {
         }
 
         public override void AnimationEvent(AbilityAnimationEventData animationData, EntityBody entityBody, AbilityData abilityData) {
-            Debug.Log("EVENT - Projectile");
             entityBody.iAbility.GetAbilityController.StartCoroutine(Shoot(entityBody, abilityData));
         }
 

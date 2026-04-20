@@ -118,7 +118,7 @@ namespace AbilitySystem {
                 moveData.isGrounded
             );
             Gravity(moveData, entityBody);
-            AnimateAbility(entityBody, moveData);
+            AnimateAbility(entityBody, moveData.velocity, moveData.fallSpeed, moveData.isGrounded);
 
             entityBody.iAbility.OnMoveEntity(moveData.velocity * Time.deltaTime);
             return true;
@@ -136,6 +136,7 @@ namespace AbilitySystem {
         }
         public override bool AutoTrackMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             entityBody.iAbility.OnEntityTrack(inpVals.Destination);
+            AnimateAbility(entityBody, Vector3.forward * walkSpeed, 0, true);
             return true;
         }
         public override bool FlightMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
@@ -272,10 +273,18 @@ namespace AbilitySystem {
             pmd.remainingJumps--;
         }
 
-        protected void AnimateAbility(EntityBody entityBody, TransformingPlayerData moveData) {
-            float delta = Mathf.Clamp01(new Vector3(moveData.velocity.x, 0, moveData.velocity.z).magnitude / runSpeed);
-
-            entityBody.animatorManager.SetMovement(delta, Mathf.Lerp(maxFallSpeed, -maxFallSpeed, moveData.fallSpeed), moveData.isGrounded);
+        protected void AnimateAbility(EntityBody entityBody, Vector3 movement, float fallSpeed, bool isGrounded) {
+            float delta = Mathf.Clamp01(new Vector3(movement.x, 0, movement.z).magnitude / runSpeed);
+            entityBody.
+            animatorManager.
+            SetMovement(
+                delta,
+                Mathf.Lerp(
+                    maxFallSpeed,
+                    -maxFallSpeed,
+                    fallSpeed),
+                isGrounded
+            );
         }
 
         public override bool PassEvent(EntityBody entityBody, AbilityData data) {
