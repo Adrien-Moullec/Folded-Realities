@@ -1,18 +1,23 @@
 using UnityEngine;
 
 public class StageLock : MonoBehaviour {
-    public string requiredKey; 
-    public GameObject lockVisual; 
-    public GameObject lockedUI; 
+    public string requiredKey;
+    public GameObject lockVisual;
+    public GameObject lockedUI;
 
     private bool isUnlocked = false;
+    private DoorTeleport doorTeleport;
 
     void Start() {
-       
-        if (lockVisual != null)
-            lockVisual.SetActive(true);
+        doorTeleport = GetComponent<DoorTeleport>();
 
         isUnlocked = PlayerPrefs.GetInt(requiredKey, 0) == 1;
+
+        if (isUnlocked) {
+            Unlock();
+        } else {
+            Lock();
+        }
     }
 
     void OnTriggerEnter(Collider other) {
@@ -21,21 +26,28 @@ public class StageLock : MonoBehaviour {
         isUnlocked = PlayerPrefs.GetInt(requiredKey, 0) == 1;
 
         if (isUnlocked) {
-            UnlockVisual();
-            Debug.Log("Unlocked - allow access");
-
-            
+            Unlock();
         } else {
-            Debug.Log("Still locked");
+            Lock();
 
             if (lockedUI != null)
                 lockedUI.SetActive(true);
         }
     }
 
-    void UnlockVisual() {
-        if (lockVisual != null && lockVisual.activeSelf) {
+    void Unlock() {
+        if (lockVisual != null)
             lockVisual.SetActive(false);
-        }
+
+        if (doorTeleport != null)
+            doorTeleport.enabled = true;
+    }
+
+    void Lock() {
+        if (lockVisual != null)
+            lockVisual.SetActive(true);
+
+        if (doorTeleport != null)
+            doorTeleport.enabled = false;
     }
 }

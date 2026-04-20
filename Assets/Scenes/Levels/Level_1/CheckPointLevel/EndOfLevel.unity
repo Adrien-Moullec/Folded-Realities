@@ -178,8 +178,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Restart
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 15f858983e0905846a1798d4295d9e93, type: 2}
-  m_sharedMaterial: {fileID: 815584396936516245, guid: 15f858983e0905846a1798d4295d9e93, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -285,6 +285,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lobbySceneName: Lobby
+  spawnID: 0
+  autoContinue: 1
+  delay: 2
 --- !u!4 &101029741
 Transform:
   m_ObjectHideFlags: 0
@@ -673,8 +676,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Continue
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 15f858983e0905846a1798d4295d9e93, type: 2}
-  m_sharedMaterial: {fileID: 815584396936516245, guid: 15f858983e0905846a1798d4295d9e93, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -849,7 +852,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 101029740}
         m_TargetAssemblyTypeName: ContinueGame, Assembly-CSharp
-        m_MethodName: Continue
+        m_MethodName: LoadLobby
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -956,8 +959,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Total Coins Collected:'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 15f858983e0905846a1798d4295d9e93, type: 2}
-  m_sharedMaterial: {fileID: 815584396936516245, guid: 15f858983e0905846a1798d4295d9e93, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1388,8 +1391,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Stage Completed! '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 15f858983e0905846a1798d4295d9e93, type: 2}
-  m_sharedMaterial: {fileID: 815584396936516245, guid: 15f858983e0905846a1798d4295d9e93, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
