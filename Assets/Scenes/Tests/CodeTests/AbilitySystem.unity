@@ -885,17 +885,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &729594868 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6633631916572554576, guid: bdd47b8a7092d2041b58d1c6446513c6, type: 3}
-  m_PrefabInstance: {fileID: 1553484199}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5487b8afb1024d141a458dfdfbee8b9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &862889824
 GameObject:
   m_ObjectHideFlags: 0
@@ -2134,15 +2123,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5357483801470575219, guid: bdd47b8a7092d2041b58d1c6446513c6, type: 3}
       propertyPath: m_LocalScale.x
-      value: 8.35
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5357483801470575219, guid: bdd47b8a7092d2041b58d1c6446513c6, type: 3}
       propertyPath: m_LocalScale.y
-      value: 8.35
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5357483801470575219, guid: bdd47b8a7092d2041b58d1c6446513c6, type: 3}
       propertyPath: m_LocalScale.z
-      value: 8.35
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5357483801470575219, guid: bdd47b8a7092d2041b58d1c6446513c6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2199,7 +2188,7 @@ PrefabInstance:
     - target: {fileID: 6866967023358552067, guid: bdd47b8a7092d2041b58d1c6446513c6, type: 3}
       propertyPath: entityBody.animatorManager
       value: 
-      objectReference: {fileID: 729594868}
+      objectReference: {fileID: 1949734124}
     - target: {fileID: 6922554623371224633, guid: bdd47b8a7092d2041b58d1c6446513c6, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -2487,6 +2476,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1949734124 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6973013642675865551, guid: bdd47b8a7092d2041b58d1c6446513c6, type: 3}
+  m_PrefabInstance: {fileID: 1553484199}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5487b8afb1024d141a458dfdfbee8b9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2074302664
 GameObject:
   m_ObjectHideFlags: 0
