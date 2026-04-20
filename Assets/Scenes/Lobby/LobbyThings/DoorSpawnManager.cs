@@ -25,10 +25,10 @@ public class DoorSpawnManager : MonoBehaviour {
                 if (cc != null) cc.enabled = false;
 
                 // Slight upward offset ONLY (not forward)
-                Vector3 safePos = spawn.position + Vector3.up * 0.5f;
-
-                player.transform.position = safePos;
-                player.transform.rotation = spawn.rotation;
+                //Vector3 safePos = spawn.position + Vector3.up * 0.5f;
+                //
+                //player.transform.position = safePos;
+                //player.transform.rotation = spawn.rotation;
 
                 if (cc != null) cc.enabled = true;
             }
@@ -38,8 +38,8 @@ public class DoorSpawnManager : MonoBehaviour {
 
             if (cc != null) cc.enabled = false;
 
-            player.transform.position = defaultSpawnPoint.position;
-            player.transform.rotation = defaultSpawnPoint.rotation;
+            //player.transform.position = defaultSpawnPoint.position;
+            //player.transform.rotation = defaultSpawnPoint.rotation;
 
             if (cc != null) cc.enabled = true;
         }
