@@ -1,22 +1,31 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class ContinueGame : MonoBehaviour {
+    public string lobbySceneName = "Lobby";
+    public int spawnID = 0;
 
-    [SerializeField] string lobbySceneName = "Lobby";
-    [SerializeField] int spawnID = 0;
+    public bool autoContinue = true;
+    public float delay = 2f;
 
-    public void Continue() {
+    void Start() {
+        if (autoContinue) {
+            StartCoroutine(AutoLoad());
+        }
+    }
 
-        Debug.Log("Continue pressed");
+    IEnumerator AutoLoad() {
+        yield return new WaitForSeconds(delay);
+        LoadLobby();
+    }
 
-        Time.timeScale = 1f;
-
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-
-        PlayerPrefs.SetInt("SpawnDoorID", spawnID);
+    public void LoadLobby() {
+        
+        PlayerPrefs.SetInt("SpawnID", spawnID);
         PlayerPrefs.Save();
+
+        Debug.Log("Loading Lobby with SpawnID: " + spawnID);
 
         SceneManager.LoadScene(lobbySceneName);
     }
