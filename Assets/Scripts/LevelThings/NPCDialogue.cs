@@ -37,7 +37,8 @@ public class NPCDialogue : MonoBehaviour {
             dialogueUI.SetActive(false);
         }
 
-        originalScale = dialogueUI.transform.localScale;
+        // FIX: ensure scale isn't broken
+        originalScale = Vector3.one;
         dialogueUI.transform.localScale = Vector3.zero;
 
         if (continuePrompt != null) {
@@ -54,9 +55,7 @@ public class NPCDialogue : MonoBehaviour {
     }
 
     void Update() {
-        if (!playerNearby) {
-            return;
-        }
+        if (!playerNearby) return;
 
         if (dialogueActive && Input.GetKeyDown(KeyCode.X)) {
             if (isTyping) {
@@ -74,41 +73,47 @@ public class NPCDialogue : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Player")) {
-            playerNearby = true;
+        Debug.Log("DIALOGUE TRIGGER HIT: " + other.name);
 
-            if (cameraFocus != null) {
-                cameraFocus.FocusOn(transform);
-            }
+        if (!other.CompareTag("Player")) return;
 
-            if (cameraZoom != null) {
-                cameraZoom.ZoomIn();
-            }
+        Debug.Log("PLAYER ENTERED DIALOGUE TRIGGER");
 
-            StartDialogue();
-        }
+        playerNearby = true;
+
+        // CAMERA DISABLED FOR DEBUG
+        // if (cameraFocus != null) {
+        //     cameraFocus.FocusOn(transform);
+        // }
+
+        // if (cameraZoom != null) {
+        //     cameraZoom.ZoomIn();
+        // }
+
+        StartDialogue();
     }
 
     void OnTriggerExit(Collider other) {
-        if (other.CompareTag("Player")) {
-            playerNearby = false;
+        Debug.Log("DIALOGUE TRIGGER EXIT: " + other.name);
 
-            if (cameraFocus != null) {
-                cameraFocus.StopFocus();
-            }
+        if (!other.CompareTag("Player")) return;
 
-            if (cameraZoom != null) {
-                cameraZoom.ZoomOut();
-            }
+        playerNearby = false;
 
-            EndDialogue();
-        }
+        // CAMERA DISABLED FOR DEBUG
+        // if (cameraFocus != null) {
+        //     cameraFocus.StopFocus();
+        // }
+
+        // if (cameraZoom != null) {
+        //     cameraZoom.ZoomOut();
+        // }
+
+        EndDialogue();
     }
 
     void StartDialogue() {
-        if (dialogueActive) {
-            return;
-        }
+        if (dialogueActive) return;
 
         dialogueActive = true;
         currentLine = 0;
