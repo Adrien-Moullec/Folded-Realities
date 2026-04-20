@@ -65,7 +65,7 @@ namespace AbilitySystem {
         protected abstract IEnumerator Ability(EntityBody entityBody, CooldownData data);
         protected virtual IEnumerator AttackAnimation(EntityBody entityBody, AbilityData data, AnimationType attackAnimation) {
             animationPlaying = true;
-            if (entityBody.animatorManager != null) {
+            if (entityBody.animatorManager == null) {
                 AnimationEvent(new AbilityAnimationEventData(), entityBody, data);
                 yield break;
             }
