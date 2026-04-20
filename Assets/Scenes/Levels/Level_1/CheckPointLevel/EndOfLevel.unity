@@ -284,10 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1a2eae4a962ed944858b9b6775c437b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lobbySceneName: Lobby
-  spawnID: 0
-  autoContinue: 1
-  delay: 2
+  nextSceneName: Lobby
 --- !u!4 &101029741
 Transform:
   m_ObjectHideFlags: 0
@@ -852,7 +849,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 101029740}
         m_TargetAssemblyTypeName: ContinueGame, Assembly-CSharp
-        m_MethodName: LoadLobby
+        m_MethodName: Continue
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
