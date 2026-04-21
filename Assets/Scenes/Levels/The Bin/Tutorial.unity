@@ -21215,6 +21215,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4a0a614a62ef9d345b2acdc049dc5a31, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1985035091}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4a0a614a62ef9d345b2acdc049dc5a31, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1985035092}
   m_SourcePrefab: {fileID: 100100000, guid: 4a0a614a62ef9d345b2acdc049dc5a31, type: 3}
 --- !u!43 &1758165507
 Mesh:
@@ -24797,6 +24800,24 @@ MonoBehaviour:
   zoomSpeed: 3
   followSpeed: 5
   fixedZ: -5
+--- !u!114 &1985035092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985035082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e75057a5c29848547adff0fe27085d46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageAmount: 1
+  damageCooldown: 1
+  flashDuration: 0.2
+  flashColor: {r: 1, g: 0, b: 0, a: 1}
+  slowStrength: 3
+  lingerDuration: 2
 --- !u!1001 &1990559674
 PrefabInstance:
   m_ObjectHideFlags: 0

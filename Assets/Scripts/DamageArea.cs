@@ -1,7 +1,8 @@
 using UnityEngine;
+
 using System.Collections;
 
-public class Damage : MonoBehaviour {
+public class DamageArea : MonoBehaviour {
     public int damageAmount = 1;
     public float damageCooldown = 1f;
 

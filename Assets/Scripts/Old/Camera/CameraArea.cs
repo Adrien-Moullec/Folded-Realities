@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public abstract class CameraArea : MonoBehaviour
 {
@@ -14,4 +14,4 @@ public abstract class CameraArea : MonoBehaviour
         other.TryGetComponent(out player);
         player.OnCameraAreaExit();
     }
-}
+}*/

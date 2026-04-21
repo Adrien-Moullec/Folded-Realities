@@ -1,4 +1,4 @@
-using Unity.Mathematics;
+/*using Unity.Mathematics;
 
 using UnityEngine;
 using UnityEngine.Splines;
@@ -77,4 +77,4 @@ public class PlayerPathCameraRailSpline : CameraArea {
                 return true;
         return false;
     }
-}
+}*/

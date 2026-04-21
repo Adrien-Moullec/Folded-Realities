@@ -11,7 +11,7 @@ namespace AbilitySystem {
         protected bool animationPlaying = false;
         [SerializeField] protected AreaColliderCheck attackArea;
         [SerializeField] bool mustRePressToUse = false;
-        [SerializeField] bool debug = false;
+        [SerializeField] protected bool debug = false;
         public override AbilityData AbilityDataSetup(EntityBody entityBody) {
             return new CooldownData(charges, cooldown);
         }

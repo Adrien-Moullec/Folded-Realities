@@ -19,7 +19,6 @@ public class PlayerManager : MonoBehaviour {
     //get => camArea != null ?
     //camArea.GetCameraPosition(gameplayCamera, cameraHolder.position) + camArea.transform.position : cameraHolder.position;
     //}
-    CameraArea camArea;
     private Vector3 camDir;
 
     [Space]
