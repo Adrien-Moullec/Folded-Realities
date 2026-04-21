@@ -11,7 +11,7 @@ public class LevelExit : MonoBehaviour {
     private bool triggered = false;
 
     private void OnTriggerEnter(Collider other) {
-        if (!other.CompareTag("Player") || triggered) return;
+        if (!(other.tag == "Player") || triggered) return;
 
         triggered = true;
 
