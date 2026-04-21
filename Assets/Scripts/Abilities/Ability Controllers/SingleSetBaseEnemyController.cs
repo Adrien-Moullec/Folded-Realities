@@ -13,6 +13,9 @@ namespace AbilitySystem {
         [HideInInspector] protected AbilitySet abilitySetList;
         [HideInInspector] protected EnemyAbilitySet abilitySet;
         [SerializeField] private NavMeshAgent navMeshAgent;
+
+        public object EnemyAbilitySetSOmovement { get; private set; }
+
         protected override void Awake() {
             base.Awake();
             entityBody.iAbility = this;
@@ -22,9 +25,9 @@ namespace AbilitySystem {
             abilitySet = new EnemyAbilitySet(abilitySetSO, entityBody);
 
             if (abilitySet.movement?.movementSO != null)
-                frameEvents += () => { abilitySet.movement.FrameEvent(entityBody); };
+                frameEvents += () => { abilitySet?.movement?.FrameEvent(entityBody); };
             if (abilitySet?.attack?.abilitySO != null)
-                frameEvents += () => { abilitySet.attack.FrameEvent(entityBody); };
+                frameEvents += () => { abilitySet?.attack?.FrameEvent(entityBody); };
         }
         protected override void Update() {
             base.Update();
@@ -47,6 +50,8 @@ namespace AbilitySystem {
         }
         public override EntityBody GetEntityBody() => entityBody;
         public override void OnDrawGizmos() {
+            abilitySetSO.movement?.GizmoEvent(entityBody);
+            abilitySetSO.attack.GizmoEvent(entityBody);
         }
     }
 }

@@ -30,9 +30,23 @@ namespace AbilitySystem {
         }
 
         private void Damage(EntityBody entityBody, CooldownData data) {
-            attackArea.GetColliders(entityBody.bodyHolder).Invoke(data.raycastHits);
+            int things = attackArea.GetColliders(entityBody.bodyHolder).Invoke(data.raycastHits);
 
-            foreach (var n in data.raycastHits) {
+            for (int i = 0; i < things; i++) {
+                if (data.raycastHits[i].transform.TryGetComponent(out IHealth iHealth)) {
+                    Debug.Log(data.raycastHits[i].gameObject.name);
+                    if (iHealth != entityBody.iHealth)
+                        iHealth.Damage(
+                            new EntityDamage(
+                                damage,
+                                entityBody,
+                                entityBody.iAbility.GetEntityTeam,
+                                EntityDamageType.Melee
+                            )
+                        );
+                }
+            }
+            /*foreach (var n in data.raycastHits) {
                 if (n.transform == null) continue;
                 if (n.transform.TryGetComponent(out IHealth iHealth))
                     if (iHealth != entityBody.iHealth)
@@ -44,7 +58,7 @@ namespace AbilitySystem {
                                 EntityDamageType.Melee
                             )
                         );
-            }
+            }*/
         }
         public override void GizmoEvent(EntityBody entityBody) {
             attackArea.Gizmo(entityBody.bodyHolder);

@@ -12,6 +12,7 @@ namespace AbilitySystem {
         [SerializeField, Min(1)] int maxHealth = 100;
         [Tooltip("Current entity health.")]
         [HideInInspector] protected int currentHealth = 100;
+        [HideInInspector] protected bool isDead = false;
         public AbilityControllerValues GetInputValues { get; set; } = new();
         protected delegate void FrameEvents();
         protected FrameEvents frameEvents;
@@ -40,6 +41,7 @@ namespace AbilitySystem {
 
         #region Health
         public virtual void Damage(EntityDamage damage) {
+            if (isDead) return;
             if (!EntityTeamFunctions.HasCommonTeam(GetEntityTeam, damage.damagingTeam))
                 currentHealth -= (int)damage.amount;
 
@@ -47,9 +49,12 @@ namespace AbilitySystem {
 
             if (currentHealth <= 0)
                 Die();
+
+            Debug.Log(currentHealth);
         }
 
         public virtual void Heal(EntityDamage heal) {
+            if (isDead) return;
             currentHealth += (int)heal.amount;
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         }
@@ -58,8 +63,8 @@ namespace AbilitySystem {
 
         }
 
-        public void InputTransitionName(string name) {
-            throw new System.NotImplementedException();
+        public virtual void InputTransitionName(string name) {
+
         }
 
         #endregion

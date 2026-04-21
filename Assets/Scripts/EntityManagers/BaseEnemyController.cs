@@ -12,7 +12,9 @@ public class BaseEnemyController : MonoBehaviour {
 
     [Space]
     [Header("Settings")]
-    [SerializeField] float playerStopDistance = 5;
+    [SerializeField] float playerStopDistance = 1;
+    [SerializeField] float playerAttackDistance = 2;
+    [SerializeField] float playerChaseDistance = 10;
     List<AbilityController> opposingTeam = new();
     private Vector3 location;
     private float distanceToEntity {
@@ -26,6 +28,7 @@ public class BaseEnemyController : MonoBehaviour {
     void Start() {
         AbilityController.GetInputValues.SetMovementTypeToggle(MovementType.AutoTrack);
         opposingTeam = EntityManager.instance.GetOpposingTeam(AbilityController.entityTeam);
+        AbilityController.GetInputValues.SetDestination(gameObject.transform.position);
         //foreach (var o in opposingTeam) Debug.Log(o.gameObject.name);
     }
 
@@ -34,10 +37,13 @@ public class BaseEnemyController : MonoBehaviour {
             opposingTeam.OrderBy(x => Vector3.Distance(transform.position, x.transform.position))
             .First()
             .transform.position;
+        if (distanceToEntity > playerChaseDistance) return;
         if (distanceToEntity > playerStopDistance) {
             AbilityController.GetInputValues.SetDestination(location);
             AbilityController.GetInputValues.isPrimaryAbility = false;
-        } else
+        }
+        if (distanceToEntity <= playerAttackDistance)
             AbilityController.GetInputValues.isPrimaryAbility = true;
+
     }
 }
