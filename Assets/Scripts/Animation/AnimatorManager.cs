@@ -45,6 +45,7 @@ namespace AbilitySystem {
                     AnimationType.Attack1 => 1,
                     AnimationType.TransformIn => 0,
                     AnimationType.TransformOut => 0,
+                    AnimationType.Death => 0,
                     _ => -1,
                 });
 

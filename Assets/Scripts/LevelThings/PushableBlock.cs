@@ -1,6 +1,7 @@
 using UnityEngine;
 
 public class PushableBlock : MonoBehaviour {
+
     private Rigidbody rb;
     private bool isBeingPushed = false;
 
@@ -9,8 +10,12 @@ public class PushableBlock : MonoBehaviour {
     }
 
     void FixedUpdate() {
+
         if (!isBeingPushed) {
-            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            Vector3 vel = rb.linearVelocity;
+            vel.x = 0f;
+            vel.z = 0f;
+            rb.linearVelocity = vel;
         }
 
         isBeingPushed = false;

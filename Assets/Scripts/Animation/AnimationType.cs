@@ -5,5 +5,6 @@ namespace AbilitySystem {
         TransformIn,
         TransformOut,
         Attack1,
+        Death,
     }
 }

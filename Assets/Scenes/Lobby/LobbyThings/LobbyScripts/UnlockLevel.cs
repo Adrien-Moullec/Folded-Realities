@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UnlockLevel : MonoBehaviour {
     public string unlockKey;
@@ -14,5 +15,6 @@ public class UnlockLevel : MonoBehaviour {
         PlayerPrefs.Save();
 
         Debug.Log(unlockKey + " unlocked!");
+        SceneManager.LoadScene(unlockKey);
     }
 }

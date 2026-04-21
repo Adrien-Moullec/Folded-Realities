@@ -3,10 +3,11 @@ using System;
 using UnityEngine;
 
 using UnityEditor;
+using System.Collections;
+using System.Collections.Generic;
 
 [Serializable]
-public class AreaColliderCheck
-{
+public class AreaColliderCheck {
     public CheckShape checkShape;
     public Vector3 centerOffset = Vector3.zero;
     public float size1 = 1;
@@ -15,22 +16,19 @@ public class AreaColliderCheck
     public bool doDrawGizmo = true;
     public bool wireFrame = true;
 
-    public Action<RaycastHit[]> GetColliders(GameObject gameObject) => GetColliders(gameObject.transform.position, gameObject.transform.forward);
+    public Func<Collider[], int> GetColliders(GameObject gameObject) => GetColliders(gameObject.transform.position, gameObject.transform.forward);
 
-    public Action<RaycastHit[]> GetColliders(Vector3 location, Vector3 direction)
-    {
+    public Func<Collider[], int> GetColliders(Vector3 location, Vector3 direction) {
         Quaternion rotation = Quaternion.LookRotation(direction);
         Vector3 pos = location + rotation * centerOffset;
-        return checkShape switch
-        {
-            CheckShape.Sphere => (RaycastHit[] x) =>
-            {
-                Physics.SphereCastNonAlloc(pos, size1, direction, x, size1, layers);
+
+        return checkShape switch {
+            CheckShape.Sphere => (Collider[] x) => {
+                return Physics.OverlapSphereNonAlloc(pos, size1, x, layers);
             }
             ,
-            CheckShape.Cube => (RaycastHit[] x) =>
-            {
-                Physics.BoxCastNonAlloc(pos, halfExtents, direction, x, rotation, Mathf.Max(halfExtents.y, halfExtents.z), layers);
+            CheckShape.Cube => (Collider[] x) => {
+                return Physics.OverlapBoxNonAlloc(pos, halfExtents, x, rotation, layers);
             }
             ,
             _ => null,
@@ -38,23 +36,21 @@ public class AreaColliderCheck
     }
     public void Gizmo(GameObject gameObject) => Gizmo(gameObject.transform);
     public void Gizmo(Transform trans) => Gizmo(trans.position, trans.forward);
-    public void Gizmo(Vector3 location, Vector3 direction)
-    {
+    public void Gizmo(Vector3 location, Vector3 direction) {
         if (!doDrawGizmo) return;
         Quaternion rotation = Quaternion.LookRotation(direction);
 
         Gizmos.matrix = Matrix4x4.TRS(location + rotation * centerOffset, rotation, Vector3.one);
         Gizmos.color = Color.red;
-        switch (checkShape)
-        {
+        switch (checkShape) {
             case CheckShape.Sphere:
                 if (wireFrame) Gizmos.DrawWireSphere(Vector3.zero, size1);
                 else Gizmos.DrawSphere(Vector3.zero, size1);
                 break;
 
             case CheckShape.Cube:
-                if (wireFrame) Gizmos.DrawWireCube(Vector3.zero, halfExtents);
-                else Gizmos.DrawCube(Vector3.zero, halfExtents);
+                if (wireFrame) Gizmos.DrawWireCube(Vector3.zero, halfExtents * 2f);
+                else Gizmos.DrawCube(Vector3.zero, halfExtents * 2f);
                 break;
         }
         Gizmos.matrix = Matrix4x4.identity;
@@ -62,10 +58,8 @@ public class AreaColliderCheck
 }
 
 [CustomPropertyDrawer(typeof(AreaColliderCheck))]
-public class AreaAffectsDrawer : PropertyDrawer
-{
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-    {
+public class AreaAffectsDrawer : PropertyDrawer {
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
         EditorGUI.BeginProperty(position, label, property);
 
         property.isExpanded = EditorGUI.Foldout(
@@ -74,8 +68,7 @@ public class AreaAffectsDrawer : PropertyDrawer
             label
         );
 
-        if (property.isExpanded)
-        {
+        if (property.isExpanded) {
             EditorGUI.indentLevel++;
 
             float y = position.y + EditorGUIUtility.singleLineHeight;
@@ -100,8 +93,7 @@ public class AreaAffectsDrawer : PropertyDrawer
         EditorGUI.EndProperty();
     }
 
-    void DrawProp(ref float y, Rect position, SerializedProperty property, string name)
-    {
+    void DrawProp(ref float y, Rect position, SerializedProperty property, string name) {
         SerializedProperty prop = property.FindPropertyRelative(name);
 
         EditorGUI.PropertyField(
@@ -112,8 +104,7 @@ public class AreaAffectsDrawer : PropertyDrawer
         y += EditorGUIUtility.singleLineHeight + 2;
     }
 
-    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-    {
+    public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
         if (!property.isExpanded)
             return EditorGUIUtility.singleLineHeight;
 
@@ -131,8 +122,7 @@ public class AreaAffectsDrawer : PropertyDrawer
     }
 }
 
-public enum CheckShape
-{
+public enum CheckShape {
     Cube,
     Sphere
 }

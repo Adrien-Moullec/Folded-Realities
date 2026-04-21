@@ -54,7 +54,8 @@ namespace AbilitySystem {
         [SerializeField, Min(0)] protected float jumpSpeed = 7f;
         [Tooltip("Max fall speed.")]
         [SerializeField, Min(0)] protected float maxFallSpeed = 25f;
-        [Tooltip("Controls if entity can glide.")]
+        [Tooltip("Grounded fall speed.")]
+        [SerializeField, Min(0)] protected float groundedFallSpeed = 2f;
 
         [Space]
         [Header("Glide Settings")]
@@ -220,7 +221,7 @@ namespace AbilitySystem {
             // Grounded reset
             pmd.remainingJumps = doubleJumpCount;
             pmd.glideDeltaActivate = 0;
-            pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, 0, decelerationWhileGrounded * Time.deltaTime);
+            pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, -groundedFallSpeed, decelerationWhileGrounded * Time.deltaTime);
             pmd.isJumpButtonRePressed = false;
             pmd.glideTime = 0;
             pmd.releasedOnJump = false;

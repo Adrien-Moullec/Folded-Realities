@@ -19,7 +19,6 @@ namespace AbilitySystem {
         [HideInInspector] public PlayerSetSummary currentAbilitySet;
         public GameObject BodyHolder;
         private CharacterController characterController;
-        private Action aaaa;
 
         #region OnStart
         protected override void Awake() {
@@ -47,7 +46,7 @@ namespace AbilitySystem {
                     frameEvents += () => { i.playerAbilitySet.secondary.FrameEvent(i.entityBody); };
                 if (i.playerAbilitySet.tertiary?.abilitySO != null)
                     frameEvents += () => { i.playerAbilitySet.tertiary.FrameEvent(i.entityBody); };
-}
+            }
             SetNewSummary(playerSetsList[0]);
         }
         protected override void Update() {
@@ -56,22 +55,51 @@ namespace AbilitySystem {
             currentAbilitySet?.playerAbilitySet?.primary?.Activate(currentAbilitySet.entityBody, GetInputValues.isPrimaryAbility);
             currentAbilitySet?.playerAbilitySet?.secondary?.Activate(currentAbilitySet.entityBody, GetInputValues.isSecondaryAbility);
             currentAbilitySet?.playerAbilitySet?.tertiary?.Activate(currentAbilitySet.entityBody, GetInputValues.isTertiaryAbility);
-            //Debug.Log()
+        }
+        public void QuickSwitch() {
+            if (currentAbilitySet.abilitySetSO.abilitySetName == "Kuhaku") OnAbilityEvent("Scissors");
+            else if (currentAbilitySet.abilitySetSO.abilitySetName == "Scissors") OnAbilityEvent("Kuhaku");
         }
         public override void Die() {
             base.Die();
+            isDead = true;
+            StartCoroutine(PlayerDeath());
+        }
+        IEnumerator PlayerDeath() {
+            bool hasFinishedAnim = false;
+            yield return currentAbilitySet.entityBody.animatorManager.InitiateOneOffAnimation(
+                () => GetComponent<CharacterController>().enabled = false,
+                null,
+                null,
+                () => hasFinishedAnim = true,
+                AnimationType.Death,
+                true
+            );
+            while (!hasFinishedAnim)
+                yield return null;
+
+            GetComponent<CharacterController>().enabled = true;
+            CheckpointManager.Instance?.RespawnPlayer(gameObject);
+            isDead = false;
+            currentHealth = (int)MaxHealth;
         }
         #endregion
 
         #region Transitions
+        public override void InputTransitionName(string name) {
+            OnAbilityEvent(name);
+            Debug.Log(name);
+        }
         public override void OnAbilityEvent(string eventMessage) {
             if (!TryGetSetSummary(eventMessage, out PlayerSetSummary playerSetSummary) || playerSetSummary == currentAbilitySet)
                 return;
+
             StartCoroutine(Transition(playerSetSummary));
         }
         private IEnumerator Transition(PlayerSetSummary newSummary) {
             if (!newSummary.isUnlocked) yield break;
             paperParticleDelta?.StartDelta();
+            Debug.Log("new summ = " + newSummary.abilitySetSO.abilitySetName);
             yield return currentAbilitySet.entityBody.animatorManager.InitiateOneOffAnimation(
                 () => { Debug.Log(currentAbilitySet.abilitySetSO.abilitySetName + ": Start"); },
                 (f) => { paperParticleDelta?.UpdateDelta(f); },
@@ -93,6 +121,7 @@ namespace AbilitySystem {
                 AnimationType.TransformIn,
                 false
             );
+            Debug.Log("Transform");
         }
         private void SetNewSummary(PlayerSetSummary playerSetSummary) {
             currentAbilitySet?.entityBody.animatorManager.gameObject.SetActive(false);
@@ -128,13 +157,6 @@ namespace AbilitySystem {
         }
         public override void OnEntityTrack(Vector3 location) {
             Debug.Log("TRACK");
-        }
-        #endregion
-
-        #region Health
-        public override void Damage(EntityDamage damage) {
-        }
-        public override void Heal(EntityDamage heal) {
         }
         #endregion
 
