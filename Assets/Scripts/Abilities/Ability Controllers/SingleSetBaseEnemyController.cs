@@ -31,7 +31,6 @@ namespace AbilitySystem {
         }
         protected override void Update() {
             base.Update();
-            Debug.Log(entityBody.animatorManager.name);
             abilitySet?.movement?.Activate(entityBody, true);
             abilitySet?.attack?.Activate(entityBody, GetInputValues.isPrimaryAbility);
         }

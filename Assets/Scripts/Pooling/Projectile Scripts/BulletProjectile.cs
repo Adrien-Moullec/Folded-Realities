@@ -12,6 +12,7 @@ namespace AbilitySystem {
             entityBody = body;
             direction = -entityBody.bodyHolder.transform.forward;
             transform.position = body.bodyHolder.transform.position;
+            transform.forward = direction;
             entityTeam = body == null ? EntityTeam.None : body.iAbility.GetEntityTeam;
         }
 

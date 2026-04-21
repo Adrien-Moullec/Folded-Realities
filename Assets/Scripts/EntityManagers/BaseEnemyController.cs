@@ -18,7 +18,7 @@ public class BaseEnemyController : MonoBehaviour {
     List<AbilityController> opposingTeam = new();
     private Vector3 location;
     private float distanceToEntity {
-        get => Vector3.Distance(transform.position, location);
+        get => Vector3.Distance(transform.position, EntityManager.instance != null ? location : PlayerManager.player.transform.position);
     }
 
     void Awake() {
@@ -27,19 +27,23 @@ public class BaseEnemyController : MonoBehaviour {
 
     void Start() {
         AbilityController.GetInputValues.SetMovementTypeToggle(MovementType.AutoTrack);
-        opposingTeam = EntityManager.instance.GetOpposingTeam(AbilityController.entityTeam);
+        opposingTeam = EntityManager.instance?.GetOpposingTeam(AbilityController.entityTeam);
         AbilityController.GetInputValues.SetDestination(gameObject.transform.position);
         //foreach (var o in opposingTeam) Debug.Log(o.gameObject.name);
     }
 
     public void Update() {
-        location =
-            opposingTeam.OrderBy(x => Vector3.Distance(transform.position, x.transform.position))
-            .First()
-            .transform.position;
+        if (EntityManager.instance != null) {
+            location =
+                opposingTeam.OrderBy(x => Vector3.Distance(transform.position, x.transform.position))
+                .First()
+                .transform.position;
+        }
+
         if (distanceToEntity > playerChaseDistance) return;
         if (distanceToEntity > playerStopDistance) {
-            AbilityController.GetInputValues.SetDestination(location);
+            Debug.Log("AAAA");
+            AbilityController.GetInputValues.SetDestination(EntityManager.instance != null ? location : PlayerManager.player.transform.position);
             AbilityController.GetInputValues.isPrimaryAbility = false;
         }
         if (distanceToEntity <= playerAttackDistance)
