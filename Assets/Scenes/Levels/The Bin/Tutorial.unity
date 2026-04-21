@@ -3159,11 +3159,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 547844563530938474, guid: a1e531976df10334380158e02a6889e7, type: 3}
+    - target: {fileID: 1225429674322778145, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.46
       objectReference: {fileID: 0}
-    - target: {fileID: 547844563530938474, guid: a1e531976df10334380158e02a6889e7, type: 3}
+    - target: {fileID: 1225429674322778145, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.35
       objectReference: {fileID: 0}
@@ -3299,7 +3299,7 @@ PrefabInstance:
       propertyPath: orthographic size
       value: 3.19
       objectReference: {fileID: 0}
-    - target: {fileID: 5710287258573495793, guid: a1e531976df10334380158e02a6889e7, type: 3}
+    - target: {fileID: 5710287258573495793, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       propertyPath: m_Name
       value: Kuhaku
       objectReference: {fileID: 0}
@@ -3340,10 +3340,10 @@ PrefabInstance:
     - {fileID: 6599312756378024008, guid: a1e531976df10334380158e02a6889e7, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5710287258573495793, guid: a1e531976df10334380158e02a6889e7, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 5710287258573495793, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2103556808}
-  m_SourcePrefab: {fileID: 100100000, guid: a1e531976df10334380158e02a6889e7, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
 --- !u!1 &248495479
 GameObject:
   m_ObjectHideFlags: 0
@@ -5545,11 +5545,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1436185672}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!20 &491156038 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 4401643024094209340, guid: a1e531976df10334380158e02a6889e7, type: 3}
-  m_PrefabInstance: {fileID: 236887677}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &495954151
 GameObject:
   m_ObjectHideFlags: 0
@@ -24793,9 +24788,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3989ba231047750428130a200a657035, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 2103556821}
+  player: {fileID: 0}
   npc: {fileID: 1985035088}
-  cam: {fileID: 491156038}
+  cam: {fileID: 0}
   targetOrthoSize: 4
   zoomSpeed: 3
   followSpeed: 5
@@ -26581,7 +26576,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2103556794 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 5710287258573495793, guid: a1e531976df10334380158e02a6889e7, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5710287258573495793, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
   m_PrefabInstance: {fileID: 236887677}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &2103556808
@@ -26597,11 +26592,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pushSpeed: 3
---- !u!4 &2103556821 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1225429674322778145, guid: a1e531976df10334380158e02a6889e7, type: 3}
-  m_PrefabInstance: {fileID: 236887677}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2110667187
 GameObject:
   m_ObjectHideFlags: 0
