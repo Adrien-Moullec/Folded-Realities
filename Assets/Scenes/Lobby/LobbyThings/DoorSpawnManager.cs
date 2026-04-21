@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class DoorSpawnManager : MonoBehaviour {
 
@@ -8,6 +9,15 @@ public class DoorSpawnManager : MonoBehaviour {
 
     void Start() {
         Debug.Log("DoorSpawnManager STARTED");
+
+        // DEFAULT PLAY FIX (when not coming from a door)
+        if (SceneManager.GetActiveScene().name == "Table_Area") {
+            if (PlayerPrefs.GetInt("UseDoorSpawn", 0) != 1) {
+                PlayerPrefs.SetInt("UseDoorSpawn", 0);
+                Debug.Log("Default play detected - forcing default spawn");
+            }
+        }
+
         StartCoroutine(SetSpawn());
     }
 
