@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿/*using System.Collections;
 
 namespace AbilitySystem {
     public interface IPoolObject {
@@ -10,4 +10,4 @@ namespace AbilitySystem {
         void Setup();
         void UpdateObject();
     }
-}
+}*/
