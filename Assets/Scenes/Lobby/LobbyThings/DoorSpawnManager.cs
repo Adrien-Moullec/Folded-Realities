@@ -1,47 +1,83 @@
 using UnityEngine;
+using System.Collections;
 
 public class DoorSpawnManager : MonoBehaviour {
-    [SerializeField] Transform[] doorSpawnPoints;
-    [SerializeField] Transform defaultSpawnPoint;
+
+    public Transform[] doorSpawnPoints;
+    public Transform defaultSpawnPoint;
 
     void Start() {
+        Debug.Log("DoorSpawnManager STARTED");
         StartCoroutine(SetSpawn());
     }
 
-    System.Collections.IEnumerator SetSpawn() {
-        yield return null; // wait 1 frame
+    IEnumerator SetSpawn() {
+        yield return null;
+
+        Debug.Log("SPAWN CHECK START");
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player == null) yield break;
+
+        if (player == null) {
+            Debug.LogError("Player NOT FOUND");
+            yield break;
+        } else {
+            Debug.Log("Player found: " + player.name);
+        }
 
         CharacterController cc = player.GetComponent<CharacterController>();
 
-        if (PlayerPrefs.GetInt("UseDoorSpawn", 0) == 1) {
-            int doorID = PlayerPrefs.GetInt("SpawnDoorID", 0);
+        if (cc == null) {
+            Debug.Log("No CharacterController found");
+        }
 
-            if (doorID >= 0 && doorID < doorSpawnPoints.Length) {
-                Transform spawn = doorSpawnPoints[doorID];
+        int useDoor = PlayerPrefs.GetInt("UseDoorSpawn", 0);
+        Debug.Log("UseDoorSpawn value: " + useDoor);
 
-                if (cc != null) cc.enabled = false;
+        if (useDoor == 1) {
 
-                // Slight upward offset ONLY (not forward)
-                //Vector3 safePos = spawn.position + Vector3.up * 0.5f;
-                //
-                //player.transform.position = safePos;
-                //player.transform.rotation = spawn.rotation;
+            float x = PlayerPrefs.GetFloat("SpawnX", -9999f);
+            float y = PlayerPrefs.GetFloat("SpawnY", -9999f);
+            float z = PlayerPrefs.GetFloat("SpawnZ", -9999f);
 
-                if (cc != null) cc.enabled = true;
+            Vector3 spawnPos = new Vector3(x, y, z);
+
+            Debug.Log("Loaded spawn coords: " + spawnPos);
+
+            if (x == -9999f || y == -9999f || z == -9999f) {
+                Debug.LogError("Spawn coordinates not set");
             }
-
-            PlayerPrefs.SetInt("UseDoorSpawn", 0);
-        } else if (defaultSpawnPoint != null) {
 
             if (cc != null) cc.enabled = false;
 
-            //player.transform.position = defaultSpawnPoint.position;
-            //player.transform.rotation = defaultSpawnPoint.rotation;
+            player.transform.position = spawnPos + Vector3.up * 1f;
+
+            Debug.Log("Player moved to: " + player.transform.position);
+
+            if (cc != null) cc.enabled = true;
+
+            PlayerPrefs.SetInt("UseDoorSpawn", 0);
+
+        } else {
+
+            Debug.Log("Using default spawn");
+
+            if (defaultSpawnPoint == null) {
+                Debug.LogError("Default spawn point not assigned");
+                yield break;
+            }
+
+            Debug.Log("Default spawn position: " + defaultSpawnPoint.position);
+
+            if (cc != null) cc.enabled = false;
+
+            player.transform.position = defaultSpawnPoint.position + Vector3.up * 1f;
+
+            Debug.Log("Player moved to default: " + player.transform.position);
 
             if (cc != null) cc.enabled = true;
         }
+
+        Debug.Log("SPAWN CHECK END");
     }
 }
