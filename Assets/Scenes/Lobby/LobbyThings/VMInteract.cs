@@ -1,6 +1,8 @@
 using UnityEngine;
 
-public class VMInteract : CinemachineInteract {
+//public class VMInteract : CinemachineInteract {
+public class VMInteract : MonoBehaviour {
+
     public GameObject shopUI;
 
     public GameObject playerVisuals;
@@ -8,12 +10,12 @@ public class VMInteract : CinemachineInteract {
 
     private bool hasTriggered = false;
 
-    public override void OnInteract() {
+    public void OnInteract() {
         // not used anymore
     }
 
-    public override void OnCancelInteract() {
-        SetCameraDefaultPriority();
+    public void OnCancelInteract() {
+        //SetCameraDefaultPriority();
         CloseShop();
     }
 
@@ -22,7 +24,7 @@ public class VMInteract : CinemachineInteract {
 
         hasTriggered = true;
 
-        SetCameraHighPriority();
+        //SetCameraHighPriority();
         OpenShop();
     }
 
@@ -53,6 +55,6 @@ public class VMInteract : CinemachineInteract {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        SetCameraDefaultPriority();
+        //SetCameraDefaultPriority();
     }
 }

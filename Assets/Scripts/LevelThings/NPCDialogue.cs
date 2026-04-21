@@ -26,6 +26,8 @@ public class NPCDialogue : MonoBehaviour {
     public bool autoAdvance = false;
     public float autoAdvanceDelay = 1.5f;
 
+    public bool dontDestroyAfterDialogue = false;
+
     private int currentLine = 0;
     private bool playerNearby = false;
     private bool isTyping = false;
@@ -69,7 +71,6 @@ public class NPCDialogue : MonoBehaviour {
 
         playerNearby = true;
 
-        
         GetComponent<Collider>().enabled = false;
 
         StartDialogue();
@@ -159,8 +160,9 @@ public class NPCDialogue : MonoBehaviour {
                 onDialogueFinished.Invoke();
             }
 
-            
-            StartCoroutine(DestroyAfter());
+            if (!dontDestroyAfterDialogue) {
+                StartCoroutine(DestroyAfter());
+            }
 
         } else {
             ShowLine();
