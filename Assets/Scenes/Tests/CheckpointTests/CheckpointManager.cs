@@ -4,7 +4,7 @@ public class CheckpointManager : MonoBehaviour {
 
     public static CheckpointManager Instance;
 
-    public Transform levelStartSpawn; // drag your level start object here
+    public Transform levelStartSpawn;
 
     private Vector3 lastCheckpointPosition;
     private int currentCheckpointIndex = -1;
@@ -12,15 +12,15 @@ public class CheckpointManager : MonoBehaviour {
     private void Awake() {
         Instance = this;
 
-        // initialise spawn position
         if (levelStartSpawn != null) {
             lastCheckpointPosition = levelStartSpawn.position;
+        } else {
+            Debug.LogError("Level start spawn not assigned!");
         }
     }
 
     public void SetCheckpoint(Vector3 position, int checkpointIndex) {
 
-        // Prevent activating old checkpoints
         if (checkpointIndex <= currentCheckpointIndex) {
             return;
         }
@@ -41,12 +41,25 @@ public class CheckpointManager : MonoBehaviour {
 
         CharacterController cc = playerRoot.GetComponent<CharacterController>();
 
-        if (cc != null) {
-            cc.enabled = false;
-            playerRoot.transform.position = lastCheckpointPosition;
-            cc.enabled = true;
+        if (cc != null) cc.enabled = false;
+
+        Vector3 spawnPos;
+
+        if (HasCheckpoint()) {
+            spawnPos = lastCheckpointPosition;
+            Debug.Log("Using checkpoint position: " + spawnPos);
+        } else if (levelStartSpawn != null) {
+            spawnPos = levelStartSpawn.position;
+            Debug.Log("Using level start position: " + spawnPos);
         } else {
-            playerRoot.transform.position = lastCheckpointPosition;
+            spawnPos = Vector3.zero;
+            Debug.LogError("No spawn point assigned");
         }
+
+        spawnPos += Vector3.up * 1f;
+
+        playerRoot.transform.position = spawnPos;
+
+        if (cc != null) cc.enabled = true;
     }
 }
