@@ -25,7 +25,6 @@ namespace AbilitySystem {
         }
 
         public override void OnDestroyIPoolObj(EntityBody body) {
-            Debug.Log("AAAAAAAAAAAA");
         }
 
         public override void OnTriggerEnter(Collider other) {

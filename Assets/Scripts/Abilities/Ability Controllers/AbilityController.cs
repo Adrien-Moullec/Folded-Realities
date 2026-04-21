@@ -50,7 +50,7 @@ namespace AbilitySystem {
             if (currentHealth <= 0)
                 Die();
 
-            Debug.Log(currentHealth);
+            //Debug.Log(currentHealth);
         }
 
         public virtual void Heal(EntityDamage heal) {
