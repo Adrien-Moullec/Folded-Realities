@@ -15,11 +15,6 @@ public class PlayerManager : MonoBehaviour {
     [Space]
     [Header("Camera Settings")]
     [SerializeField] Camera gameplayCamera;
-    [SerializeField] Transform cameraHolderCentre;
-    [SerializeField, Range(-100, 0)] float cameraTiltMin;
-    [SerializeField, Range(0, 100)] float cameraTiltMax;
-    [SerializeField, Min(5)] float lerpSpeed = 10;
-    float camYTilt = 30;
     //private Vector3 GetCameraPosition {
     //get => camArea != null ?
     //camArea.GetCameraPosition(gameplayCamera, cameraHolder.position) + camArea.transform.position : cameraHolder.position;
@@ -31,6 +26,7 @@ public class PlayerManager : MonoBehaviour {
     [Header("Script Managers")]
     [SerializeField] IAbility iAbility;
     [SerializeField] RadialMenuManager _RadialMenuManager;
+    [SerializeField] PlayerAbilityController playerAbilityController;
     private PlayerInput _PlayerInput;
 
     [Space]
@@ -50,6 +46,7 @@ public class PlayerManager : MonoBehaviour {
     InputAction ability3Input;
     InputAction radialWheel;
     InputAction interact;
+    InputAction switchAction;
     bool wheelActive = false;
     #endregion
 
@@ -59,7 +56,8 @@ public class PlayerManager : MonoBehaviour {
     }
     #region On Start
     private void OnEnable() {
-        iAbility = GetComponent<PlayerAbilityController>();
+        playerAbilityController = GetComponent<PlayerAbilityController>();
+        iAbility = playerAbilityController;
         _PlayerInput = GetComponent<PlayerInput>();
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -72,19 +70,23 @@ public class PlayerManager : MonoBehaviour {
         ability2Input = _PlayerInput.actions["Ability2"];
         ability3Input = _PlayerInput.actions["Ability3"];
         interact = _PlayerInput.actions["Interact"];
+        switchAction = _PlayerInput.actions["QuickSwitch"];
 
         lookInput.performed += input => deltaLook = input.ReadValue<Vector2>();
         lookInput.canceled += input => deltaLook = input.ReadValue<Vector2>();
         runInput.performed += input => iAbility.GetInputValues.SetRunToggle(true);
         runInput.canceled += input => iAbility.GetInputValues.SetRunToggle(false);
+        switchAction.performed += input => playerAbilityController.QuickSwitch();
         radialWheel.performed += input => {
             _RadialMenuManager?.SetWheelActive(true);
             wheelActive = true;
+            Cursor.lockState = CursorLockMode.None;
         };
         radialWheel.canceled += input => {
             _RadialMenuManager?.SetWheelActive(false);
             wheelActive = false;
             iAbility.InputTransitionName(_RadialMenuManager?.OnSegmentClicked());
+            Cursor.lockState = CursorLockMode.Locked;
         };
         ability1Input.performed += input => iAbility.GetInputValues.isPrimaryAbility = true;
         ability1Input.canceled += input => iAbility.GetInputValues.isPrimaryAbility = false;
@@ -117,10 +119,10 @@ public class PlayerManager : MonoBehaviour {
     #endregion
 
     void OnInteract() {
-        RaycastHit[] hits = new RaycastHit[4];
+        Collider[] hits = new Collider[4];
         interactionArea.GetColliders(body).Invoke(hits);
         foreach (var n in hits)
-            if (n.collider.TryGetComponent(out IInteractable iinteract))
+            if (n.TryGetComponent(out IInteractable iinteract))
                 iinteract.OnInteract();
     }
 
