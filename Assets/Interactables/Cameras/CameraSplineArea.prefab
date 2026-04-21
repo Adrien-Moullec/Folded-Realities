@@ -49,7 +49,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2159905191731953650}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -210,7 +210,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playObj: {fileID: 0}
   cameraLerp: 1
-  cameraBoundaryTransition: 0.3
+  cameraBoundaryTransitionStart: 5
+  cameraBoundaryTransitionEnd: 5
 --- !u!65 &8846092281601577550
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -281,7 +282,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9054805718515937737}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
