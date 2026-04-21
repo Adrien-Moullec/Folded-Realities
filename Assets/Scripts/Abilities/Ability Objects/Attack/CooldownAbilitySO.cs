@@ -18,7 +18,6 @@ namespace AbilitySystem {
         #region Call Logic
         public override bool Execute(EntityBody entityBody, AbilityData data) {
             CooldownData cdd = (CooldownData)data;
-            if (debug) Debug.Log("using = " + entityBody.UsingAbility + ", charges = " + cdd.currentCharges);
             if (data.usingAbility) {
                 if (data.isHoldingInput)
                     OnHold(entityBody, cdd);

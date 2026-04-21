@@ -42,7 +42,6 @@ public class BaseEnemyController : MonoBehaviour {
 
         if (distanceToEntity > playerChaseDistance) return;
         if (distanceToEntity > playerStopDistance) {
-            Debug.Log("AAAA");
             AbilityController.GetInputValues.SetDestination(EntityManager.instance != null ? location : PlayerManager.player.transform.position);
             AbilityController.GetInputValues.isPrimaryAbility = false;
         }
