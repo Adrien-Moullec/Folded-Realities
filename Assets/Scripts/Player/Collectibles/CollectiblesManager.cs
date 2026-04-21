@@ -7,24 +7,19 @@ public class CollectiblesManager : MonoBehaviour {
 
     public static CollectiblesManager Instance;
 
-    [Header("LEVEL SETTINGS")]
-    public int levelID = 0; // set this per level in inspector
+    public int levelID = 0;
 
-    [Header("Normal Collectibles")]
     public int normalCount = 0;
     public TMP_Text normalCountText;
 
-    [Header("Special Collectibles")]
     public GameObject specialCanvas;
     public Image[] puzzlePieces;
     private int specialCount = 0;
 
-    [Header("Pickup Effect Settings")]
     public float pickupFloatSpeed = 2f;
     public float pickupRotationSpeed = 360f;
     public float destroyDelay = 0.6f;
 
-    [Header("Audio")]
     public AudioClip pickupSound;
 
     void Awake() {
@@ -34,15 +29,9 @@ public class CollectiblesManager : MonoBehaviour {
     void Start() {
         normalCount = 0;
         UpdateNormalUI();
-
         ResetPuzzleUI();
-
-        if (specialCanvas != null) {
-            specialCanvas.SetActive(false);
-        }
     }
 
-    // NORMAL COLLECTIBLE
     public void CollectNormal(GameObject obj) {
         normalCount++;
         UpdateNormalUI();
@@ -54,25 +43,19 @@ public class CollectiblesManager : MonoBehaviour {
         StartCoroutine(PlayPickupEffect(obj));
     }
 
-    // SPECIAL COLLECTIBLE
     public void CollectSpecial(GameObject obj) {
-
-        // Activate canvas on first pickup
-        if (specialCanvas != null && !specialCanvas.activeSelf) {
-            specialCanvas.SetActive(true);
-        }
-
         if (specialCount < puzzlePieces.Length) {
 
-            puzzlePieces[specialCount].enabled = true;
+            if (puzzlePieces[specialCount] != null) {
+                puzzlePieces[specialCount].enabled = true;
+            }
+
             specialCount++;
 
-            // +10 coins per special
             if (CurrencyManager.Instance != null) {
                 CurrencyManager.Instance.AddCoins(10);
             }
 
-            // Check if puzzle complete
             if (specialCount == puzzlePieces.Length) {
                 OnPuzzleCompleted();
             }
@@ -81,15 +64,9 @@ public class CollectiblesManager : MonoBehaviour {
         StartCoroutine(PlayPickupEffect(obj));
     }
 
-    // PUZZLE COMPLETE
     void OnPuzzleCompleted() {
-        Debug.Log("Puzzle complete for level: " + levelID);
-
-        // Save completion
         PlayerPrefs.SetInt("PuzzleComplete_Level_" + levelID, 1);
         PlayerPrefs.Save();
-
-        // You can hook UI / sound here later
     }
 
     IEnumerator PlayPickupEffect(GameObject obj) {
@@ -113,7 +90,6 @@ public class CollectiblesManager : MonoBehaviour {
         while (timer < destroyDelay) {
             obj.transform.position += Vector3.up * pickupFloatSpeed * Time.deltaTime;
             obj.transform.Rotate(Vector3.up * pickupRotationSpeed * Time.deltaTime);
-
             timer += Time.deltaTime;
             yield return null;
         }
@@ -133,7 +109,6 @@ public class CollectiblesManager : MonoBehaviour {
                 puzzlePieces[i].enabled = false;
             }
         }
-
         specialCount = 0;
     }
 
