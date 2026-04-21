@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 [ExecuteAlways]
 public class CameraPointGizmo : MonoBehaviour {
@@ -24,4 +24,4 @@ public class CameraPointGizmo : MonoBehaviour {
 
         Gizmos.matrix = temp;
     }
-}
+}*/
