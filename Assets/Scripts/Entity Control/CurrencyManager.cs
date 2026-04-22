@@ -6,13 +6,13 @@ public class CurrencyManager : MonoBehaviour {
     public int coins = 0;
 
     void Awake() {
-        if (Instance == null) {
+        if (Instance != null && Instance != this)
+            Destroy(this);
+        else {
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
             coins = PlayerPrefs.GetInt("Coins", 0);
-        } else {
-            Destroy(gameObject);
         }
     }
 
