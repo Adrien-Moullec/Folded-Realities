@@ -83,12 +83,12 @@ public class NPCDialogue : MonoBehaviour {
     }
 
     void StartDialogue() {
-        if (dialogueActive) return;
+        if (dialogueActive || dialogueUI == null) return;
 
         dialogueActive = true;
         currentLine = 0;
 
-        dialogueUI.SetActive(true);
+        dialogueUI?.SetActive(true);
         StopAllCoroutines();
         StartCoroutine(PopIn());
 
