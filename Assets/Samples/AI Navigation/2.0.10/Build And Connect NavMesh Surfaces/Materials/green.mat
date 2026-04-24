@@ -58,9 +58,10 @@ Material:
   m_LightmapFlags: 3
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap:
     MotionVector: User
+    RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
   - TransparentDepthPrepass
@@ -126,15 +127,20 @@ Material:
     m_Ints: []
     m_Floats:
     - _AddPrecomputedVelocity: 0
+    - _AlphaClip: 0
     - _AlphaCutoffEnable: 0
     - _AlphaDstBlend: 0
     - _AlphaSrcBlend: 1
+    - _AlphaToMask: 0
     - _AmbientOcclusion: 0
     - _BUILTIN_QueueControl: 1
     - _BUILTIN_QueueOffset: 0
+    - _Blend: 0
     - _BlendMode: 0
     - _BumpScale: 1
+    - _CastShadows: 1
     - _ConservativeDepthOffsetEnable: 0
+    - _Cull: 0
     - _CullMode: 2
     - _CullModeForward: 2
     - _Cutoff: 0.5
@@ -183,7 +189,10 @@ Material:
     - _StencilWriteMaskGBuffer: 15
     - _StencilWriteMaskMV: 41
     - _SupportDecals: 1
+    - _Surface: 0
     - _SurfaceType: 0
+    - _ToonRingAL: 0
+    - _ToonRingAdditionalLighting: 0.1
     - _ToonRings: 0.23
     - _ToonRings1: 1
     - _TransmissionEnable: 1
@@ -196,13 +205,16 @@ Material:
     - _TransparentZWrite: 0
     - _UVSec: 0
     - _UseShadowThreshold: 0
+    - _ZTest: 4
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 1
+    - _ZWriteControl: 0
     m_Colors:
     - _Color: {r: 0.16738756, g: 0.5294118, b: 0.28972682, a: 1}
     - _ColourTint: {r: 0.86145604, g: 0.5444998, b: 0.8679245, a: 1}
+    - _CutoffThreshold: {r: -0.05, g: 0.05, b: 0, a: 0}
     - _Diffuse: {r: 0.16862746, g: 0.5294118, b: 0.2901961, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
