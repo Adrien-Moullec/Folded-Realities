@@ -142,6 +142,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d6ce47495c207e41a67f9c61858a48e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupSound: {fileID: 0}
+  deactivateTime: 0
+  pickupFloatSpeed: 2
+  pickupRotationSpeed: 360
   isSpecial: 1
 --- !u!114 &6083480298371176875
 MonoBehaviour:
@@ -157,7 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 1
   outlineColor: {r: 0, g: 0, b: 0, a: 1}
-  outlineWidth: 10
+  outlineWidth: 4
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
