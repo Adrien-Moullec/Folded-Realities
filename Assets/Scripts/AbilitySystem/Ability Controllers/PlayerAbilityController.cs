@@ -99,9 +99,9 @@ namespace AbilitySystem {
         private IEnumerator Transition(PlayerSetSummary newSummary) {
             if (!newSummary.isUnlocked) yield break;
             paperParticleDelta?.StartDelta();
-            Debug.Log("new summ = " + newSummary.abilitySetSO.abilitySetName);
+
             yield return currentAbilitySet.entityBody.animatorManager.InitiateOneOffAnimation(
-                () => { Debug.Log(currentAbilitySet.abilitySetSO.abilitySetName + ": Start"); },
+                null,
                 (f) => { paperParticleDelta?.UpdateDelta(f); },
                 null,
                 () => {
@@ -110,16 +110,16 @@ namespace AbilitySystem {
                 true
             );
             SetNewSummary(newSummary);
-            Debug.Log(currentAbilitySet.abilitySetSO.abilitySetName + ": new summary");
+
             currentAbilitySet.playerAbilitySet.movement.StartUp(currentAbilitySet.entityBody);
 
             yield return currentAbilitySet.entityBody.animatorManager.InitiateOneOffAnimation(
-                () => { Debug.Log(currentAbilitySet.abilitySetSO.abilitySetName + ": new summary start"); },
+                null,
                 (f) => { paperParticleDelta?.UpdateDelta(1 - f); },
                 null,
-                () => { paperParticleDelta?.EndDelta(); Debug.Log(currentAbilitySet.abilitySetSO.abilitySetName + ": new summary end"); },
+                () => { paperParticleDelta?.EndDelta(); },
                 AnimationType.TransformIn,
-                false
+                true
             );
             Debug.Log("Transform");
         }

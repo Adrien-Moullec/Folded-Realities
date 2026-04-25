@@ -49,7 +49,7 @@ namespace AbilitySystem {
                     _ => -1,
                 });
 
-            if (!CanStartAnimation(info))
+            if (!CanStartAnimation(info) && !overrideState)
                 yield break;
 
             // If already playing, stop it first
@@ -63,11 +63,8 @@ namespace AbilitySystem {
         }
 
         bool CanStartAnimation((int hashCode, int layer) info) {
-
-            if (layers[info.layer].state.currentState != "") { // || animator.HasState(0, hashCode)) {
-                Debug.Log("Animation already playing and override disabled " + layers[info.layer].state.currentState);
+            if (layers[info.layer].state.currentState != "")
                 return false;
-            }
             return true;
         }
 

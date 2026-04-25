@@ -6211,7 +6211,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &169983240
 Transform:
   m_ObjectHideFlags: 0
@@ -73735,10 +73735,10 @@ PrefabInstance:
     - target: {fileID: 6552002042681570147, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       propertyPath: SmokesAndMirrorsAnimation
       value: 
-      objectReference: {fileID: 633669567}
+      objectReference: {fileID: 0}
     - target: {fileID: 6552002042681570147, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       propertyPath: playerSetsList.Array.data[1].isUnlocked
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6552002042681570147, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       propertyPath: playerSetsList.Array.data[1].entityBody.animationComponent
@@ -73870,11 +73870,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 719968478}
   m_SourcePrefab: {fileID: 100100000, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
---- !u!111 &633669567 stripped
-Animation:
-  m_CorrespondingSourceObject: {fileID: 9170826110673044228, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
-  m_PrefabInstance: {fileID: 633669565}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &637296727
 Mesh:
   m_ObjectHideFlags: 0
@@ -81999,12 +81994,33 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a85ee413fe3f17a4f9c4dcee5f6b7152, type: 3}
       insertIndex: -1
       addedObject: {fileID: 115823783}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a85ee413fe3f17a4f9c4dcee5f6b7152, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 836460904}
   m_SourcePrefab: {fileID: 100100000, guid: a85ee413fe3f17a4f9c4dcee5f6b7152, type: 3}
 --- !u!4 &836460901 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a85ee413fe3f17a4f9c4dcee5f6b7152, type: 3}
   m_PrefabInstance: {fileID: 836460900}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &836460904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115823781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0, g: 0, b: 0, a: 0.5254902}
+  outlineWidth: 0.2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &839614338
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -84294,6 +84310,10 @@ PrefabInstance:
     - target: {fileID: 7190939115984339868, guid: 721968613551ab542bc06cc9649e70be, type: 3}
       propertyPath: m_RenderingLayerMask
       value: 257
+      objectReference: {fileID: 0}
+    - target: {fileID: 8239264736068297387, guid: 721968613551ab542bc06cc9649e70be, type: 3}
+      propertyPath: outlineWidth
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9056047179994367626, guid: 721968613551ab542bc06cc9649e70be, type: 3}
       propertyPath: m_RenderingLayerMask
@@ -93156,6 +93176,10 @@ PrefabInstance:
     - target: {fileID: 2917061764577173462, guid: ae34d6d6c79b0104bb89fd0ae29ff87b, type: 3}
       propertyPath: m_RenderingLayerMask
       value: 257
+      objectReference: {fileID: 0}
+    - target: {fileID: 5758019453120729297, guid: ae34d6d6c79b0104bb89fd0ae29ff87b, type: 3}
+      propertyPath: outlineWidth
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6730122355796108904, guid: ae34d6d6c79b0104bb89fd0ae29ff87b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -159588,7 +159612,7 @@ VisualEffect:
       m_Array: []
     m_Vector3f:
       m_Array:
-      - m_Value: {x: 1, y: 3328.7, z: 1}
+      - m_Value: {x: 1, y: 2104.46, z: 1}
         m_Name: Scale
         m_Overridden: 1
       - m_Value: {x: 1, y: 42.97, z: 10.05}
@@ -159609,7 +159633,7 @@ VisualEffect:
       - m_Value: {x: 1, y: 0.66, z: 0}
         m_Name: AxisY 1
         m_Overridden: 1
-      - m_Value: {x: 0.6, y: 0.31, z: 0}
+      - m_Value: {x: 0.6, y: 0.31, z: 0.02}
         m_Name: Direction
         m_Overridden: 1
       - m_Value: {x: 1, y: 125.5, z: 1.85}
@@ -161982,6 +162006,14 @@ PrefabInstance:
       propertyPath: m_RenderingLayerMask
       value: 257
       objectReference: {fileID: 0}
+    - target: {fileID: 7209573488076187000, guid: ae34d6d6c79b0104bb89fd0ae29ff87b, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7209573488076187000, guid: ae34d6d6c79b0104bb89fd0ae29ff87b, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 106f3ff43a17d4967a2b64c7a92e49ec, type: 2}
     - target: {fileID: 8942433442052277952, guid: ae34d6d6c79b0104bb89fd0ae29ff87b, type: 3}
       propertyPath: m_RenderingLayerMask
       value: 257
@@ -164119,6 +164151,10 @@ PrefabInstance:
     - target: {fileID: 5679321500042128735, guid: c4db0909978d49045b3aad9f768d3a75, type: 3}
       propertyPath: m_RenderingLayerMask
       value: 257
+      objectReference: {fileID: 0}
+    - target: {fileID: 6083480298371176875, guid: c4db0909978d49045b3aad9f768d3a75, type: 3}
+      propertyPath: outlineWidth
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6184001529252433034, guid: c4db0909978d49045b3aad9f768d3a75, type: 3}
       propertyPath: m_Name
@@ -369763,7 +369799,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!73398921 &2093367680
 VFXRenderer:
   serializedVersion: 1
@@ -369772,7 +369808,7 @@ VFXRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2093367679}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -369825,7 +369861,7 @@ VisualEffect:
   m_PropertySheet:
     m_Float:
       m_Array:
-      - m_Value: 4
+      - m_Value: 1.31
         m_Name: PaperSpeed
         m_Overridden: 1
     m_Vector2f:

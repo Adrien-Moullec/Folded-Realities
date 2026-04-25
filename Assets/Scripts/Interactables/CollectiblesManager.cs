@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+
 using TMPro;
+
 using System.Collections;
 
 public class CollectiblesManager : MonoBehaviour {
@@ -40,7 +42,7 @@ public class CollectiblesManager : MonoBehaviour {
             CurrencyManager.Instance.AddCoins(1);
         }
 
-        StartCoroutine(PlayPickupEffect(obj));
+        //StartCoroutine(PlayPickupEffect(obj));
     }
 
     public void CollectSpecial(GameObject obj) {
@@ -61,7 +63,7 @@ public class CollectiblesManager : MonoBehaviour {
             }
         }
 
-        StartCoroutine(PlayPickupEffect(obj));
+        //StartCoroutine(PlayPickupEffect(obj));
     }
 
     void OnPuzzleCompleted() {
@@ -69,7 +71,7 @@ public class CollectiblesManager : MonoBehaviour {
         PlayerPrefs.Save();
     }
 
-    IEnumerator PlayPickupEffect(GameObject obj) {
+    /*IEnumerator PlayPickupEffect(GameObject obj) {
 
         if (pickupSound != null) {
             AudioSource.PlayClipAtPoint(pickupSound, obj.transform.position);
@@ -95,7 +97,7 @@ public class CollectiblesManager : MonoBehaviour {
         }
 
         Destroy(obj);
-    }
+    }*/
 
     void UpdateNormalUI() {
         if (normalCountText != null) {

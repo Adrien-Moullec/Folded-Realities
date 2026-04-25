@@ -7,15 +7,17 @@ public abstract class CinemachineOrigami : MonoBehaviour {
     [SerializeField] protected int areaPriority = 10;
     [SerializeField] protected int defaultPriority = 0;
 
-    [Space]
-    [TextArea]
-    public string CinemachineBreakdown = "Check this script for notes about how to use cinemachine components.";
+    void Awake() {
+        vcamToActivate.gameObject.SetActive(false);
+    }
 
     public virtual void SetCameraHighPriority() {
+        vcamToActivate.gameObject.SetActive(true);
         if (vcamToActivate == null) return;
         vcamToActivate.Priority = areaPriority;
     }
     public virtual void SetCameraDefaultPriority() {
+        vcamToActivate.gameObject.SetActive(false);
         if (vcamToActivate == null) return;
         vcamToActivate.Priority = defaultPriority;
     }
