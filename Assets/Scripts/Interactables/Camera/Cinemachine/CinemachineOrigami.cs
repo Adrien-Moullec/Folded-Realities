@@ -10,6 +10,11 @@ public abstract class CinemachineOrigami : MonoBehaviour {
     void Awake() {
         vcamToActivate.gameObject.SetActive(false);
     }
+    void Start() {
+
+        vcamToActivate.Target.TrackingTarget = PlayerManager.player.transform;
+        vcamToActivate.Target.LookAtTarget = PlayerManager.player.transform;
+    }
 
     public virtual void SetCameraHighPriority() {
         vcamToActivate.gameObject.SetActive(true);
