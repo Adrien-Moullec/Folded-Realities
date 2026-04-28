@@ -37,6 +37,12 @@ public class CheckpointManager : MonoBehaviour {
 
     public void RespawnPlayer(GameObject playerRoot) {
 
+        
+        if (PlayerPrefs.GetInt("UseDoorSpawn", 0) == 1) {
+            Debug.Log("Skipping checkpoint spawn (door spawn active)");
+            return;
+        }
+
         Debug.Log("Respawning player");
 
         CharacterController cc = playerRoot.GetComponent<CharacterController>();
