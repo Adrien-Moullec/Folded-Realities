@@ -1,29 +1,49 @@
 using System.Collections;
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerLevelSpawn : MonoBehaviour {
+    CharacterController cc;
+
     void Start() {
+        cc = GetComponent<CharacterController>();
         StartCoroutine(ApplySpawn());
     }
 
     IEnumerator ApplySpawn() {
-        yield return null;
-        yield return null;
+       
+        yield return new WaitForEndOfFrame();
 
-        string savedScene = PlayerPrefs.GetString("SpawnScene", "");
+        string spawnID = SpawnData.spawnID;
 
-        if (savedScene == SceneManager.GetActiveScene().name) {
-            float x = PlayerPrefs.GetFloat("SpawnX");
-            float y = PlayerPrefs.GetFloat("SpawnY");
-            float z = PlayerPrefs.GetFloat("SpawnZ");
+        Debug.Log("Loaded SpawnID: " + spawnID);
 
-            transform.position = new Vector3(x, y, z);
-
-            PlayerPrefs.DeleteKey("SpawnScene");
-
-            Debug.Log("Spawn applied at: " + transform.position);
+        if (spawnID == "") {
+            Debug.Log("No SpawnID found, using default position");
+            yield break;
         }
+
+        SpawnPos[] points = FindObjectsByType<SpawnPos>(FindObjectsSortMode.None);
+
+        Debug.Log("Found spawn points: " + points.Length);
+
+        foreach (SpawnPos point in points) {
+            Debug.Log("Checking: " + point.spawnID);
+
+            if (point.spawnID == spawnID) {
+                if (cc != null) cc.enabled = false;
+
+                transform.position = point.transform.position;
+                transform.rotation = point.transform.rotation;
+
+                if (cc != null) cc.enabled = true;
+
+                Debug.Log("FINAL spawn applied at: " + spawnID);
+
+                break;
+            }
+        }
+
+        SpawnData.spawnID = "";
     }
 }
