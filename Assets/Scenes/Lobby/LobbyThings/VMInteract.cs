@@ -1,6 +1,5 @@
 using UnityEngine;
 
-//public class VMInteract : CinemachineInteract {
 public class VMInteract : MonoBehaviour {
 
     public GameObject shopUI;
@@ -8,23 +7,15 @@ public class VMInteract : MonoBehaviour {
     public GameObject playerVisuals;
     public MonoBehaviour playerController;
 
+    public Transform hatContainer;   
+    public GameObject crownHat;      
+
     private bool hasTriggered = false;
-
-    public void OnInteract() {
-        // not used anymore
-    }
-
-    public void OnCancelInteract() {
-        //SetCameraDefaultPriority();
-        CloseShop();
-    }
 
     void OnTriggerEnter(Collider other) {
         if (!other.CompareTag("Player") || hasTriggered) return;
 
         hasTriggered = true;
-
-        //SetCameraHighPriority();
         OpenShop();
     }
 
@@ -55,6 +46,20 @@ public class VMInteract : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        //SetCameraDefaultPriority();
+        hasTriggered = false;
+    }
+
+    
+
+    public void BuyCrown() {
+        EquipHat(crownHat);
+    }
+
+    void EquipHat(GameObject hat) {
+        foreach (Transform h in hatContainer) {
+            h.gameObject.SetActive(false);
+        }
+
+        hat.SetActive(true);
     }
 }
