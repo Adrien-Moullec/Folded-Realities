@@ -2,27 +2,33 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class BrightnessSettings : MonoBehaviour {
-    public Image overlay;
     public Slider slider;
+    public Image preview1;
+    public Image preview2;
 
-    float tempValue;
+    float tempValue = 1f;
 
-    void OnEnable() {
-        float saved = PlayerPrefs.GetFloat("Brightness", 1f);
-        slider.value = saved;
-        tempValue = saved;
-        ApplyVisual(saved);
+    void Start() {
+        slider.minValue = 0.5f;
+        slider.maxValue = 1.5f;
+
+        tempValue = PlayerPrefs.GetFloat("Brightness", 1f);
+
+        slider.value = tempValue;
+
+        UpdatePreview();
     }
 
     public void OnSliderChanged(float value) {
         tempValue = value;
-        ApplyVisual(value);
+        UpdatePreview();
     }
 
-    void ApplyVisual(float value) {
-        Color c = overlay.color;
-        c.a = 1 - value;
-        overlay.color = c;
+    void UpdatePreview() {
+        Color c = new Color(tempValue, tempValue, tempValue, 1f);
+
+        preview1.color = c;
+        preview2.color = c;
     }
 
     public void Accept() {
@@ -31,8 +37,8 @@ public class BrightnessSettings : MonoBehaviour {
     }
 
     public void Revert() {
-        float saved = PlayerPrefs.GetFloat("Brightness", 1f);
-        slider.value = saved;
-        ApplyVisual(saved);
+        tempValue = PlayerPrefs.GetFloat("Brightness", 1f);
+        slider.value = tempValue;
+        UpdatePreview();
     }
 }

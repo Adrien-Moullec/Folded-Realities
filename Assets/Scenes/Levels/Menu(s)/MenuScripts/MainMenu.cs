@@ -17,7 +17,6 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void OpenOptions() {
-        menuContainer.SetActive(false);
         optionsPanel.SetActive(true);
     }
 
