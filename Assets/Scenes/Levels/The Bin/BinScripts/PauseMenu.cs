@@ -12,6 +12,7 @@ public class PauseMenu : MonoBehaviour {
     public GameObject settingsPanel;
     public GameObject savePanel;
     public GameObject overwritePanel;
+    public GameObject quitConfirmPanel;
     public GameObject backgroundPanel;
 
     public bool isPaused;
@@ -56,6 +57,7 @@ public class PauseMenu : MonoBehaviour {
         settingsPanel.SetActive(false);
         savePanel.SetActive(false);
         overwritePanel.SetActive(false);
+        quitConfirmPanel.SetActive(false);
         backgroundPanel.SetActive(true);
 
         UpdateAllSlots();
@@ -89,6 +91,7 @@ public class PauseMenu : MonoBehaviour {
         settingsPanel.SetActive(false);
         savePanel.SetActive(false);
         overwritePanel.SetActive(false);
+        quitConfirmPanel.SetActive(false);
 
         backgroundPanel.SetActive(true);
 
@@ -140,6 +143,31 @@ public class PauseMenu : MonoBehaviour {
         savePanel.SetActive(true);
     }
 
+    public void OpenQuitConfirm() {
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        buttonsContainer.SetActive(false);
+        quitConfirmPanel.SetActive(true);
+    }
+
+    public void CancelQuit() {
+
+        quitConfirmPanel.SetActive(false);
+        buttonsContainer.SetActive(true);
+    }
+
+    public void QuitToMainMenuConfirmed() {
+
+        Time.timeScale = 1f;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        SceneManager.LoadScene("MainMenu");
+    }
+
     public void BackToMain() {
 
         Cursor.lockState = CursorLockMode.None;
@@ -152,6 +180,7 @@ public class PauseMenu : MonoBehaviour {
         settingsPanel.SetActive(false);
         savePanel.SetActive(false);
         overwritePanel.SetActive(false);
+        quitConfirmPanel.SetActive(false);
     }
 
     public void SetCheckpoint(Vector3 position) {
