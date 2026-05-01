@@ -130,6 +130,10 @@ public class PauseMenu : MonoBehaviour {
 
         buttonsContainer.SetActive(false);
         settingsPanel.SetActive(true);
+
+        if (GraphicsSettings.Instance != null) {
+            GraphicsSettings.Instance.CacheCurrentSettings();
+        }
     }
 
     public void OpenSavePanel() {

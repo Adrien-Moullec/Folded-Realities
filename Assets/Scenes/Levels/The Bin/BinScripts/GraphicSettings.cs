@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GraphicsSettings : MonoBehaviour {
 
@@ -9,10 +10,16 @@ public class GraphicsSettings : MonoBehaviour {
 
     public Volume globalVolume;
 
+    public Slider brightnessSlider;
+    public Slider saturationSlider;
+
     ColorAdjustments colorAdjustments;
 
     float brightness;
     float saturation;
+
+    float originalBrightness;
+    float originalSaturation;
 
     void Awake() {
         if (Instance == null) {
@@ -33,36 +40,64 @@ public class GraphicsSettings : MonoBehaviour {
 
     void Start() {
         SetupVolume();
+
+        brightness = PlayerPrefs.GetFloat("Brightness", 0f);
+        saturation = PlayerPrefs.GetFloat("Saturation", 0f);
+
+        ApplySettings();
+        UpdateSliders();
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
         SetupVolume();
         ApplySettings();
+        UpdateSliders();
     }
 
     void SetupVolume() {
 
         if (globalVolume == null) {
-            globalVolume = FindObjectOfType<Volume>();
+            GameObject vol = GameObject.Find("GlobalVolume");
+            if (vol != null) {
+                globalVolume = vol.GetComponent<Volume>();
+            }
         }
 
         if (globalVolume != null && globalVolume.profile != null) {
             globalVolume.profile.TryGet(out colorAdjustments);
         }
+    }
 
-        brightness = PlayerPrefs.GetFloat("Brightness", 0f);
-        saturation = PlayerPrefs.GetFloat("Saturation", 0f);
+    
+    public void CacheCurrentSettings() {
+        originalBrightness = brightness;
+        originalSaturation = saturation;
     }
 
     public void SetBrightness(float value) {
         brightness = value;
-        PlayerPrefs.SetFloat("Brightness", brightness);
         ApplySettings();
     }
 
     public void SetSaturation(float value) {
         saturation = value;
+        ApplySettings();
+    }
+
+    public void ConfirmSettings() {
+
+        PlayerPrefs.SetFloat("Brightness", brightness);
         PlayerPrefs.SetFloat("Saturation", saturation);
+
+        PlayerPrefs.Save();
+    }
+
+    public void RevertSettings() {
+
+        brightness = originalBrightness;
+        saturation = originalSaturation;
+
+        UpdateSliders();
         ApplySettings();
     }
 
@@ -70,6 +105,16 @@ public class GraphicsSettings : MonoBehaviour {
         if (colorAdjustments != null) {
             colorAdjustments.postExposure.value = brightness;
             colorAdjustments.saturation.value = saturation;
+        }
+    }
+
+    void UpdateSliders() {
+        if (brightnessSlider != null) {
+            brightnessSlider.value = brightness;
+        }
+
+        if (saturationSlider != null) {
+            saturationSlider.value = saturation;
         }
     }
 }
