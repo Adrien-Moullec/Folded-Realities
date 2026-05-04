@@ -2,6 +2,10 @@ using UnityEngine;
 using System.Collections;
 
 public class PianoKey : MonoBehaviour {
+
+    public int keyID;
+    public PianoKeyManager puzzleManager;
+
     public AudioSource audioSource;
     public AudioClip note;
 
@@ -17,14 +21,26 @@ public class PianoKey : MonoBehaviour {
     }
 
     public void PlayKey() {
+
+        if (!gameObject.activeInHierarchy) {
+            return;
+        }
+
         if (audioSource != null && note != null) {
             audioSource.PlayOneShot(note);
         }
 
-        StartCoroutine(PressEffect());
+        if (puzzleManager != null) {
+            puzzleManager.PressKey(keyID);
+        }
+
+        if (gameObject.activeInHierarchy) {
+            StartCoroutine(PressEffect());
+        }
     }
 
     IEnumerator PressEffect() {
+
         isPressed = true;
 
         if (highlight != null) {
