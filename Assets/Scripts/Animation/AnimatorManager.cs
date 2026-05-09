@@ -59,7 +59,7 @@ namespace AbilitySystem {
             }
 
             layers[info.layer].state = new AnimatorFunctions(animType.ToString(), startF, updateF, eventF, endF);
-            animator.CrossFade(animType.ToString(), 0);
+            animator?.CrossFade(animType.ToString(), 0);
         }
 
         bool CanStartAnimation((int hashCode, int layer) info) {

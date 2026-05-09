@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 375b1bf6a451c0a48a3cc36b6e378e3d, type: 3}
-  m_Name: FrogMovement
+  m_Script: {fileID: 11500000, guid: 2abe5f2fa9b32fa48b5854c404cb7905, type: 3}
+  m_Name: WallClimbMovement
   m_EditorClassIdentifier: 
-  speedMultiplier: 157.52
+  speedMultiplier: 1
   changeDirectionSpeedMultiplier: 3
-  acceleration: 1033.4
+  acceleration: 1
   deceleration: 8
   runAccelerationMultiplier: 1
-  accelerationWhileFalling: 17.45
+  accelerationWhileFalling: 0.5
   decelerationWhileFalling: 0.5
   decelerationWhileGrounded: 5
   turnSpeed: 10
@@ -25,7 +25,7 @@ MonoBehaviour:
   chargeSpeedMultiplier: 2
   canJump: 1
   doubleJumpCount: 1
-  jumpSpeed: 264.2
+  jumpSpeed: 7
   maxFallSpeed: 25
   groundedFallSpeed: 2
   canGlide: 0
@@ -51,18 +51,17 @@ MonoBehaviour:
     wireFrame: 1
   wallCheckLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   gravity: 60
   groundLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   DebugLog: 0
   onHitGround: 
   onGlide: 
   onFreeFall: 
   onHitWall: 
   onCrouch: 
-  onUncrouch: Kuhaku
+  onUncrouch: 
   onClimb: 
-  onClimbRelease: 
-  jumpForward: 25
+  onClimbRelease: Kuhaku

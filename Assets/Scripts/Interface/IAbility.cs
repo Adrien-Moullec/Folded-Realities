@@ -9,7 +9,7 @@ namespace AbilitySystem {
         #endregion
 
         #region Ability Actions
-        public void OnMoveEntity(Vector3 direction);
+        public void OnMoveEntity(Vector3 direction, bool rotate = true);
         public void OnEntityTrack(Vector3 location);
         public void OnRotateEntity(Vector3 direction);
         public void OnAbilityEvent(string eventMessage);

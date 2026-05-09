@@ -36,10 +36,10 @@ namespace AbilitySystem {
             abilitySet?.attack?.Activate(entityBody, GetInputValues.isPrimaryAbility);
         }
 
-        public override void OnMoveEntity(Vector3 direction) {
+        public override void OnMoveEntity(Vector3 direction, bool rotate = true) {
             navMeshAgent.Move(direction);
             direction.y = 0;
-            if (direction != Vector3.zero) entityBody.bodyHolder.transform.forward = direction;
+            if (direction != Vector3.zero && rotate) entityBody.bodyHolder.transform.forward = direction;
         }
         public override void OnRotateEntity(Vector3 direction) {
             direction.y = 0;

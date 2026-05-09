@@ -16,7 +16,9 @@ public class AreaColliderCheck {
     public bool doDrawGizmo = true;
     public bool wireFrame = true;
 
+    // int s = wallCheckArea.GetColliders(entityBody.bodyHolder).Invoke(pmd.wallRaycastHits);
     public Func<Collider[], int> GetColliders(GameObject gameObject) => GetColliders(gameObject.transform.position, gameObject.transform.forward);
+    public Func<Collider[], int> GetColliders(Transform trans) => GetColliders(trans.position, trans.forward);
 
     public Func<Collider[], int> GetColliders(Vector3 location, Vector3 direction) {
         Quaternion rotation = Quaternion.LookRotation(direction);
@@ -33,6 +35,11 @@ public class AreaColliderCheck {
             ,
             _ => null,
         };
+    }
+    public static Func<RaycastHit[], int> GetRayCastColliders(Vector3 location, Vector3 direction, LayerMask layerMask) {
+        Quaternion rotation = Quaternion.LookRotation(direction);
+        Ray ray = new Ray(location, direction);
+        return (RaycastHit[] x) => Physics.RaycastNonAlloc(ray, x, 1, layerMask);
     }
     public void Gizmo(GameObject gameObject) => Gizmo(gameObject.transform);
     public void Gizmo(Transform trans) => Gizmo(trans.position, trans.forward);
@@ -124,5 +131,6 @@ public class AreaAffectsDrawer : PropertyDrawer {
 
 public enum CheckShape {
     Cube,
-    Sphere
+    Sphere,
+    Ray
 }

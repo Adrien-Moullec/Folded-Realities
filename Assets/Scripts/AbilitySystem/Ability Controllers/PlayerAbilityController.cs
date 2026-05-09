@@ -54,7 +54,6 @@ namespace AbilitySystem {
 
         protected override void Update() {
             base.Update();
-            Debug.Log(characterController.isGrounded);
             currentAbilitySet?.playerAbilitySet?.movement?.Activate(currentAbilitySet.entityBody, true);
             currentAbilitySet?.playerAbilitySet?.primary?.Activate(currentAbilitySet.entityBody, GetInputValues.isPrimaryAbility);
             currentAbilitySet?.playerAbilitySet?.secondary?.Activate(currentAbilitySet.entityBody, GetInputValues.isSecondaryAbility);
@@ -125,7 +124,6 @@ namespace AbilitySystem {
                 AnimationType.TransformIn,
                 true
             );
-            Debug.Log("Transform");
         }
         private void SetNewSummary(PlayerSetSummary playerSetSummary) {
             currentAbilitySet?.entityBody.animatorManager.gameObject.SetActive(false);
@@ -150,10 +148,10 @@ namespace AbilitySystem {
         #endregion
 
         #region Movement Functions
-        public override void OnMoveEntity(Vector3 direction) {
+        public override void OnMoveEntity(Vector3 direction, bool rotate = true) {
             characterController.Move(direction);
             direction.y = 0;
-            if (direction != Vector3.zero) currentAbilitySet.entityBody.bodyHolder.transform.forward = direction;
+            if (direction != Vector3.zero && rotate) currentAbilitySet.entityBody.bodyHolder.transform.forward = direction;
         }
         public override void OnRotateEntity(Vector3 direction) {
             direction.y = 0;

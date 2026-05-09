@@ -71,6 +71,10 @@ namespace AbilitySystem {
         [Tooltip("The speed to decelerate into glide fallspeed.")]
         [SerializeField] protected float fallToGlideAcceleration = 2;
 
+        [Space]
+        [Header("Wall Climbing")]
+        [SerializeField] protected AreaColliderCheck wallCheckArea;
+        [SerializeField] protected LayerMask wallCheckLayers;
 
         [Space]
         [Header("Physics")]
@@ -89,6 +93,8 @@ namespace AbilitySystem {
         [SerializeField] protected string onHitWall;
         [SerializeField] protected string onCrouch;
         [SerializeField] protected string onUncrouch;
+        [SerializeField] protected string onClimb;
+        [SerializeField] protected string onClimbRelease;
         #region Setup
 
         public override AbilityData AbilityDataSetup(EntityBody eb) {
@@ -113,6 +119,9 @@ namespace AbilitySystem {
 
             float maxSpeed = moveData.isJumpingButtonPressed ? glideHorizontalSpeed : inpVals.IsRunning ? runSpeed : walkSpeed;
 
+            if (moveData.isJumpingButtonPressed)
+                CheckForWall(entityBody, moveData);
+
             if (!moveData.isCrouching && inpVals.IsCrouching) {
                 moveData.isCrouching = true;
                 entityBody.iAbility.OnAbilityEvent(onCrouch);
@@ -120,7 +129,6 @@ namespace AbilitySystem {
                 moveData.isCrouching = false;
                 entityBody.iAbility.OnAbilityEvent(onUncrouch);
             }
-
             moveData.velocity = AccelerationMovement(
                 inpVals.Direction,
                 inpVals.IsCrouching && moveData.isGrounded ? moveData.velocity * 0.3f : moveData.velocity,
@@ -195,22 +203,21 @@ namespace AbilitySystem {
             return new Vector3(horizontalVelocity.x, 0, horizontalVelocity.z);
         }
 
-        private void Gravity(TransformingPlayerData pmd, EntityBody entityBody) {
+        protected virtual void Gravity(TransformingPlayerData pmd, EntityBody entityBody) {
 
             // Grounded and jump logic
             Vector3 feetPos = entityBody.feetSphereArea.transform.position + entityBody.feetSphereArea.center;
             bool hitGround = entityBody.isGrounded && pmd.fallSpeed <= 0;
 
-
-            if (DebugLog) {
-                Collider[] colliders = Physics.OverlapSphere(feetPos, entityBody.feetSphereArea.radius, groundLayers);
-                foreach (var c in colliders) Debug.Log(c.name);
-            }
+            //if (DebugLog) {
+            //Collider[] colliders = Physics.OverlapSphere(feetPos, entityBody.feetSphereArea.radius, groundLayers);
+            //foreach (var c in colliders) Debug.Log(c.name);
+            //}
 
             // Grounded conditions
-            if (hitGround)
+            if (hitGround) {
                 OnGrounded(entityBody, pmd);
-            else {
+            } else {
                 pmd.isGrounded = hitGround;
                 OnArial(entityBody, pmd);
             }
@@ -218,6 +225,18 @@ namespace AbilitySystem {
             //Set fallspeed
             pmd.fallSpeed = Mathf.Clamp(pmd.fallSpeed, -maxFallSpeed, maxFallSpeed);
             pmd.velocity.y = pmd.fallSpeed;
+        }
+        protected bool CheckForWall(EntityBody entityBody, TransformingPlayerData pmd) {
+            int s = AreaColliderCheck.GetRayCastColliders(entityBody.bodyHolder.transform.position, entityBody.bodyHolder.transform.forward, wallCheckLayers).Invoke(pmd.wallRaycastHits);
+            Debug.Log(s);
+            if (s > 0) {
+                pmd.wallClimbObj = pmd.wallRaycastHits[0];
+                // if (!pmd.isClimbing) 
+                entityBody.iAbility.OnAbilityEvent(onClimb);
+                // pmd.isClimbing = true;
+                return true;
+            }
+            return false;
         }
         private void OnGrounded(EntityBody entityBody, TransformingPlayerData pmd) {
             if (!pmd.isGrounded) {
@@ -318,11 +337,14 @@ namespace AbilitySystem {
             [HideInInspector] public bool isGrounded;
             [HideInInspector] public bool isRunning;
             [HideInInspector] public bool isCrouching;
+            [HideInInspector] public bool isClimbing;
 
             [HideInInspector] public bool isJumpButtonRePressed;
 
             [HideInInspector] public float glideDeltaActivate = 0;
             [HideInInspector] public bool canGlide { get => isJumpingButtonPressed && fallSpeed < 0 && releasedOnJump; }
+            [HideInInspector] public RaycastHit[] wallRaycastHits = new RaycastHit[1];
+            [HideInInspector] public RaycastHit wallClimbObj;
 
             public bool canJump {
                 get => !releasedOnJump && (isGrounded || remainingJumps > 0);
