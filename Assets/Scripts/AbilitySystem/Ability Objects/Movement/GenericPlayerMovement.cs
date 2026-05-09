@@ -85,6 +85,10 @@ namespace AbilitySystem {
         [SerializeField] protected LayerMask groundLayers;
 
         [Space]
+        [Header("Charge")]
+        protected float chargeChangeDirectionAmount = 1;
+
+        [Space]
         [Header("Movement Events")]
         [SerializeField] protected bool DebugLog = false;
         [SerializeField] protected string onHitGround;
@@ -148,6 +152,7 @@ namespace AbilitySystem {
                 moveData.chargeDirection = entityBody.animatorManager.transform.forward;
                 moveData.chargeDirection.y = 0;
             }
+            moveData.chargeDirection = Vector3.MoveTowards(moveData.chargeDirection, inpVals.inputAbilityValues.direction, chargeChangeDirectionAmount * Time.deltaTime);
             moveData.velocity = moveData.chargeDirection.normalized * chargeSpeed;
             Gravity(moveData, entityBody);
             entityBody.iAbility.OnMoveEntity(moveData.velocity * Time.deltaTime);
