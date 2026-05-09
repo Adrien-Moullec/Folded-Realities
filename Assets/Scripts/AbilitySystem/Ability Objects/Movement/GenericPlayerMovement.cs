@@ -87,6 +87,8 @@ namespace AbilitySystem {
         [SerializeField] protected string onGlide;
         [SerializeField] protected string onFreeFall;
         [SerializeField] protected string onHitWall;
+        [SerializeField] protected string onCrouch;
+        [SerializeField] protected string onUncrouch;
         #region Setup
 
         public override AbilityData AbilityDataSetup(EntityBody eb) {
@@ -111,10 +113,18 @@ namespace AbilitySystem {
 
             float maxSpeed = moveData.isJumpingButtonPressed ? glideHorizontalSpeed : inpVals.IsRunning ? runSpeed : walkSpeed;
 
+            if (!moveData.isCrouching && inpVals.IsCrouching) {
+                moveData.isCrouching = true;
+                entityBody.iAbility.OnAbilityEvent(onCrouch);
+            } else if (moveData.isCrouching && !inpVals.IsCrouching) {
+                moveData.isCrouching = false;
+                entityBody.iAbility.OnAbilityEvent(onUncrouch);
+            }
+
             moveData.velocity = AccelerationMovement(
                 inpVals.Direction,
-                moveData.velocity,
-                maxSpeed,
+                inpVals.IsCrouching && moveData.isGrounded ? moveData.velocity * 0.3f : moveData.velocity,
+                inpVals.IsCrouching && moveData.isGrounded ? maxSpeed * 0.3f : maxSpeed,
                 inpVals.IsRunning,
                 moveData.isGrounded
             );
@@ -189,11 +199,7 @@ namespace AbilitySystem {
 
             // Grounded and jump logic
             Vector3 feetPos = entityBody.feetSphereArea.transform.position + entityBody.feetSphereArea.center;
-            bool hitGround = Physics.CheckSphere(
-                feetPos,
-                entityBody.feetSphereArea.radius,
-                groundLayers
-            ) && pmd.fallSpeed <= 0;
+            bool hitGround = entityBody.isGrounded && pmd.fallSpeed <= 0;
 
 
             if (DebugLog) {
@@ -266,7 +272,7 @@ namespace AbilitySystem {
                 pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, -maxFallSpeed, gravity * Time.deltaTime);
             }
         }
-        private void OnJump(TransformingPlayerData pmd) {
+        protected virtual void OnJump(TransformingPlayerData pmd) {
             if (!(canJump && pmd.canJump)) return;
 
             pmd.fallSpeed = jumpSpeed * 100;
@@ -311,6 +317,7 @@ namespace AbilitySystem {
             //States
             [HideInInspector] public bool isGrounded;
             [HideInInspector] public bool isRunning;
+            [HideInInspector] public bool isCrouching;
 
             [HideInInspector] public bool isJumpButtonRePressed;
 

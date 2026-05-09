@@ -33,7 +33,7 @@ namespace AbilitySystem {
 
                 i.entityBody.iAbility = this;
                 i.entityBody.iHealth = this;
-                i.entityBody.animatorManager.gameObject.SetActive(false);
+                i.entityBody.animatorManager?.gameObject.SetActive(false);
 
                 i.playerAbilitySet = new PlayerAbilitySet(i.abilitySetSO, i.entityBody);
                 i.playerAbilitySet.movement.AbilityData = playerSetsList[0].playerAbilitySet.movement.AbilityData;
@@ -49,8 +49,12 @@ namespace AbilitySystem {
             }
             SetNewSummary(playerSetsList[0]);
         }
+        public override bool IsGrounded() =>
+            characterController.isGrounded;
+
         protected override void Update() {
             base.Update();
+            Debug.Log(characterController.isGrounded);
             currentAbilitySet?.playerAbilitySet?.movement?.Activate(currentAbilitySet.entityBody, true);
             currentAbilitySet?.playerAbilitySet?.primary?.Activate(currentAbilitySet.entityBody, GetInputValues.isPrimaryAbility);
             currentAbilitySet?.playerAbilitySet?.secondary?.Activate(currentAbilitySet.entityBody, GetInputValues.isSecondaryAbility);

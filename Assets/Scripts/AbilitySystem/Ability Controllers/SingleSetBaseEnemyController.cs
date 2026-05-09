@@ -16,6 +16,7 @@ namespace AbilitySystem {
 
         public object EnemyAbilitySetSOmovement { get; private set; }
 
+        public override bool IsGrounded() => true;
         protected override void Awake() {
             base.Awake();
             entityBody.iAbility = this;

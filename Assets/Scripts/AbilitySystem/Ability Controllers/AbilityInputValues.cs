@@ -19,6 +19,7 @@ namespace AbilitySystem {
         public Vector3 Direction { get => isOverrideActive ? overrideAbilityValues.direction : inputAbilityValues.direction; }
         public Vector3 Destination { get => isOverrideActive ? overrideAbilityValues.destination : inputAbilityValues.destination; }
         public bool IsRunning { get => isOverrideActive ? overrideAbilityValues.isRunning : inputAbilityValues.isRunning; }
+        public bool IsCrouching { get => isOverrideActive ? overrideAbilityValues.isCrouching : inputAbilityValues.isCrouching; }
         public bool IsAccelerating { get => isOverrideActive ? overrideAbilityValues.isAccelerating : inputAbilityValues.isAccelerating; }
         public MovementType MovementType { get => isOverrideActive ? overrideAbilityValues.movementType : inputAbilityValues.movementType; }
         public bool IsOverriding { get => isOverrideActive; }
@@ -43,6 +44,10 @@ namespace AbilitySystem {
         public void SetRunToggle(bool isRunning, bool overrideVals = false) {
             if (!overrideVals) inputAbilityValues.isRunning = isRunning;
             else overrideAbilityValues.isRunning = isRunning;
+        }
+        public void SetCrouchToggle(bool isCrouching, bool overrideVals = false) {
+            if (!overrideVals) inputAbilityValues.isCrouching = isCrouching;
+            else overrideAbilityValues.isCrouching = isCrouching;
         }
         public void SetAccelerateToggle(bool isAccelerating, bool overrideVals = false) {
             if (!overrideVals) inputAbilityValues.isAccelerating = isAccelerating;
@@ -71,6 +76,9 @@ namespace AbilitySystem {
         public Vector3 destination;
         [Tooltip("Is Entity Running.")]
         public bool isRunning;
+
+        [Tooltip("Is Entity Crouching.")]
+        public bool isCrouching;
 
         [Tooltip("Switch between accelerating and not accelerating.")]
         public bool isAccelerating;

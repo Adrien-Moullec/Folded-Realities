@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 375b1bf6a451c0a48a3cc36b6e378e3d, type: 3}
+  m_Name: FrogMovement
+  m_EditorClassIdentifier: 
+  speedMultiplier: 1
+  changeDirectionSpeedMultiplier: 3
+  acceleration: 1
+  deceleration: 8
+  runAccelerationMultiplier: 1
+  accelerationWhileFalling: 0.5
+  decelerationWhileFalling: 0.5
+  decelerationWhileGrounded: 5
+  turnSpeed: 10
+  runSpeedMultiplier: 1.5
+  chargeSpeedMultiplier: 2
+  canJump: 1
+  doubleJumpCount: 1
+  jumpSpeed: 7
+  maxFallSpeed: 25
+  groundedFallSpeed: 2
+  canGlide: 0
+  glideHorizontalSpeed: 1
+  maxGlideTime: 5
+  glideFallSpeed: 1
+  glideFallSpeedOverTime:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  fallToGlideAcceleration: 2
+  gravity: 60
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  DebugLog: 0
+  onHitGround: 
+  onGlide: 
+  onFreeFall: 
+  onHitWall: 
+  onCrouch: 
+  onUncrouch: Kuhaku
+  jumpMagnitude: 3

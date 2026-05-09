@@ -20,6 +20,7 @@ namespace AbilitySystem {
         [Tooltip("Interface reference for the Ability Controller.")]
         [HideInInspector] public IAbility iAbility;
         [HideInInspector] public IHealth iHealth;
+        [HideInInspector] public bool isGrounded { get => iAbility.IsGrounded(); }
         [HideInInspector] public bool UsingAbility = false;
         [HideInInspector] public bool MoveOverride = false;
     }

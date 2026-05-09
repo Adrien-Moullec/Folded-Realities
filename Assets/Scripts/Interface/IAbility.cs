@@ -13,6 +13,7 @@ namespace AbilitySystem {
         public void OnEntityTrack(Vector3 location);
         public void OnRotateEntity(Vector3 direction);
         public void OnAbilityEvent(string eventMessage);
+        public bool IsGrounded();
         #endregion
 
         #region Utility Functions

@@ -39,6 +39,7 @@ public class PlayerManager : MonoBehaviour {
     InputAction lookInput;
     Vector2 deltaLook;
     InputAction jumpInput;
+    InputAction crouchInput;
     InputAction runInput;
     InputAction ability1Input;
     InputAction ability2Input;
@@ -70,11 +71,14 @@ public class PlayerManager : MonoBehaviour {
         ability3Input = _PlayerInput.actions["Ability3"];
         interact = _PlayerInput.actions["Interact"];
         switchAction = _PlayerInput.actions["QuickSwitch"];
+        crouchInput = _PlayerInput.actions["Crouch"];
 
         lookInput.performed += input => deltaLook = input.ReadValue<Vector2>();
         lookInput.canceled += input => deltaLook = input.ReadValue<Vector2>();
         runInput.performed += input => iAbility.GetInputValues.SetRunToggle(true);
         runInput.canceled += input => iAbility.GetInputValues.SetRunToggle(false);
+        crouchInput.performed += input => iAbility.GetInputValues.SetCrouchToggle(true);
+        crouchInput.canceled += input => iAbility.GetInputValues.SetCrouchToggle(false);
         switchAction.performed += input => playerAbilityController.QuickSwitch();
         radialWheel.performed += input => {
             _RadialMenuManager?.SetWheelActive(true);

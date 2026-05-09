@@ -70,5 +70,7 @@ namespace AbilitySystem {
         #endregion
 
         public abstract void OnDrawGizmos();
+
+        public abstract bool IsGrounded();
     }
 }

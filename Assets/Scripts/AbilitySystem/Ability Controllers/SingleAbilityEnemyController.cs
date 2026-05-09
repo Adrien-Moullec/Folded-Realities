@@ -24,6 +24,7 @@ namespace AbilitySystem {
             UpdateHealth();
         }
 
+
         private void UpdateHealth() {
             healthBar.value = currentHealth;
         }
