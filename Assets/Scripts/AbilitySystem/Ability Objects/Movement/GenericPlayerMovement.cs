@@ -230,8 +230,10 @@ namespace AbilitySystem {
             pmd.fallSpeed = Mathf.Clamp(pmd.fallSpeed, -maxFallSpeed, maxFallSpeed);
             pmd.velocity.y = pmd.fallSpeed;
         }
-        protected bool CheckForWall(EntityBody entityBody, TransformingPlayerData pmd) {
-            int s = AreaColliderCheck.GetRayCastColliders(entityBody.bodyHolder.transform.position, entityBody.bodyHolder.transform.forward, wallCheckLayers).Invoke(pmd.wallRaycastHits);
+        protected bool CheckForWall(EntityBody entityBody, TransformingPlayerData pmd) =>
+            CheckForWall(entityBody, entityBody.bodyHolder.transform.position, entityBody.bodyHolder.transform.forward, pmd);
+        protected bool CheckForWall(EntityBody entityBody, Vector3 position, Vector3 direction, TransformingPlayerData pmd) {
+            int s = AreaColliderCheck.GetRayCastColliders(position, direction, wallCheckLayers).Invoke(pmd.wallRaycastHits);
             Debug.Log(s);
             if (s > 0) {
                 pmd.wallClimbObj = pmd.wallRaycastHits[0];
