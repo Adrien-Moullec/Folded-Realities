@@ -9,17 +9,16 @@ namespace AbilitySystem {
         [Header("Body")]
         [Tooltip("Gameobject that parents the body prefab.")]
         public GameObject bodyHolder;
-        [Tooltip("Gameobject that has the Collider for the feet collisions.")]
-        public SphereCollider feetSphereArea;
-        [Tooltip("AnimatorManager.")]
+        [Tooltip("Animator Manager.")]
         public AnimatorManager animatorManager;
 
-        [Space]
         [Header("Ability References")]
         [HideInInspector] public AbilitySet abilitySet;
         [Tooltip("Interface reference for the Ability Controller.")]
         [HideInInspector] public IAbility iAbility;
         [HideInInspector] public IHealth iHealth;
+
+        [Header("Get Info")]
         [HideInInspector] public bool isGrounded { get => iAbility.IsGrounded(); }
         [HideInInspector] public bool UsingAbility = false;
         [HideInInspector] public bool MoveOverride = false;

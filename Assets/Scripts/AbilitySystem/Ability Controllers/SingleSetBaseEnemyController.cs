@@ -53,5 +53,10 @@ namespace AbilitySystem {
             abilitySetSO.movement?.GizmoEvent(entityBody);
             abilitySetSO.attack.GizmoEvent(entityBody);
         }
+
+        public override void Die() {
+            navMeshAgent.enabled = false;
+            StartCoroutine(PlayerDeath(entityBody.animatorManager, () => Destroy(gameObject)));
+        }
     }
 }

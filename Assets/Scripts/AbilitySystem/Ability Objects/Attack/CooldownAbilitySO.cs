@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 
 namespace AbilitySystem {
-    public abstract class CooldownAbilitySO : AbilitySO {
+    public abstract class CooldownAbilitySO : FrameAbilitySO {
         [Header("Ability Settings")]
         [SerializeField, Range(0.1f, 20)] protected float cooldown;
         [SerializeField, Range(1, 5)] protected int charges;
@@ -88,7 +88,7 @@ namespace AbilitySystem {
     }
 
     [Serializable]
-    public class CooldownAbilitySummary : AbilitySummary {
+    public class CooldownAbilitySummary : FrameAbilitySummary {
         [SerializeField] public CooldownAbilitySO abilitySO;
 
         public override void Activate(EntityBody entityBody, bool abilityPressed) {

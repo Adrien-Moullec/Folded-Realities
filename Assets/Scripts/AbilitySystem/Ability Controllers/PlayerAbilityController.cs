@@ -48,6 +48,7 @@ namespace AbilitySystem {
                     frameEvents += () => { i.playerAbilitySet.tertiary.FrameEvent(i.entityBody); };
             }
             SetNewSummary(playerSetsList[0]);
+            CurrentHealth = MaxHealth;
         }
         public override bool IsGrounded() =>
             characterController.isGrounded;
@@ -62,29 +63,6 @@ namespace AbilitySystem {
         public void QuickSwitch() {
             if (currentAbilitySet.abilitySetSO.abilitySetName == "Kuhaku") OnAbilityEvent("Scissors");
             else if (currentAbilitySet.abilitySetSO.abilitySetName == "Scissors") OnAbilityEvent("Kuhaku");
-        }
-        public override void Die() {
-            base.Die();
-            isDead = true;
-            StartCoroutine(PlayerDeath());
-        }
-        IEnumerator PlayerDeath() {
-            bool hasFinishedAnim = false;
-            yield return currentAbilitySet.entityBody.animatorManager.InitiateOneOffAnimation(
-                () => GetComponent<CharacterController>().enabled = false,
-                null,
-                null,
-                () => hasFinishedAnim = true,
-                AnimationType.Death,
-                true
-            );
-            while (!hasFinishedAnim)
-                yield return null;
-
-            GetComponent<CharacterController>().enabled = true;
-            CheckpointManager.Instance?.RespawnPlayer(gameObject);
-            isDead = false;
-            currentHealth = (int)MaxHealth;
         }
         #endregion
 
@@ -174,6 +152,15 @@ namespace AbilitySystem {
                 n?.abilitySetSO?.secondary?.GizmoEvent(n.entityBody);
                 n?.abilitySetSO?.tertiary?.GizmoEvent(n.entityBody);
             }
+        }
+        public override void Die() {
+            currentAbilitySet.abilitySetSO.healthSettings.Die(currentAbilitySet.entityBody, ref CurrentHealth);
+            GetComponent<CharacterController>().enabled = false;
+            StartCoroutine(PlayerDeath(currentAbilitySet.entityBody.animatorManager, () => {
+                GetComponent<CharacterController>().enabled = true;
+                CheckpointManager.Instance?.RespawnPlayer(gameObject);
+                currentAbilitySet.abilitySetSO.healthSettings.MaxHealth(currentAbilitySet.entityBody, ref CurrentHealth, ref MaxHealth);
+            }));
         }
 
         [Serializable]

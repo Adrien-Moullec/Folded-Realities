@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 namespace AbilitySystem {
-    public abstract class MovementSO : AbilitySO {
+    public abstract class MovementSO : FrameAbilitySO {
         public override bool Execute(EntityBody entityBody, AbilityData data) {
             AbilityControllerValues inpVals = entityBody.iAbility.GetInputValues;
 
@@ -35,7 +35,7 @@ namespace AbilitySystem {
     }
 
     [Serializable]
-    public class MovementAbilitySummary : AbilitySummary {
+    public class MovementAbilitySummary : FrameAbilitySummary {
         [SerializeField] public MovementSO movementSO;
         public override void Activate(EntityBody entityBody, bool isPressed) =>
             movementSO?.Execute(entityBody, AbilityData);
@@ -47,7 +47,7 @@ namespace AbilitySystem {
             movementSO?.Startup(entityBody, AbilityData);
         public override void OnDrawGizmos(EntityBody entityBody) =>
             movementSO?.GizmoEvent(entityBody);
-        
+
 
         public MovementAbilitySummary(MovementSO m, EntityBody eb) {
             movementSO = m;

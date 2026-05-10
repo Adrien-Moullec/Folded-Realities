@@ -11,22 +11,15 @@ namespace AbilitySystem {
             healthBar.value = MaxHealth;
         }*/
         public override void Damage(EntityDamage damage) {
-            base.Damage(damage);
+            //base.Damage(damage);
             UpdateHealth();
         }
-
-        public override void Die() {
-            Destroy(gameObject);
-        }
-
         public override void Heal(EntityDamage heal) {
-            currentHealth = (int)Mathf.Clamp(currentHealth + (int)heal.amount, 0, MaxHealth);
+            //base.Heal(heal);
             UpdateHealth();
         }
-
-
         private void UpdateHealth() {
-            healthBar.value = currentHealth;
+            //healthBar.value = currentHealth;
         }
     }
 }

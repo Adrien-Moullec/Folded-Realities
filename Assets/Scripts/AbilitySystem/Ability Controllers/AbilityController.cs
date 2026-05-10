@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+
 using UnityEngine;
 
 namespace AbilitySystem {
@@ -6,23 +9,16 @@ namespace AbilitySystem {
         [Tooltip("The 'team' the entity is on.")]
         [SerializeField] public EntityTeam entityTeam;
         public EntityTeam GetEntityTeam => entityTeam;
+        public int MaxHealth = 100;
+        public int CurrentHealth;
 
-        [Header("Health")]
-        [Tooltip("Max health.")]
-        [SerializeField, Min(1)] int maxHealth = 100;
-        [Tooltip("Current entity health.")]
-        [HideInInspector] protected int currentHealth = 100;
-        [HideInInspector] protected bool isDead = false;
         public AbilityControllerValues GetInputValues { get; set; } = new();
         protected delegate void FrameEvents();
         protected FrameEvents frameEvents;
-        public float CurrentHealth => throw new System.NotImplementedException();
-        public float MaxHealth => throw new System.NotImplementedException();
-
         public AbilityController GetAbilityController { get => this; }
 
         protected virtual void Awake() {
-            currentHealth = maxHealth;
+
         }
         protected virtual void Update() {
             frameEvents?.Invoke();
@@ -40,37 +36,42 @@ namespace AbilitySystem {
         #endregion
 
         #region Health
+
         public virtual void Damage(EntityDamage damage) {
-            if (isDead) return;
-            if (!EntityTeamFunctions.HasCommonTeam(GetEntityTeam, damage.damagingTeam))
-                currentHealth -= (int)damage.amount;
-
-            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-
-            if (currentHealth <= 0)
-                Die();
-
-            //Debug.Log(currentHealth);
+            if (GetEntityBody().abilitySet.healthSettings != null)
+                GetEntityBody().abilitySet.healthSettings.DamageAmount(GetEntityBody(), ref CurrentHealth, ref MaxHealth, damage);
+            else
+                HealthSO.DefaultDamage(GetEntityBody(), ref CurrentHealth, ref MaxHealth, damage);
+            if (CurrentHealth <= 0) Die();
         }
 
         public virtual void Heal(EntityDamage heal) {
-            if (isDead) return;
-            currentHealth += (int)heal.amount;
-            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+            if (GetEntityBody().abilitySet.healthSettings != null)
+                GetEntityBody().abilitySet.healthSettings.HealAmount(GetEntityBody(), ref CurrentHealth, ref MaxHealth, heal);
+            else
+                HealthSO.DefaultHeal(GetEntityBody(), ref CurrentHealth, ref MaxHealth, heal);
         }
+        public abstract void Die();
+        protected IEnumerator PlayerDeath(AnimatorManager animatorManager, Action onDeathAnimationEnd) {
 
-        public virtual void Die() {
+            bool hasFinishedAnim = false;
+            yield return animatorManager?.InitiateOneOffAnimation(
+                null,
+                null,
+                null,
+                () => hasFinishedAnim = true,
+                AnimationType.Death,
+                true
+            );
+            while (!hasFinishedAnim)
+                yield return null;
 
+            onDeathAnimationEnd();
         }
-
-        public virtual void InputTransitionName(string name) {
-
-        }
-
+        public virtual void InputTransitionName(string name) { }
         #endregion
 
         public abstract void OnDrawGizmos();
-
         public abstract bool IsGrounded();
     }
 }

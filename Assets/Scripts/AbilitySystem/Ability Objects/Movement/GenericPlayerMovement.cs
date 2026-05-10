@@ -211,7 +211,6 @@ namespace AbilitySystem {
         protected virtual void Gravity(TransformingPlayerData pmd, EntityBody entityBody) {
 
             // Grounded and jump logic
-            Vector3 feetPos = entityBody.feetSphereArea.transform.position + entityBody.feetSphereArea.center;
             bool hitGround = entityBody.isGrounded && pmd.fallSpeed <= 0;
 
             //if (DebugLog) {
