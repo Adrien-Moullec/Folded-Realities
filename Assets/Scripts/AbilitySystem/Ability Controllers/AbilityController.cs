@@ -38,16 +38,16 @@ namespace AbilitySystem {
         #region Health
 
         public virtual void Damage(EntityDamage damage) {
-            if (GetEntityBody().abilitySet.healthSettings != null)
-                GetEntityBody().abilitySet.healthSettings.DamageAmount(GetEntityBody(), ref CurrentHealth, ref MaxHealth, damage);
+            if (GetEntityBody().abilitySet?.healthSettings != null)
+                GetEntityBody().abilitySet?.healthSettings.DamageAmount(GetEntityBody(), ref CurrentHealth, ref MaxHealth, damage);
             else
                 HealthSO.DefaultDamage(GetEntityBody(), ref CurrentHealth, ref MaxHealth, damage);
             if (CurrentHealth <= 0) Die();
         }
 
         public virtual void Heal(EntityDamage heal) {
-            if (GetEntityBody().abilitySet.healthSettings != null)
-                GetEntityBody().abilitySet.healthSettings.HealAmount(GetEntityBody(), ref CurrentHealth, ref MaxHealth, heal);
+            if (GetEntityBody().abilitySet?.healthSettings != null)
+                GetEntityBody().abilitySet?.healthSettings.HealAmount(GetEntityBody(), ref CurrentHealth, ref MaxHealth, heal);
             else
                 HealthSO.DefaultHeal(GetEntityBody(), ref CurrentHealth, ref MaxHealth, heal);
         }
