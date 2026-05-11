@@ -9,6 +9,7 @@ public class BaseEnemyController : MonoBehaviour {
     [Space]
     [Header("Script Managers")]
     [SerializeField] SingleAbilityEnemyController AbilityController;
+    [SerializeField] bool DebugEnemy = false;
 
     [Space]
     [Header("Settings")]
@@ -40,13 +41,19 @@ public class BaseEnemyController : MonoBehaviour {
                 .transform.position;
         }
 
-        if (distanceToEntity > playerChaseDistance) return;
+        if (distanceToEntity > playerChaseDistance) {
+            if (DebugEnemy) Debug.Log("TOO FAR AWAY");
+            return;
+        }
         if (distanceToEntity > playerStopDistance) {
+            if (DebugEnemy) Debug.Log("RUN AT PLAYER");
             AbilityController.GetInputValues.SetDestination(EntityManager.instance != null ? location : PlayerManager.player.transform.position);
             AbilityController.GetInputValues.isPrimaryAbility = false;
         }
-        if (distanceToEntity <= playerAttackDistance)
+        if (distanceToEntity <= playerAttackDistance) {
+            if (DebugEnemy) Debug.Log("ATTTACK");
             AbilityController.GetInputValues.isPrimaryAbility = true;
+        }
 
     }
 }

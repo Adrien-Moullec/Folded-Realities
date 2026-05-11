@@ -81,8 +81,6 @@ namespace AbilitySystem {
 
         [Tooltip("Gravity acceleration.")]
         [SerializeField, Min(0)] protected float gravity = 60f;
-        [Tooltip("Layers that count as ground.")]
-        [SerializeField] protected LayerMask groundLayers;
 
         [Space]
         [Header("Charge")]
@@ -234,7 +232,6 @@ namespace AbilitySystem {
             CheckForWall(entityBody, entityBody.bodyHolder.transform.position, entityBody.bodyHolder.transform.forward, pmd);
         protected bool CheckForWall(EntityBody entityBody, Vector3 position, Vector3 direction, TransformingPlayerData pmd) {
             int s = AreaColliderCheck.GetRayCastColliders(position, direction, wallCheckLayers).Invoke(pmd.wallRaycastHits);
-            Debug.Log(s);
             if (s > 0) {
                 pmd.wallClimbObj = pmd.wallRaycastHits[0];
                 // if (!pmd.isClimbing) 

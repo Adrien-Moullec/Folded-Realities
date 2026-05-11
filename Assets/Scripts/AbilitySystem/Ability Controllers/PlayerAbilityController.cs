@@ -19,6 +19,14 @@ namespace AbilitySystem {
         [HideInInspector] public PlayerSetSummary currentAbilitySet;
         public GameObject BodyHolder;
         private CharacterController characterController;
+        [SerializeField] PlayerHealthCanvas playerHealthCanvas;
+
+        [Space]
+        [Header("Respawn")]
+        [SerializeField] Transform startPoint;
+        [Header("Damage Settings")]
+        [SerializeField] float invincibilityTime = 1f;
+        private bool invincible = false;
 
         #region OnStart
         protected override void Awake() {
@@ -131,6 +139,23 @@ namespace AbilitySystem {
             direction.y = 0;
             if (direction != Vector3.zero && rotate) currentAbilitySet.entityBody.bodyHolder.transform.forward = direction;
         }
+        // Andrea's function
+        IEnumerator InvincibilityFrames() {
+            invincible = true;
+            yield return new WaitForSeconds(invincibilityTime);
+            invincible = false;
+        }
+        // Andrea's function
+        void Respawn() {
+            //currentHealth = maxHealth;
+            playerHealthCanvas.UpdateHearts(100);
+            CurrentHealth = MaxHealth;
+
+            Vector3 respawnPosition = startPoint.position;
+
+            if (CheckpointManager.Instance != null && CheckpointManager.Instance.HasCheckpoint())
+                respawnPosition = CheckpointManager.Instance.GetCheckpointPosition();
+        }
         public override void OnRotateEntity(Vector3 direction) {
             direction.y = 0;
             if (direction != Vector3.zero) currentAbilitySet.entityBody.bodyHolder.transform.forward = direction;
@@ -160,7 +185,16 @@ namespace AbilitySystem {
                 GetComponent<CharacterController>().enabled = true;
                 CheckpointManager.Instance?.RespawnPlayer(gameObject);
                 currentAbilitySet.abilitySetSO.healthSettings.MaxHealth(currentAbilitySet.entityBody, ref CurrentHealth, ref MaxHealth);
+                Respawn();
             }));
+        }
+        public override void Heal(EntityDamage heal) {
+            base.Heal(heal);
+            playerHealthCanvas?.UpdateHearts(CurrentHealth);
+        }
+        public override void Damage(EntityDamage damage) {
+            base.Damage(damage);
+            playerHealthCanvas?.UpdateHearts(CurrentHealth);
         }
 
         [Serializable]

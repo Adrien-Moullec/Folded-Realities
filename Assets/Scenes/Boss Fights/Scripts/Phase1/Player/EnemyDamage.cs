@@ -12,8 +12,8 @@ public class EnemyDamage : MonoBehaviour {
             return;
         }
 
-        PlayerHealth player =
-            other.GetComponentInParent<PlayerHealth>();
+        PlayerHealthCanvas player =
+            other.GetComponentInParent<PlayerHealthCanvas>();
 
         if (player != null) {
             Debug.Log("Player hit successfully");
@@ -24,7 +24,8 @@ public class EnemyDamage : MonoBehaviour {
                     null
                 );
 
-            player.Damage(dmg);
+            if (other.TryGetComponent(out IHealth ihealth))
+                ihealth.Damage(dmg);
 
             canDamage = false;
         }

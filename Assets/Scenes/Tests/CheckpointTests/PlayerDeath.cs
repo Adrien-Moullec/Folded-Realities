@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class PlayerDeath : MonoBehaviour {
     void Update() {
@@ -7,4 +7,4 @@ public class PlayerDeath : MonoBehaviour {
             CheckpointManager.Instance.RespawnPlayer(gameObject);
         }
     }
-}
+}*/
