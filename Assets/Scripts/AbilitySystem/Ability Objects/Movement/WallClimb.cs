@@ -17,6 +17,7 @@ namespace AbilitySystem {
             if (!hasWall || !moveData.isJumpingButtonPressed) {
                 Debug.Log(hasWall);
                 moveData.isClimbing = false;
+                //if (moveData.isJumpingButtonPressed) moveData.velocity *= 20;
                 entityBody.iAbility.OnAbilityEvent(onClimbRelease);
                 return true;
             }

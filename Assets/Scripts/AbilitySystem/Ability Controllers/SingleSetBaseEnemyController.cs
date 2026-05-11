@@ -16,6 +16,15 @@ namespace AbilitySystem {
 
         public object EnemyAbilitySetSOmovement { get; private set; }
 
+        public override void OnEnable() {
+            navMeshAgent.enabled = true;
+        }
+        public override void OnDisable() {
+            try {
+                navMeshAgent.isStopped = true;
+            } catch { Debug.LogError("Issue Stoppiung agent"); }
+            navMeshAgent.enabled = false;
+        }
         public override bool IsGrounded() => true;
         protected override void Awake() {
             base.Awake();
@@ -32,6 +41,7 @@ namespace AbilitySystem {
         }
         protected override void Update() {
             base.Update();
+            if (!navMeshAgent.enabled) return;
             abilitySet?.movement?.Activate(entityBody, true);
             abilitySet?.attack?.Activate(entityBody, GetInputValues.isPrimaryAbility);
         }

@@ -58,6 +58,10 @@ namespace AbilitySystem {
             else overrideAbilityValues.movementType = movementType;
         }
 
+        internal void SetDefaultValues() {
+            inputAbilityValues = new();
+        }
+
         #endregion
 
         [Header("Ability inputs.")]

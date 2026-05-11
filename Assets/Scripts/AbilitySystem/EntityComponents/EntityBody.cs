@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace AbilitySystem {
         public GameObject bodyHolder;
         [Tooltip("Animator Manager.")]
         public AnimatorManager animatorManager;
+        public List<Renderer> entityShader;
 
         [Header("Ability References")]
         [HideInInspector] public AbilitySet abilitySet;

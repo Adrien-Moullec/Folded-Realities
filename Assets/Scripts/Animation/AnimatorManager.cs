@@ -25,9 +25,9 @@ namespace AbilitySystem {
         }
         #region States
         public void SetMovement(float dSpeed, float dFall, bool isGround) {
-            animator.SetFloat(deltaSpeed, Mathf.Clamp01(dSpeed));
-            animator.SetFloat(deltaFall, Mathf.Clamp01(dFall));
-            animator.SetBool(isGrounded, isGround);
+            animator?.SetFloat(deltaSpeed, Mathf.Clamp01(dSpeed));
+            animator?.SetFloat(deltaFall, Mathf.Clamp01(dFall));
+            animator?.SetBool(isGrounded, isGround);
         }
 
         public IEnumerator InitiateOneOffAnimation(

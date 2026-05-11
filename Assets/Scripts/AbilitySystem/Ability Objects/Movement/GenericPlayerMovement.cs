@@ -305,7 +305,7 @@ namespace AbilitySystem {
         protected void AnimateAbility(EntityBody entityBody, Vector3 movement, float fallSpeed, bool isGrounded) {
             float delta = Mathf.Clamp01(new Vector3(movement.x, 0, movement.z).magnitude / runSpeed);
             entityBody.
-            animatorManager.
+            animatorManager?.
             SetMovement(
                 delta,
                 Mathf.Lerp(

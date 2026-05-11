@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 
 using UnityEngine;
 
@@ -16,15 +17,23 @@ namespace AbilitySystem {
         protected delegate void FrameEvents();
         protected FrameEvents frameEvents;
         public AbilityController GetAbilityController { get => this; }
+        public bool isControllerActive = true;
 
         protected virtual void Awake() {
 
         }
         protected virtual void Update() {
+            if (!isControllerActive) return;
             frameEvents?.Invoke();
         }
 
         #region Movement Interface
+        public virtual void OnEnable() {
+            isControllerActive = true;
+        }
+        public virtual void OnDisable() {
+            isControllerActive = false;
+        }
         public abstract void OnRotateEntity(Vector3 movement);
         public abstract void OnMoveEntity(Vector3 direction, bool rotate = true);
         public abstract void OnEntityTrack(Vector3 location);
@@ -36,13 +45,14 @@ namespace AbilitySystem {
         #endregion
 
         #region Health
-
         public virtual void Damage(EntityDamage damage) {
             if (GetEntityBody().abilitySet?.healthSettings != null)
                 GetEntityBody().abilitySet?.healthSettings.DamageAmount(GetEntityBody(), ref CurrentHealth, ref MaxHealth, damage);
             else
                 HealthSO.DefaultDamage(GetEntityBody(), ref CurrentHealth, ref MaxHealth, damage);
             if (CurrentHealth <= 0) Die();
+            foreach (var n in GetEntityBody().entityShader.Select(x => x.material))
+                n.SetFloat("_Health01", (float)CurrentHealth / MaxHealth);
         }
 
         public virtual void Heal(EntityDamage heal) {
@@ -50,6 +60,8 @@ namespace AbilitySystem {
                 GetEntityBody().abilitySet?.healthSettings.HealAmount(GetEntityBody(), ref CurrentHealth, ref MaxHealth, heal);
             else
                 HealthSO.DefaultHeal(GetEntityBody(), ref CurrentHealth, ref MaxHealth, heal);
+            foreach (var n in GetEntityBody().entityShader.Select(x => x.material))
+                n.SetFloat("_Health01", (float)CurrentHealth / MaxHealth);
         }
         public abstract void Die();
         protected IEnumerator PlayerDeath(AnimatorManager animatorManager, Action onDeathAnimationEnd) {
