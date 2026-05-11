@@ -127,7 +127,7 @@ namespace AbilitySystem {
             if (!moveData.isCrouching && inpVals.IsCrouching) {
                 moveData.isCrouching = true;
                 entityBody.iAbility.OnAbilityEvent(onCrouch);
-            } else if (moveData.isCrouching && !inpVals.IsCrouching) {
+            } else if (moveData.isCrouching && !inpVals.IsCrouching && entityBody.isGrounded) {
                 moveData.isCrouching = false;
                 entityBody.iAbility.OnAbilityEvent(onUncrouch);
             }
@@ -225,7 +225,7 @@ namespace AbilitySystem {
             }
 
             //Set fallspeed
-            pmd.fallSpeed = Mathf.Clamp(pmd.fallSpeed, -maxFallSpeed, maxFallSpeed);
+            pmd.fallSpeed = Mathf.Clamp(pmd.fallSpeed, -maxFallSpeed, jumpSpeed);
             pmd.velocity.y = pmd.fallSpeed;
         }
         protected bool CheckForWall(EntityBody entityBody, TransformingPlayerData pmd) =>
