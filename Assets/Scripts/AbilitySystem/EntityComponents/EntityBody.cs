@@ -12,6 +12,7 @@ namespace AbilitySystem {
         public GameObject bodyHolder;
         [Tooltip("Animator Manager.")]
         public AnimatorManager animatorManager;
+        public Transform prefab;
         public List<Renderer> entityShader;
 
         [Header("Ability References")]

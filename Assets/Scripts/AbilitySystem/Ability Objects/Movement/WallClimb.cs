@@ -31,12 +31,18 @@ namespace AbilitySystem {
             float horizontal = Vector3.Dot(input, wallRight);
             float vertical = Vector3.Dot(input, -wallNormal);
 
-            moveData.velocity = wallRight * horizontal + wallUp * vertical - wallNormal;
+            Vector3 dir = wallRight * horizontal + wallUp * vertical;
+            moveData.velocity = dir - wallNormal;
             moveData.velocity.Normalize();
+
             entityBody.iAbility.OnMoveEntity(
                 moveData.velocity * speedMultiplier * Time.deltaTime,
                 false
             );
+            if (dir != Vector3.zero) {
+                entityBody.prefab.right = -dir.normalized;
+                entityBody.prefab.eulerAngles = new Vector3(0, 0, entityBody.prefab.eulerAngles.z);
+            }
             entityBody.iAbility.OnRotateEntity(
                 -wallNormal
             );
