@@ -165,59 +165,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &1768793327603475908
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3280997533145751887}
-  - component: {fileID: 6536683569106103474}
-  m_Layer: 0
-  m_Name: FeetCollision
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3280997533145751887
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1768793327603475908}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.557, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1726812301455353388}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &6536683569106103474
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1768793327603475908}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5182362205785371105
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,6 +250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AbilityController: {fileID: 6866967023358552067}
+  DebugEnemy: 0
   playerStopDistance: 5
   playerAttackDistance: 2
   playerChaseDistance: 10
@@ -319,12 +267,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityTeam: 1
-  maxHealth: 100
+  MaxHealth: 100
+  CurrentHealth: 0
   abilitySetSO: {fileID: 11400000, guid: c629a897cbeedc944a16b070e04af81a, type: 2}
   entityBody:
     bodyHolder: {fileID: 7211196813232357869}
-    feetSphereArea: {fileID: 6536683569106103474}
     animatorManager: {fileID: 9082340017207010461}
+    entityShader: []
     UsingAbility: 0
     MoveOverride: 0
   navMeshAgent: {fileID: 3769690474327977817}
@@ -548,7 +497,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5357483801470575219}
-  - {fileID: 3280997533145751887}
   - {fileID: 5399219681639832531}
   m_Father: {fileID: 1225429674322778145}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -847,11 +795,11 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7631835797964543903}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 6a57fdd5bd8ff3a4898d5462022b13b0, type: 3}
   m_Controller: {fileID: 22100000, guid: 01d5e57e923c08b4782848821782c21a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0

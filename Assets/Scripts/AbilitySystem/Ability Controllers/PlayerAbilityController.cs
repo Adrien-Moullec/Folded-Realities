@@ -58,10 +58,17 @@ namespace AbilitySystem {
             SetNewSummary(playerSetsList[0]);
             CurrentHealth = MaxHealth;
         }
+        public override void OnEnable() {
+            GetComponent<PlayerManager>().OnEnable();
+        }
+        public override void OnDisable() {
+            GetComponent<PlayerManager>().OnDisable();
+        }
         public override bool IsGrounded() =>
             characterController.isGrounded;
 
         protected override void Update() {
+            if (!characterController.enabled) return;
             base.Update();
             currentAbilitySet?.playerAbilitySet?.movement?.Activate(currentAbilitySet.entityBody, true);
             currentAbilitySet?.playerAbilitySet?.primary?.Activate(currentAbilitySet.entityBody, GetInputValues.isPrimaryAbility);
@@ -142,19 +149,22 @@ namespace AbilitySystem {
         // Andrea's function
         IEnumerator InvincibilityFrames() {
             invincible = true;
-            yield return new WaitForSeconds(invincibilityTime);
+            float time = 0;
+            while (time < invincibilityTime) {
+                time += Time.deltaTime;
+                foreach (var n in GetEntityBody().entityShader)
+                    n.material.SetFloat("_DamageFlash01", Mathf.Abs(Mathf.Sin(time * 8 / invincibilityTime)));
+                yield return null;
+            }
+            Debug.Log("END");
+            foreach (var n in GetEntityBody().entityShader)
+                n.material.SetFloat("_DamageFlash01", 0);
             invincible = false;
         }
         // Andrea's function
         void Respawn() {
-            //currentHealth = maxHealth;
             playerHealthCanvas.UpdateHearts(100);
             CurrentHealth = MaxHealth;
-
-            Vector3 respawnPosition = startPoint.position;
-
-            if (CheckpointManager.Instance != null && CheckpointManager.Instance.HasCheckpoint())
-                respawnPosition = CheckpointManager.Instance.GetCheckpointPosition();
         }
         public override void OnRotateEntity(Vector3 direction) {
             direction.y = 0;
@@ -193,8 +203,10 @@ namespace AbilitySystem {
             playerHealthCanvas?.UpdateHearts(CurrentHealth);
         }
         public override void Damage(EntityDamage damage) {
+            if (invincible) return;
             base.Damage(damage);
             playerHealthCanvas?.UpdateHearts(CurrentHealth);
+            StartCoroutine(InvincibilityFrames());
         }
 
         [Serializable]

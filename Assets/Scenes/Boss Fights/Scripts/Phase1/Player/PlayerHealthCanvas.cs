@@ -38,10 +38,6 @@ public class PlayerHealthCanvas : MonoBehaviour {//, IHealth {
                     darkHeart;
             }
         }
-
-        Debug.Log(
-            "Hearts updated"
-        );
     }
 
 

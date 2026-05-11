@@ -19,6 +19,14 @@ public class EntityManager : MonoBehaviour {
 
         entities = FindObjectsByType<AbilityController>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList();
     }
+    public void ActivateAllEntities() {
+        foreach (var n in entities)
+            n.OnEnable();
+    }
+    public void DeactivateAllEntities() {
+        foreach (var n in entities)
+            n.OnDisable();
+    }
     public void GetAbilityControllers() => entities = FindObjectsByType<AbilityController>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList();
     public List<AbilityController> GetOpposingTeam(EntityTeam currentTeam) {
         List<AbilityController> abilityControllers = new();

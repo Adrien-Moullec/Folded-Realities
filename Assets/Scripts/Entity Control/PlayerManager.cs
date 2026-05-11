@@ -55,7 +55,7 @@ public class PlayerManager : MonoBehaviour {
         iAbility = GetComponent<IAbility>();
     }
     #region On Start
-    private void OnEnable() {
+    public void OnEnable() {
         playerAbilityController = GetComponent<PlayerAbilityController>();
         iAbility = playerAbilityController;
         _PlayerInput = GetComponent<PlayerInput>();
@@ -98,7 +98,8 @@ public class PlayerManager : MonoBehaviour {
         ability3Input.performed += input => iAbility.GetInputValues.isTertiaryAbility = true;
         ability3Input.canceled += input => iAbility.GetInputValues.isTertiaryAbility = false;
     }
-    void OnDisable() {
+    public void OnDisable() {
+        iAbility.GetInputValues.SetDefaultValues();
         lookInput.performed -= input => deltaLook = input.ReadValue<Vector2>();
         lookInput.canceled -= input => deltaLook = input.ReadValue<Vector2>();
         runInput.performed -= input => iAbility.GetInputValues.SetRunToggle(true);
