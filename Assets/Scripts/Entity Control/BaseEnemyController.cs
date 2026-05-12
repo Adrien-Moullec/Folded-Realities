@@ -4,6 +4,7 @@ using AbilitySystem;
 
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.AI;
 
 public class BaseEnemyController : MonoBehaviour {
     [Space]
@@ -47,7 +48,8 @@ public class BaseEnemyController : MonoBehaviour {
         }
         if (distanceToEntity > playerStopDistance) {
             if (DebugEnemy) Debug.Log("RUN AT PLAYER");
-            AbilityController.GetInputValues.SetDestination(EntityManager.instance != null ? location : PlayerManager.player.transform.position);
+            //AbilityController.GetInputValues.SetDestination(EntityManager.instance != null ? location : PlayerManager.player.transform.position);
+            AbilityController.OnMoveEntity(EntityManager.instance != null ? location : PlayerManager.player.transform.position);
             AbilityController.GetInputValues.isPrimaryAbility = false;
         }
         if (distanceToEntity <= playerAttackDistance) {
