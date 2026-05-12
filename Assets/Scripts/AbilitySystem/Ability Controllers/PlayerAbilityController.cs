@@ -189,7 +189,7 @@ namespace AbilitySystem {
             }
         }
         public override void Die() {
-            currentAbilitySet.abilitySetSO.healthSettings.Die(currentAbilitySet.entityBody, ref CurrentHealth);
+            currentAbilitySet.abilitySetSO.healthSettings?.Die(currentAbilitySet.entityBody, ref CurrentHealth);
             GetComponent<CharacterController>().enabled = false;
             StartCoroutine(PlayerDeath(currentAbilitySet.entityBody.animatorManager, () => {
                 GetComponent<CharacterController>().enabled = true;
