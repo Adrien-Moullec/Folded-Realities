@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 public class PlayerLevelSpawn : MonoBehaviour {
+
     CharacterController cc;
 
     void Start() {
@@ -11,7 +12,7 @@ public class PlayerLevelSpawn : MonoBehaviour {
     }
 
     IEnumerator ApplySpawn() {
-       
+
         yield return new WaitForEndOfFrame();
 
         string spawnID = SpawnData.spawnID;
@@ -23,22 +24,45 @@ public class PlayerLevelSpawn : MonoBehaviour {
             yield break;
         }
 
-        SpawnPos[] points = FindObjectsByType<SpawnPos>(FindObjectsSortMode.None);
+        SpawnPos[] points =
+            FindObjectsByType<SpawnPos>(
+                FindObjectsSortMode.None
+            );
 
-        Debug.Log("Found spawn points: " + points.Length);
+        Debug.Log(
+            "Found spawn points: "
+            + points.Length
+        );
 
         foreach (SpawnPos point in points) {
-            Debug.Log("Checking: " + point.spawnID);
+
+            Debug.Log(
+                "Checking: "
+                + point.spawnID
+            );
 
             if (point.spawnID == spawnID) {
-                if (cc != null) cc.enabled = false;
 
-                transform.position = point.transform.position;
-                transform.rotation = point.transform.rotation;
+                if (cc != null)
+                    cc.enabled = false;
 
-                if (cc != null) cc.enabled = true;
+                transform.position =
+                    point.transform.position;
 
-                Debug.Log("FINAL spawn applied at: " + spawnID);
+                transform.rotation =
+                    Quaternion.Euler(
+                        0f,
+                        point.transform.eulerAngles.y,
+                        0f
+                    );
+
+                if (cc != null)
+                    cc.enabled = true;
+
+                Debug.Log(
+                    "FINAL spawn applied at: "
+                    + spawnID
+                );
 
                 break;
             }

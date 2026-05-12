@@ -30,12 +30,7 @@ public class PauseMenu : MonoBehaviour {
     int pendingSlot = -1;
 
     void Awake() {
-        if (Instance == null) {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        } else {
-            Destroy(gameObject);
-        }
+        Instance = this;
     }
 
     void OnEnable() {
@@ -59,7 +54,7 @@ public class PauseMenu : MonoBehaviour {
     }
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
+        if (Input.GetKeyDown(KeyCode.P)) {
             if (isPaused) Resume();
             else Pause();
         }
