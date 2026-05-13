@@ -13,6 +13,10 @@ public class PianoKey : MonoBehaviour {
 
     public Transform pivot;
 
+    public MeshRenderer meshRenderer;
+
+    public Material pressedMaterial;
+
     public float pressAngle = 4f;
 
     public float pressSpeed = 12f;
@@ -21,13 +25,22 @@ public class PianoKey : MonoBehaviour {
 
     bool isPressed = false;
 
+    bool activated = false;
+
     Quaternion startRot;
+
+    Material originalMaterial;
 
     void Start() {
 
         if (pivot != null) {
             startRot =
                 pivot.localRotation;
+        }
+
+        if (meshRenderer != null) {
+            originalMaterial =
+                meshRenderer.material;
         }
     }
 
@@ -50,8 +63,23 @@ public class PianoKey : MonoBehaviour {
             audioSource.PlayOneShot(note);
         }
 
-        if (puzzleManager != null) {
-            puzzleManager.PressKey(keyID);
+        if (
+            !activated
+            && puzzleManager != null
+        ) {
+            activated = true;
+
+            puzzleManager.PressKey(
+                keyID
+            );
+
+            if (
+                meshRenderer != null
+                && pressedMaterial != null
+            ) {
+                meshRenderer.material =
+                    pressedMaterial;
+            }
         }
 
         if (
