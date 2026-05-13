@@ -4,29 +4,49 @@ using System.Collections;
 public class PianoKey : MonoBehaviour {
 
     public int keyID;
+
     public PianoKeyManager puzzleManager;
 
     public AudioSource audioSource;
+
     public AudioClip note;
 
-    public GameObject highlight;
-    public float flashDuration = 0.1f;
+    public Transform pivot;
 
-    private bool isPressed = false;
+    public float pressAngle = 4f;
+
+    public float pressSpeed = 12f;
+
+    public float holdTime = 0.05f;
+
+    bool isPressed = false;
+
+    Quaternion startRot;
+
+    void Start() {
+
+        if (pivot != null) {
+            startRot =
+                pivot.localRotation;
+        }
+    }
 
     void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Player") && !isPressed) {
+
+        if (
+            other.CompareTag("Player")
+            && !isPressed
+        ) {
             PlayKey();
         }
     }
 
     public void PlayKey() {
 
-        if (!gameObject.activeInHierarchy) {
-            return;
-        }
-
-        if (audioSource != null && note != null) {
+        if (
+            audioSource != null
+            && note != null
+        ) {
             audioSource.PlayOneShot(note);
         }
 
@@ -34,24 +54,70 @@ public class PianoKey : MonoBehaviour {
             puzzleManager.PressKey(keyID);
         }
 
-        if (gameObject.activeInHierarchy) {
-            StartCoroutine(PressEffect());
+        if (
+            pivot != null
+            && gameObject.activeInHierarchy
+        ) {
+            StartCoroutine(
+                PressAnimation()
+            );
         }
     }
 
-    IEnumerator PressEffect() {
+    IEnumerator PressAnimation() {
 
         isPressed = true;
 
-        if (highlight != null) {
-            highlight.SetActive(true);
+        Quaternion downRot =
+            startRot
+            * Quaternion.Euler(
+                pressAngle,
+                0f,
+                0f
+            );
+
+        float t = 0f;
+
+        while (t < 1f) {
+
+            t +=
+                Time.deltaTime
+                * pressSpeed;
+
+            pivot.localRotation =
+                Quaternion.Lerp(
+                    startRot,
+                    downRot,
+                    t
+                );
+
+            yield return null;
         }
 
-        yield return new WaitForSeconds(flashDuration);
+        yield return new WaitForSeconds(
+            holdTime
+        );
 
-        if (highlight != null) {
-            highlight.SetActive(false);
+        t = 0f;
+
+        while (t < 1f) {
+
+            t +=
+                Time.deltaTime
+                * pressSpeed;
+
+            pivot.localRotation =
+                Quaternion.Lerp(
+                    downRot,
+                    startRot,
+                    t
+                );
+
+            yield return null;
         }
+
+        pivot.localRotation =
+            startRot;
 
         isPressed = false;
     }
