@@ -42,14 +42,15 @@ namespace AbilitySystem {
         protected override void Update() {
             base.Update();
             if (!navMeshAgent.enabled) return;
-            abilitySet?.movement?.Activate(entityBody, true);
+            //abilitySet?.movement?.Activate(entityBody, true);
             abilitySet?.attack?.Activate(entityBody, GetInputValues.isPrimaryAbility);
+            AnimateAbility();
         }
 
         public override void OnMoveEntity(Vector3 direction, bool rotate = true) {
-            navMeshAgent.Move(direction);
+            navMeshAgent.SetDestination(direction);
             direction.y = 0;
-            if (direction != Vector3.zero && rotate) entityBody.bodyHolder.transform.forward = direction;
+            //if (direction != Vector3.zero && rotate) entityBody.bodyHolder.transform.forward = direction;
         }
         public override void OnRotateEntity(Vector3 direction) {
             direction.y = 0;
@@ -67,6 +68,17 @@ namespace AbilitySystem {
         public override void Die() {
             navMeshAgent.enabled = false;
             StartCoroutine(PlayerDeath(entityBody.animatorManager, () => Destroy(gameObject)));
+        }
+        protected void AnimateAbility() {
+            float delta = Mathf.Clamp01(navMeshAgent.velocity.magnitude / navMeshAgent.speed);
+
+            entityBody.
+            animatorManager?.
+            SetMovement(
+                delta,
+                0,
+                true
+            );
         }
     }
 }

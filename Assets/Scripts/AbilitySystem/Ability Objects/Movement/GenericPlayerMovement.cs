@@ -85,6 +85,7 @@ namespace AbilitySystem {
         [Space]
         [Header("Charge")]
         protected float chargeChangeDirectionAmount = 1;
+        public bool DEBUG = false;
 
         [Space]
         [Header("Movement Events")]
@@ -304,6 +305,8 @@ namespace AbilitySystem {
 
         protected void AnimateAbility(EntityBody entityBody, Vector3 movement, float fallSpeed, bool isGrounded) {
             float delta = Mathf.Clamp01(new Vector3(movement.x, 0, movement.z).magnitude / runSpeed);
+
+            if (DEBUG) Debug.Log(movement);
             entityBody.
             animatorManager?.
             SetMovement(

@@ -39,12 +39,27 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   fallToGlideAcceleration: 2
-  gravity: 0.2
-  groundLayers:
+  wallCheckArea:
+    checkShape: 0
+    centerOffset: {x: 0, y: 0, z: 0}
+    size1: 1
+    halfExtents: {x: 1, y: 1, z: 1}
+    layers:
+      serializedVersion: 2
+      m_Bits: 1
+    doDrawGizmo: 1
+    wireFrame: 1
+  wallCheckLayers:
     serializedVersion: 2
     m_Bits: 0
+  gravity: 0.2
+  DEBUG: 1
   DebugLog: 1
   onHitGround: 
   onGlide: 
   onFreeFall: 
   onHitWall: 
+  onCrouch: 
+  onUncrouch: 
+  onClimb: 
+  onClimbRelease: 
