@@ -1410,11 +1410,6 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 5153156618686235527, guid: bdd47b8a7092d2041b58d1c6446513c6, type: 3}
   m_PrefabInstance: {fileID: 969352611}
   m_PrefabAsset: {fileID: 0}
---- !u!137 &1063626791 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 9150545233552267040, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
-  m_PrefabInstance: {fileID: 1212804231}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1076051574
 GameObject:
   m_ObjectHideFlags: 0
@@ -1853,6 +1848,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5880ffcdbc481d0479c0639e88005b48, type: 2}
+    - target: {fileID: 5361473600899143467, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5710287258573495793, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       propertyPath: m_Name
       value: Kuhaku
@@ -1860,7 +1859,7 @@ PrefabInstance:
     - target: {fileID: 6552002042681570147, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       propertyPath: playerSetsList.Array.data[0].entityBody.entityShader
       value: 
-      objectReference: {fileID: 1063626791}
+      objectReference: {fileID: 0}
     - target: {fileID: 6552002042681570147, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       propertyPath: playerSetsList.Array.data[1].entityBody.entityShader
       value: 
@@ -1868,6 +1867,42 @@ PrefabInstance:
     - target: {fileID: 6552002042681570147, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       propertyPath: playerSetsList.Array.data[2].entityBody.entityShader
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820946559904015299, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820946559904015299, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.325
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820946559904015299, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.131
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820946559904015299, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820946559904015299, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820946559904015299, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820946559904015299, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820946559904015299, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820946559904015299, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 7213186390161269041, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       propertyPath: m_LocalPosition.x
