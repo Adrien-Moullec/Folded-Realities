@@ -68,6 +68,7 @@ namespace AbilitySystem {
             characterController.isGrounded;
 
         protected override void Update() {
+            Debug.Log(characterController.isGrounded);
             if (!characterController.enabled) return;
             base.Update();
             currentAbilitySet?.playerAbilitySet?.movement?.Activate(currentAbilitySet.entityBody, true);
@@ -76,8 +77,8 @@ namespace AbilitySystem {
             currentAbilitySet?.playerAbilitySet?.tertiary?.Activate(currentAbilitySet.entityBody, GetInputValues.isTertiaryAbility);
         }
         public void QuickSwitch() {
-            if (currentAbilitySet.abilitySetSO.abilitySetName == "Kuhaku") OnAbilityEvent("Scissors");
-            else if (currentAbilitySet.abilitySetSO.abilitySetName == "Scissors") OnAbilityEvent("Kuhaku");
+            if (currentAbilitySet.abilitySetSO?.abilitySetName == "Kuhaku") OnAbilityEvent("Bear");
+            else if (currentAbilitySet.abilitySetSO?.abilitySetName == "Bear") OnAbilityEvent("Kuhaku");
         }
         #endregion
 

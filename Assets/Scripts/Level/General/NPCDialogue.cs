@@ -1,8 +1,13 @@
 using System.Collections;
+
 using UnityEngine;
+
 using TMPro;
 
 public class NPCDialogue : MonoBehaviour {
+
+
+
     public GameObject dialogueUI;
     public TextMeshProUGUI dialogueText;
     public GameObject continuePrompt;

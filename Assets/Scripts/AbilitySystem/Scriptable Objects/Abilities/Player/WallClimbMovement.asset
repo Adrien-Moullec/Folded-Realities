@@ -12,56 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2abe5f2fa9b32fa48b5854c404cb7905, type: 3}
   m_Name: WallClimbMovement
   m_EditorClassIdentifier: 
-  speedMultiplier: 16.11
-  changeDirectionSpeedMultiplier: 3
-  acceleration: 1
-  deceleration: 8
-  runAccelerationMultiplier: 1
-  accelerationWhileFalling: 0.5
-  decelerationWhileFalling: 0.5
-  decelerationWhileGrounded: 5
-  turnSpeed: 10
-  runSpeedMultiplier: 1.5
-  chargeSpeedMultiplier: 2
-  canJump: 1
-  doubleJumpCount: 1
-  jumpSpeed: 7
-  maxFallSpeed: 25
-  groundedFallSpeed: 2
-  canGlide: 0
-  glideHorizontalSpeed: 1
-  maxGlideTime: 5
-  glideFallSpeed: 1
-  glideFallSpeedOverTime:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  fallToGlideAcceleration: 2
-  wallCheckArea:
-    checkShape: 0
-    centerOffset: {x: 0, y: 0, z: 0}
-    size1: 1
-    halfExtents: {x: 1, y: 1, z: 1}
-    layers:
-      serializedVersion: 2
-      m_Bits: 1
-    doDrawGizmo: 1
-    wireFrame: 1
   wallCheckLayers:
     serializedVersion: 2
     m_Bits: 1024
-  gravity: 60
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 1024
-  DebugLog: 0
-  onHitGround: 
-  onGlide: 
-  onFreeFall: 
-  onHitWall: 
-  onCrouch: 
-  onUncrouch: 
-  onClimb: 
-  onClimbRelease: Kuhaku
+  turnSpeed: 0.01
+  speedMultiplier: 10

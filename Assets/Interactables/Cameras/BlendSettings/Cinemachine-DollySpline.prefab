@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 880497637004899326}
   serializedVersion: 2
   m_LocalRotation: {x: 0.16060503, y: -0.68353164, z: 0.15812486, w: 0.69425285}
-  m_LocalPosition: {x: -0.1582737, y: 9.999999, z: -7.392189}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -195,9 +195,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vcamToActivate: {fileID: 1479387197367121724}
-  highPriority: 15
-  lowPriority: 5
-  CinemachineBreakdown: This is a rundown of the different Cinemachine display methods.
+  areaPriority: 10
+  defaultPriority: 0
 --- !u!1 &3934679843648725325
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,7 +281,7 @@ GameObject:
   m_Layer: 0
   m_Name: Cinemachine-DollySpline
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
