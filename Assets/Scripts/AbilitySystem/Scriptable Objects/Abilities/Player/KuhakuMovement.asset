@@ -17,9 +17,9 @@ MonoBehaviour:
   acceleration: 50
   deceleration: 40
   runAccelerationMultiplier: 1
-  accelerationWhileFalling: 5
-  decelerationWhileFalling: 5
-  decelerationWhileGrounded: 5
+  accelerationWhileFalling: 50
+  decelerationWhileFalling: 40
+  decelerationWhileGrounded: 40
   turnSpeed: 5
   runSpeedMultiplier: 1.5
   chargeSpeedMultiplier: 3
@@ -89,6 +89,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   gravity: 60
+  DEBUG: 0
   DebugLog: 1
   onHitGround: 
   onGlide: Crane

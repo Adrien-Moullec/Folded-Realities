@@ -123,7 +123,7 @@ namespace AbilitySystem {
             float maxSpeed = moveData.isJumpingButtonPressed ? glideHorizontalSpeed : inpVals.IsRunning ? runSpeed : walkSpeed;
 
             if (moveData.isJumpingButtonPressed)
-                CheckForWall(entityBody, moveData);
+                CheckForWall(entityBody, entityBody.bodyHolder.transform.position, entityBody.bodyHolder.transform.forward, ref moveData.wallClimbObj, ref moveData.wallRaycastHits, wallCheckLayers, onClimb);
 
             if (!moveData.isCrouching && inpVals.IsCrouching) {
                 moveData.isCrouching = true;
@@ -229,14 +229,12 @@ namespace AbilitySystem {
             pmd.fallSpeed = Mathf.Clamp(pmd.fallSpeed, -maxFallSpeed, jumpSpeed);
             pmd.velocity.y = pmd.fallSpeed;
         }
-        protected bool CheckForWall(EntityBody entityBody, TransformingPlayerData pmd) =>
-            CheckForWall(entityBody, entityBody.bodyHolder.transform.position, entityBody.bodyHolder.transform.forward, pmd);
-        protected bool CheckForWall(EntityBody entityBody, Vector3 position, Vector3 direction, TransformingPlayerData pmd) {
-            int s = AreaColliderCheck.GetRayCastColliders(position, direction, wallCheckLayers).Invoke(pmd.wallRaycastHits);
+        public static bool CheckForWall(EntityBody entityBody, Vector3 position, Vector3 direction, ref RaycastHit raycastObj, ref RaycastHit[] raycastHits, LayerMask layerMask, string climbEvent) {
+            int s = AreaColliderCheck.GetRayCastColliders(position, direction, layerMask).Invoke(raycastHits);
             if (s > 0) {
-                pmd.wallClimbObj = pmd.wallRaycastHits[0];
+                raycastObj = raycastHits[0];
                 // if (!pmd.isClimbing) 
-                entityBody.iAbility.OnAbilityEvent(onClimb);
+                entityBody.iAbility.OnAbilityEvent(climbEvent);
                 // pmd.isClimbing = true;
                 return true;
             }
@@ -322,48 +320,45 @@ namespace AbilitySystem {
         public override bool PassEvent(EntityBody entityBody, AbilityData data) {
             throw new System.NotImplementedException();
         }
-
-
         #endregion
+    }
+    public class TransformingPlayerData : AbilityData {
+        //Velocity Values
+        [HideInInspector] public Vector3 velocity;
+        [HideInInspector] public float fallSpeed;
+        [HideInInspector] public Vector3 chargeDirection;
 
-        public class TransformingPlayerData : AbilityData {
-            //Velocity Values
-            [HideInInspector] public Vector3 velocity;
-            [HideInInspector] public float fallSpeed;
-            [HideInInspector] public Vector3 chargeDirection;
+        //Jumping
+        [HideInInspector] public bool isJumpingButtonPressed;
+        [HideInInspector] public bool releasedOnJump;
+        [HideInInspector] public int remainingJumps;
+        [HideInInspector] public float queueJump;//!!!!!!!!!!!!!
+        [HideInInspector] public float glideTime;
 
-            //Jumping
-            [HideInInspector] public bool isJumpingButtonPressed;
-            [HideInInspector] public bool releasedOnJump;
-            [HideInInspector] public int remainingJumps;
-            [HideInInspector] public float queueJump;//!!!!!!!!!!!!!
-            [HideInInspector] public float glideTime;
+        //States
+        [HideInInspector] public bool isGrounded;
+        [HideInInspector] public bool isRunning;
+        [HideInInspector] public bool isCrouching;
+        [HideInInspector] public bool isClimbing;
 
-            //States
-            [HideInInspector] public bool isGrounded;
-            [HideInInspector] public bool isRunning;
-            [HideInInspector] public bool isCrouching;
-            [HideInInspector] public bool isClimbing;
+        [HideInInspector] public bool isJumpButtonRePressed;
 
-            [HideInInspector] public bool isJumpButtonRePressed;
+        [HideInInspector] public float glideDeltaActivate = 0;
+        [HideInInspector] public bool canGlide { get => isJumpingButtonPressed && fallSpeed < 0 && releasedOnJump; }
+        [HideInInspector] public RaycastHit[] wallRaycastHits = new RaycastHit[1];
+        [HideInInspector] public RaycastHit wallClimbObj;
 
-            [HideInInspector] public float glideDeltaActivate = 0;
-            [HideInInspector] public bool canGlide { get => isJumpingButtonPressed && fallSpeed < 0 && releasedOnJump; }
-            [HideInInspector] public RaycastHit[] wallRaycastHits = new RaycastHit[1];
-            [HideInInspector] public RaycastHit wallClimbObj;
+        public bool canJump {
+            get => !releasedOnJump && (isGrounded || remainingJumps > 0);
+        }
 
-            public bool canJump {
-                get => !releasedOnJump && (isGrounded || remainingJumps > 0);
-            }
-
-            public TransformingPlayerData() {
-                velocity = Vector3.zero;
-                fallSpeed = 0;
-                isGrounded = false;
-                isRunning = false;
-                releasedOnJump = false;
-                remainingJumps = 0;
-            }
+        public TransformingPlayerData() {
+            velocity = Vector3.zero;
+            fallSpeed = 0;
+            isGrounded = false;
+            isRunning = false;
+            releasedOnJump = false;
+            remainingJumps = 0;
         }
     }
 }

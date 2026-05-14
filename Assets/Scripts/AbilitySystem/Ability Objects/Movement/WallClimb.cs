@@ -2,7 +2,26 @@ using UnityEngine;
 
 namespace AbilitySystem {
     [CreateAssetMenu(fileName = "WallClimbMovement", menuName = MenuAssetNames.MovementAbility + "/Wall Climb")]
-    public class WallClimb : GenericPlayerMovement {
+    public class WallClimb : MovementSO {
+
+        [Header("Wall Climb")]
+        [SerializeField] LayerMask wallCheckLayers;
+        [SerializeField] float turnSpeed = 1;
+        [SerializeField] float speedMultiplier = 5;
+
+        public override AbilityData AbilityDataSetup(EntityBody entityBody) => new TransformingPlayerData();
+
+        public override bool AutoTrackMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool ChargeMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool FlightMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
+            throw new System.NotImplementedException();
+        }
 
         public override bool NormalMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             TransformingPlayerData moveData = (TransformingPlayerData)data;
@@ -10,15 +29,13 @@ namespace AbilitySystem {
             moveData.isJumpingButtonPressed = inpVals.Direction.y > 0;
             moveData.chargeDirection = inpVals.Direction;
 
-            bool hasWall = CheckForWall(entityBody, entityBody.bodyHolder.transform.position, -moveData.wallClimbObj.normal, moveData);
-            Debug.Log("WALLCLIMB");
+            bool hasWall = GenericPlayerMovement.CheckForWall(entityBody, entityBody.bodyHolder.transform.position, -moveData.wallClimbObj.normal, ref moveData.wallClimbObj, ref moveData.wallRaycastHits, wallCheckLayers, "");
 
             // Release climb
             if (!hasWall || !moveData.isJumpingButtonPressed) {
                 Debug.Log(hasWall);
                 moveData.isClimbing = false;
-                //if (moveData.isJumpingButtonPressed) moveData.velocity *= 20;
-                entityBody.iAbility.OnAbilityEvent(onClimbRelease);
+                entityBody.iAbility.OnAbilityEvent("Kuhaku");
                 return true;
             }
 
@@ -32,7 +49,7 @@ namespace AbilitySystem {
             float vertical = Vector3.Dot(input, -wallNormal);
 
             Vector3 dir = wallRight * horizontal + wallUp * vertical;
-            moveData.velocity = dir - wallNormal;
+            moveData.velocity = Vector3.MoveTowards(moveData.velocity, dir - wallNormal, turnSpeed);
             moveData.velocity.Normalize();
 
             entityBody.iAbility.OnMoveEntity(
@@ -40,14 +57,17 @@ namespace AbilitySystem {
                 false
             );
             if (dir != Vector3.zero) {
-                entityBody.prefab.right = -dir.normalized;
-                entityBody.prefab.eulerAngles = new Vector3(0, 0, entityBody.prefab.eulerAngles.z);
+                entityBody.prefab.transform.rotation = Quaternion.RotateTowards(entityBody.prefab.transform.rotation, Quaternion.LookRotation(-moveData.wallClimbObj.normal, moveData.velocity), 0.8f);
             }
             entityBody.iAbility.OnRotateEntity(
                 -wallNormal
             );
 
             return false;
+        }
+
+        public override bool PassEvent(EntityBody entityBody, AbilityData data) {
+            throw new System.NotImplementedException();
         }
     }
 }
