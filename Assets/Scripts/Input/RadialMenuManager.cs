@@ -1,170 +1,349 @@
-using System.Collections;
-
 using UnityEngine;
-
-using UnityEditor;
+using UnityEngine.UI;
+using AbilitySystem;
 
 public class RadialMenuManager : MonoBehaviour {
+
     [Header("UI References")]
     public RectTransform center;
-    public RectTransform selectObject;
+
     public GameObject radialMenuRoot;
 
-    /*[Header("Forms")]
-    public GameObject kuhaku_jump;
-    public GameObject kuhaku_krane;
+    [Header("Segment Images")]
+    public Image bearSegment;
 
-    [Header("Animation")]
-    public Animation playerAnimation;
+    public Image spiderSegment;
 
-    public float transformTime = 0.4f;
-    public float scrunchTime = 0.9f;*/
+    public Image frogSegment;
 
-    [Header("Radial Settings")]
-    [SerializeField] private int segmentCount = 6;
-    [SerializeField] private float spriteRotationOffset = -120f;
+    [Header("Normal Colours")]
+    public Color normalColor = Color.white;
+
+    [Header("Highlight Colour")]
+    public Color highlightColor = Color.yellow;
+
+    [Header("Player")]
+    public PlayerAbilityController playerAbilityController;
+
+    [Header("Settings")]
+    [SerializeField]
+    private int segmentCount = 3;
 
     private float segmentAngle;
+
     private int currentIndex = 0;
 
-    //private GameObject currentModel;
+    private bool wheelOpen = false;
 
     void Start() {
-        segmentAngle = 360f / segmentCount;
-        radialMenuRoot.SetActive(false);
 
-        //currentModel = kuhaku_jump;
+        Debug.Log(
+            "RADIAL MENU START"
+        );
 
-        //kuhaku_jump.SetActive(true);
-        //kuhaku_krane.SetActive(false);
+        segmentAngle =
+            360f / segmentCount;
+
+        if (
+            radialMenuRoot != null
+        ) {
+
+            radialMenuRoot.SetActive(
+                false
+            );
+
+            Debug.Log(
+                "RADIAL MENU ROOT DISABLED"
+            );
+        } else {
+
+            Debug.LogError(
+                "RADIAL MENU ROOT IS NULL"
+            );
+        }
+
+        ResetHighlights();
+
+        Cursor.lockState =
+            CursorLockMode.Locked;
+
+        Cursor.visible = false;
     }
 
-    public void SetWheelActive(bool active) => radialMenuRoot.SetActive(active);
+    void Update() {
 
-    /*void Update() {
+        if (
+            Input.GetKeyDown(
+                KeyCode.M
+            )
+        ) {
 
-        // Toggle radial menu with E
-        if (Input.GetKeyDown(KeyCode.E)) {
-            radialMenuRoot.SetActive(!radialMenuRoot.activeSelf);
+            Debug.Log(
+                "M KEY DOWN"
+            );
+
+            OpenWheel();
         }
 
-        if (radialMenuRoot.activeSelf) {
+        if (
+            Input.GetKeyUp(
+                KeyCode.M
+            )
+        ) {
+
+            Debug.Log(
+                "M KEY UP"
+            );
+
+            CloseWheel();
+        }
+
+        if (
+            wheelOpen
+        ) {
+
             UpdateSelection();
         }
-    }*/
+    }
 
-    private void UpdateSelection() {
-        Vector2 centerScreenPosition = RectTransformUtility.WorldToScreenPoint(null, center.position);
+    void OpenWheel() {
 
-        Vector2 mousePos = Input.mousePosition;
-        Vector2 delta = mousePos - centerScreenPosition;
+        Debug.Log(
+            "OPENING WHEEL"
+        );
 
-        float angle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
+        wheelOpen = true;
+
+        if (
+            radialMenuRoot != null
+        ) {
+
+            radialMenuRoot.SetActive(
+                true
+            );
+
+            Debug.Log(
+                "RADIAL MENU ENABLED"
+            );
+        }
+
+        Cursor.lockState =
+            CursorLockMode.None;
+
+        Cursor.visible = true;
+    }
+
+    void CloseWheel() {
+
+        Debug.Log(
+            "CLOSING WHEEL"
+        );
+
+        wheelOpen = false;
+
+        if (
+            radialMenuRoot != null
+        ) {
+
+            radialMenuRoot.SetActive(
+                false
+            );
+
+            Debug.Log(
+                "RADIAL MENU DISABLED"
+            );
+        }
+
+        Cursor.lockState =
+            CursorLockMode.Locked;
+
+        Cursor.visible = false;
+
+        TriggerSelectedForm();
+
+        ResetHighlights();
+    }
+
+    void UpdateSelection() {
+
+        Vector2 centerScreenPosition =
+            RectTransformUtility
+            .WorldToScreenPoint(
+                null,
+                center.position
+            );
+
+        Vector2 mousePos =
+            Input.mousePosition;
+
+        Vector2 delta =
+            mousePos
+            - centerScreenPosition;
+
+        float angle =
+            Mathf.Atan2(
+                delta.y,
+                delta.x
+            )
+            * Mathf.Rad2Deg;
 
         if (angle < 0f) {
+
             angle += 360f;
         }
 
-        angle += segmentAngle / 2f;
+        angle +=
+            segmentAngle / 2f;
 
         if (angle >= 360f) {
+
             angle -= 360f;
         }
 
-        currentIndex = Mathf.FloorToInt(angle / segmentAngle);
+        currentIndex =
+            Mathf.FloorToInt(
+                angle / segmentAngle
+            );
 
-        float finalRotation = (currentIndex * segmentAngle) + spriteRotationOffset;
+        HighlightCurrentSegment();
+    }
 
-        selectObject.localRotation = Quaternion.Euler(0f, 0f, finalRotation);
+    void HighlightCurrentSegment() {
+
+        ResetHighlights();
+
+        switch (currentIndex) {
+
+            case 0:
+
+                if (
+                    bearSegment != null
+                ) {
+
+                    bearSegment.color =
+                        highlightColor;
+                }
+
+                break;
+
+            case 1:
+
+                if (
+                    spiderSegment != null
+                ) {
+
+                    spiderSegment.color =
+                        highlightColor;
+                }
+
+                break;
+
+            case 2:
+
+                if (
+                    frogSegment != null
+                ) {
+
+                    frogSegment.color =
+                        highlightColor;
+                }
+
+                break;
+        }
+    }
+
+    void ResetHighlights() {
+
+        if (
+            bearSegment != null
+        ) {
+
+            bearSegment.color =
+                normalColor;
+        }
+
+        if (
+            spiderSegment != null
+        ) {
+
+            spiderSegment.color =
+                normalColor;
+        }
+
+        if (
+            frogSegment != null
+        ) {
+
+            frogSegment.color =
+                normalColor;
+        }
+    }
+
+    void TriggerSelectedForm() {
+
+        if (
+            playerAbilityController
+            == null
+        ) {
+
+            Debug.LogError(
+                "PLAYER ABILITY CONTROLLER NOT ASSIGNED"
+            );
+
+            return;
+        }
+
+        switch (currentIndex) {
+
+            case 0:
+
+                Debug.Log(
+                    "TRANSFORMING TO BEARSET"
+                );
+
+                playerAbilityController
+                    .InputTransitionName(
+                        "Bear"
+                    );
+
+                break;
+
+            case 1:
+
+                Debug.Log(
+                    "TRANSFORMING TO SPIDERSET"
+                );
+
+                playerAbilityController
+                    .InputTransitionName(
+                        "Spider"
+                    );
+
+                break;
+
+            case 2:
+
+                Debug.Log(
+                    "TRANSFORMING TO FROGSET"
+                );
+
+                playerAbilityController
+                    .InputTransitionName(
+                        "Frog"
+                    );
+
+                break;
+        }
+    }
+
+    public void SetWheelActive(
+        bool active
+    ) {
+
     }
 
     public string OnSegmentClicked() {
 
-
-        /*
-        if (isSwitching) {
-            return;
-        }*/
-
-        switch (currentIndex) {
-            case 0: return "Kuhaku";
-            case 1: return "Crane";
-            default: Debug.LogError("Not a sufficient index"); return "";
-        }
-
-        /*radialMenuRoot.SetActive(false);
-        isRadialMenuActive = false;*/
+        return "";
     }
-
-    /*
-    public void StartPlayerToCrane() => StartCoroutine(PlayerToCrane());
-    IEnumerator PlayerToCrane() {
-        isSwitching = true;
-
-        Vector3 lockedPos = kuhaku_jump.transform.position;
-        Quaternion lockedRot = kuhaku_jump.transform.rotation;
-
-        playerAnimation.Play("Transform");
-
-        float timer = 0f;
-
-        while (timer < transformTime) {
-            kuhaku_jump.transform.SetPositionAndRotation(lockedPos, lockedRot);
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        playerAnimation.Play("Scrunch");
-
-        timer = 0f;
-
-        while (timer < scrunchTime) {
-            kuhaku_jump.transform.SetPositionAndRotation(lockedPos, lockedRot);
-            timer += Time.deltaTime;
-            yield return null;
-        }
-
-        kuhaku_jump.SetActive(false);
-
-        kuhaku_krane.SetActive(true);
-        kuhaku_krane.transform.SetPositionAndRotation(lockedPos, lockedRot);
-
-        currentModel = kuhaku_krane;
-
-        isSwitching = false;
-    }
-
-    public void StartCraneToPlayer() => StartCoroutine(CraneToPlayer());
-    IEnumerator CraneToPlayer() {
-        Vector3 pos = kuhaku_krane.transform.position;
-        Quaternion rot = kuhaku_krane.transform.rotation;
-
-        kuhaku_krane.SetActive(false);
-
-        kuhaku_jump.SetActive(true);
-        kuhaku_jump.transform.SetPositionAndRotation(pos, rot);
-
-        currentModel = kuhaku_jump;
-
-        yield return null;
-    }
-    */
 }
-
-/*
-[CustomEditor(typeof(RadialMenuManager))]
-public class RadialMenuManagerEditor : Editor {
-    SerializedProperty lookAtPoint;
-
-
-    public override void OnInspectorGUI() {
-        RadialMenuManager rmm = (RadialMenuManager)target;
-        DrawDefaultInspector();
-        if (GUILayout.Button("Player to Crane")) {
-            rmm.StartPlayerToCrane();
-        }
-        if (GUILayout.Button("Crane to Player")) {
-            rmm.StartCraneToPlayer();
-        }
-    }
-}*/
