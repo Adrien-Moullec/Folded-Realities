@@ -44,7 +44,9 @@ public class PianoKey : MonoBehaviour {
         }
     }
 
-    void OnTriggerEnter(Collider other) {
+    void OnTriggerEnter(
+        Collider other
+    ) {
 
         if (
             other.CompareTag("Player")
@@ -60,26 +62,34 @@ public class PianoKey : MonoBehaviour {
             audioSource != null
             && note != null
         ) {
-            audioSource.PlayOneShot(note);
+            audioSource.PlayOneShot(
+                note
+            );
         }
+
+        bool correct = false;
 
         if (
             !activated
             && puzzleManager != null
         ) {
+
+            correct =
+                puzzleManager.PressKey(
+                    keyID
+                );
+        }
+
+        if (
+            correct
+            && meshRenderer != null
+            && pressedMaterial != null
+        ) {
+
             activated = true;
 
-            puzzleManager.PressKey(
-                keyID
-            );
-
-            if (
-                meshRenderer != null
-                && pressedMaterial != null
-            ) {
-                meshRenderer.material =
-                    pressedMaterial;
-            }
+            meshRenderer.material =
+                pressedMaterial;
         }
 
         if (
@@ -89,6 +99,20 @@ public class PianoKey : MonoBehaviour {
             StartCoroutine(
                 PressAnimation()
             );
+        }
+    }
+
+    public void ResetKey() {
+
+        activated = false;
+
+        if (
+            meshRenderer != null
+            && originalMaterial != null
+        ) {
+
+            meshRenderer.material =
+                originalMaterial;
         }
     }
 
