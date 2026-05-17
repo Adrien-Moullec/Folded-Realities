@@ -61,9 +61,7 @@ public class CheckpointManager : MonoBehaviour {
         return Vector3.zero;
     }
 
-    public void RespawnPlayer(
-        GameObject playerRoot
-    ) {
+    public void RespawnPlayer(GameObject playerRoot) {
         if (
             PlayerPrefs.GetInt(
                 "UseDoorSpawn",
@@ -107,12 +105,7 @@ public class CheckpointManager : MonoBehaviour {
                 + spawnPos
             );
         } else {
-            spawnPos =
-                Vector3.zero;
-
-            Debug.LogError(
-                "No spawn point assigned"
-            );
+            return;
         }
 
         spawnPos += Vector3.up * 1f;

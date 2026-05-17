@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 using TMPro;
 
 public class MainMenu : MonoBehaviour {
@@ -27,7 +28,7 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void StartGame() {
-        SceneManager.LoadScene("Tutorial");
+        SceneManager.LoadScene("IntroCutscene");
     }
 
     public void OpenLoadGame() {
