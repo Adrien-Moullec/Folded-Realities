@@ -1,18 +1,37 @@
 using UnityEngine;
+using System.Collections;
 
 public class PianoKeyManager : MonoBehaviour {
 
     public PlatformGroup[] keyGroups;
 
-    public GameObject[] keys;
+    [Header("Correct Sequence")]
+    public int[] correctSequence;
 
-    int activatedKeys = 0;
+    PianoKey[] keys;
+
+    int currentIndex = 0;
 
     bool puzzleComplete = false;
 
+    [Header("Wrong Sound")]
+    public AudioSource audioSource;
+
+    public AudioClip wrongSound;
+
+    [Header("Victory Melody")]
+    public AudioClip[] victoryMelody;
+
+    public float melodyDelay = 0.4f;
+
     void Start() {
 
-        activatedKeys = 0;
+        keys =
+    FindObjectsByType<PianoKey>(
+        FindObjectsSortMode.None
+    );
+
+        currentIndex = 0;
 
         puzzleComplete = false;
 
@@ -24,35 +43,104 @@ public class PianoKeyManager : MonoBehaviour {
             keyGroups[i].Hide();
         }
 
+        ResetAllKeys();
+
         Debug.Log(
-            "Puzzle Initialized"
+            "Memory Puzzle Initialized"
         );
     }
 
-    public void PressKey(
+    public bool PressKey(
         int keyID
     ) {
 
         if (puzzleComplete) {
-            return;
+            return false;
         }
 
-        activatedKeys++;
-
         Debug.Log(
-            "Activated Key: "
+            "Pressed Key: "
             + keyID
         );
 
-        ShowKeyPlatforms(
+        if (
             keyID
+            ==
+            correctSequence[currentIndex]
+        ) {
+
+            Debug.Log(
+                "Correct Key"
+            );
+
+            ShowKeyPlatforms(
+                keyID
+            );
+
+            currentIndex++;
+
+            if (
+                currentIndex
+                >= correctSequence.Length
+            ) {
+                CompletePuzzle();
+            }
+
+            return true;
+        }
+
+        Debug.Log(
+            "WRONG KEY"
         );
 
+        StartCoroutine(
+            WrongSequence()
+        );
+
+        return false;
+    }
+
+    IEnumerator WrongSequence() {
+
         if (
-            activatedKeys
-            >= keys.Length
+            audioSource != null
+            && wrongSound != null
         ) {
-            CompletePuzzle();
+            audioSource.PlayOneShot(
+                wrongSound
+            );
+        }
+
+        yield return new WaitForSeconds(
+            0.2f
+        );
+
+        currentIndex = 0;
+
+        for (
+            int i = 0;
+            i < keyGroups.Length;
+            i++
+        ) {
+            keyGroups[i].Hide();
+        }
+
+        ResetAllKeys();
+    }
+
+    void ResetAllKeys() {
+
+        for (
+            int i = 0;
+            i < keys.Length;
+            i++
+        ) {
+
+            if (
+                keys[i] != null
+            ) {
+                keys[i].ResetKey();
+            }
         }
     }
 
@@ -71,11 +159,6 @@ public class PianoKeyManager : MonoBehaviour {
                 == keyID
             ) {
                 keyGroups[i].Show();
-
-                Debug.Log(
-                    "Showing platforms for key: "
-                    + keyID
-                );
             }
         }
     }
@@ -85,7 +168,7 @@ public class PianoKeyManager : MonoBehaviour {
         puzzleComplete = true;
 
         Debug.Log(
-            "ALL COLOURS ACTIVATED"
+            "PUZZLE COMPLETE"
         );
 
         for (
@@ -94,6 +177,39 @@ public class PianoKeyManager : MonoBehaviour {
             i++
         ) {
             keyGroups[i].Show();
+        }
+
+        StartCoroutine(
+            PlayVictoryMelody()
+        );
+    }
+
+    IEnumerator PlayVictoryMelody() {
+
+        if (
+            audioSource == null
+        ) {
+            yield break;
+        }
+
+        for (
+            int i = 0;
+            i < victoryMelody.Length;
+            i++
+        ) {
+
+            if (
+                victoryMelody[i] != null
+            ) {
+
+                audioSource.PlayOneShot(
+                    victoryMelody[i]
+                );
+
+                yield return new WaitForSeconds(
+                    melodyDelay
+                );
+            }
         }
     }
 }
