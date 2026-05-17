@@ -1,20 +1,61 @@
 using UnityEngine;
 
 public class PushObjects : MonoBehaviour {
-
     public float pushSpeed = 3f;
 
-    void OnControllerColliderHit(ControllerColliderHit hit) {
+    public float rigidbodyPushForce = 5f;
 
-        if (!hit.collider.CompareTag("Pushable")) return;
+    void OnControllerColliderHit(
+        ControllerColliderHit hit
+    ) {
+        Vector3 moveDir =
+            new Vector3(
+                hit.moveDirection.x,
+                0,
+                hit.moveDirection.z
+            );
 
-        TOYCARPUSH car = hit.collider.GetComponent<TOYCARPUSH>();
-        if (car == null) return;
+        if (
+            moveDir.magnitude < 0.2f
+        ) {
+            return;
+        }
 
-        Vector3 moveDir = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
+        if (
+            hit.collider.CompareTag(
+                "Pushable"
+            )
+        ) {
+            TOYCARPUSH car =
+                hit.collider.GetComponent<
+                    TOYCARPUSH
+                >();
 
-        if (moveDir.magnitude < 0.2f) return;
+            if (car != null) {
+                car.Push(
+                    moveDir.normalized
+                    * pushSpeed
+                );
 
-        car.Push(moveDir.normalized * pushSpeed);
+                return;
+            }
+        }
+
+        Rigidbody rb =
+            hit.collider.attachedRigidbody;
+
+        if (rb == null) {
+            return;
+        }
+
+        if (rb.isKinematic) {
+            return;
+        }
+
+        rb.AddForce(
+            moveDir.normalized
+            * rigidbodyPushForce,
+            ForceMode.Impulse
+        );
     }
 }
