@@ -1,23 +1,53 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelExit : MonoBehaviour, IInteractable {
-    public string nextSceneName = "Bedroom";
-    public string targetSpawnID = "1";
+public class LevelExit : MonoBehaviour,
+    IInteractable {
+    public string nextSceneName =
+        "Bedroom";
 
-    private bool triggered = false;
+    public string targetSpawnID =
+        "1";
 
-    private void OnTriggerEnter(Collider other) {
-        if (!other.CompareTag("Player") || triggered) return;
+    private bool triggered =
+        false;
+
+    private void OnTriggerEnter(
+        Collider other
+    ) {
+        if (
+            !other.CompareTag(
+                "Player"
+            )
+            || triggered
+        ) {
+            return;
+        }
+
         NextScene();
     }
-    public void OnInteract() => NextScene();
-    public void OnCancelInteract() { }
+
+    public void OnInteract() {
+        NextScene();
+    }
+
+    public void OnCancelInteract() {
+    }
 
     void NextScene() {
         triggered = true;
-        Debug.Log("SETTING SpawnID: " + targetSpawnID);
-        SpawnData.spawnID = targetSpawnID;
-        SceneManager.LoadScene(nextSceneName);
+
+        Debug.Log(
+            "SETTING SpawnID: "
+            + targetSpawnID
+        );
+
+        SpawnData.spawnID =
+            targetSpawnID;
+
+        SceneTransition.Instance
+            .TransitionToScene(
+                nextSceneName
+            );
     }
 }
