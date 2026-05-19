@@ -13,6 +13,8 @@ public class SceneTransition : MonoBehaviour {
 
     public float speed = 1.5f;
 
+    public float respawnSpeed = 0.7f;
+
     bool transitioning = false;
 
     void Awake() {
@@ -32,10 +34,6 @@ public class SceneTransition : MonoBehaviour {
         irisMaterial.SetFloat(
             "_Radius",
             1f
-        );
-
-        Debug.Log(
-            "IRIS READY"
         );
     }
 
@@ -62,7 +60,6 @@ public class SceneTransition : MonoBehaviour {
         if (
             transitioning
         ) {
-
             return;
         }
 
@@ -73,6 +70,60 @@ public class SceneTransition : MonoBehaviour {
         );
     }
 
+    public IEnumerator RespawnTransition(
+        GameObject player
+    ) {
+
+        if (transitioning) {
+            yield break;
+        }
+
+        transitioning = true;
+
+        irisMaterial.SetFloat(
+            "_Radius",
+            0f
+        );
+
+        yield return null;
+
+        if (
+            CheckpointManager.Instance
+            != null
+        ) {
+
+            CheckpointManager.Instance
+                .RespawnPlayer(
+                    player
+                );
+        }
+
+        yield return null;
+        yield return null;
+        yield return new WaitForEndOfFrame();
+
+        yield return new WaitForSeconds(
+            0.5f
+        );
+
+        float radius = 0f;
+
+        while (radius < 1f) {
+
+            radius +=
+                Time.deltaTime
+                * respawnSpeed;
+
+            irisMaterial.SetFloat(
+                "_Radius",
+                radius
+            );
+
+            yield return null;
+        }
+
+        transitioning = false;
+    }
     IEnumerator TransitionRoutine(
         string sceneName
     ) {
@@ -98,6 +149,7 @@ public class SceneTransition : MonoBehaviour {
         yield return new WaitForSeconds(
             0.1f
         );
+
         SceneManager.LoadScene(
             sceneName
         );
