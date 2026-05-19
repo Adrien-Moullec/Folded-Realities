@@ -31,8 +31,8 @@ public class ProgressDoor : MonoBehaviour {
 
         if (levelExit != null) {
 
-            levelExit.enabled =
-                unlocked;
+            levelExit.locked =
+                !unlocked;
         }
 
         if (lockVisual != null) {

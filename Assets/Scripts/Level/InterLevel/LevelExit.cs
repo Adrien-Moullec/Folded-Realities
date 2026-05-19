@@ -10,14 +10,18 @@ public class LevelExit : MonoBehaviour,
     public string targetSpawnID =
         "1";
 
-    bool triggered =
-        false;
+    [HideInInspector]
+    public bool locked;
+
+    bool triggered = false;
 
     void OnTriggerEnter(
         Collider other
     ) {
 
         if (
+            locked
+            ||
             !other.CompareTag(
                 "Player"
             )
@@ -32,6 +36,10 @@ public class LevelExit : MonoBehaviour,
 
     public void OnInteract() {
 
+        if (locked) {
+            return;
+        }
+
         NextScene();
     }
 
@@ -43,18 +51,13 @@ public class LevelExit : MonoBehaviour,
         triggered = true;
 
         Debug.Log(
-            "SETTING SpawnID: "
+            gameObject.name +
+            " SETTING SpawnID TO: "
             + targetSpawnID
         );
 
-        PlayerPrefs.SetInt(
-            "SpawnDoorID",
-            int.Parse(
-                targetSpawnID
-            )
-        );
-
-        PlayerPrefs.Save();
+        SpawnData.spawnID =
+            targetSpawnID;
 
         SceneTransition.Instance
             .TransitionToScene(
