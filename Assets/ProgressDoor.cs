@@ -25,9 +25,13 @@ public class ProgressDoor : MonoBehaviour {
             );
 
         bool unlocked =
-            progress >= minProgress
-            &&
-            progress <= maxProgress;
+            (
+                progress >= minProgress
+                &&
+                progress <= maxProgress
+            )
+            ||
+            progress >= 3;
 
         if (levelExit != null) {
 
