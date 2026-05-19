@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class UnlockLevel : MonoBehaviour {
+public class ProgressSetter : MonoBehaviour {
 
-    public string unlockKey;
+    public int setProgressTo;
 
-    bool triggered = false;
+    bool triggered;
 
     void OnTriggerEnter(
         Collider other
@@ -23,15 +23,15 @@ public class UnlockLevel : MonoBehaviour {
         triggered = true;
 
         PlayerPrefs.SetInt(
-            unlockKey,
-            1
+            "Progress",
+            setProgressTo
         );
 
         PlayerPrefs.Save();
 
         Debug.Log(
-            unlockKey +
-            " unlocked!"
+            "PROGRESS SET TO: "
+            + setProgressTo
         );
     }
 }

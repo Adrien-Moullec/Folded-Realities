@@ -3,23 +3,26 @@ using UnityEngine.SceneManagement;
 
 public class LevelExit : MonoBehaviour,
     IInteractable {
+
     public string nextSceneName =
         "Bedroom";
 
     public string targetSpawnID =
         "1";
 
-    private bool triggered =
+    bool triggered =
         false;
 
-    private void OnTriggerEnter(
+    void OnTriggerEnter(
         Collider other
     ) {
+
         if (
             !other.CompareTag(
                 "Player"
             )
-            || triggered
+            ||
+            triggered
         ) {
             return;
         }
@@ -28,6 +31,7 @@ public class LevelExit : MonoBehaviour,
     }
 
     public void OnInteract() {
+
         NextScene();
     }
 
@@ -35,6 +39,7 @@ public class LevelExit : MonoBehaviour,
     }
 
     void NextScene() {
+
         triggered = true;
 
         Debug.Log(
@@ -42,8 +47,14 @@ public class LevelExit : MonoBehaviour,
             + targetSpawnID
         );
 
-        SpawnData.spawnID =
-            targetSpawnID;
+        PlayerPrefs.SetInt(
+            "SpawnDoorID",
+            int.Parse(
+                targetSpawnID
+            )
+        );
+
+        PlayerPrefs.Save();
 
         SceneTransition.Instance
             .TransitionToScene(

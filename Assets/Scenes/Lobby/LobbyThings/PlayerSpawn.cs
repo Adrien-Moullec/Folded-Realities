@@ -2,32 +2,69 @@ using UnityEngine;
 
 public class PlayerSpawn : MonoBehaviour {
 
-    [SerializeField] Transform[] spawnPoints;
+    [SerializeField]
+    Transform[] spawnPoints;
 
     void Start() {
-        StartCoroutine(SetSpawn());
+
+        StartCoroutine(
+            SetSpawn()
+        );
     }
 
     System.Collections.IEnumerator SetSpawn() {
+
         yield return null;
 
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player == null) yield break;
+        GameObject player =
+            GameObject.FindGameObjectWithTag(
+                "Player"
+            );
 
-        CharacterController cc = player.GetComponent<CharacterController>();
-        if (cc != null) cc.enabled = false;
+        if (player == null)
+            yield break;
 
-        int spawnID = PlayerPrefs.GetInt("SpawnDoorID", -1);
+        CharacterController cc =
+            player.GetComponent<CharacterController>();
 
-        if (spawnID >= 0 && spawnID < spawnPoints.Length) {
-            Transform spawn = spawnPoints[spawnID];
+        if (cc != null)
+            cc.enabled = false;
 
-            player.transform.position = spawn.position + Vector3.up * 1f;
-            player.transform.rotation = spawn.rotation;
+        int spawnID =
+            PlayerPrefs.GetInt(
+                "SpawnDoorID",
+                0
+            );
 
-            Debug.Log("Spawned at spawn ID: " + spawnID);
+        Debug.Log(
+            "LOADING SPAWN ID: "
+            + spawnID
+        );
+
+        if (
+            spawnID >= 0
+            &&
+            spawnID < spawnPoints.Length
+        ) {
+
+            Transform spawn =
+                spawnPoints[spawnID];
+
+            player.transform.position =
+                spawn.position;
+
+            player.transform.rotation =
+                spawn.rotation;
+
+            Debug.Log(
+                "SPAWNED AT: "
+                + spawn.name
+            );
         }
 
-        if (cc != null) cc.enabled = true;
+        yield return null;
+
+        if (cc != null)
+            cc.enabled = true;
     }
 }
