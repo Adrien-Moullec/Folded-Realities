@@ -2,6 +2,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.EventSystems;
+using AbilitySystem;
 
 public class PauseMenu : MonoBehaviour {
 
@@ -14,13 +16,19 @@ public class PauseMenu : MonoBehaviour {
     public GameObject overwritePanel;
     public GameObject quitConfirmPanel;
     public GameObject backgroundPanel;
+    float cachedBrightness;
+
+    float cachedSaturation;
+
+    float cachedVolume;
 
     public bool isPaused;
 
     public Transform player;
-    public MonoBehaviour playerController;
+
 
     public Vector3 lastCheckpoint;
+
     public int coins;
 
     public TextMeshProUGUI slot1Text;
@@ -30,201 +38,352 @@ public class PauseMenu : MonoBehaviour {
     int pendingSlot = -1;
 
     void Awake() {
+
         Instance = this;
     }
 
     void OnEnable() {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+
+        SceneManager.sceneLoaded +=
+            OnSceneLoaded;
     }
 
     void OnDisable() {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        SceneManager.sceneLoaded -=
+            OnSceneLoaded;
     }
 
     void Start() {
+
         pauseMenu.SetActive(false);
+
         buttonsContainer.SetActive(true);
+
         settingsPanel.SetActive(false);
+
         savePanel.SetActive(false);
+
         overwritePanel.SetActive(false);
+
         quitConfirmPanel.SetActive(false);
+
         backgroundPanel.SetActive(true);
 
         UpdateAllSlots();
     }
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.P)) {
-            if (isPaused) Resume();
-            else Pause();
+
+        if (
+            Input.GetKeyDown(
+                KeyCode.P
+            )
+        ) {
+
+            if (isPaused) {
+                Resume();
+            } else {
+                Pause();
+            }
         }
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+    void OnSceneLoaded(
+        Scene scene,
+        LoadSceneMode mode
+    ) {
 
-        GameObject p = GameObject.FindGameObjectWithTag("Player");
+        GameObject p =
+            GameObject.FindGameObjectWithTag(
+                "Player"
+            );
+
         if (p != null) {
-            player = p.transform;
+
+            player =
+                p.transform;
+
         }
 
-        if (GameLoader.slotToLoad != -1) {
-            StartCoroutine(LoadAfterDelay(GameLoader.slotToLoad));
+        if (
+            GameLoader.slotToLoad != -1
+        ) {
+
+            StartCoroutine(
+                LoadAfterDelay(
+                    GameLoader.slotToLoad
+                )
+            );
+
             GameLoader.slotToLoad = -1;
         }
     }
 
-    IEnumerator LoadAfterDelay(int slot) {
+    IEnumerator LoadAfterDelay(
+        int slot
+    ) {
 
-        yield return new WaitForSeconds(0.1f);
-
-        if (playerController != null) playerController.enabled = false;
+        yield return new WaitForSeconds(
+            0.1f
+        );
 
         DisablePlayerSystems();
 
         LoadGame(slot);
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(
+            0.1f
+        );
 
         SnapToGround();
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(
+            0.1f
+        );
 
         EnablePlayerSystems();
 
-        if (playerController != null) playerController.enabled = true;
     }
 
     void DisablePlayerSystems() {
 
-        if (player == null) return;
+        if (
+            player == null
+        ) return;
 
-        CharacterController cc = player.GetComponent<CharacterController>();
-        if (cc != null) cc.enabled = false;
+        CharacterController cc =
+            player.GetComponent<
+                CharacterController
+            >();
 
-        Rigidbody rb = player.GetComponent<Rigidbody>();
-        if (rb != null) {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = true;
+        if (
+            cc != null
+        ) {
+            cc.enabled = false;
         }
 
-        MonoBehaviour[] scripts = player.GetComponents<MonoBehaviour>();
-        foreach (var s in scripts) {
-            if (s != this && s != playerController) {
-                s.enabled = false;
-            }
+        Rigidbody rb =
+            player.GetComponent<
+                Rigidbody
+            >();
+
+        if (
+            rb != null
+        ) {
+
+            rb.linearVelocity =
+                Vector3.zero;
+
+            rb.angularVelocity =
+                Vector3.zero;
+
+            rb.isKinematic = true;
         }
     }
 
     void EnablePlayerSystems() {
 
-        if (player == null) return;
+        if (
+            player == null
+        ) return;
 
-        CharacterController cc = player.GetComponent<CharacterController>();
-        if (cc != null) cc.enabled = true;
+        CharacterController cc =
+            player.GetComponent<
+                CharacterController
+            >();
 
-        Rigidbody rb = player.GetComponent<Rigidbody>();
-        if (rb != null) {
-            rb.isKinematic = false;
+        if (
+            cc != null
+        ) {
+            cc.enabled = true;
         }
 
-        MonoBehaviour[] scripts = player.GetComponents<MonoBehaviour>();
-        foreach (var s in scripts) {
-            if (s != this) {
-                s.enabled = true;
-            }
+        Rigidbody rb =
+            player.GetComponent<
+                Rigidbody
+            >();
+
+        if (
+            rb != null
+        ) {
+
+            rb.isKinematic = false;
         }
     }
 
     void SnapToGround() {
 
-        if (player == null) return;
+        if (
+            player == null
+        ) return;
 
         RaycastHit hit;
 
-        if (Physics.Raycast(player.position + Vector3.up, Vector3.down, out hit, 20f)) {
-            player.position = hit.point;
+        if (
+            Physics.Raycast(
+                player.position + Vector3.up,
+                Vector3.down,
+                out hit,
+                20f
+            )
+        ) {
+
+            player.position =
+                hit.point;
         }
     }
 
     public void Pause() {
+
         pauseMenu.SetActive(true);
+
         buttonsContainer.SetActive(true);
+
         settingsPanel.SetActive(false);
+
         savePanel.SetActive(false);
+
         overwritePanel.SetActive(false);
+
         quitConfirmPanel.SetActive(false);
+
         backgroundPanel.SetActive(true);
 
         Time.timeScale = 0f;
+
         isPaused = true;
 
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState =
+            CursorLockMode.None;
+
         Cursor.visible = true;
 
-        if (playerController != null) playerController.enabled = false;
+        UnityEngine.EventSystems
+            .EventSystem.current
+            .SetSelectedGameObject(
+                null
+            );
+
+        DisablePlayerSystems();
     }
 
     public void Resume() {
+
         pauseMenu.SetActive(false);
 
         Time.timeScale = 1f;
+
         isPaused = false;
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Cursor.lockState =
+            CursorLockMode.Locked;
 
-        if (playerController != null) playerController.enabled = true;
+        Cursor.visible = false;
+        Cursor.lockState =
+       CursorLockMode.Locked;
+
+        Cursor.visible =
+            false;
+
+        EnablePlayerSystems();
     }
 
     public void OpenSettings() {
-        Cursor.lockState = CursorLockMode.None;
+
+        Cursor.lockState =
+            CursorLockMode.None;
+
         Cursor.visible = true;
 
         backgroundPanel.SetActive(false);
 
         buttonsContainer.SetActive(false);
+
         settingsPanel.SetActive(true);
 
-        if (GraphicsSettings.Instance != null) {
-            GraphicsSettings.Instance.CacheCurrentSettings();
+        if (
+            GraphicsSettings.Instance
+            != null
+        ) {
+
+            GraphicsSettings.Instance
+                .CacheCurrentSettings();
         }
     }
+    public void CloseSettings() {
 
+        if (
+            GraphicsSettings.Instance != null
+        ) {
+
+            GraphicsSettings.Instance.SaveSettings();
+        }
+
+        BackToMain();
+    }
+
+    public void RevertSettings() {
+
+        if (
+            GraphicsSettings.Instance != null
+        ) {
+
+            GraphicsSettings.Instance.RevertCachedSettings();
+        }
+    }
     public void OpenSavePanel() {
-        Cursor.lockState = CursorLockMode.None;
+
+        Cursor.lockState =
+            CursorLockMode.None;
+
         Cursor.visible = true;
 
         backgroundPanel.SetActive(true);
 
         buttonsContainer.SetActive(false);
+
         savePanel.SetActive(true);
     }
 
     public void OpenQuitConfirm() {
-        Cursor.lockState = CursorLockMode.None;
+
+        Cursor.lockState =
+            CursorLockMode.None;
+
         Cursor.visible = true;
 
         buttonsContainer.SetActive(false);
+
         quitConfirmPanel.SetActive(true);
     }
 
     public void CancelQuit() {
+
         quitConfirmPanel.SetActive(false);
+
         buttonsContainer.SetActive(true);
     }
 
     public void QuitToMainMenuConfirmed() {
+
         Time.timeScale = 1f;
 
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState =
+            CursorLockMode.None;
+
         Cursor.visible = true;
 
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene(
+            "MainMenu"
+        );
     }
 
     public void BackToMain() {
-        Cursor.lockState = CursorLockMode.None;
+
+        Cursor.lockState =
+            CursorLockMode.None;
+
         Cursor.visible = true;
 
         backgroundPanel.SetActive(true);
@@ -232,111 +391,266 @@ public class PauseMenu : MonoBehaviour {
         buttonsContainer.SetActive(true);
 
         settingsPanel.SetActive(false);
+
         savePanel.SetActive(false);
+
         overwritePanel.SetActive(false);
+
         quitConfirmPanel.SetActive(false);
     }
 
-    public void SetCheckpoint(Vector3 position) {
-        lastCheckpoint = position;
+    public void SetCheckpoint(
+        Vector3 position
+    ) {
+
+        lastCheckpoint =
+            position;
     }
 
-    public void AddCoins(int amount) {
+    public void AddCoins(
+        int amount
+    ) {
+
         coins += amount;
     }
 
-    public void SelectSlot(int slot) {
-        if (PlayerPrefs.GetInt("Slot" + slot + "_Exists", 0) == 1) {
+    public void SelectSlot(
+        int slot
+    ) {
+
+        if (
+            PlayerPrefs.GetInt(
+                "Slot" + slot + "_Exists",
+                0
+            ) == 1
+        ) {
+
             pendingSlot = slot;
-            overwritePanel.SetActive(true);
+
+            overwritePanel.SetActive(
+                true
+            );
         } else {
+
             SaveGame(slot);
         }
     }
 
     public void ConfirmOverwrite() {
-        SaveGame(pendingSlot);
-        overwritePanel.SetActive(false);
+
+        SaveGame(
+            pendingSlot
+        );
+
+        overwritePanel.SetActive(
+            false
+        );
+
         pendingSlot = -1;
     }
 
     public void CancelOverwrite() {
-        overwritePanel.SetActive(false);
+
+        overwritePanel.SetActive(
+            false
+        );
+
         pendingSlot = -1;
     }
 
-    void SaveGame(int slot) {
+    void SaveGame(
+        int slot
+    ) {
 
-        Vector3 pos = player != null ? player.position : lastCheckpoint;
+        Vector3 pos =
+            player != null
+            ? player.position
+            : lastCheckpoint;
 
-        PlayerPrefs.SetFloat("Slot" + slot + "_X", pos.x);
-        PlayerPrefs.SetFloat("Slot" + slot + "_Y", pos.y);
-        PlayerPrefs.SetFloat("Slot" + slot + "_Z", pos.z);
+        PlayerPrefs.SetFloat(
+            "Slot" + slot + "_X",
+            pos.x
+        );
 
-        PlayerPrefs.SetInt("Slot" + slot + "_Coins", coins);
+        PlayerPrefs.SetFloat(
+            "Slot" + slot + "_Y",
+            pos.y
+        );
 
-        PlayerPrefs.SetString("Slot" + slot + "_Scene", SceneManager.GetActiveScene().name);
+        PlayerPrefs.SetFloat(
+            "Slot" + slot + "_Z",
+            pos.z
+        );
 
-        PlayerPrefs.SetInt("Slot" + slot + "_Exists", 1);
+        PlayerPrefs.SetInt(
+            "Slot" + slot + "_Coins",
+            coins
+        );
 
-        string time = System.DateTime.Now.ToString("dd/MM/yyyy HH:mm");
-        PlayerPrefs.SetString("Slot" + slot + "_Time", time);
+        PlayerPrefs.SetString(
+            "Slot" + slot + "_Scene",
+            SceneManager
+                .GetActiveScene()
+                .name
+        );
+
+        PlayerPrefs.SetInt(
+            "Slot" + slot + "_Exists",
+            1
+        );
+
+        string time =
+            System.DateTime.Now.ToString(
+                "dd/MM/yyyy HH:mm"
+            );
+
+        PlayerPrefs.SetString(
+            "Slot" + slot + "_Time",
+            time
+        );
 
         PlayerPrefs.Save();
 
         UpdateSlotUI(slot);
     }
 
-    public void LoadGame(int slot) {
+    public void LoadGame(
+        int slot
+    ) {
 
-        if (PlayerPrefs.GetInt("Slot" + slot + "_Exists", 0) != 1) return;
+        if (
+            PlayerPrefs.GetInt(
+                "Slot" + slot + "_Exists",
+                0
+            ) != 1
+        ) return;
 
-        float x = PlayerPrefs.GetFloat("Slot" + slot + "_X", 0f);
-        float y = PlayerPrefs.GetFloat("Slot" + slot + "_Y", 0f);
-        float z = PlayerPrefs.GetFloat("Slot" + slot + "_Z", 0f);
+        float x =
+            PlayerPrefs.GetFloat(
+                "Slot" + slot + "_X",
+                0f
+            );
 
-        coins = PlayerPrefs.GetInt("Slot" + slot + "_Coins", 0);
+        float y =
+            PlayerPrefs.GetFloat(
+                "Slot" + slot + "_Y",
+                0f
+            );
 
-        Vector3 loadPos = new Vector3(x, y, z);
+        float z =
+            PlayerPrefs.GetFloat(
+                "Slot" + slot + "_Z",
+                0f
+            );
 
-        if (loadPos == Vector3.zero) {
-            GameObject start = GameObject.FindGameObjectWithTag("PlayerStart");
-            if (start != null) loadPos = start.transform.position;
+        coins =
+            PlayerPrefs.GetInt(
+                "Slot" + slot + "_Coins",
+                0
+            );
+
+        Vector3 loadPos =
+            new Vector3(
+                x,
+                y,
+                z
+            );
+
+        if (
+            loadPos == Vector3.zero
+        ) {
+
+            GameObject start =
+                GameObject.FindGameObjectWithTag(
+                    "PlayerStart"
+                );
+
+            if (
+                start != null
+            ) {
+
+                loadPos =
+                    start.transform.position;
+            }
         }
 
-        if (player != null) {
-            player.position = loadPos;
+        if (
+            player != null
+        ) {
+
+            player.position =
+                loadPos;
         }
 
-        lastCheckpoint = loadPos;
+        lastCheckpoint =
+            loadPos;
     }
 
     void UpdateAllSlots() {
+
         UpdateSlotUI(1);
+
         UpdateSlotUI(2);
+
         UpdateSlotUI(3);
     }
 
-    void UpdateSlotUI(int slot) {
+    void UpdateSlotUI(
+        int slot
+    ) {
 
-        TextMeshProUGUI text = null;
+        TextMeshProUGUI text =
+            null;
 
-        if (slot == 1) text = slot1Text;
-        if (slot == 2) text = slot2Text;
-        if (slot == 3) text = slot3Text;
+        if (slot == 1)
+            text = slot1Text;
 
-        if (text == null) return;
+        if (slot == 2)
+            text = slot2Text;
 
-        if (PlayerPrefs.GetInt("Slot" + slot + "_Exists", 0) == 1) {
+        if (slot == 3)
+            text = slot3Text;
 
-            string time = PlayerPrefs.GetString("Slot" + slot + "_Time", "No Time");
-            int savedCoins = PlayerPrefs.GetInt("Slot" + slot + "_Coins", 0);
-            string scene = PlayerPrefs.GetString("Slot" + slot + "_Scene", "Unknown");
+        if (
+            text == null
+        ) return;
 
-            text.text = "Saved\n" + scene + "\n" + time + "\nCoins: " + savedCoins;
+        if (
+            PlayerPrefs.GetInt(
+                "Slot" + slot + "_Exists",
+                0
+            ) == 1
+        ) {
 
+            string time =
+                PlayerPrefs.GetString(
+                    "Slot" + slot + "_Time",
+                    "No Time"
+                );
+
+            int savedCoins =
+                PlayerPrefs.GetInt(
+                    "Slot" + slot + "_Coins",
+                    0
+                );
+
+            string scene =
+                PlayerPrefs.GetString(
+                    "Slot" + slot + "_Scene",
+                    "Unknown"
+                );
+
+            text.text =
+                "Saved\n"
+                + scene
+                + "\n"
+                + time
+                + "\nCoins: "
+                + savedCoins;
         } else {
-            text.text = "Empty";
+
+            text.text =
+                "Empty";
         }
     }
 }
