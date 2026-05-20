@@ -21,14 +21,16 @@ public class GraphicsSettings : MonoBehaviour {
 
     float saturation;
 
-    float originalBrightness;
-
-    float originalSaturation;
-
     [Header("Audio")]
     public Slider volumeSlider;
 
     float volume;
+
+    float cachedBrightness;
+
+    float cachedSaturation;
+
+    float cachedVolume;
 
     void Awake() {
 
@@ -62,10 +64,6 @@ public class GraphicsSettings : MonoBehaviour {
     }
 
     void Start() {
-
-        PlayerPrefs.DeleteKey(
-            "GameVolume"
-        );
 
         SetupVolume();
 
@@ -166,11 +164,53 @@ public class GraphicsSettings : MonoBehaviour {
 
     public void CacheCurrentSettings() {
 
-        originalBrightness =
+        cachedBrightness =
             brightness;
 
-        originalSaturation =
+        cachedSaturation =
             saturation;
+
+        cachedVolume =
+            volume;
+    }
+
+    public void RevertCachedSettings() {
+
+        brightness =
+            cachedBrightness;
+
+        saturation =
+            cachedSaturation;
+
+        volume =
+            cachedVolume;
+
+        AudioListener.volume =
+            volume;
+
+        ApplySettings();
+
+        UpdateSliders();
+    }
+
+    public void SaveSettings() {
+
+        PlayerPrefs.SetFloat(
+            "Brightness",
+            brightness
+        );
+
+        PlayerPrefs.SetFloat(
+            "Saturation",
+            saturation
+        );
+
+        PlayerPrefs.SetFloat(
+            "GameVolume",
+            volume
+        );
+
+        PlayerPrefs.Save();
     }
 
     public void SetBrightness(
@@ -202,46 +242,6 @@ public class GraphicsSettings : MonoBehaviour {
 
         AudioListener.volume =
             volume;
-
-        PlayerPrefs.SetFloat(
-            "GameVolume",
-            volume
-        );
-
-        PlayerPrefs.Save();
-    }
-
-    public void ConfirmSettings() {
-
-        PlayerPrefs.SetFloat(
-            "Brightness",
-            brightness
-        );
-
-        PlayerPrefs.SetFloat(
-            "Saturation",
-            saturation
-        );
-
-        PlayerPrefs.SetFloat(
-            "GameVolume",
-            volume
-        );
-
-        PlayerPrefs.Save();
-    }
-
-    public void RevertSettings() {
-
-        brightness =
-            originalBrightness;
-
-        saturation =
-            originalSaturation;
-
-        UpdateSliders();
-
-        ApplySettings();
     }
 
     void ApplySettings() {
