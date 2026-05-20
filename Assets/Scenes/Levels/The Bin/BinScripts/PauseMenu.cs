@@ -16,6 +16,11 @@ public class PauseMenu : MonoBehaviour {
     public GameObject overwritePanel;
     public GameObject quitConfirmPanel;
     public GameObject backgroundPanel;
+    float cachedBrightness;
+
+    float cachedSaturation;
+
+    float cachedVolume;
 
     public bool isPaused;
 
@@ -306,7 +311,27 @@ public class PauseMenu : MonoBehaviour {
                 .CacheCurrentSettings();
         }
     }
+    public void CloseSettings() {
 
+        if (
+            GraphicsSettings.Instance != null
+        ) {
+
+            GraphicsSettings.Instance.SaveSettings();
+        }
+
+        BackToMain();
+    }
+
+    public void RevertSettings() {
+
+        if (
+            GraphicsSettings.Instance != null
+        ) {
+
+            GraphicsSettings.Instance.RevertCachedSettings();
+        }
+    }
     public void OpenSavePanel() {
 
         Cursor.lockState =
