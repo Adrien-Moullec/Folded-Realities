@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
-
 using TMPro;
+using AbilitySystem;
 
 public class CollectiblesManager : MonoBehaviour {
 
@@ -21,20 +21,15 @@ public class CollectiblesManager : MonoBehaviour {
 
     public AudioClip pickupSound;
 
+    [Header("Health Pickup")]
+    public int healAmount = 20;
+
     void Awake() {
 
         Instance = this;
-
-        Debug.Log(
-            "COLLECTIBLES MANAGER AWAKE"
-        );
     }
 
     void Start() {
-
-        Debug.Log(
-            "COLLECTIBLES MANAGER START"
-        );
 
         normalCount = 0;
 
@@ -42,56 +37,19 @@ public class CollectiblesManager : MonoBehaviour {
 
         ResetPuzzleUI();
 
-        if (specialCanvas != null) {
-
-            specialCanvas.SetActive(true);
-
-            Debug.Log(
-                "SPECIAL CANVAS ENABLED"
-            );
-        } else {
-
-            Debug.LogError(
-                "SPECIAL CANVAS IS NULL"
-            );
-        }
-
-        Debug.Log(
-            "PUZZLE PIECE COUNT: "
-            + puzzlePieces.Length
-        );
-
-        for (
-            int i = 0;
-            i < puzzlePieces.Length;
-            i++
+        if (
+            specialCanvas != null
         ) {
 
-            if (
-                puzzlePieces[i] == null
-            ) {
-
-                Debug.LogError(
-                    "PUZZLE PIECE NULL AT INDEX: "
-                    + i
-                );
-            } else {
-
-                Debug.Log(
-                    "PUZZLE PIECE ASSIGNED: "
-                    + puzzlePieces[i].name
-                );
-            }
+            specialCanvas.SetActive(
+                true
+            );
         }
     }
 
     public void CollectNormal(
         GameObject obj
     ) {
-
-        Debug.Log(
-            "NORMAL COLLECTIBLE PICKED UP"
-        );
 
         normalCount++;
 
@@ -106,31 +64,25 @@ public class CollectiblesManager : MonoBehaviour {
                 1
             );
         }
+
+        PlayPickupSound(
+            obj.transform.position
+        );
+
+        Destroy(
+            obj
+        );
     }
 
     public void CollectSpecial(
         GameObject obj
     ) {
 
-        Debug.Log(
-            "SPECIAL COLLECTIBLE PICKED UP"
-        );
-
-        Debug.Log(
-            "CURRENT SPECIAL COUNT: "
-            + specialCount
-        );
-
         if (
             specialCount
             >=
             puzzlePieces.Length
         ) {
-
-            Debug.LogError(
-                "SPECIAL COUNT EXCEEDS ARRAY"
-            );
-
             return;
         }
 
@@ -138,34 +90,16 @@ public class CollectiblesManager : MonoBehaviour {
             puzzlePieces[specialCount]
             == null
         ) {
-
-            Debug.LogError(
-                "PUZZLE PIECE IS NULL AT INDEX: "
-                + specialCount
-            );
-
             return;
         }
 
-        Debug.Log(
-            "ENABLING IMAGE: "
-            + puzzlePieces[specialCount].name
-        );
-
         puzzlePieces[specialCount]
             .gameObject
-            .SetActive(true);
-
-        Debug.Log(
-            "IMAGE ENABLED SUCCESSFULLY"
-        );
+            .SetActive(
+                true
+            );
 
         specialCount++;
-
-        Debug.Log(
-            "NEW SPECIAL COUNT: "
-            + specialCount
-        );
 
         if (
             CurrencyManager.Instance
@@ -183,19 +117,60 @@ public class CollectiblesManager : MonoBehaviour {
             puzzlePieces.Length
         ) {
 
-            Debug.Log(
-                "ALL SPECIAL PIECES FOUND"
-            );
-
             OnPuzzleCompleted();
+        }
+
+        PlayPickupSound(
+            obj.transform.position
+        );
+
+        Destroy(
+            obj
+        );
+    }
+
+    public void CollectHealth(
+        GameObject obj,
+        GameObject player
+    ) {
+
+        PlayerAbilityController health =
+            player.GetComponent<
+                PlayerAbilityController
+            >();
+
+        if (
+            health != null
+        ) {
+
+            health.RestoreFullHealth();
+        }
+
+        PlayPickupSound(
+            obj.transform.position
+        );
+
+        Destroy(
+            obj
+        );
+    }
+
+    void PlayPickupSound(
+        Vector3 pos
+    ) {
+
+        if (
+            pickupSound != null
+        ) {
+
+            AudioSource.PlayClipAtPoint(
+                pickupSound,
+                pos
+            );
         }
     }
 
     void OnPuzzleCompleted() {
-
-        Debug.Log(
-            "PUZZLE COMPLETE"
-        );
 
         PlayerPrefs.SetInt(
             "PuzzleComplete_Level_"
@@ -214,24 +189,10 @@ public class CollectiblesManager : MonoBehaviour {
 
             normalCountText.text =
                 normalCount.ToString();
-
-            Debug.Log(
-                "UPDATED NORMAL UI: "
-                + normalCount
-            );
-        } else {
-
-            Debug.LogError(
-                "NORMAL COUNT TEXT NULL"
-            );
         }
     }
 
     void ResetPuzzleUI() {
-
-        Debug.Log(
-            "RESETTING PUZZLE UI"
-        );
 
         for (
             int i = 0;
@@ -245,20 +206,13 @@ public class CollectiblesManager : MonoBehaviour {
 
                 puzzlePieces[i]
                     .gameObject
-                    .SetActive(false);
-
-                Debug.Log(
-                    "RESET IMAGE: "
-                    + puzzlePieces[i].name
-                );
+                    .SetActive(
+                        false
+                    );
             }
         }
 
         specialCount = 0;
-
-        Debug.Log(
-            "SPECIAL COUNT RESET"
-        );
     }
 
     public int GetCoinCount() {

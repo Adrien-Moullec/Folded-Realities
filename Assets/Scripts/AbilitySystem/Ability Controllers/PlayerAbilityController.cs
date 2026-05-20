@@ -164,8 +164,47 @@ namespace AbilitySystem {
         }
         // Andrea's function
         void Respawn() {
-            playerHealthCanvas.UpdateHearts(100);
-            CurrentHealth = MaxHealth;
+
+            playerHealthCanvas.UpdateHearts(
+                100
+            );
+
+            CurrentHealth =
+                MaxHealth;
+        }
+        //andrea updated for checkpoint to restore health
+        public void RestoreFullHealth() {
+
+            CurrentHealth =
+                MaxHealth;
+
+            playerHealthCanvas?.UpdateHearts(
+                CurrentHealth
+            );
+        }
+
+        public void DirectDamage(
+            int amount
+        ) {
+
+            CurrentHealth -=
+                amount;
+
+            if (
+                CurrentHealth < 0
+            ) {
+                CurrentHealth = 0;
+            }
+
+            playerHealthCanvas?.UpdateHearts(
+                CurrentHealth
+            );
+
+            if (
+                CurrentHealth <= 0
+            ) {
+                Die();
+            }
         }
         public override void OnRotateEntity(Vector3 direction) {
             direction.y = 0;
@@ -190,14 +229,53 @@ namespace AbilitySystem {
             }
         }
         public override void Die() {
-            currentAbilitySet.abilitySetSO.healthSettings?.Die(currentAbilitySet.entityBody, ref CurrentHealth);
-            GetComponent<CharacterController>().enabled = false;
-            StartCoroutine(PlayerDeath(currentAbilitySet.entityBody.animatorManager, () => {
-                GetComponent<CharacterController>().enabled = true;
-                CheckpointManager.Instance?.RespawnPlayer(gameObject);
-                currentAbilitySet.abilitySetSO.healthSettings.MaxHealth(currentAbilitySet.entityBody, ref CurrentHealth, ref MaxHealth);
-                Respawn();
-            }));
+
+            currentAbilitySet
+                .abilitySetSO
+                .healthSettings
+                ?.Die(
+                    currentAbilitySet.entityBody,
+                    ref CurrentHealth
+                );
+
+            GetComponent<
+                CharacterController
+            >().enabled = false;
+
+            StartCoroutine(
+                PlayerDeath(
+                    currentAbilitySet.entityBody.animatorManager,
+                    () => {
+
+                        StartCoroutine(
+                            SceneTransition.Instance
+                                .RespawnTransition(
+                                    gameObject
+                                )
+                        );
+
+                        GetComponent<
+                            CharacterController
+                        >().enabled = true;
+
+                        CheckpointManager.Instance
+                            ?.RespawnPlayer(
+                                gameObject
+                            );
+
+                        currentAbilitySet
+                            .abilitySetSO
+                            .healthSettings
+                            .MaxHealth(
+                                currentAbilitySet.entityBody,
+                                ref CurrentHealth,
+                                ref MaxHealth
+                            );
+
+                        Respawn();
+                    }
+                )
+            );
         }
         public override void Heal(EntityDamage heal) {
             base.Heal(heal);
