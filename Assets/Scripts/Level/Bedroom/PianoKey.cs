@@ -11,11 +11,15 @@ public class PianoKey : MonoBehaviour {
 
     public AudioClip note;
 
+    [Header("Movement")]
     public Transform pivot;
 
     public MeshRenderer meshRenderer;
 
-    public Material pressedMaterial;
+    [Header("Materials")]
+    public Material whiteMaterial;
+
+    public Material colouredMaterial;
 
     public float pressAngle = 4f;
 
@@ -29,18 +33,28 @@ public class PianoKey : MonoBehaviour {
 
     Quaternion startRot;
 
-    Material originalMaterial;
-
     void Start() {
 
-        if (pivot != null) {
+        if (
+            pivot == null
+        ) {
+            pivot =
+                transform;
+        }
+
+        if (
+            pivot != null
+        ) {
             startRot =
                 pivot.localRotation;
         }
 
-        if (meshRenderer != null) {
-            originalMaterial =
-                meshRenderer.material;
+        if (
+            meshRenderer != null
+            && colouredMaterial != null
+        ) {
+            meshRenderer.material =
+                colouredMaterial;
         }
     }
 
@@ -49,7 +63,9 @@ public class PianoKey : MonoBehaviour {
     ) {
 
         if (
-            other.CompareTag("Player")
+            other.CompareTag(
+                "Player"
+            )
             && !isPressed
         ) {
             PlayKey();
@@ -70,8 +86,7 @@ public class PianoKey : MonoBehaviour {
         bool correct = false;
 
         if (
-            !activated
-            && puzzleManager != null
+            puzzleManager != null
         ) {
 
             correct =
@@ -82,14 +97,8 @@ public class PianoKey : MonoBehaviour {
 
         if (
             correct
-            && meshRenderer != null
-            && pressedMaterial != null
         ) {
-
             activated = true;
-
-            meshRenderer.material =
-                pressedMaterial;
         }
 
         if (
@@ -102,17 +111,49 @@ public class PianoKey : MonoBehaviour {
         }
     }
 
+    public void FlashWhite() {
+
+        if (
+            gameObject.activeInHierarchy
+        ) {
+            StartCoroutine(
+                FlashWhiteRoutine()
+            );
+        }
+    }
+
+    IEnumerator FlashWhiteRoutine() {
+
+        if (
+            meshRenderer == null
+            || whiteMaterial == null
+            || colouredMaterial == null
+        ) {
+            yield break;
+        }
+
+        meshRenderer.material =
+            whiteMaterial;
+
+        yield return new WaitForSeconds(
+            0.25f
+        );
+
+        meshRenderer.material =
+            colouredMaterial;
+    }
+
     public void ResetKey() {
 
         activated = false;
 
         if (
             meshRenderer != null
-            && originalMaterial != null
+            && colouredMaterial != null
         ) {
 
             meshRenderer.material =
-                originalMaterial;
+                colouredMaterial;
         }
     }
 
@@ -130,7 +171,9 @@ public class PianoKey : MonoBehaviour {
 
         float t = 0f;
 
-        while (t < 1f) {
+        while (
+            t < 1f
+        ) {
 
             t +=
                 Time.deltaTime
@@ -152,7 +195,9 @@ public class PianoKey : MonoBehaviour {
 
         t = 0f;
 
-        while (t < 1f) {
+        while (
+            t < 1f
+        ) {
 
             t +=
                 Time.deltaTime

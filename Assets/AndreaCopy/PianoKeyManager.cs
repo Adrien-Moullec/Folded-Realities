@@ -8,11 +8,18 @@ public class PianoKeyManager : MonoBehaviour {
     [Header("Correct Sequence")]
     public int[] correctSequence;
 
+    [Header("Memory Reveal Platforms")]
+    public PlatformGroup[] memoryRevealPlatforms;
+
     PianoKey[] keys;
 
     int currentIndex = 0;
 
     bool puzzleComplete = false;
+
+    bool introStarted = false;
+
+    bool replayingMemory = false;
 
     [Header("Wrong Sound")]
     public AudioSource audioSource;
@@ -24,24 +31,22 @@ public class PianoKeyManager : MonoBehaviour {
 
     public float melodyDelay = 0.4f;
 
+    [Header("Memory Timing")]
+    public float flashOffTime = 0.12f;
+
+    public float platformRevealDelay = 0.8f;
+
+    public float introVisibleTime = 1.5f;
+
+    [Header("Trigger")]
+    public PianoPuzzleTrigger puzzleTrigger;
+
     void Start() {
 
         keys =
     FindObjectsByType<PianoKey>(
         FindObjectsSortMode.None
     );
-
-        currentIndex = 0;
-
-        puzzleComplete = false;
-
-        for (
-            int i = 0;
-            i < keyGroups.Length;
-            i++
-        ) {
-            keyGroups[i].Hide();
-        }
 
         ResetAllKeys();
 
@@ -50,17 +55,111 @@ public class PianoKeyManager : MonoBehaviour {
         );
     }
 
+    public void StartMemoryPuzzle() {
+
+        if (
+            introStarted
+        ) {
+            return;
+        }
+
+        StartCoroutine(
+            IntroSequence()
+        );
+    }
+
+    IEnumerator IntroSequence() {
+
+        introStarted = true;
+
+        replayingMemory = true;
+
+        Debug.Log(
+            "START MEMORY INTRO"
+        );
+
+        for (
+            int i = 0;
+            i < memoryRevealPlatforms.Length;
+            i++
+        ) {
+
+            if (
+                memoryRevealPlatforms[i] != null
+            ) {
+
+                memoryRevealPlatforms[i].Hide();
+
+                yield return new WaitForSeconds(
+                    flashOffTime
+                );
+
+                memoryRevealPlatforms[i].Show();
+
+                yield return new WaitForSeconds(
+                    platformRevealDelay
+                );
+            }
+        }
+
+        yield return new WaitForSeconds(
+            introVisibleTime
+        );
+
+        for (
+            int i = 0;
+            i < keyGroups.Length;
+            i++
+        ) {
+
+            if (
+                keyGroups[i] != null
+            ) {
+                keyGroups[i].Hide();
+            }
+        }
+
+        replayingMemory = false;
+
+        Debug.Log(
+            "MEMORY PUZZLE ACTIVE"
+        );
+    }
+
     public bool PressKey(
         int keyID
     ) {
 
-        if (puzzleComplete) {
+        if (
+            replayingMemory
+        ) {
+            return false;
+        }
+
+        if (
+            puzzleComplete
+        ) {
+
+            ShowKeyPlatforms(
+                keyID
+            );
+
+            return true;
+        }
+
+        if (
+            !introStarted
+        ) {
             return false;
         }
 
         Debug.Log(
             "Pressed Key: "
             + keyID
+        );
+
+        ShowKeyPlatforms(
+            keyID
         );
 
         if (
@@ -71,10 +170,6 @@ public class PianoKeyManager : MonoBehaviour {
 
             Debug.Log(
                 "Correct Key"
-            );
-
-            ShowKeyPlatforms(
-                keyID
             );
 
             currentIndex++;
@@ -112,7 +207,7 @@ public class PianoKeyManager : MonoBehaviour {
         }
 
         yield return new WaitForSeconds(
-            0.2f
+            0.6f
         );
 
         currentIndex = 0;
@@ -122,10 +217,75 @@ public class PianoKeyManager : MonoBehaviour {
             i < keyGroups.Length;
             i++
         ) {
-            keyGroups[i].Hide();
+
+            if (
+                keyGroups[i] != null
+            ) {
+                keyGroups[i].Hide();
+            }
         }
 
         ResetAllKeys();
+
+        yield return new WaitForSeconds(
+            0.4f
+        );
+
+        StartCoroutine(
+            ReplayMemorySequence()
+        );
+    }
+
+    IEnumerator ReplayMemorySequence() {
+
+        replayingMemory = true;
+
+        Debug.Log(
+            "REPLAY MEMORY SEQUENCE"
+        );
+
+        for (
+            int i = 0;
+            i < memoryRevealPlatforms.Length;
+            i++
+        ) {
+
+            if (
+                memoryRevealPlatforms[i] != null
+            ) {
+
+                memoryRevealPlatforms[i].Hide();
+
+                yield return new WaitForSeconds(
+                    flashOffTime
+                );
+
+                memoryRevealPlatforms[i].Show();
+
+                yield return new WaitForSeconds(
+                    platformRevealDelay
+                );
+            }
+        }
+
+        yield return new WaitForSeconds(
+            introVisibleTime
+        );
+
+        for (
+            int i = 0;
+            i < keyGroups.Length;
+            i++
+        ) {
+
+            if (
+                keyGroups[i] != null
+            ) {
+                keyGroups[i].Hide();
+            }
+        }
+
+        replayingMemory = false;
     }
 
     void ResetAllKeys() {
@@ -176,7 +336,18 @@ public class PianoKeyManager : MonoBehaviour {
             i < keyGroups.Length;
             i++
         ) {
-            keyGroups[i].Show();
+
+            if (
+                keyGroups[i] != null
+            ) {
+                keyGroups[i].Show();
+            }
+        }
+
+        if (
+            puzzleTrigger != null
+        ) {
+            puzzleTrigger.DestroyTrigger();
         }
 
         StartCoroutine(
