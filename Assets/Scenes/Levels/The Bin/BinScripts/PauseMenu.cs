@@ -1,7 +1,6 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine.EventSystems;
 using AbilitySystem;
@@ -24,9 +23,6 @@ public class PauseMenu : MonoBehaviour {
     float cachedVolume;
 
     public bool isPaused;
-    PlayerInput playerInput;
-
-    InputAction pauseAction;
 
     public Transform player;
 
@@ -51,18 +47,11 @@ public class PauseMenu : MonoBehaviour {
         SceneManager.sceneLoaded +=
             OnSceneLoaded;
     }
+
     void OnDisable() {
 
         SceneManager.sceneLoaded -=
             OnSceneLoaded;
-
-        if (
-            pauseAction != null
-        ) {
-
-            pauseAction.performed -=
-                OnPausePressed;
-        }
     }
 
     void Start() {
@@ -84,17 +73,19 @@ public class PauseMenu : MonoBehaviour {
         UpdateAllSlots();
     }
 
-    void OnPausePressed(
-        InputAction.CallbackContext context
-    ) {
+    void Update() {
 
-        if (isPaused) {
+        if (
+            Input.GetKeyDown(
+                KeyCode.P
+            )
+        ) {
 
-            Resume();
-
-        } else {
-
-            Pause();
+            if (isPaused) {
+                Resume();
+            } else {
+                Pause();
+            }
         }
     }
 
@@ -112,28 +103,7 @@ public class PauseMenu : MonoBehaviour {
 
             player =
                 p.transform;
-        }
 
-        playerInput =
-            FindFirstObjectByType<PlayerInput>();
-
-        if (
-            pauseAction != null
-        ) {
-
-            pauseAction.performed -=
-                OnPausePressed;
-        }
-
-        if (
-            playerInput != null
-        ) {
-
-            pauseAction =
-                playerInput.actions["Pause"];
-
-            pauseAction.performed +=
-                OnPausePressed;
         }
 
         if (
