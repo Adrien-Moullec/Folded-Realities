@@ -1230,7 +1230,6 @@ GameObject:
   m_Component:
   - component: {fileID: 347508943}
   - component: {fileID: 347508944}
-  - component: {fileID: 347508945}
   m_Layer: 0
   m_Name: MenuManager
   m_TagString: Untagged
@@ -1273,22 +1272,6 @@ MonoBehaviour:
   slot1Text: {fileID: 1486836848}
   slot2Text: {fileID: 644935969}
   slot3Text: {fileID: 2033211862}
---- !u!114 &347508945
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 347508942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22872c40f22240f4eacdb0aea8c5f139, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  globalVolume: {fileID: 0}
-  brightnessSlider: {fileID: 2146611354}
-  saturationSlider: {fileID: 1674504739}
-  volumeSlider: {fileID: 1052482021}
 --- !u!1 &416580128
 GameObject:
   m_ObjectHideFlags: 0
@@ -3235,7 +3218,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 347508945}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GraphicsSettings, Assembly-CSharp
         m_MethodName: SetVolume
         m_Mode: 0
@@ -3322,6 +3305,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1052637145}
   m_CullTransparentMesh: 1
+--- !u!1 &1094683899
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1094683901}
+  - component: {fileID: 1094683900}
+  m_Layer: 0
+  m_Name: GraphicsSettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1094683900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094683899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22872c40f22240f4eacdb0aea8c5f139, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globalVolume: {fileID: 656575878}
+  brightnessSlider: {fileID: 2146611354}
+  saturationSlider: {fileID: 1674504739}
+  volumeSlider: {fileID: 1052482021}
+--- !u!4 &1094683901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094683899}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 645.062, y: 240.57779, z: 55.478817}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1096977857
 GameObject:
   m_ObjectHideFlags: 0
@@ -5060,7 +5091,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 347508945}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GraphicsSettings, Assembly-CSharp
         m_MethodName: SetSaturation
         m_Mode: 0
@@ -6429,7 +6460,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 347508945}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GraphicsSettings, Assembly-CSharp
         m_MethodName: SetBrightness
         m_Mode: 0
@@ -6456,3 +6487,4 @@ SceneRoots:
   - {fileID: 749394996}
   - {fileID: 1036362417}
   - {fileID: 2120485562}
+  - {fileID: 1094683901}

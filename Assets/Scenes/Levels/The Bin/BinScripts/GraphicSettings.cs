@@ -34,21 +34,7 @@ public class GraphicsSettings : MonoBehaviour {
 
     void Awake() {
 
-        if (
-            Instance == null
-        ) {
-
-            Instance = this;
-
-            DontDestroyOnLoad(
-                gameObject
-            );
-        } else {
-
-            Destroy(
-                gameObject
-            );
-        }
+        Instance = this;
     }
 
     void OnEnable() {
@@ -64,8 +50,6 @@ public class GraphicsSettings : MonoBehaviour {
     }
 
     void Start() {
-
-        SetupVolume();
 
         brightness =
             PlayerPrefs.GetFloat(
@@ -85,6 +69,10 @@ public class GraphicsSettings : MonoBehaviour {
                 0.5f
             );
 
+        SetupVolume();
+
+        FindSliders();
+
         ApplySettings();
 
         UpdateSliders();
@@ -99,11 +87,87 @@ public class GraphicsSettings : MonoBehaviour {
 
         SetupVolume();
 
+        FindSliders();
+
         ApplySettings();
 
         UpdateSliders();
 
         SetupAudioSlider();
+    }
+
+    void FindSliders() {
+
+        Slider[] sliders =
+            FindObjectsByType<Slider>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None
+            );
+
+        foreach (
+            Slider s in sliders
+        ) {
+
+            if (
+                s.name == "bslide"
+            ) {
+
+                brightnessSlider = s;
+            }
+
+            if (
+                s.name == "satslide"
+            ) {
+
+                saturationSlider = s;
+            }
+
+            if (
+                s.name == "vslide"
+            ) {
+
+                volumeSlider = s;
+            }
+        }
+
+        if (
+            brightnessSlider != null
+        ) {
+
+            brightnessSlider.onValueChanged
+                .RemoveAllListeners();
+
+            brightnessSlider.onValueChanged
+                .AddListener(
+                    SetBrightness
+                );
+        }
+
+        if (
+            saturationSlider != null
+        ) {
+
+            saturationSlider.onValueChanged
+                .RemoveAllListeners();
+
+            saturationSlider.onValueChanged
+                .AddListener(
+                    SetSaturation
+                );
+        }
+
+        if (
+            volumeSlider != null
+        ) {
+
+            volumeSlider.onValueChanged
+                .RemoveAllListeners();
+
+            volumeSlider.onValueChanged
+                .AddListener(
+                    SetVolume
+                );
+        }
     }
 
     void SetupVolume() {
@@ -151,14 +215,6 @@ public class GraphicsSettings : MonoBehaviour {
 
             volumeSlider.value =
                 volume;
-
-            volumeSlider.onValueChanged
-                .RemoveAllListeners();
-
-            volumeSlider.onValueChanged
-                .AddListener(
-                    SetVolume
-                );
         }
     }
 
