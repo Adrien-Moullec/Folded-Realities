@@ -443,29 +443,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: WaterCamera
-    To: StartLevelCamera2
-    Blend:
-      Style: 2
-      Time: 1
-      CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 4
-  - From: WaterCamera
-    To: DrawerCamera
-    Blend:
-      Style: 2
-      Time: 1
-      CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 4
-  - From: WaterCamera
-    To: DrawerCamera3
+    To: '**ANY CAMERA**'
     Blend:
       Style: 2
       Time: 1
@@ -476,40 +454,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: DrawerCamera
-    To: WaterCamera
-    Blend:
-      Style: 2
-      Time: 1
-      CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 4
-  - From: DrawerCamera
-    To: DrawerCamera3
-    Blend:
-      Style: 2
-      Time: 1
-      CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 4
-  - From: DrawerCamera
-    To: DrawerCamera_Bridge1
-    Blend:
-      Style: 2
-      Time: 1
-      CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 4
-  - From: DrawerCamera
-    To: DrawerCamera2
+    To: '**ANY CAMERA**'
     Blend:
       Style: 2
       Time: 1
@@ -520,29 +465,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: DrawerCamera2
-    To: DrawerCamera
-    Blend:
-      Style: 2
-      Time: 1
-      CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 4
-  - From: DrawerCamera2
-    To: DrawerCamera_Bridge1
-    Blend:
-      Style: 2
-      Time: 1
-      CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 4
-  - From: DrawerCamera2
-    To: DrawerCamera4
+    To: '**ANY CAMERA**'
     Blend:
       Style: 2
       Time: 1
@@ -553,29 +476,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: DrawerCamera3
-    To: DrawerCamera
-    Blend:
-      Style: 2
-      Time: 1
-      CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 4
-  - From: DrawerCamera3
-    To: WaterCamera
-    Blend:
-      Style: 2
-      Time: 1
-      CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 4
-  - From: DrawerCamera3
-    To: DrawerCamera4
+    To: '**ANY CAMERA**'
     Blend:
       Style: 2
       Time: 1
@@ -619,18 +520,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: DrawerCamera5
-    To: DrawerCamera
-    Blend:
-      Style: 2
-      Time: 1
-      CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 4
-  - From: DrawerCamera5
-    To: DrawerCamera_Bridge1
+    To: '**ANY CAMERA**'
     Blend:
       Style: 2
       Time: 1
@@ -641,29 +531,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: DrawerCamera_Bridge1
-    To: DrawerCamera2
-    Blend:
-      Style: 2
-      Time: 1
-      CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 4
-  - From: DrawerCamera_Bridge1
-    To: DrawerCamera5
-    Blend:
-      Style: 2
-      Time: 1
-      CustomCurve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
-        m_RotationOrder: 4
-  - From: DrawerCamera_Bridge1
-    To: DrawerCamera
+    To: '**ANY CAMERA**'
     Blend:
       Style: 2
       Time: 1
@@ -699,6 +567,28 @@ MonoBehaviour:
     To: DrawerCamera_Bridge2
     Blend:
       Style: 2
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: KidsPuzzlePieceCamera
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 1
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: '**ANY CAMERA**'
+    To: KidsPuzzlePieceCamera
+    Blend:
+      Style: 1
       Time: 1
       CustomCurve:
         serializedVersion: 2
