@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace AbilitySystem {
     [RequireComponent(typeof(CharacterController))]
@@ -12,6 +13,8 @@ namespace AbilitySystem {
         [Space]
         [Header("Transition Animation")]
         [SerializeField] private PaperParticles paperParticleDelta;
+        [Header("Boss Fight")]
+        [SerializeField] bool reloadSceneOnDeath = false;
 
         [Space]
         [Header("Abilities")]
@@ -228,6 +231,7 @@ namespace AbilitySystem {
                 n?.abilitySetSO?.tertiary?.GizmoEvent(n.entityBody);
             }
         }
+        //andrea updated death
         public override void Die() {
 
             currentAbilitySet
@@ -246,6 +250,19 @@ namespace AbilitySystem {
                 PlayerDeath(
                     currentAbilitySet.entityBody.animatorManager,
                     () => {
+
+                        if (
+                            reloadSceneOnDeath
+                        ) {
+
+                            StartCoroutine(
+                                BossFightRestartRoutine()
+                            );
+
+                            return;
+                        }
+
+                        //CHECKPOINT RESPAWN
 
                         StartCoroutine(
                             SceneTransition.Instance
@@ -277,15 +294,62 @@ namespace AbilitySystem {
                 )
             );
         }
+        IEnumerator BossFightRestartRoutine() {
+
+            CharacterController cc =
+                GetComponent<CharacterController>();
+
+            if (cc != null) {
+
+                cc.enabled = false;
+            }
+
+            if (
+                SceneTransition.Instance != null
+            ) {
+
+                yield return StartCoroutine(
+                    SceneTransition.Instance
+                        .BossDeathTransition()
+                );
+            }
+
+            SceneManager.LoadScene(
+                SceneManager
+                    .GetActiveScene()
+                    .name
+            );
+        }
         public override void Heal(EntityDamage heal) {
             base.Heal(heal);
             playerHealthCanvas?.UpdateHearts(CurrentHealth);
         }
-        public override void Damage(EntityDamage damage) {
-            if (invincible) return;
-            base.Damage(damage);
-            playerHealthCanvas?.UpdateHearts(CurrentHealth);
-            StartCoroutine(InvincibilityFrames());
+        public override void Damage(
+            EntityDamage damage
+        ) {
+
+            if (invincible) {
+                return;
+            }
+
+            base.Damage(
+                damage
+            );
+
+            playerHealthCanvas?.UpdateHearts(
+                CurrentHealth
+            );
+
+            StartCoroutine(
+                InvincibilityFrames()
+            );
+
+            if (
+                CurrentHealth <= 0
+            ) {
+
+                Die();
+            }
         }
 
         [Serializable]

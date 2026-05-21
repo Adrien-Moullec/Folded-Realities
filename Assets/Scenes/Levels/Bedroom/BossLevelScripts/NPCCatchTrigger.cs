@@ -1,22 +1,22 @@
-using UnityEngine;
+//using UnityEngine;
 
-public class NPCCatchTrigger : MonoBehaviour {
-    bool triggered = false;
+//public class NPCCatchTrigger : MonoBehaviour {
+//    bool triggered = false;
 
-    void OnTriggerEnter(Collider other) {
-        if (triggered) {
-            return;
-        }
+//    void OnTriggerEnter(Collider other) {
+//        if (triggered) {
+//            return;
+//        }
 
-        if (other.CompareTag("Player")) {
-            triggered = true;
+//        if (other.CompareTag("Player")) {
+//            triggered = true;
 
-            Time.timeScale = 0.4f;
+//            Time.timeScale = 0.4f;
 
-            BossFightManager.Instance
-                .TriggerCraneSequence();
+//            BossFightManager.Instance
+//                .TriggerCraneSequence();
 
-            Time.timeScale = 1f;
-        }
-    }
-}
+//            Time.timeScale = 1f;
+//        }
+//    }
+//}

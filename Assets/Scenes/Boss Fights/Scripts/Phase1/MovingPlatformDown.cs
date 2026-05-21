@@ -1,72 +1,166 @@
 using UnityEngine;
+using AbilitySystem;
 
 public class MovingPlatformDown : MonoBehaviour {
+
     [Header("Movement")]
     public float fallSpeed = 3f;
 
     [Header("Respawn")]
-    public float resetHeight = 15f;
-    public float despawnOffset = 10f;
-    public float horizontalRange = 4f;
+    public float despawnOffset = 15f;
 
-    private Transform player;
-    private CharacterController playerController;
+    [Header("Damage")]
+    public int damageAmount = 10;
 
-    private Vector3 lastPosition;
+    public float damageCooldown = 1f;
+
+    [Header("Boss Suction")]
+    public Transform bossTarget;
+
+    public float suctionForce = 8f;
+
+    public float suctionStartDistanceBelowPlayer = 3f;
+
+    [Header("Fake Thickness")]
+    public float visualHitPadding = 1.5f;
+
+    [HideInInspector]
+    public PlatformSpawner spawner;
+
+    Transform player;
+
+    float damageTimer;
+
+    bool suctionActive = false;
 
     void Start() {
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+
+        GameObject playerObj =
+            GameObject.FindGameObjectWithTag(
+                "Player"
+            );
 
         if (playerObj != null) {
-            player = playerObj.transform;
-            playerController = playerObj.GetComponent<CharacterController>();
-        }
 
-        lastPosition = transform.position;
+            player =
+                playerObj.transform;
+        }
     }
 
     void Update() {
+
         if (player == null) {
             return;
         }
 
-        transform.position += Vector3.down * fallSpeed * Time.deltaTime;
+        // normal falling
+        transform.position +=
+            Vector3.down *
+            fallSpeed *
+            Time.deltaTime;
 
-        Vector3 platformDelta = transform.position - lastPosition;
+        // only start suction AFTER passing player
+        if (
+            !suctionActive &&
+            transform.position.y <
+            player.position.y -
+            suctionStartDistanceBelowPlayer
+        ) {
 
-       
-        if (IsPlayerOnPlatform()) {
-            if (playerController != null) {
-                playerController.Move(platformDelta);
-            } else {
-                player.position += platformDelta;
+            suctionActive = true;
+        }
+
+        // suck toward boss
+        if (
+            suctionActive &&
+            bossTarget != null
+        ) {
+
+            Vector3 dir =
+                (
+                    bossTarget.position -
+                    transform.position
+                ).normalized;
+
+            transform.position +=
+                dir *
+                suctionForce *
+                Time.deltaTime;
+        }
+
+        // fake damage zone
+        if (
+            IsPlayerUnderPlatform()
+        ) {
+
+            PlayerAbilityController health =
+                player.GetComponent<PlayerAbilityController>();
+
+            if (
+                health != null &&
+                Time.time > damageTimer
+            ) {
+
+                EntityDamage damage =
+                    new EntityDamage();
+
+                damage.amount =
+                    damageAmount;
+
+                health.Damage(
+                    damage
+                );
+
+                damageTimer =
+                    Time.time +
+                    damageCooldown;
             }
         }
 
-        lastPosition = transform.position;
+        // cleanup
+        if (
+            transform.position.y <
+            player.position.y -
+            despawnOffset
+        ) {
 
-       
-        if (transform.position.y < player.position.y - despawnOffset) {
-            ResetPlatform();
+            if (
+                spawner != null
+            ) {
+
+                spawner.PlatformDestroyed();
+            }
+
+            Destroy(
+                gameObject
+            );
         }
     }
 
-    bool IsPlayerOnPlatform() {
-       
-        float distance = player.position.y - transform.position.y;
+    bool IsPlayerUnderPlatform() {
 
-        return distance > 0f && distance < 2f;
-    }
+        float horizontalDistance =
+            Mathf.Abs(
+                player.position.x -
+                transform.position.x
+            );
 
-    void ResetPlatform() {
-        float randomX = Random.Range(-horizontalRange, horizontalRange);
+        bool closeHorizontally =
+            horizontalDistance < 2.2f;
 
-        transform.position = new Vector3(
-            randomX,
-            player.position.y + resetHeight,
-            transform.position.z
-        );
+        bool playerBelow =
+            player.position.y <
+            transform.position.y;
 
-        lastPosition = transform.position;
+        bool closeVertically =
+            transform.position.y -
+            player.position.y <
+            2.5f +
+            visualHitPadding;
+
+        return
+            closeHorizontally &&
+            playerBelow &&
+            closeVertically;
     }
 }

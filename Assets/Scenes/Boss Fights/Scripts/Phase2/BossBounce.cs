@@ -1,43 +1,82 @@
 using UnityEngine;
+using System.Collections;
 
 public class BossBounce : MonoBehaviour {
-    public float bounceForce = 8f;
+
+    public float bounceForce = 12f;
+
     public float flashTime = 0.2f;
 
-    private Renderer rend;
-    private Color originalColor;
+    Renderer[] renderers;
+
+    Color[] originalColors;
 
     void Start() {
-        rend = GetComponent<Renderer>();
 
-        if (rend != null) {
-            originalColor = rend.material.color;
+        renderers =
+            GetComponentsInChildren<Renderer>();
+
+        originalColors =
+            new Color[
+                renderers.Length
+            ];
+
+        for (int i = 0; i < renderers.Length; i++) {
+
+            originalColors[i] =
+                renderers[i].material.color;
         }
     }
 
-    void OnCollisionEnter(Collision collision) {
-        if (!collision.gameObject.CompareTag("Player")) {
+    void OnTriggerEnter(
+        Collider other
+    ) {
+
+        if (
+            !other.CompareTag("Player")
+        ) {
             return;
         }
 
-        CharacterController cc = collision.gameObject.GetComponent<CharacterController>();
+        CharacterController cc =
+            other.GetComponent<CharacterController>();
 
         if (cc != null) {
-            cc.Move(Vector3.up * bounceForce * Time.deltaTime);
+
+            Vector3 bounce =
+                Vector3.up *
+                bounceForce;
+
+            cc.Move(
+                bounce *
+                Time.deltaTime
+            );
         }
 
-        StartCoroutine(FlashRed());
+        StartCoroutine(
+            FlashRed()
+        );
     }
 
-    System.Collections.IEnumerator FlashRed() {
-        if (rend != null) {
-            rend.material.color = Color.red;
+    IEnumerator FlashRed() {
+
+        foreach (
+            Renderer r
+            in renderers
+        ) {
+
+            r.material.color =
+                Color.red;
         }
 
-        yield return new WaitForSeconds(flashTime);
+        yield return new WaitForSeconds(
+            flashTime
+        );
 
-        if (rend != null) {
-            rend.material.color = originalColor;
+        for (int i = 0; i < renderers.Length; i++) {
+
+            renderers[i].material.color =
+                originalColors[i];
         }
     }
 }

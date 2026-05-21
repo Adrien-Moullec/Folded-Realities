@@ -2,115 +2,158 @@ using UnityEngine;
 using System.Collections;
 
 public class BossEnemy : MonoBehaviour {
+
+    [Header("Movement")]
     public float moveSpeed = 4f;
 
     public float minX = -8f;
+
     public float maxX = 8f;
 
+    [Header("Projectile")]
     public GameObject projectilePrefab;
-    public Transform shootPoint;
 
-    public float shootInterval = 2f;
-    public float shootPauseTime = 1.2f;
+    public Transform shootPoint;
 
     public Transform player;
 
-    private float timer;
-    private bool movingRight = true;
-    private bool isAttacking = false;
+    [Header("Flash")]
+    public Color angryColor = Color.red;
+
+    public float flashDuration = 0.5f;
+
+    Renderer[] renderers;
+
+    Material[] materials;
+
+    bool movingRight = true;
 
     float centerX;
 
     void Start() {
-        centerX = transform.position.x;
-        Debug.Log("Boss started");
+
+        centerX =
+            transform.position.x;
+
+        renderers =
+            GetComponentsInChildren<Renderer>();
+
+        materials =
+            new Material[
+                renderers.Length
+            ];
+
+        for (int i = 0; i < renderers.Length; i++) {
+
+            materials[i] =
+                renderers[i].material;
+
+            materials[i].EnableKeyword(
+                "_EMISSION"
+            );
+        }
     }
 
     void Update() {
-        if (!isAttacking) {
-            Move();
 
-            timer += Time.deltaTime;
-
-            if (timer >= shootInterval) {
-                StartCoroutine(AttackRoutine());
-                timer = 0f;
-            }
-        }
+        Move();
     }
 
     void Move() {
-        float direction = movingRight ? 1f : -1f;
 
-        Vector3 pos = transform.position;
-        pos.x += direction * moveSpeed * Time.deltaTime;
+        float direction =
+            movingRight ? 1f : -1f;
 
-        float left = centerX + minX;
-        float right = centerX + maxX;
+        Vector3 pos =
+            transform.position;
+
+        pos.x +=
+            direction *
+            moveSpeed *
+            Time.deltaTime;
+
+        float left =
+            centerX + minX;
+
+        float right =
+            centerX + maxX;
 
         if (pos.x >= right) {
+
             pos.x = right;
+
             movingRight = false;
+
         } else if (pos.x <= left) {
+
             pos.x = left;
+
             movingRight = true;
         }
 
-        transform.position = pos;
+        transform.position =
+            pos;
     }
 
-    IEnumerator AttackRoutine() {
-        isAttacking = true;
+    public void Shoot(
+        float speed
+    ) {
 
-        Debug.Log("Boss attacking");
-
-        yield return new WaitForSeconds(shootPauseTime);
-
-        ShootAtNearestPlatform();
-
-        yield return new WaitForSeconds(0.3f);
-
-        isAttacking = false;
-    }
-
-    void ShootAtNearestPlatform() {
-        if (projectilePrefab == null || shootPoint == null || player == null) {
-            Debug.LogError("Missing references");
+        if (
+            projectilePrefab == null ||
+            shootPoint == null ||
+            player == null
+        ) {
             return;
         }
 
-        GameObject[] platforms = GameObject.FindGameObjectsWithTag("Platform");
+        GameObject proj =
+            Instantiate(
+                projectilePrefab,
+                shootPoint.position,
+                Quaternion.identity
+            );
 
-        if (platforms.Length == 0) {
-            Debug.LogError("No platforms found");
-            return;
-        }
-
-        Transform closestPlatform = null;
-        float closestDistance = Mathf.Infinity;
-
-        foreach (GameObject p in platforms) {
-            float dist = Vector3.Distance(player.position, p.transform.position);
-
-            if (dist < closestDistance) {
-                closestDistance = dist;
-                closestPlatform = p.transform;
-            }
-        }
-
-        if (closestPlatform == null) {
-            Debug.LogWarning("No platform selected");
-            return;
-        }
-
-        Debug.Log("Targeting platform: " + closestPlatform.name);
-
-        GameObject proj = Instantiate(projectilePrefab, shootPoint.position, Quaternion.identity);
-
-        BossProjectile bp = proj.GetComponent<BossProjectile>();
+        BossProjectile bp =
+            proj.GetComponent<BossProjectile>();
 
         if (bp != null) {
-            bp.SetTarget(closestPlatform);
+
+            bp.speed =
+                speed;
+
+            bp.SetTarget(
+                player
+            );
+        }
+    }
+
+    public IEnumerator FlashAngry() {
+
+        foreach (
+            Material mat
+            in materials
+        ) {
+
+            mat.SetColor(
+                "_EmissionColor",
+                angryColor * 6f
+            );
+        }
+
+        yield return new WaitForSeconds(
+            flashDuration
+        );
+
+        foreach (
+            Material mat
+            in materials
+        ) {
+
+            mat.SetColor(
+                "_EmissionColor",
+                Color.black
+            );
         }
     }
 }

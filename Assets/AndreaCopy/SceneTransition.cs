@@ -19,11 +19,20 @@ public class SceneTransition : MonoBehaviour {
 
     void Awake() {
 
-        Instance = this;
+        if (
+            Instance == null
+        ) {
 
-        DontDestroyOnLoad(
-            gameObject
-        );
+            Instance = this;
+
+            DontDestroyOnLoad(
+                gameObject
+            );
+
+        } else {
+
+            Destroy(gameObject);
+        }
     }
 
     void Start() {
@@ -185,5 +194,34 @@ public class SceneTransition : MonoBehaviour {
         }
 
         transitioning = false;
+    }
+    public IEnumerator BossDeathTransition() {
+
+        if (transitioning) {
+            yield break;
+        }
+
+        transitioning = true;
+
+        float radius = 1f;
+
+        while (radius > 0f) {
+
+            radius -=
+                Time.deltaTime
+                * speed;
+
+            irisMaterial.SetFloat(
+                "_Radius",
+                radius
+            );
+
+            yield return null;
+        }
+
+        // hold black
+        yield return new WaitForSeconds(
+            1f
+        );
     }
 }

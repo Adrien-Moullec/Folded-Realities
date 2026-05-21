@@ -1,222 +1,248 @@
-using UnityEngine;
 using System.Collections;
 
+using UnityEngine;
+
 public class BossFightManager : MonoBehaviour {
+
     public static BossFightManager Instance;
 
-    [Header("Player")]
-    public GameObject player;
+    [Header("Boss")]
+    public BossEnemy boss;
 
-    public GameObject playerVisuals;
+    [Header("Projectile Settings")]
+    public float phase1ProjectileRate = 1f;
+    public float phase1ProjectileSpeed = 8f;
 
-    public CharacterController playerController;
+    public float phase3ProjectileRate = 0.4f;
+    public float phase3ProjectileSpeed = 14f;
 
-    [Header("NPC")]
-    public GameObject npc;
+    public float phase4ProjectileRate = 0.25f;
+    public float phase4ProjectileSpeed = 18f;
 
-    [Header("Crane")]
-    public GameObject craneForm;
+    [Header("Platform Settings")]
+    public PlatformSpawner platformSpawner;
 
-    public Transform glideTarget;
+    public float phase2SpawnRate = 1.5f;
+    public int phase2MaxPlatforms = 5;
+    public float phase2PlatformSpeed = 4f;
+    public float phase2SuctionForce = 10f;
 
-    public float glideSpeed = 12f;
+    public float phase4SpawnRate = 0.5f;
+    public int phase4MaxPlatforms = 10;
+    public float phase4PlatformSpeed = 8f;
+    public float phase4SuctionForce = 18f;
 
-    [Header("Falling Section")]
-    public GameObject debrisSpawner;
+    [Header("Phase Lengths")]
+    public float phase1Length = 10f;
+    public float phase2Length = 12f;
+    public float phase3Length = 10f;
 
-    [Header("Boss Arena")]
-    public GameObject bossArena;
+    [Header("Flash")]
+    public Color phase2FlashColor = Color.red;
+    public Color phase3FlashColor = Color.magenta;
+    public Color phase4FlashColor = Color.yellow;
 
-    bool sequenceStarted = false;
+    Coroutine projectileRoutine;
 
     void Awake() {
+
         Instance = this;
     }
 
-    public void TriggerCraneSequence() {
-        Debug.Log(
-            "TRIGGER CRANE SEQUENCE"
-        );
-
-        if (sequenceStarted) {
-            Debug.Log(
-                "SEQUENCE ALREADY STARTED"
-            );
-
-            return;
-        }
+    void Start() {
 
         StartCoroutine(
-            CraneSequenceRoutine()
+            BossRoutine()
         );
     }
 
-    IEnumerator CraneSequenceRoutine() {
-        Debug.Log(
-            "STARTING CRANE ROUTINE"
+    IEnumerator BossRoutine() {
+
+        // PHASE 1
+        StartProjectilePhase(
+            phase1ProjectileRate,
+            phase1ProjectileSpeed
         );
 
-        sequenceStarted = true;
-
-        if (debrisSpawner != null) {
-            Debug.Log(
-                "DISABLING DEBRIS SPAWNER"
-            );
-
-            debrisSpawner.SetActive(
-                false
-            );
-        }
-
-        FallingKuhaku fk =
-            player.GetComponent<
-                FallingKuhaku
-            >();
-
-        if (fk != null) {
-            Debug.Log(
-                "SETTING TRANSITION STATE"
-            );
-
-            fk.SetTransitionState(
-                true
-            );
-        }
-
-        Rigidbody rb =
-            player.GetComponent<
-                Rigidbody
-            >();
-
-        if (rb != null) {
-            Debug.Log(
-                "RESETTING PLAYER VELOCITY"
-            );
-
-            rb.linearVelocity =
-                Vector3.zero;
-        }
-
-        Debug.Log(
-            "DISABLING PLAYER CONTROLLER"
+        yield return new WaitForSeconds(
+            phase1Length
         );
 
-        playerController.enabled =
-            false;
+        // FLASH
+        boss.angryColor =
+            phase2FlashColor;
 
-        if (playerVisuals != null) {
-            Debug.Log(
-                "HIDING PLAYER VISUALS"
-            );
-
-            playerVisuals.SetActive(
-                false
-            );
-        } else {
-            Debug.LogError(
-                "PLAYER VISUALS NOT ASSIGNED"
-            );
-        }
-
-        if (npc != null) {
-            Debug.Log(
-                "HIDING NPC"
-            );
-
-            npc.SetActive(false);
-        }
-
-        if (craneForm == null) {
-            Debug.LogError(
-                "CRANE FORM MISSING"
-            );
-
-            yield break;
-        }
-
-        if (glideTarget == null) {
-            Debug.LogError(
-                "GLIDE TARGET MISSING"
-            );
-
-            yield break;
-        }
-
-        Debug.Log(
-            "SHOWING CRANE"
+        yield return StartCoroutine(
+            boss.FlashAngry()
         );
 
-        craneForm.SetActive(true);
+        // PHASE 2
+        StopProjectileRoutine();
 
-        craneForm.transform.position =
-            player.transform.position;
-
-        Debug.Log(
-            "CRANE START POSITION: "
-            + craneForm.transform.position
+        StartPlatformPhase(
+            phase2SpawnRate,
+            phase2MaxPlatforms,
+            phase2PlatformSpeed,
+            phase2SuctionForce
         );
 
-        Debug.Log(
-            "GLIDE TARGET POSITION: "
-            + glideTarget.position
+        yield return new WaitForSeconds(
+            phase2Length
         );
 
-        while (
-            Vector3.Distance(
-                craneForm.transform.position,
-                glideTarget.position
-            ) > 0.3f
+        // FLASH
+        boss.angryColor =
+            phase3FlashColor;
+
+        yield return StartCoroutine(
+            boss.FlashAngry()
+        );
+
+        // PHASE 3
+        StopPlatformPhase();
+
+        StartProjectilePhase(
+            phase3ProjectileRate,
+            phase3ProjectileSpeed
+        );
+
+        yield return new WaitForSeconds(
+            phase3Length
+        );
+
+        // FLASH
+        boss.angryColor =
+            phase4FlashColor;
+
+        yield return StartCoroutine(
+            boss.FlashAngry()
+        );
+
+        // PHASE 4
+        StartPlatformPhase(
+            phase4SpawnRate,
+            phase4MaxPlatforms,
+            phase4PlatformSpeed,
+            phase4SuctionForce
+        );
+
+        StartProjectilePhase(
+            phase4ProjectileRate,
+            phase4ProjectileSpeed
+        );
+    }
+
+    void StartProjectilePhase(
+        float rate,
+        float speed
+    ) {
+
+        StopProjectileRoutine();
+
+        projectileRoutine =
+            StartCoroutine(
+                ProjectileRoutine(
+                    rate,
+                    speed
+                )
+            );
+    }
+
+    void StopProjectileRoutine() {
+
+        if (
+            projectileRoutine != null
         ) {
-            Vector3 dir =
-                (
-                    glideTarget.position
-                    - craneForm.transform.position
-                ).normalized;
 
-            craneForm.transform.position +=
-                dir
-                * glideSpeed
-                * Time.deltaTime;
-
-            Debug.Log(
-                "CRANE POS: "
-                + craneForm.transform.position
+            StopCoroutine(
+                projectileRoutine
             );
 
-            yield return null;
+            projectileRoutine = null;
         }
+    }
 
-        Debug.Log(
-            "CRANE ARRIVED"
-        );
+    IEnumerator ProjectileRoutine(
+        float rate,
+        float speed
+    ) {
 
-        craneForm.SetActive(false);
+        while (true) {
 
-        player.transform.position =
-            glideTarget.position;
-
-        if (playerVisuals != null) {
-            Debug.Log(
-                "SHOWING PLAYER VISUALS"
+            boss.Shoot(
+                speed
             );
 
-            playerVisuals.SetActive(
-                true
+            yield return new WaitForSeconds(
+                rate
             );
         }
+    }
 
-        Debug.Log(
-            "REENABLING CONTROLLER"
+    void StartPlatformPhase(
+        float spawnRate,
+        int maxPlatforms,
+        float platformSpeed,
+        float suctionForce
+    ) {
+
+        if (
+            platformSpawner == null
+        ) {
+            return;
+        }
+
+        platformSpawner.gameObject.SetActive(
+            true
         );
 
-        playerController.enabled =
-            true;
+        platformSpawner.spawnRate =
+            spawnRate;
 
-        if (fk != null) {
-            fk.SetTransitionState(
+        platformSpawner.maxPlatforms =
+            maxPlatforms;
+
+        UpdatePlatforms(
+            platformSpeed,
+            suctionForce
+        );
+    }
+
+    void StopPlatformPhase() {
+
+        if (
+            platformSpawner != null
+        ) {
+
+            platformSpawner.gameObject.SetActive(
                 false
             );
         }
+    }
 
+    void UpdatePlatforms(
+        float speed,
+        float suction
+    ) {
+
+        MovingPlatformDown[] platforms =
+            FindObjectsByType<MovingPlatformDown>(
+                FindObjectsSortMode.None
+            );
+
+        foreach (
+            MovingPlatformDown p
+            in platforms
+        ) {
+
+            p.fallSpeed =
+                speed;
+
+            p.suctionForce =
+                suction;
+
+            p.bossTarget =
+                boss.transform;
+        }
     }
 }
