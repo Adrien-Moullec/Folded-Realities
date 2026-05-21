@@ -155,21 +155,36 @@ public class SceneTransition : MonoBehaviour {
             yield return null;
         }
 
-        yield return new WaitForSeconds(
-            0.1f
+
+        radius = 0f;
+
+        irisMaterial.SetFloat(
+            "_Radius",
+            radius
         );
+
+        yield return new WaitForSeconds(
+            0.5f
+        );
+
 
         SceneManager.LoadScene(
             sceneName
         );
 
         yield return null;
+        yield return null;
+        yield return null;
+
+        yield return new WaitForEndOfFrame();
+
 
         irisMaterial =
             irisImage.material;
 
+
         yield return new WaitForSeconds(
-            0.1f
+            0.8f
         );
 
         radius = 0f;
@@ -183,7 +198,7 @@ public class SceneTransition : MonoBehaviour {
 
             radius +=
                 Time.deltaTime
-                * speed;
+                * (speed * 0.7f);
 
             irisMaterial.SetFloat(
                 "_Radius",
@@ -192,6 +207,12 @@ public class SceneTransition : MonoBehaviour {
 
             yield return null;
         }
+
+        // fully open
+        irisMaterial.SetFloat(
+            "_Radius",
+            1f
+        );
 
         transitioning = false;
     }
