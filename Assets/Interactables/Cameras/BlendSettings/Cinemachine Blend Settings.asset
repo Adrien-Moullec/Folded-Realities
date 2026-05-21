@@ -918,7 +918,7 @@ MonoBehaviour:
   - From: Table_cameraStar
     To: '**ANY CAMERA**'
     Blend:
-      Style: 0
+      Style: 2
       Time: 1
       CustomCurve:
         serializedVersion: 2
@@ -993,6 +993,17 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 4
   - From: ShopCamera
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 1
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: PianoAreaCamera
     To: '**ANY CAMERA**'
     Blend:
       Style: 1
