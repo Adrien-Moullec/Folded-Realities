@@ -10,6 +10,7 @@ public class PauseMenu : MonoBehaviour {
 
     public static PauseMenu Instance;
 
+    [Header("Panels")]
     public GameObject pauseMenu;
     public GameObject buttonsContainer;
     public GameObject settingsPanel;
@@ -17,27 +18,20 @@ public class PauseMenu : MonoBehaviour {
     public GameObject overwritePanel;
     public GameObject quitConfirmPanel;
     public GameObject backgroundPanel;
-    float cachedBrightness;
 
-    float cachedSaturation;
-
-    float cachedVolume;
-
-    public bool isPaused;
-    PlayerInput playerInput;
-
-    InputAction pauseAction;
-
+    [Header("Player")]
     public Transform player;
 
+    [Header("Save Slots")]
+    public TextMeshProUGUI slot1Text;
+    public TextMeshProUGUI slot2Text;
+    public TextMeshProUGUI slot3Text;
+
+    public bool isPaused;
 
     public Vector3 lastCheckpoint;
 
     public int coins;
-
-    public TextMeshProUGUI slot1Text;
-    public TextMeshProUGUI slot2Text;
-    public TextMeshProUGUI slot3Text;
 
     int pendingSlot = -1;
 
@@ -51,18 +45,11 @@ public class PauseMenu : MonoBehaviour {
         SceneManager.sceneLoaded +=
             OnSceneLoaded;
     }
+
     void OnDisable() {
 
         SceneManager.sceneLoaded -=
             OnSceneLoaded;
-
-        if (
-            pauseAction != null
-        ) {
-
-            pauseAction.performed -=
-                OnPausePressed;
-        }
     }
 
     void Start() {
@@ -84,17 +71,23 @@ public class PauseMenu : MonoBehaviour {
         UpdateAllSlots();
     }
 
-    void OnPausePressed(
-        InputAction.CallbackContext context
-    ) {
+    void Update() {
 
-        if (isPaused) {
+        if (
+            Keyboard.current != null &&
+            Keyboard.current.pKey.wasPressedThisFrame
+        ) {
 
-            Resume();
+            Debug.Log("P PRESSED");
 
-        } else {
+            if (isPaused) {
 
-            Pause();
+                Resume();
+
+            } else {
+
+                Pause();
+            }
         }
     }
 
@@ -112,28 +105,6 @@ public class PauseMenu : MonoBehaviour {
 
             player =
                 p.transform;
-        }
-
-        playerInput =
-            FindFirstObjectByType<PlayerInput>();
-
-        if (
-            pauseAction != null
-        ) {
-
-            pauseAction.performed -=
-                OnPausePressed;
-        }
-
-        if (
-            playerInput != null
-        ) {
-
-            pauseAction =
-                playerInput.actions["Pause"];
-
-            pauseAction.performed +=
-                OnPausePressed;
         }
 
         if (
@@ -173,7 +144,6 @@ public class PauseMenu : MonoBehaviour {
         );
 
         EnablePlayerSystems();
-
     }
 
     void DisablePlayerSystems() {
@@ -190,6 +160,7 @@ public class PauseMenu : MonoBehaviour {
         if (
             cc != null
         ) {
+
             cc.enabled = false;
         }
 
@@ -226,6 +197,7 @@ public class PauseMenu : MonoBehaviour {
         if (
             cc != null
         ) {
+
             cc.enabled = true;
         }
 
@@ -266,6 +238,8 @@ public class PauseMenu : MonoBehaviour {
 
     public void Pause() {
 
+        Debug.Log("PAUSING");
+
         pauseMenu.SetActive(true);
 
         buttonsContainer.SetActive(true);
@@ -289,16 +263,22 @@ public class PauseMenu : MonoBehaviour {
 
         Cursor.visible = true;
 
-        UnityEngine.EventSystems
-            .EventSystem.current
-            .SetSelectedGameObject(
-                null
-            );
+        if (
+            EventSystem.current != null
+        ) {
+
+            EventSystem.current
+                .SetSelectedGameObject(
+                    null
+                );
+        }
 
         DisablePlayerSystems();
     }
 
     public void Resume() {
+
+        Debug.Log("RESUMING");
 
         pauseMenu.SetActive(false);
 
@@ -310,11 +290,6 @@ public class PauseMenu : MonoBehaviour {
             CursorLockMode.Locked;
 
         Cursor.visible = false;
-        Cursor.lockState =
-       CursorLockMode.Locked;
-
-        Cursor.visible =
-            false;
 
         EnablePlayerSystems();
     }
@@ -341,13 +316,15 @@ public class PauseMenu : MonoBehaviour {
                 .CacheCurrentSettings();
         }
     }
+
     public void CloseSettings() {
 
         if (
             GraphicsSettings.Instance != null
         ) {
 
-            GraphicsSettings.Instance.SaveSettings();
+            GraphicsSettings.Instance
+                .SaveSettings();
         }
 
         BackToMain();
@@ -359,9 +336,11 @@ public class PauseMenu : MonoBehaviour {
             GraphicsSettings.Instance != null
         ) {
 
-            GraphicsSettings.Instance.RevertCachedSettings();
+            GraphicsSettings.Instance
+                .RevertCachedSettings();
         }
     }
+
     public void OpenSavePanel() {
 
         Cursor.lockState =
@@ -460,6 +439,7 @@ public class PauseMenu : MonoBehaviour {
             overwritePanel.SetActive(
                 true
             );
+
         } else {
 
             SaveGame(slot);
@@ -677,6 +657,7 @@ public class PauseMenu : MonoBehaviour {
                 + time
                 + "\nCoins: "
                 + savedCoins;
+
         } else {
 
             text.text =
