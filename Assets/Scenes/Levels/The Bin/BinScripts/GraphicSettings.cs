@@ -35,19 +35,12 @@ public class GraphicsSettings : MonoBehaviour {
     void Awake() {
 
         Instance = this;
-    }
-
-    void OnEnable() {
 
         SceneManager.sceneLoaded +=
             OnSceneLoaded;
     }
 
-    void OnDisable() {
 
-        SceneManager.sceneLoaded -=
-            OnSceneLoaded;
-    }
 
     void Start() {
 
@@ -82,8 +75,28 @@ public class GraphicsSettings : MonoBehaviour {
         Scene scene,
         LoadSceneMode mode
     ) {
+        Debug.Log(
+      "SCENE LOADED: "
+      + scene.name
+  );
+
 
         SetupVolume();
+
+        brightnessSlider =
+            GameObject.Find(
+                "Brightness"
+            )?.GetComponent<Slider>();
+
+        saturationSlider =
+            GameObject.Find(
+                "Saturation"
+            )?.GetComponent<Slider>();
+
+        volumeSlider =
+            GameObject.Find(
+                "Volume"
+            )?.GetComponent<Slider>();
 
         ApplySettings();
 
@@ -94,36 +107,49 @@ public class GraphicsSettings : MonoBehaviour {
 
     void SetupVolume() {
 
-        GameObject vol =
-            GameObject.Find(
-                "GlobalVolume"
+        Debug.Log(
+            "SETUP VOLUME RUNNING"
+        );
+
+        globalVolume =
+            FindFirstObjectByType<Volume>();
+
+        if (
+            globalVolume == null
+        ) {
+
+            Debug.LogError(
+                "NO GLOBAL VOLUME FOUND"
             );
 
-        if (
-            vol != null
-        ) {
-
-            globalVolume =
-                vol.GetComponent<
-                    Volume
-                >();
+            return;
         }
 
+        Debug.Log(
+            "FOUND VOLUME: "
+            + globalVolume.name
+        );
+
         if (
-            globalVolume != null
-            &&
-            globalVolume.profile != null
+            globalVolume.profile == null
         ) {
 
-            globalVolume.profile =
-                Instantiate(
-                    globalVolume.profile
-                );
+            Debug.LogError(
+                "NO PROFILE FOUND"
+            );
 
+            return;
+        }
+
+        bool found =
             globalVolume.profile.TryGet(
                 out colorAdjustments
             );
-        }
+
+        Debug.Log(
+            "COLOR FOUND: "
+            + found
+        );
     }
 
     void SetupAudioSlider() {

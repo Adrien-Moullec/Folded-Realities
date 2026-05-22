@@ -481,7 +481,47 @@ public class PauseMenu : MonoBehaviour {
 
         pendingSlot = -1;
     }
+    public void ClearSlot(
+    int slot
+) {
 
+        PlayerPrefs.DeleteKey(
+            "Slot" + slot + "_X"
+        );
+
+        PlayerPrefs.DeleteKey(
+            "Slot" + slot + "_Y"
+        );
+
+        PlayerPrefs.DeleteKey(
+            "Slot" + slot + "_Z"
+        );
+
+        PlayerPrefs.DeleteKey(
+            "Slot" + slot + "_Coins"
+        );
+
+        PlayerPrefs.DeleteKey(
+            "Slot" + slot + "_Scene"
+        );
+
+        PlayerPrefs.DeleteKey(
+            "Slot" + slot + "_Time"
+        );
+
+        PlayerPrefs.DeleteKey(
+            "Slot" + slot + "_Exists"
+        );
+
+        PlayerPrefs.Save();
+
+        UpdateSlotUI(slot);
+
+        Debug.Log(
+            "Cleared Save Slot "
+            + slot
+        );
+    }
     void SaveGame(
         int slot
     ) {
@@ -572,6 +612,26 @@ public class PauseMenu : MonoBehaviour {
                 "Slot" + slot + "_Coins",
                 0
             );
+        string scene =
+    PlayerPrefs.GetString(
+        "Slot" + slot + "_Scene",
+        "Unknown"
+    );
+
+        if (
+            SceneManager.GetActiveScene().name
+            != scene
+        ) {
+
+            GameLoader.slotToLoad =
+                slot;
+
+            SceneManager.LoadScene(
+                scene
+            );
+
+            return;
+        }
 
         Vector3 loadPos =
             new Vector3(

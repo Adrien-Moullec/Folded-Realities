@@ -8,21 +8,13 @@ public class GameProgress : MonoBehaviour {
 
     void Awake() {
 
-        if (Instance == null) {
+        Instance = this;
 
-            Instance = this;
-
-            DontDestroyOnLoad(gameObject);
-
-            progress =
-                PlayerPrefs.GetInt(
-                    "Progress",
-                    0
-                );
-        } else {
-
-            Destroy(gameObject);
-        }
+        progress =
+            PlayerPrefs.GetInt(
+                "Progress",
+                0
+            );
     }
 
     public void SetProgress(
