@@ -378,10 +378,24 @@ public class PauseMenu : MonoBehaviour {
 
         Time.timeScale = 1f;
 
+        isPaused = false;
+
         Cursor.lockState =
             CursorLockMode.None;
 
         Cursor.visible = true;
+
+        pauseMenu.SetActive(false);
+
+        GameObject systems =
+            GameObject.Find(
+                "GameplaySystems"
+            );
+
+        if (systems != null) {
+
+            Destroy(systems);
+        }
 
         SceneManager.LoadScene(
             "MainMenu"
