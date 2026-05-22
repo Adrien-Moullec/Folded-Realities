@@ -59,9 +59,19 @@ public class LevelExit : MonoBehaviour,
         SpawnData.spawnID =
             targetSpawnID;
 
-        SceneTransition.Instance
-            .TransitionToScene(
-                nextSceneName
+        if (
+            SceneTransition.Instance != null
+        ) {
+
+            SceneTransition.Instance
+                .TransitionToScene(
+                    nextSceneName
+                );
+        } else {
+
+            Debug.LogError(
+                "SceneTransition Instance Missing"
             );
+        }
     }
 }
