@@ -73,6 +73,6 @@ public class VideoCutsceneManager : MonoBehaviour {
     }
 
     private void OnEnd() {
-        SceneManager.LoadScene("Tutorial");
+        SceneManager.LoadScene("Tutorial2");
     }
 }
