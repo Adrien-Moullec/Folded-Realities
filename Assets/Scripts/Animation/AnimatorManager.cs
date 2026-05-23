@@ -29,6 +29,9 @@ namespace AbilitySystem {
             animator?.SetFloat(deltaFall, Mathf.Clamp01(dFall));
             animator?.SetBool(isGrounded, isGround);
         }
+        public void SetMovementState() {
+            animator.CrossFade("Grounded", 0);
+        }
 
         public IEnumerator InitiateOneOffAnimation(
             Action startF,
@@ -59,7 +62,7 @@ namespace AbilitySystem {
             }
 
             layers[info.layer].state = new AnimatorFunctions(animType.ToString(), startF, updateF, eventF, endF);
-            animator?.CrossFade(animType.ToString(), 0);
+            if (animator.gameObject.activeSelf) animator.CrossFade(animType.ToString(), 0);
         }
 
         bool CanStartAnimation((int hashCode, int layer) info) {

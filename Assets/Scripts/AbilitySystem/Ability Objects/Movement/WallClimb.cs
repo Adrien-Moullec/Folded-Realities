@@ -62,6 +62,11 @@ namespace AbilitySystem {
             entityBody.iAbility.OnRotateEntity(
                 -wallNormal
             );
+            if (entityBody.animatorManager.gameObject.activeSelf) {
+                entityBody.animatorManager?.SetMovement(moveData.velocity.magnitude / (dir - wallNormal).magnitude, 0, true);
+                entityBody.animatorManager?.SetMovementState();
+            }
+            //entityBody.animatorManager?.InitiateOneOffAnimation(moveData.velocity.magnitude / (dir - wallNormal).magnitude, 0, true);
 
             return false;
         }
