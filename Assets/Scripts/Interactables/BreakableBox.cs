@@ -1,5 +1,7 @@
 using UnityEngine;
+
 using System.Collections;
+
 using AbilitySystem;
 
 public class BreakableBox : MonoBehaviour,
@@ -146,5 +148,9 @@ public class BreakableBox : MonoBehaviour,
         Destroy(
             gameObject
         );
+    }
+
+    public void SetMaxHealth() {
+        throw new System.NotImplementedException();
     }
 }

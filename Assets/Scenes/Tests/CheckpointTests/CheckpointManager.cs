@@ -1,4 +1,5 @@
 using UnityEngine;
+
 using AbilitySystem;
 
 public class CheckpointManager : MonoBehaviour {
@@ -50,11 +51,11 @@ public class CheckpointManager : MonoBehaviour {
                 player.GetComponent<
                     PlayerAbilityController
                 >();
-          
+
             if (
                 abilityController != null
             ) {
-                abilityController.RestoreFullHealth();
+                abilityController.SetMaxHealth();
             }
         }
     }

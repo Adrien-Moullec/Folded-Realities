@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 using TMPro;
 
+using System;
+
 public class MainMenu : MonoBehaviour {
 
     public GameObject menuContainer;
@@ -13,6 +15,10 @@ public class MainMenu : MonoBehaviour {
     public TextMeshProUGUI slot1Text;
     public TextMeshProUGUI slot2Text;
     public TextMeshProUGUI slot3Text;
+
+    LoadStyle loadStyle;
+    public void SetNewGame() => loadStyle = LoadStyle.NewGame;
+    public void SetLoadGame() => loadStyle = LoadStyle.LoadGame;
 
     void Start() {
         menuContainer.SetActive(true);
@@ -25,10 +31,6 @@ public class MainMenu : MonoBehaviour {
         UpdateSlotUI(3);
     }
 
-    public void StartGame() {
-        SceneManager.LoadScene("IntroCutscene");
-    }
-
     public void OpenLoadGame() {
         loadGamePanel.SetActive(true);
         loadGamePanel.transform.SetAsLastSibling();
@@ -38,16 +40,12 @@ public class MainMenu : MonoBehaviour {
         loadGamePanel.SetActive(false);
     }
 
-    public void LoadSlot1() {
-        GameplaySystem.instance.LoadSlot(1);
-    }
-
-    public void LoadSlot2() {
-        GameplaySystem.instance.LoadSlot(2);
-    }
-
-    public void LoadSlot3() {
-        GameplaySystem.instance.LoadSlot(3);
+    public void LoadSlot(int slot) {
+        switch (loadStyle) {
+            case LoadStyle.NewGame: GameplaySystem.instance.DeleteSettings(slot); break;
+            case LoadStyle.LoadGame: break;
+        }
+        GameplaySystem.instance.StartGame(slot);
     }
 
     public void OpenOptions() {
@@ -98,5 +96,9 @@ public class MainMenu : MonoBehaviour {
         } else {
             text.text = "Empty";
         }
+    }
+    public enum LoadStyle {
+        NewGame,
+        LoadGame
     }
 }

@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+
 using TMPro;
+
 using AbilitySystem;
 
 public class CollectiblesManager : MonoBehaviour {
@@ -143,7 +145,7 @@ public class CollectiblesManager : MonoBehaviour {
             health != null
         ) {
 
-            health.RestoreFullHealth();
+            health.SetMaxHealth();
         }
 
         PlayPickupSound(

@@ -33,6 +33,10 @@ public class KuhakuFallingGamemode : MonoBehaviour, IHealth {
         healthCanvas?.UpdateHearts(health);
     }
 
+    public void SetMaxHealth() {
+        throw new System.NotImplementedException();
+    }
+
     void OnEnable() {
         characterController = GetComponent<CharacterController>();
         playerInput = GetComponent<PlayerInput>();
