@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class LevelExit : MonoBehaviour,
     IInteractable {
@@ -15,31 +14,15 @@ public class LevelExit : MonoBehaviour,
 
     bool triggered = false;
 
-    void OnTriggerEnter(
-        Collider other
-    ) {
-
-        if (
-            locked
-            ||
-            !other.CompareTag(
-                "Player"
-            )
-            ||
-            triggered
-        ) {
+    void OnTriggerEnter(Collider other) {
+        if (locked || !other.CompareTag("Player") || triggered)
             return;
-        }
-
         NextScene();
     }
 
     public void OnInteract() {
-
-        if (locked) {
+        if (locked)
             return;
-        }
-
         NextScene();
     }
 
@@ -49,29 +32,7 @@ public class LevelExit : MonoBehaviour,
     void NextScene() {
 
         triggered = true;
-
-        Debug.Log(
-            gameObject.name +
-            " SETTING SpawnID TO: "
-            + targetSpawnID
-        );
-
-        SpawnData.spawnID =
-            targetSpawnID;
-
-        if (
-            SceneTransition.Instance != null
-        ) {
-
-            SceneTransition.Instance
-                .TransitionToScene(
-                    nextSceneName
-                );
-        } else {
-
-            Debug.LogError(
-                "SceneTransition Instance Missing"
-            );
-        }
+        SpawnData.spawnID = targetSpawnID;
+        GameplaySystem.instance.LoadScene(GameplayScenes.Bedroom, TransitionType.Iris);
     }
 }

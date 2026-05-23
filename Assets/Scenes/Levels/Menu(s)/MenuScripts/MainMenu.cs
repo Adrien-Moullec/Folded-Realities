@@ -10,8 +10,6 @@ public class MainMenu : MonoBehaviour {
     public GameObject optionsPanel;
     public GameObject brightnessPanel;
 
-    public GameLoader gameLoader;
-
     public TextMeshProUGUI slot1Text;
     public TextMeshProUGUI slot2Text;
     public TextMeshProUGUI slot3Text;
@@ -41,15 +39,15 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void LoadSlot1() {
-        if (gameLoader != null) gameLoader.LoadSlot(1);
+        GameplaySystem.instance.LoadSlot(1);
     }
 
     public void LoadSlot2() {
-        if (gameLoader != null) gameLoader.LoadSlot(2);
+        GameplaySystem.instance.LoadSlot(2);
     }
 
     public void LoadSlot3() {
-        if (gameLoader != null) gameLoader.LoadSlot(3);
+        GameplaySystem.instance.LoadSlot(3);
     }
 
     public void OpenOptions() {
@@ -71,7 +69,7 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void ApplySettings() {
-        PlayerPrefs.Save();
+        GameplaySystem.instance.SaveSettings();
         optionsPanel.SetActive(false);
         brightnessPanel.SetActive(false);
     }
@@ -90,11 +88,10 @@ public class MainMenu : MonoBehaviour {
 
         if (text == null) return;
 
-        if (PlayerPrefs.GetInt("Slot" + slot + "_Exists", 0) == 1) {
-
-            string time = PlayerPrefs.GetString("Slot" + slot + "_Time", "No Time");
-            int coins = PlayerPrefs.GetInt("Slot" + slot + "_Coins", 0);
-            string scene = PlayerPrefs.GetString("Slot" + slot + "_Scene", "Unknown");
+        if (GameplaySystem.instance.GetInt(PrefInt.DoesSlotExist, -1) == 1) {
+            string time = GameplaySystem.instance.GetString(PrefString.Time, "No Time");
+            int coins = GameplaySystem.instance.GetInt(PrefInt.Coins, 0);
+            string scene = GameplaySystem.instance.GetString(PrefString.Scene, "Unknown");
 
             text.text = "Saved\n" + scene + "\n" + time + "\nCoins: " + coins;
 

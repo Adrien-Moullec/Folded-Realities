@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameLoader : MonoBehaviour {
@@ -7,17 +7,17 @@ public class GameLoader : MonoBehaviour {
 
     public void LoadSlot(int slot) {
 
-        if (PlayerPrefs.GetInt("Slot" + slot + "_Exists", 0) != 1) {
+        if (PlasyerPrefs.GetInt("Slot" + slot + "_Exists", 0) != 1) {
             Debug.Log("No save in this slot");
             return;
         }
 
         slotToLoad = slot;
 
-        string sceneName = PlayerPrefs.GetString("Slot" + slot + "_Scene", "");
+        string sceneName = PlasyerPrefs.GetString("Slot" + slot + "_Scene", "");
 
         if (sceneName != "") {
             SceneManager.LoadScene(sceneName);
         }
     }
-}
+}*/

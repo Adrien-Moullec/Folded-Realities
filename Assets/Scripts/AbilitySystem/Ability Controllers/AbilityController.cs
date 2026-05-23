@@ -85,5 +85,9 @@ namespace AbilitySystem {
 
         public abstract void OnDrawGizmos();
         public abstract bool IsGrounded();
+
+        public void SetMaxHealth() {
+            CurrentHealth = MaxHealth;
+        }
     }
 }

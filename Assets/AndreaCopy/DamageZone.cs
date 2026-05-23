@@ -1,5 +1,7 @@
 using UnityEngine;
+
 using System.Collections;
+
 using AbilitySystem;
 
 public class DamageZone : MonoBehaviour {
@@ -10,7 +12,7 @@ public class DamageZone : MonoBehaviour {
 
     bool damagingPlayer = false;
 
-    PlayerAbilityController currentHealth;
+    IHealth iPlayerHealth;
 
     Coroutine damageRoutine;
 
@@ -26,13 +28,13 @@ public class DamageZone : MonoBehaviour {
             return;
         }
 
-        currentHealth =
+        iPlayerHealth =
             other.GetComponent<
-                PlayerAbilityController
+                IHealth
             >();
 
         if (
-            currentHealth == null
+            iPlayerHealth == null
         ) {
             return;
         }
@@ -81,11 +83,11 @@ public class DamageZone : MonoBehaviour {
         ) {
 
             if (
-                currentHealth != null
+                iPlayerHealth != null
             ) {
 
-                currentHealth.DirectDamage(
-                    damageAmount
+                iPlayerHealth.Damage(
+                    new EntityDamage(damageAmount, null)
                 );
             }
 

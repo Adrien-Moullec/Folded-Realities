@@ -107,7 +107,7 @@ public class PauseMenu : MonoBehaviour {
                 p.transform;
         }
 
-        if (
+        /*if (
             GameLoader.slotToLoad != -1
         ) {
 
@@ -118,7 +118,7 @@ public class PauseMenu : MonoBehaviour {
             );
 
             GameLoader.slotToLoad = -1;
-        }
+        }*/
     }
 
     IEnumerator LoadAfterDelay(
@@ -404,21 +404,13 @@ public class PauseMenu : MonoBehaviour {
 
     public void BackToMain() {
 
-        Cursor.lockState =
-            CursorLockMode.None;
-
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
         backgroundPanel.SetActive(true);
-
         buttonsContainer.SetActive(true);
-
         settingsPanel.SetActive(false);
-
         savePanel.SetActive(false);
-
         overwritePanel.SetActive(false);
-
         quitConfirmPanel.SetActive(false);
     }
 

@@ -8,10 +8,6 @@ public class RestartGame : MonoBehaviour {
 
     public void RestartLevel() {
 
-
-        //PlayerPrefs.DeleteKey("FinalCoins");
-
-
         if (CollectiblesManager.Instance != null) {
             CollectiblesManager.Instance.normalCount = 0;
         }
