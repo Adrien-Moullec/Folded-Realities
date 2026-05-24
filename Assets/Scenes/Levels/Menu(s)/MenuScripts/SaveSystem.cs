@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SaveSystem : MonoBehaviour {
@@ -14,11 +14,11 @@ public class SaveSystem : MonoBehaviour {
     }
 
     public void LoadGame() {
-        if (PlayerPrefs.HasKey("SavedScene")) {
-            string scene = PlayerPrefs.GetString("SavedScene");
+        if (PlayersPrefs.HasKey("SavedScene")) {
+            string scene = PlayersPrefs.GetString("SavedScene");
             SceneManager.LoadScene(scene);
         } else {
             Debug.Log("No save found");
         }
     }
-}
+}*/

@@ -1,4 +1,4 @@
-public enum PrefFloat {
+public enum SettingsFloatPref {
     // Settings
     GameVolume,
     Brightness,

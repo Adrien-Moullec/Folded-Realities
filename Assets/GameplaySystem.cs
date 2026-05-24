@@ -55,7 +55,7 @@ public class GameplaySystem : MonoBehaviour {
     public static void SaveSettings() =>
         PlayerPrefs.Save();
     public static void DeleteSettings(int slotID) {
-        foreach (var n in Enum.GetNames(typeof(PrefFloat)))
+        foreach (var n in Enum.GetNames(typeof(SettingsFloatPref)))
             PlayerPrefs.DeleteKey(GetSlotID(slotID) + n.ToString());
         foreach (var n in Enum.GetNames(typeof(PrefInt)))
             PlayerPrefs.DeleteKey(GetSlotID(slotID) + n.ToString());
@@ -71,10 +71,10 @@ public class GameplaySystem : MonoBehaviour {
 
 
     /// FLOAT
-    public static void SetFloat(PrefFloat key, float value, bool isSlotInfo = true) =>
-        PlayerPrefs.SetFloat((isSlotInfo ? currentSlotId : "") + key.ToString(), value);
-    public static float GetFloat(PrefFloat key, float def = 0, bool isSlotInfo = true) =>
-        PlayerPrefs.GetFloat((isSlotInfo ? currentSlotId : "") + key.ToString(), def);
+    public static void SetSettingsFloat(SettingsFloatPref key, float value) =>
+        PlayerPrefs.SetFloat(key.ToString(), value);
+    public static float GetSettingsFloat(SettingsFloatPref key, float def = 0) =>
+        PlayerPrefs.GetFloat(key.ToString(), def);
 
     /// INTEGER
     public static void SetInt(PrefInt key, int value, bool isSlotInfo = true) =>
