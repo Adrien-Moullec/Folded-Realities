@@ -28,6 +28,6 @@ public class LevelExit : MonoBehaviour, IInteractable {
     void NextScene() {
         triggered = true;
         SpawnData.spawnID = targetSpawnID;
-        GameplaySystem.instance.LoadScene(targetLevel, TransitionType.Iris);
+        //GameplaySystem.instance.LoadScene(targetLevel, TransitionType.Iris);
     }
 }

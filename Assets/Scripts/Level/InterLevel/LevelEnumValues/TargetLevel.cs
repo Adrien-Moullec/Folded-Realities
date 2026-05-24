@@ -30,7 +30,7 @@ public class TargetLevelDrawer : PropertyDrawer {
 
             switch (scene) {
                 case GameplayScenes.MainMenu: break;
-                case GameplayScenes.Bedroom: DrawProp(ref y, position, property, "bedroomSpawnPoints"); break;
+                case GameplayScenes.Bedroom: DrawProp(ref y, position, property, "bedroomSpawnPoint"); break;
                 case GameplayScenes.IntroCutscene: break;
                 case GameplayScenes.Tutorial2: break;
             }

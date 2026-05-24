@@ -23,18 +23,18 @@ public class GameplaySystem : MonoBehaviour {
     }
 
     #region Scene Management
-    public void LoadScene(TargetLevel scene, TransitionType transition) {
+    public void LoadScene(GameplayScenes scene, TransitionType transition) {
         PlayerPrefs.Save();
-        sceneTransition?.TransitionToScene(scene.targetScene.ToString());
+        sceneTransition?.TransitionToScene(scene.ToString());
     }
     public IEnumerator Respawn(GameObject player, TransitionType transition) {
         PlayerPrefs.Save();
         yield return sceneTransition?.RespawnTransition(player);
     }
-    public IEnumerator BossTransition(TargetLevel scene, TransitionType transition) {
+    public IEnumerator BossTransition(GameplayScenes scene, TransitionType transition) {
         PlayerPrefs.Save();
         yield return sceneTransition?.BossDeathTransition();
-        SceneManager.LoadScene(scene.targetScene.ToString());
+        SceneManager.LoadScene(scene.ToString());
     }
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public void StartGame(int slotId) {
@@ -42,9 +42,8 @@ public class GameplaySystem : MonoBehaviour {
         PlayerPrefs.Save();
         sceneTransition?.TransitionToScene(GetString(PrefString.SavedScene, GameplayScenes.IntroCutscene.ToString()));
     }
-    public void SetCurrentSaveScene(GameplayScenes gameplayScenes, Vector3 loc) {
+    public void SetCurrentSaveScene(GameplayScenes gameplayScenes) {
         SetString(PrefString.SavedScene, gameplayScenes.ToString());
-        SetVector3(PrefVector3.SavedLocation, loc);
     }
     #endregion
 
