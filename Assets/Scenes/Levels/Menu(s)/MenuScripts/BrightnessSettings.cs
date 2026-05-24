@@ -11,7 +11,7 @@ public class BrightnessSettings : MonoBehaviour {
     void Start() {
         slider.minValue = 0.5f;
         slider.maxValue = 1.5f;
-        tempValue = GameplaySystem.instance.GetFloat(PrefFloat.Brightness, 1f, false);
+        tempValue = GameplaySystem.GetFloat(PrefFloat.Brightness, 1f, false);
 
         slider.value = tempValue;
 
@@ -31,12 +31,12 @@ public class BrightnessSettings : MonoBehaviour {
     }
 
     public void Accept() {
-        GameplaySystem.instance.SetFloat(PrefFloat.Brightness, tempValue, false);
-        GameplaySystem.instance.SaveSettings();
+        GameplaySystem.SetFloat(PrefFloat.Brightness, tempValue, false);
+        GameplaySystem.SaveSettings();
     }
 
     public void Revert() {
-        tempValue = GameplaySystem.instance.GetFloat(PrefFloat.Brightness, 1, false);
+        tempValue = GameplaySystem.GetFloat(PrefFloat.Brightness, 1, false);
         slider.value = tempValue;
         UpdatePreview();
     }

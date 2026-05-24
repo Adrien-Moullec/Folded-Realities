@@ -18,7 +18,7 @@ public class ProgressDoor : MonoBehaviour {
 
     void Update() {
 
-        int progress = GameplaySystem.instance.GetInt(PrefInt.Progress, 0);
+        int progress = GameplaySystem.GetInt(PrefInt.Progress, 0);
 
         bool unlocked =
             (

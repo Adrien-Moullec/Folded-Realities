@@ -5,139 +5,57 @@ using AbilitySystem;
 public class CheckpointManager : MonoBehaviour {
 
     public static CheckpointManager Instance;
-
     public Transform levelStartSpawn;
-
     private Vector3 lastCheckpointPosition;
-
     private int currentCheckpointIndex = -1;
 
     private void Awake() {
-
         Instance = this;
-
-        if (
-            levelStartSpawn != null
-        ) {
-            lastCheckpointPosition =
-                levelStartSpawn.position;
-        }
+        if (levelStartSpawn != null)
+            lastCheckpointPosition = levelStartSpawn.position;
     }
 
-    public void SetCheckpoint(
-        Vector3 position,
-        int checkpointIndex,
-        GameObject player = null
-    ) {
+    public void SetCheckpoint(Vector3 position, int checkpointIndex, GameObject player = null) {
 
-        if (
-            checkpointIndex
-            <= currentCheckpointIndex
-        ) {
+        if (checkpointIndex <= currentCheckpointIndex)
             return;
-        }
 
-        currentCheckpointIndex =
-            checkpointIndex;
+        currentCheckpointIndex = checkpointIndex;
+        lastCheckpointPosition = position;
 
-        lastCheckpointPosition =
-            position;
-
-        if (
-            player != null
-        ) {
-
-            PlayerAbilityController abilityController =
-                player.GetComponent<
-                    PlayerAbilityController
-                >();
-
-            if (
-                abilityController != null
-            ) {
+        if (player != null)
+            if (player.TryGetComponent(out PlayerAbilityController abilityController))
                 abilityController.SetMaxHealth();
-            }
-        }
     }
 
-    public bool HasCheckpoint() {
-
-        return
-            currentCheckpointIndex != -1;
-    }
+    public bool HasCheckpoint() => currentCheckpointIndex != -1;
 
     public Vector3 GetCheckpointPosition() {
-
-        if (
-            HasCheckpoint()
-        ) {
-            return
-                lastCheckpointPosition;
-        }
-
-        if (
-            levelStartSpawn != null
-        ) {
-            return
-                levelStartSpawn.position;
-        }
-
-        return
-            Vector3.zero;
+        if (HasCheckpoint()) return lastCheckpointPosition;
+        if (levelStartSpawn != null) return levelStartSpawn.position;
+        return Vector3.zero;
     }
 
-    public void RespawnPlayer(
-        GameObject playerRoot
-    ) {
+    public void RespawnPlayer(GameObject playerRoot) {
 
-        if (
-            PlayerPrefs.GetInt(
-                "UseDoorSpawn",
-                0
-            ) == 1
-        ) {
+        if (PlayerPrefs.GetInt("UseDoorSpawn", 0) == 1)
             return;
-        }
 
-        CharacterController cc =
-            playerRoot.GetComponent<
-                CharacterController
-            >();
-
-        if (
-            cc != null
-        ) {
+        if (playerRoot.TryGetComponent(out CharacterController cc))
             cc.enabled = false;
-        }
 
         Vector3 spawnPos;
 
-        if (
-            HasCheckpoint()
-        ) {
-
-            spawnPos =
-                lastCheckpointPosition;
-        } else if (
-              levelStartSpawn != null
-          ) {
-
-            spawnPos =
-                levelStartSpawn.position;
-        } else {
+        if (HasCheckpoint())
+            spawnPos = lastCheckpointPosition;
+        else if (levelStartSpawn != null)
+            spawnPos = levelStartSpawn.position;
+        else
             return;
-        }
 
-        spawnPos +=
-            Vector3.up * 1f;
+        spawnPos += Vector3.up * 1f;
+        playerRoot.transform.position = spawnPos;
 
-        playerRoot.transform.position =
-            spawnPos;
-
-        if (
-            cc != null
-        ) {
-            cc.enabled = true;
-        }
+        if (cc != null) cc.enabled = true;
     }
 }

@@ -16,10 +16,10 @@ public class SceneTransition : MonoBehaviour {
         irisMaterial.SetFloat("_Radius", 1f);
     }
 
-    public void TransitionToScene(string sceneName) {
+    public void TransitionToScene(string targetLevel) {
         if (transitioning)
             return;
-        StartCoroutine(TransitionRoutine(sceneName));
+        StartCoroutine(TransitionRoutine(targetLevel));
     }
 
     public IEnumerator RespawnTransition(GameObject player) {

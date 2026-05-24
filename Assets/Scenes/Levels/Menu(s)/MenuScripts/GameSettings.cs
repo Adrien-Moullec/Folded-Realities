@@ -18,9 +18,8 @@ public class GameSettings : MonoBehaviour {
 
     public void ApplySettings() {
 
-        float brightness = GameplaySystem.instance.GetFloat(PrefFloat.Brightness, 1f);
-
-        float saturation = GameplaySystem.instance.GetFloat(PrefFloat.Saturation, 1f);
+        float brightness = GameplaySystem.GetFloat(PrefFloat.Brightness, 1f);
+        float saturation = GameplaySystem.GetFloat(PrefFloat.Saturation, 1f);
 
         if (brightnessOverlay != null) {
             Color b = brightnessOverlay.color;

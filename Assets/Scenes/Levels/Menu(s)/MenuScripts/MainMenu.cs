@@ -42,7 +42,7 @@ public class MainMenu : MonoBehaviour {
 
     public void LoadSlot(int slot) {
         switch (loadStyle) {
-            case LoadStyle.NewGame: GameplaySystem.instance.DeleteSettings(slot); break;
+            case LoadStyle.NewGame: GameplaySystem.DeleteSettings(slot); break;
             case LoadStyle.LoadGame: break;
         }
         GameplaySystem.instance.StartGame(slot);
@@ -67,7 +67,7 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void ApplySettings() {
-        GameplaySystem.instance.SaveSettings();
+        GameplaySystem.SaveSettings();
         optionsPanel.SetActive(false);
         brightnessPanel.SetActive(false);
     }
@@ -86,10 +86,10 @@ public class MainMenu : MonoBehaviour {
 
         if (text == null) return;
 
-        if (GameplaySystem.instance.GetInt(PrefInt.DoesSlotExist, -1) == 1) {
-            string time = GameplaySystem.instance.GetString(PrefString.Time, "No Time");
-            int coins = GameplaySystem.instance.GetInt(PrefInt.Coins, 0);
-            string scene = GameplaySystem.instance.GetString(PrefString.Scene, "Unknown");
+        if (GameplaySystem.GetInt(PrefInt.DoesSlotExist, -1) == 1) {
+            string time = GameplaySystem.GetString(PrefString.Time, "No Time");
+            int coins = GameplaySystem.GetInt(PrefInt.Coins, 0);
+            string scene = GameplaySystem.GetString(PrefString.Scene, "Unknown");
 
             text.text = "Saved\n" + scene + "\n" + time + "\nCoins: " + coins;
 

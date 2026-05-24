@@ -20,7 +20,7 @@ public class AudioManager : MonoBehaviour {
     }
 
     void Start() {
-        float savedVolume = GameplaySystem.instance.GetFloat(PrefFloat.GameVolume, 1f, false);
+        float savedVolume = GameplaySystem.GetFloat(PrefFloat.GameVolume, 1f, false);
         AudioListener.volume = savedVolume;
 
         if (volumeSlider != null) {
@@ -31,6 +31,6 @@ public class AudioManager : MonoBehaviour {
 
     public void SetVolume(float volume) {
         AudioListener.volume = volume;
-        GameplaySystem.instance.SetFloat(PrefFloat.GameVolume, volume, false);
+        GameplaySystem.SetFloat(PrefFloat.GameVolume, volume, false);
     }
 }

@@ -9,8 +9,8 @@ public class SaveSystem : MonoBehaviour {
     }
 
     public void SaveGame() {
-        GameplaySystem.instance.SetString(PrefString.SavedScene, SceneManager.GetActiveScene().name);
-        GameplaySystem.instance.SaveSettings();
+        GameplaySystem.SetString(PrefString.SavedScene, SceneManager.GetActiveScene().name);
+        GameplaySystem.SaveSettings();
     }
 
     public void LoadGame() {

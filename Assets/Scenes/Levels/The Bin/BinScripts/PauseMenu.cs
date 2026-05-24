@@ -72,7 +72,7 @@ public class PauseMenu : MonoBehaviour {
         GameObject p = GameObject.FindGameObjectWithTag("Player");
         if (p != null) player = p.transform;
 
-        StartCoroutine(LoadAfterDelay(GameplaySystem.instance.slot));
+        StartCoroutine(LoadAfterDelay(GameplaySystem.slot));
     }
 
     IEnumerator LoadAfterDelay(int slot) {
@@ -247,7 +247,7 @@ public class PauseMenu : MonoBehaviour {
         pendingSlot = -1;
     }
     public void ClearSlot(int slot) {
-        GameplaySystem.instance.DeleteSettings(slot);
+        GameplaySystem.DeleteSettings(slot);
         PlayerPrefs.DeleteKey("Slot" + slot + "_X");
         PlayerPrefs.DeleteKey("Slot" + slot + "_Y");
         PlayerPrefs.DeleteKey("Slot" + slot + "_Z");

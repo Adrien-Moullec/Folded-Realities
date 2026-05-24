@@ -71,7 +71,6 @@ namespace AbilitySystem {
             characterController.isGrounded;
 
         protected override void Update() {
-            Debug.Log(characterController.isGrounded);
             if (!characterController.enabled) return;
             base.Update();
             currentAbilitySet?.playerAbilitySet?.movement?.Activate(currentAbilitySet.entityBody, true);
