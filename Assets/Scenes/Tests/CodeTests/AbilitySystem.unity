@@ -370,6 +370,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 387799429034610630, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
+      propertyPath: m_Name
+      value: GroundIcon
+      objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.4323711
@@ -3272,6 +3276,18 @@ PrefabInstance:
       propertyPath: 'entities.Array.data[1]'
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7092505742053027653, guid: f43133602da8454439b007f8b3ea8b4f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -78.72997
+      objectReference: {fileID: 0}
+    - target: {fileID: 7092505742053027653, guid: f43133602da8454439b007f8b3ea8b4f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.7468599
+      objectReference: {fileID: 0}
+    - target: {fileID: 7092505742053027653, guid: f43133602da8454439b007f8b3ea8b4f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 32.071205
+      objectReference: {fileID: 0}
     - target: {fileID: 9048949666770092547, guid: f43133602da8454439b007f8b3ea8b4f, type: 3}
       propertyPath: m_Name
       value: LevelManager
@@ -3927,6 +3943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a2155b0098fd4643aa1ec265c4fbd17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playOnAwake: 0
   onStart:
     m_PersistentCalls:
       m_Calls: []

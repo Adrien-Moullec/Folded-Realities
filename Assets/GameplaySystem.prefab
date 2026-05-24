@@ -46,7 +46,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneTransition: {fileID: 3014608933184267194}
-  slot: -1
 --- !u!1001 &6739511748568867058
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58,6 +57,10 @@ PrefabInstance:
     - target: {fileID: 3011037045168678236, guid: f43ffc0fdc2cbca49a9a96a04c8f4dec, type: 3}
       propertyPath: m_Name
       value: TransitionCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 3011037045168678236, guid: f43ffc0fdc2cbca49a9a96a04c8f4dec, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8351506004013951482, guid: f43ffc0fdc2cbca49a9a96a04c8f4dec, type: 3}
       propertyPath: m_Pivot.x

@@ -14,6 +14,7 @@ public class GameplaySystem : MonoBehaviour {
     private static string GetSlotID(int id) => "Slot" + id + "_";
 
     void Awake() {
+        sceneTransition.gameObject.SetActive(true);
         if (instance != null) {
             Destroy(gameObject);
             return;
