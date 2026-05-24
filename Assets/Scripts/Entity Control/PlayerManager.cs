@@ -50,6 +50,7 @@ public class PlayerManager : MonoBehaviour {
     bool wheelActive = false;
     #endregion
 
+    Collider[] hits = new Collider[10];
     void Awake() {
         player = this;
         iAbility = GetComponent<IAbility>();
@@ -125,11 +126,13 @@ public class PlayerManager : MonoBehaviour {
     #endregion
 
     void OnInteract() {
-        Collider[] hits = new Collider[4];
-        interactionArea.GetColliders(body).Invoke(hits);
-        foreach (var n in hits) {
-            if (n == null) continue;
-            if (n.TryGetComponent(out IInteractable iinteract))
+        int amount = interactionArea.GetColliders(gameObject).Invoke(hits);
+        for (int i = 0; i < amount; i++) {
+            if (hits[i] == null) continue;
+            if (hits[i].TryGetComponent(out LevelExit exit))
+                Debug.Log(exit.gameObject.name);
+            Debug.Log(hits[i].gameObject.name + ": " + i + "/" + amount);
+            if (hits[i].TryGetComponent(out IInteractable iinteract))
                 iinteract.OnInteract();
         }
     }
