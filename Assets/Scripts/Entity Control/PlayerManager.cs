@@ -80,6 +80,7 @@ public class PlayerManager : MonoBehaviour {
         crouchInput.performed += input => iAbility.GetInputValues.SetCrouchToggle(true);
         crouchInput.canceled += input => iAbility.GetInputValues.SetCrouchToggle(false);
         switchAction.performed += input => playerAbilityController.QuickSwitch();
+        interact.performed += Input => OnInteract();
         radialWheel.performed += input => {
             _RadialMenuManager?.SetWheelActive(true);
             wheelActive = true;
@@ -104,6 +105,7 @@ public class PlayerManager : MonoBehaviour {
         lookInput.canceled -= input => deltaLook = input.ReadValue<Vector2>();
         runInput.performed -= input => iAbility.GetInputValues.SetRunToggle(true);
         runInput.canceled -= input => iAbility.GetInputValues.SetRunToggle(false);
+        interact.performed -= Input => OnInteract();
         radialWheel.performed -= input => {
             _RadialMenuManager?.SetWheelActive(true);
             wheelActive = true;
@@ -125,9 +127,11 @@ public class PlayerManager : MonoBehaviour {
     void OnInteract() {
         Collider[] hits = new Collider[4];
         interactionArea.GetColliders(body).Invoke(hits);
-        foreach (var n in hits)
+        foreach (var n in hits) {
+            if (n == null) continue;
             if (n.TryGetComponent(out IInteractable iinteract))
                 iinteract.OnInteract();
+        }
     }
 
     #region Update Functions

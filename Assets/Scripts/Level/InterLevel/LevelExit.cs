@@ -8,7 +8,7 @@ public class LevelExit : MonoBehaviour, IInteractable {
     [SerializeField] float gizmos = 1;
 
 
-    [HideInInspector] public bool locked;
+    public bool locked;
     [HideInInspector] public Vector3 SpawnPos => transform.position + spawnPos;
 
     bool triggered = false;
