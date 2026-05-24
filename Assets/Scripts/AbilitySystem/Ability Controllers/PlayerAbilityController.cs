@@ -71,7 +71,6 @@ namespace AbilitySystem {
             characterController.isGrounded;
 
         protected override void Update() {
-            Debug.Log(characterController.isGrounded);
             if (!characterController.enabled) return;
             base.Update();
             currentAbilitySet?.playerAbilitySet?.movement?.Activate(currentAbilitySet.entityBody, true);
@@ -165,50 +164,6 @@ namespace AbilitySystem {
                 n.material.SetFloat("_DamageFlash01", 0);
             invincible = false;
         }
-        // Andrea's function
-        void Respawn() {
-
-            playerHealthCanvas.UpdateHearts(
-                100
-            );
-
-            CurrentHealth =
-                MaxHealth;
-        }
-        //andrea updated for checkpoint to restore health
-        public void RestoreFullHealth() {
-
-            CurrentHealth =
-                MaxHealth;
-
-            playerHealthCanvas?.UpdateHearts(
-                CurrentHealth
-            );
-        }
-
-        public void DirectDamage(
-            int amount
-        ) {
-
-            CurrentHealth -=
-                amount;
-
-            if (
-                CurrentHealth < 0
-            ) {
-                CurrentHealth = 0;
-            }
-
-            playerHealthCanvas?.UpdateHearts(
-                CurrentHealth
-            );
-
-            if (
-                CurrentHealth <= 0
-            ) {
-                Die();
-            }
-        }
         public override void OnRotateEntity(Vector3 direction) {
             direction.y = 0;
             if (direction != Vector3.zero) currentAbilitySet.entityBody.bodyHolder.transform.forward = direction;
@@ -233,53 +188,18 @@ namespace AbilitySystem {
         }
         //andrea updated death
         public override void Die() {
+            currentAbilitySet.abilitySetSO.healthSettings?.Die(currentAbilitySet.entityBody, ref CurrentHealth);
 
-            currentAbilitySet
-                .abilitySetSO
-                .healthSettings
-                ?.Die(
-                    currentAbilitySet.entityBody,
-                    ref CurrentHealth
-                );
-
-            GetComponent<
-                CharacterController
-            >().enabled = false;
-
-            StartCoroutine(
-                PlayerDeath(
-                    currentAbilitySet.entityBody.animatorManager,
+            GetComponent<CharacterController>().enabled = false;
+            StartCoroutine(PlayerDeath(currentAbilitySet.entityBody.animatorManager,
                     () => {
-
-                        if (
-                            reloadSceneOnDeath
-                        ) {
-
-                            StartCoroutine(
-                                BossFightRestartRoutine()
-                            );
-
+                        if (reloadSceneOnDeath) {
+                            StartCoroutine(BossFightRestartRoutine());
                             return;
                         }
-
-                        //CHECKPOINT RESPAWN
-
-                        StartCoroutine(
-                            SceneTransition.Instance
-                                .RespawnTransition(
-                                    gameObject
-                                )
-                        );
-
-                        GetComponent<
-                            CharacterController
-                        >().enabled = true;
-
-                        CheckpointManager.Instance
-                            ?.RespawnPlayer(
-                                gameObject
-                            );
-
+                        StartCoroutine(GameplaySystem.instance.Respawn(gameObject, TransitionType.Iris));
+                        GetComponent<CharacterController>().enabled = true;
+                        CheckpointManager.Instance?.RespawnPlayer(gameObject);
                         currentAbilitySet
                             .abilitySetSO
                             .healthSettings
@@ -289,67 +209,31 @@ namespace AbilitySystem {
                                 ref MaxHealth
                             );
 
-                        Respawn();
+                        SetMaxHealth();
                     }
                 )
             );
         }
         IEnumerator BossFightRestartRoutine() {
-
-            CharacterController cc =
-                GetComponent<CharacterController>();
-
-            if (cc != null) {
-
-                cc.enabled = false;
-            }
-
-            if (
-                SceneTransition.Instance != null
-            ) {
-
-                yield return StartCoroutine(
-                    SceneTransition.Instance
-                        .BossDeathTransition()
-                );
-            }
-
-            SceneManager.LoadScene(
-                SceneManager
-                    .GetActiveScene()
-                    .name
-            );
+            characterController.enabled = false;
+            yield return StartCoroutine(GameplaySystem.instance.BossTransition(GameplayScenes.Bedroom, TransitionType.Iris));
+            characterController.enabled = true;
         }
         public override void Heal(EntityDamage heal) {
             base.Heal(heal);
             playerHealthCanvas?.UpdateHearts(CurrentHealth);
         }
-        public override void Damage(
-            EntityDamage damage
-        ) {
+        public override void Damage(EntityDamage damage) {
 
-            if (invincible) {
+            if (invincible)
                 return;
-            }
 
-            base.Damage(
-                damage
-            );
+            base.Damage(damage);
+            playerHealthCanvas?.UpdateHearts(CurrentHealth);
 
-            playerHealthCanvas?.UpdateHearts(
-                CurrentHealth
-            );
-
-            StartCoroutine(
-                InvincibilityFrames()
-            );
-
-            if (
-                CurrentHealth <= 0
-            ) {
-
+            StartCoroutine(InvincibilityFrames());
+            if (CurrentHealth <= 0)
                 Die();
-            }
         }
 
         [Serializable]

@@ -20,11 +20,7 @@ public class LobbyStateManager : MonoBehaviour {
 
     void Start() {
 
-        int progress =
-            PlayerPrefs.GetInt(
-                "Progress",
-                0
-            );
+        int progress = GameplaySystem.GetInt(PrefInt.Progress, 0);
 
         Debug.Log(
             "LOBBY PROGRESS: "

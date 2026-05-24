@@ -1,17 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class GameSettings : MonoBehaviour {
 
     public static GameSettings Instance;
-
     public Image brightnessOverlay;
-
     public Image saturationOverlay;
 
     void Awake() {
-
         Instance = this;
     }
 
@@ -22,39 +18,18 @@ public class GameSettings : MonoBehaviour {
 
     public void ApplySettings() {
 
-        float brightness =
-            PlayerPrefs.GetFloat(
-                "Brightness",
-                1f
-            );
+        float brightness = GameplaySystem.GetFloat(PrefFloat.Brightness, 1f);
+        float saturation = GameplaySystem.GetFloat(PrefFloat.Saturation, 1f);
 
-        float saturation =
-            PlayerPrefs.GetFloat(
-                "Saturation",
-                1f
-            );
-
-        if (
-            brightnessOverlay != null
-        ) {
-
-            Color b =
-                brightnessOverlay.color;
-
+        if (brightnessOverlay != null) {
+            Color b = brightnessOverlay.color;
             b.a = 1 - brightness;
-
             brightnessOverlay.color = b;
         }
 
-        if (
-            saturationOverlay != null
-        ) {
-
-            Color s =
-                saturationOverlay.color;
-
+        if (saturationOverlay != null) {
+            Color s = saturationOverlay.color;
             s.a = 1 - saturation;
-
             saturationOverlay.color = s;
         }
     }

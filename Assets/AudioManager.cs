@@ -9,62 +9,28 @@ public class AudioManager : MonoBehaviour {
 
     void Awake() {
 
-        if (
-            Instance != null
-            && Instance != this
-        ) {
-
-            Destroy(
-                gameObject
-            );
-
+        if (Instance != null && Instance != this) {
+            Destroy(gameObject);
             return;
         }
 
         Instance = this;
 
-        DontDestroyOnLoad(
-            gameObject
-        );
+        //DontDestroyOnLoad(gameObject);
     }
 
     void Start() {
+        float savedVolume = GameplaySystem.GetFloat(PrefFloat.GameVolume, 1f, false);
+        AudioListener.volume = savedVolume;
 
-        float savedVolume =
-            PlayerPrefs.GetFloat(
-                "GameVolume",
-                1f
-            );
-
-        AudioListener.volume =
-            savedVolume;
-
-        if (
-            volumeSlider != null
-        ) {
-
-            volumeSlider.value =
-                savedVolume;
-
-            volumeSlider.onValueChanged
-                .AddListener(
-                    SetVolume
-                );
+        if (volumeSlider != null) {
+            volumeSlider.value = savedVolume;
+            volumeSlider.onValueChanged.AddListener(SetVolume);
         }
     }
 
-    public void SetVolume(
-        float volume
-    ) {
-
-        AudioListener.volume =
-            volume;
-
-        PlayerPrefs.SetFloat(
-            "GameVolume",
-            volume
-        );
-
-        PlayerPrefs.Save();
+    public void SetVolume(float volume) {
+        AudioListener.volume = volume;
+        GameplaySystem.SetFloat(PrefFloat.GameVolume, volume, false);
     }
 }

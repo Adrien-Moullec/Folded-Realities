@@ -73,6 +73,6 @@ public class VideoCutsceneManager : MonoBehaviour {
     }
 
     private void OnEnd() {
-        SceneManager.LoadScene("Tutorial2");
+        GameplaySystem.instance.LoadScene(GameplayScenes.Tutorial2, TransitionType.Iris);
     }
 }

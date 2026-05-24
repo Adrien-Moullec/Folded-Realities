@@ -22,34 +22,13 @@ public class ProgressSetter : MonoBehaviour {
 
         triggered = true;
 
-        int currentProgress =
-            PlayerPrefs.GetInt(
-                "Progress",
-                0
-            );
+        int currentProgress = GameplaySystem.GetInt(PrefInt.Progress, 0);
 
         if (
             setProgressTo >
             currentProgress
         ) {
-
-            PlayerPrefs.SetInt(
-                "Progress",
-                setProgressTo
-            );
-
-            PlayerPrefs.Save();
-
-            Debug.Log(
-                "PROGRESS UPDATED TO: "
-                + setProgressTo
-            );
-        } else {
-
-            Debug.Log(
-                "Progress remains at: "
-                + currentProgress
-            );
+            GameplaySystem.GetInt(PrefInt.Progress, setProgressTo);
         }
     }
 }

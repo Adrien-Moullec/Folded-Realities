@@ -1,18 +1,22 @@
 using System.Collections;
 
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.Pool;
 
 public class FreefallGamemode : MonoBehaviour {
+    [SerializeField] PlayableDirector playableDirector;
     [SerializeField] Transform damageObjectParents;
     [SerializeField] GameObject damageObjects;
     [SerializeField] Vector3 point1;
     [SerializeField] Vector3 point2;
     [SerializeField] float DespawnHeight = 10;
+    [SerializeField, Min(0.1f)] float Speed = 1;
 
     ObjectPool<GameObject> pooledObjects;
 
     void Awake() {
+        playableDirector.playableGraph.GetRootPlayable(0).SetSpeed(Speed);
         pooledObjects = new ObjectPool<GameObject>(
             createFunc: () => Instantiate(damageObjects, damageObjectParents),
             actionOnGet: gameObject => gameObject.SetActive(true),

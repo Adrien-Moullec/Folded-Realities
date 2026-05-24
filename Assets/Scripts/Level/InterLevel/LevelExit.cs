@@ -1,77 +1,33 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class LevelExit : MonoBehaviour,
-    IInteractable {
+public class LevelExit : MonoBehaviour, IInteractable {
+    public TargetLevel targetLevel;
+    public string targetSpawnID = "1";
+    public bool activatedByWalkingIntoArea = false;
 
-    public string nextSceneName =
-        "Bedroom";
-
-    public string targetSpawnID =
-        "1";
-
-    [HideInInspector]
-    public bool locked;
+    [HideInInspector] public bool locked;
 
     bool triggered = false;
 
-    void OnTriggerEnter(
-        Collider other
-    ) {
-
-        if (
-            locked
-            ||
-            !other.CompareTag(
-                "Player"
-            )
-            ||
-            triggered
-        ) {
+    void OnTriggerEnter(Collider other) {
+        if (locked || !other.CompareTag("Player") || triggered || !activatedByWalkingIntoArea)
             return;
-        }
-
         NextScene();
     }
 
     public void OnInteract() {
-
-        if (locked) {
+        if (locked || triggered)
             return;
-        }
-
         NextScene();
     }
 
     public void OnCancelInteract() {
+
     }
 
     void NextScene() {
-
         triggered = true;
-
-        Debug.Log(
-            gameObject.name +
-            " SETTING SpawnID TO: "
-            + targetSpawnID
-        );
-
-        SpawnData.spawnID =
-            targetSpawnID;
-
-        if (
-            SceneTransition.Instance != null
-        ) {
-
-            SceneTransition.Instance
-                .TransitionToScene(
-                    nextSceneName
-                );
-        } else {
-
-            Debug.LogError(
-                "SceneTransition Instance Missing"
-            );
-        }
+        SpawnData.spawnID = targetSpawnID;
+        //GameplaySystem.instance.LoadScene(targetLevel, TransitionType.Iris);
     }
 }

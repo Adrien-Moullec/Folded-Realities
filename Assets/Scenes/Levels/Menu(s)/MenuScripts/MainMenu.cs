@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 using TMPro;
 
+using System;
+
 public class MainMenu : MonoBehaviour {
 
     public GameObject menuContainer;
@@ -10,11 +12,13 @@ public class MainMenu : MonoBehaviour {
     public GameObject optionsPanel;
     public GameObject brightnessPanel;
 
-    public GameLoader gameLoader;
-
     public TextMeshProUGUI slot1Text;
     public TextMeshProUGUI slot2Text;
     public TextMeshProUGUI slot3Text;
+
+    LoadStyle loadStyle;
+    public void SetNewGame() => loadStyle = LoadStyle.NewGame;
+    public void SetLoadGame() => loadStyle = LoadStyle.LoadGame;
 
     void Start() {
         menuContainer.SetActive(true);
@@ -27,10 +31,6 @@ public class MainMenu : MonoBehaviour {
         UpdateSlotUI(3);
     }
 
-    public void StartGame() {
-        SceneManager.LoadScene("IntroCutscene");
-    }
-
     public void OpenLoadGame() {
         loadGamePanel.SetActive(true);
         loadGamePanel.transform.SetAsLastSibling();
@@ -40,16 +40,12 @@ public class MainMenu : MonoBehaviour {
         loadGamePanel.SetActive(false);
     }
 
-    public void LoadSlot1() {
-        if (gameLoader != null) gameLoader.LoadSlot(1);
-    }
-
-    public void LoadSlot2() {
-        if (gameLoader != null) gameLoader.LoadSlot(2);
-    }
-
-    public void LoadSlot3() {
-        if (gameLoader != null) gameLoader.LoadSlot(3);
+    public void LoadSlot(int slot) {
+        switch (loadStyle) {
+            case LoadStyle.NewGame: GameplaySystem.DeleteSettings(slot); break;
+            case LoadStyle.LoadGame: break;
+        }
+        GameplaySystem.instance.StartGame(slot);
     }
 
     public void OpenOptions() {
@@ -71,7 +67,7 @@ public class MainMenu : MonoBehaviour {
     }
 
     public void ApplySettings() {
-        PlayerPrefs.Save();
+        GameplaySystem.SaveSettings();
         optionsPanel.SetActive(false);
         brightnessPanel.SetActive(false);
     }
@@ -90,16 +86,19 @@ public class MainMenu : MonoBehaviour {
 
         if (text == null) return;
 
-        if (PlayerPrefs.GetInt("Slot" + slot + "_Exists", 0) == 1) {
-
-            string time = PlayerPrefs.GetString("Slot" + slot + "_Time", "No Time");
-            int coins = PlayerPrefs.GetInt("Slot" + slot + "_Coins", 0);
-            string scene = PlayerPrefs.GetString("Slot" + slot + "_Scene", "Unknown");
+        if (GameplaySystem.GetInt(PrefInt.DoesSlotExist, -1) == 1) {
+            string time = GameplaySystem.GetString(PrefString.Time, "No Time");
+            int coins = GameplaySystem.GetInt(PrefInt.Coins, 0);
+            string scene = GameplaySystem.GetString(PrefString.Scene, "Unknown");
 
             text.text = "Saved\n" + scene + "\n" + time + "\nCoins: " + coins;
 
         } else {
             text.text = "Empty";
         }
+    }
+    public enum LoadStyle {
+        NewGame,
+        LoadGame
     }
 }

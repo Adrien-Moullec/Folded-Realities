@@ -28,212 +28,91 @@ public class PauseMenu : MonoBehaviour {
     public TextMeshProUGUI slot3Text;
 
     public bool isPaused;
-
     public Vector3 lastCheckpoint;
-
     public int coins;
 
     int pendingSlot = -1;
 
     void Awake() {
-
         Instance = this;
     }
 
     void OnEnable() {
-
-        SceneManager.sceneLoaded +=
-            OnSceneLoaded;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void OnDisable() {
-
-        SceneManager.sceneLoaded -=
-            OnSceneLoaded;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     void Start() {
 
         pauseMenu.SetActive(false);
-
         buttonsContainer.SetActive(true);
-
         settingsPanel.SetActive(false);
-
         savePanel.SetActive(false);
-
         overwritePanel.SetActive(false);
-
         quitConfirmPanel.SetActive(false);
-
         backgroundPanel.SetActive(true);
-
         UpdateAllSlots();
     }
 
+    /// !!!!!!!!!!!!!!!!!!!! TURN THIS INTO A BUTTON PRESS USING PLAYER INPUT
     void Update() {
-
-        if (
-            Keyboard.current != null &&
-            Keyboard.current.pKey.wasPressedThisFrame
-        ) {
-
+        if (Keyboard.current != null && Keyboard.current.pKey.wasPressedThisFrame) {
             Debug.Log("P PRESSED");
+            if (isPaused) Resume();
+            else Pause();
 
-            if (isPaused) {
-
-                Resume();
-
-            } else {
-
-                Pause();
-            }
         }
     }
 
-    void OnSceneLoaded(
-        Scene scene,
-        LoadSceneMode mode
-    ) {
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
 
-        GameObject p =
-            GameObject.FindGameObjectWithTag(
-                "Player"
-            );
+        GameObject p = GameObject.FindGameObjectWithTag("Player");
+        if (p != null) player = p.transform;
 
-        if (p != null) {
-
-            player =
-                p.transform;
-        }
-
-        if (
-            GameLoader.slotToLoad != -1
-        ) {
-
-            StartCoroutine(
-                LoadAfterDelay(
-                    GameLoader.slotToLoad
-                )
-            );
-
-            GameLoader.slotToLoad = -1;
-        }
+        StartCoroutine(LoadAfterDelay(GameplaySystem.slot));
     }
 
-    IEnumerator LoadAfterDelay(
-        int slot
-    ) {
-
-        yield return new WaitForSeconds(
-            0.1f
-        );
-
+    IEnumerator LoadAfterDelay(int slot) {
+        if (slot == -1) yield break;
+        yield return new WaitForSeconds(0.1f);
         DisablePlayerSystems();
-
         LoadGame(slot);
-
-        yield return new WaitForSeconds(
-            0.1f
-        );
-
+        yield return new WaitForSeconds(0.1f);
         SnapToGround();
-
-        yield return new WaitForSeconds(
-            0.1f
-        );
-
+        yield return new WaitForSeconds(0.1f);
         EnablePlayerSystems();
     }
 
     void DisablePlayerSystems() {
 
-        if (
-            player == null
-        ) return;
-
-        CharacterController cc =
-            player.GetComponent<
-                CharacterController
-            >();
-
-        if (
-            cc != null
-        ) {
-
-            cc.enabled = false;
-        }
-
-        Rigidbody rb =
-            player.GetComponent<
-                Rigidbody
-            >();
-
-        if (
-            rb != null
-        ) {
-
-            rb.linearVelocity =
-                Vector3.zero;
-
-            rb.angularVelocity =
-                Vector3.zero;
-
+        if (player == null) return;
+        if (player.TryGetComponent(out CharacterController cc)) cc.enabled = false;
+        if (player.TryGetComponent(out Rigidbody rb)) {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
             rb.isKinematic = true;
         }
     }
 
     void EnablePlayerSystems() {
 
-        if (
-            player == null
-        ) return;
+        if (player == null) return;
 
-        CharacterController cc =
-            player.GetComponent<
-                CharacterController
-            >();
+        CharacterController cc = player.GetComponent<CharacterController>();
+        if (cc != null) cc.enabled = true;
 
-        if (
-            cc != null
-        ) {
+        Rigidbody rb = player.GetComponent<Rigidbody>();
+        if (rb != null) rb.isKinematic = false;
 
-            cc.enabled = true;
-        }
-
-        Rigidbody rb =
-            player.GetComponent<
-                Rigidbody
-            >();
-
-        if (
-            rb != null
-        ) {
-
-            rb.isKinematic = false;
-        }
     }
 
     void SnapToGround() {
-
-        if (
-            player == null
-        ) return;
-
-        RaycastHit hit;
-
-        if (
-            Physics.Raycast(
-                player.position + Vector3.up,
-                Vector3.down,
-                out hit,
-                20f
-            )
-        ) {
-
-            player.position =
-                hit.point;
-        }
+        if (player == null) return;
+        if (Physics.Raycast(player.position + Vector3.up, Vector3.down, out RaycastHit hit, 20f))
+            player.position = hit.point;
     }
 
     public void Pause() {
@@ -241,501 +120,200 @@ public class PauseMenu : MonoBehaviour {
         Debug.Log("PAUSING");
 
         pauseMenu.SetActive(true);
-
         buttonsContainer.SetActive(true);
-
         settingsPanel.SetActive(false);
-
         savePanel.SetActive(false);
-
         overwritePanel.SetActive(false);
-
         quitConfirmPanel.SetActive(false);
-
         backgroundPanel.SetActive(true);
 
         Time.timeScale = 0f;
-
         isPaused = true;
-
-        Cursor.lockState =
-            CursorLockMode.None;
-
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        if (
-            EventSystem.current != null
-        ) {
+        EventSystem.current?.SetSelectedGameObject(null);
 
-            EventSystem.current
-                .SetSelectedGameObject(
-                    null
-                );
-        }
 
         DisablePlayerSystems();
     }
 
     public void Resume() {
-
         Debug.Log("RESUMING");
-
         pauseMenu.SetActive(false);
-
         Time.timeScale = 1f;
-
         isPaused = false;
 
-        Cursor.lockState =
-            CursorLockMode.Locked;
-
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
         EnablePlayerSystems();
     }
 
     public void OpenSettings() {
-
-        Cursor.lockState =
-            CursorLockMode.None;
-
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
         backgroundPanel.SetActive(false);
-
         buttonsContainer.SetActive(false);
-
         settingsPanel.SetActive(true);
 
-        if (
-            GraphicsSettings.Instance
-            != null
-        ) {
+        if (GraphicsSettings.Instance != null)
+            GraphicsSettings.Instance.CacheCurrentSettings();
 
-            GraphicsSettings.Instance
-                .CacheCurrentSettings();
-        }
     }
 
     public void CloseSettings() {
-
-        if (
-            GraphicsSettings.Instance != null
-        ) {
-
-            GraphicsSettings.Instance
-                .SaveSettings();
+        if (GraphicsSettings.Instance != null) {
+            GraphicsSettings.Instance.SaveSettings();
         }
-
         BackToMain();
     }
 
     public void RevertSettings() {
-
-        if (
-            GraphicsSettings.Instance != null
-        ) {
-
-            GraphicsSettings.Instance
-                .RevertCachedSettings();
-        }
+        if (GraphicsSettings.Instance != null)
+            GraphicsSettings.Instance.RevertCachedSettings();
     }
 
     public void OpenSavePanel() {
-
-        Cursor.lockState =
-            CursorLockMode.None;
-
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
         backgroundPanel.SetActive(true);
-
         buttonsContainer.SetActive(false);
-
         savePanel.SetActive(true);
     }
 
     public void OpenQuitConfirm() {
-
-        Cursor.lockState =
-            CursorLockMode.None;
-
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
         buttonsContainer.SetActive(false);
-
         quitConfirmPanel.SetActive(true);
     }
 
     public void CancelQuit() {
-
         quitConfirmPanel.SetActive(false);
-
         buttonsContainer.SetActive(true);
     }
 
     public void QuitToMainMenuConfirmed() {
-
         Time.timeScale = 1f;
-
         isPaused = false;
-
-        Cursor.lockState =
-            CursorLockMode.None;
-
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
         pauseMenu.SetActive(false);
-
-        GameObject systems =
-            GameObject.Find(
-                "GameplaySystems"
-            );
-
-        if (systems != null) {
-
-            Destroy(systems);
-        }
-
-        SceneManager.LoadScene(
-            "MainMenu"
-        );
+        GameObject systems = GameObject.Find("GameplaySystems");
+        if (systems != null) Destroy(systems);
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void BackToMain() {
 
-        Cursor.lockState =
-            CursorLockMode.None;
-
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
         backgroundPanel.SetActive(true);
-
         buttonsContainer.SetActive(true);
-
         settingsPanel.SetActive(false);
-
         savePanel.SetActive(false);
-
         overwritePanel.SetActive(false);
-
         quitConfirmPanel.SetActive(false);
     }
 
-    public void SetCheckpoint(
-        Vector3 position
-    ) {
-
-        lastCheckpoint =
-            position;
+    public void SetCheckpoint(Vector3 position) {
+        lastCheckpoint = position;
     }
 
-    public void AddCoins(
-        int amount
-    ) {
-
+    public void AddCoins(int amount) {
         coins += amount;
     }
 
-    public void SelectSlot(
-        int slot
-    ) {
+    public void SelectSlot(int slot) {
 
-        if (
-            PlayerPrefs.GetInt(
-                "Slot" + slot + "_Exists",
-                0
-            ) == 1
-        ) {
-
+        if (PlayerPrefs.GetInt("Slot" + slot + "_Exists", 0) == 1) {
             pendingSlot = slot;
-
-            overwritePanel.SetActive(
-                true
-            );
-
+            overwritePanel.SetActive(true);
         } else {
-
             SaveGame(slot);
         }
     }
 
     public void ConfirmOverwrite() {
-
-        SaveGame(
-            pendingSlot
-        );
-
-        overwritePanel.SetActive(
-            false
-        );
-
+        SaveGame(pendingSlot);
+        overwritePanel.SetActive(false);
         pendingSlot = -1;
     }
 
     public void CancelOverwrite() {
-
-        overwritePanel.SetActive(
-            false
-        );
-
+        overwritePanel.SetActive(false);
         pendingSlot = -1;
     }
-    public void ClearSlot(
-    int slot
-) {
-
-        PlayerPrefs.DeleteKey(
-            "Slot" + slot + "_X"
-        );
-
-        PlayerPrefs.DeleteKey(
-            "Slot" + slot + "_Y"
-        );
-
-        PlayerPrefs.DeleteKey(
-            "Slot" + slot + "_Z"
-        );
-
-        PlayerPrefs.DeleteKey(
-            "Slot" + slot + "_Coins"
-        );
-
-        PlayerPrefs.DeleteKey(
-            "Slot" + slot + "_Scene"
-        );
-
-        PlayerPrefs.DeleteKey(
-            "Slot" + slot + "_Time"
-        );
-
-        PlayerPrefs.DeleteKey(
-            "Slot" + slot + "_Exists"
-        );
-
-        PlayerPrefs.Save();
-
+    public void ClearSlot(int slot) {
+        GameplaySystem.DeleteSettings(slot);
+        PlayerPrefs.DeleteKey("Slot" + slot + "_X");
+        PlayerPrefs.DeleteKey("Slot" + slot + "_Y");
+        PlayerPrefs.DeleteKey("Slot" + slot + "_Z");
         UpdateSlotUI(slot);
-
-        Debug.Log(
-            "Cleared Save Slot "
-            + slot
-        );
     }
-    void SaveGame(
-        int slot
-    ) {
+    void SaveGame(int slot) {
 
-        Vector3 pos =
-            player != null
-            ? player.position
-            : lastCheckpoint;
-
-        PlayerPrefs.SetFloat(
-            "Slot" + slot + "_X",
-            pos.x
-        );
-
-        PlayerPrefs.SetFloat(
-            "Slot" + slot + "_Y",
-            pos.y
-        );
-
-        PlayerPrefs.SetFloat(
-            "Slot" + slot + "_Z",
-            pos.z
-        );
-
-        PlayerPrefs.SetInt(
-            "Slot" + slot + "_Coins",
-            coins
-        );
-
-        PlayerPrefs.SetString(
-            "Slot" + slot + "_Scene",
-            SceneManager
-                .GetActiveScene()
-                .name
-        );
-
-        PlayerPrefs.SetInt(
-            "Slot" + slot + "_Exists",
-            1
-        );
-
-        string time =
-            System.DateTime.Now.ToString(
-                "dd/MM/yyyy HH:mm"
-            );
-
-        PlayerPrefs.SetString(
-            "Slot" + slot + "_Time",
-            time
-        );
-
+        Vector3 pos = player != null ? player.position : lastCheckpoint;
+        PlayerPrefs.SetFloat("Slot" + slot + "_X", pos.x);
+        PlayerPrefs.SetFloat("Slot" + slot + "_Y", pos.y);
+        PlayerPrefs.SetFloat("Slot" + slot + "_Z", pos.z);
+        PlayerPrefs.SetInt("Slot" + slot + "_Coins", coins);
+        PlayerPrefs.SetString("Slot" + slot + "_Scene", SceneManager.GetActiveScene().name);
+        PlayerPrefs.SetInt("Slot" + slot + "_Exists", 1);
+        string time = System.DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+        PlayerPrefs.SetString("Slot" + slot + "_Time", time);
         PlayerPrefs.Save();
-
         UpdateSlotUI(slot);
     }
 
-    public void LoadGame(
-        int slot
-    ) {
+    public void LoadGame(int slot) {
 
-        if (
-            PlayerPrefs.GetInt(
-                "Slot" + slot + "_Exists",
-                0
-            ) != 1
-        ) return;
+        if (PlayerPrefs.GetInt("Slot" + slot + "_Exists", 0) != 1) return;
 
-        float x =
-            PlayerPrefs.GetFloat(
-                "Slot" + slot + "_X",
-                0f
-            );
+        float x = PlayerPrefs.GetFloat("Slot" + slot + "_X", 0f);
+        float y = PlayerPrefs.GetFloat("Slot" + slot + "_Y", 0f);
+        float z = PlayerPrefs.GetFloat("Slot" + slot + "_Z", 0f);
+        coins = PlayerPrefs.GetInt("Slot" + slot + "_Coins", 0);
+        string scene = PlayerPrefs.GetString("Slot" + slot + "_Scene", "Unknown");
 
-        float y =
-            PlayerPrefs.GetFloat(
-                "Slot" + slot + "_Y",
-                0f
-            );
-
-        float z =
-            PlayerPrefs.GetFloat(
-                "Slot" + slot + "_Z",
-                0f
-            );
-
-        coins =
-            PlayerPrefs.GetInt(
-                "Slot" + slot + "_Coins",
-                0
-            );
-        string scene =
-    PlayerPrefs.GetString(
-        "Slot" + slot + "_Scene",
-        "Unknown"
-    );
-
-        if (
-            SceneManager.GetActiveScene().name
-            != scene
-        ) {
-
-            GameLoader.slotToLoad =
-                slot;
-
-            SceneManager.LoadScene(
-                scene
-            );
-
+        if (SceneManager.GetActiveScene().name != scene) {
+            GameplaySystem.instance.StartGame(slot);
             return;
         }
 
-        Vector3 loadPos =
-            new Vector3(
-                x,
-                y,
-                z
-            );
+        Vector3 loadPos = new Vector3(x, y, z);
 
-        if (
-            loadPos == Vector3.zero
-        ) {
-
-            GameObject start =
-                GameObject.FindGameObjectWithTag(
-                    "PlayerStart"
-                );
-
-            if (
-                start != null
-            ) {
-
-                loadPos =
-                    start.transform.position;
-            }
+        if (loadPos == Vector3.zero) {
+            GameObject start = GameObject.FindGameObjectWithTag("PlayerStart");
+            if (start != null) loadPos = start.transform.position;
         }
 
-        if (
-            player != null
-        ) {
-
-            player.position =
-                loadPos;
-        }
-
-        lastCheckpoint =
-            loadPos;
+        if (player != null) player.position = loadPos;
+        lastCheckpoint = loadPos;
     }
 
     void UpdateAllSlots() {
-
         UpdateSlotUI(1);
-
         UpdateSlotUI(2);
-
         UpdateSlotUI(3);
     }
 
-    void UpdateSlotUI(
-        int slot
-    ) {
+    void UpdateSlotUI(int slot) {
+        TextMeshProUGUI text = null;
+        if (slot == 1) text = slot1Text;
+        if (slot == 2) text = slot2Text;
+        if (slot == 3) text = slot3Text;
+        if (text == null) return;
 
-        TextMeshProUGUI text =
-            null;
-
-        if (slot == 1)
-            text = slot1Text;
-
-        if (slot == 2)
-            text = slot2Text;
-
-        if (slot == 3)
-            text = slot3Text;
-
-        if (
-            text == null
-        ) return;
-
-        if (
-            PlayerPrefs.GetInt(
-                "Slot" + slot + "_Exists",
-                0
-            ) == 1
-        ) {
-
-            string time =
-                PlayerPrefs.GetString(
-                    "Slot" + slot + "_Time",
-                    "No Time"
-                );
-
-            int savedCoins =
-                PlayerPrefs.GetInt(
-                    "Slot" + slot + "_Coins",
-                    0
-                );
-
-            string scene =
-                PlayerPrefs.GetString(
-                    "Slot" + slot + "_Scene",
-                    "Unknown"
-                );
-
-            text.text =
-                "Saved\n"
-                + scene
-                + "\n"
-                + time
-                + "\nCoins: "
-                + savedCoins;
-
+        if (PlayerPrefs.GetInt("Slot" + slot + "_Exists", 0) == 1) {
+            string time = PlayerPrefs.GetString("Slot" + slot + "_Time", "No Time");
+            int savedCoins = PlayerPrefs.GetInt("Slot" + slot + "_Coins", 0);
+            string scene = PlayerPrefs.GetString("Slot" + slot + "_Scene", "Unknown");
+            text.text = "Saved\n" + scene + "\n" + time + "\nCoins: " + savedCoins;
         } else {
-
-            text.text =
-                "Empty";
+            text.text = "Empty";
         }
     }
 }
