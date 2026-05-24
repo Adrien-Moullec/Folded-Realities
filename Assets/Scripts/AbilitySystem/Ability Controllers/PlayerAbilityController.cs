@@ -24,9 +24,6 @@ namespace AbilitySystem {
         [HideInInspector] public CharacterController characterController;
         [SerializeField] PlayerHealthCanvas playerHealthCanvas;
 
-        [Space]
-        [Header("Respawn")]
-        [SerializeField] Transform startPoint;
         [Header("Damage Settings")]
         [SerializeField] float invincibilityTime = 1f;
         private bool invincible = false;

@@ -2,7 +2,8 @@ public enum GameplayScenes {
     MainMenu,
     Bedroom,
     IntroCutscene,
-    Tutorial2
+    Tutorial2,
+    Lobby
 }
 public enum BedroomSpawnPoints {
     TrashBin = 0,

@@ -23,7 +23,7 @@ public class CheckpointManager : MonoBehaviour {
 
     void Update() {
         if (!respawning && Player.transform.position.y < fallYLimit) {
-            GameplaySystem.instance.Respawn();
+            StartCoroutine(GameplaySystem.instance.Respawn());
         }
     }
     public void SetCheckpoint(Vector3 position, int checkpointIndex, GameObject player = null) {
@@ -49,19 +49,27 @@ public class CheckpointManager : MonoBehaviour {
 
     public void RespawnPlayerIntoLevel(int spawnId = -1) {
         if (spawnId == -1) {
-            RespawnPlayer();
+            RespawnPlayer(false);
             return;
         }
         if (spawnId >= 0 && spawnId < levelExits.Count) {
             SpawnPlayerAtLocation(levelExits[spawnId].SpawnPos + Vector3.up * 2f);
         } else {
-            RespawnPlayer();
+            RespawnPlayer(false);
         }
     }
-    public void RespawnPlayer() {
+    void SpawnPlayer() {
         Vector3 spawnPos = Vector3.zero;
         if (levelStartSpawn != null) {
-            spawnPos = GameplaySystem.GetSceneSavePoint(SceneManager.GetActiveScene().name, levelStartSpawn.position + Vector3.up * 2f);
+            spawnPos = levelStartSpawn.position + Vector3.up * 2f;
+            SpawnPlayerAtLocation(spawnPos);
+        }
+    }
+    public void RespawnPlayer(bool savePoint = true) {
+        Vector3 spawnPos = Vector3.zero;
+        if (levelStartSpawn != null) {
+            spawnPos = levelStartSpawn.position + Vector3.up * 2f;
+            spawnPos = savePoint ? GameplaySystem.GetSceneSavePoint(SceneManager.GetActiveScene().name, spawnPos) : spawnPos;
             SpawnPlayerAtLocation(spawnPos);
         }
     }

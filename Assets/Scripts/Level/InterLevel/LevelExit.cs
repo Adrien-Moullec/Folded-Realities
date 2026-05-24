@@ -23,8 +23,8 @@ public class LevelExit : MonoBehaviour, IInteractable {
     public void OnInteract() {
         if (locked || triggered)
             return;
+        GameplaySystem.SetSceneSavePoint(SceneManager.GetActiveScene().name, SpawnPos);
         NextScene();
-        GameplaySystem.SetSceneSavePoint(SceneManager.GetActiveScene().name, transform.position + spawnPos);
     }
 
     public void OnCancelInteract() {

@@ -31,7 +31,7 @@ public class GameplaySystem : MonoBehaviour {
         PlayerPrefs.Save();
         sceneTransition?.TransitionToScene(scene.ToString(), -1);
     }
-    public IEnumerator Respawn(TransitionType transition = TransitionType.Iris) {
+    public IEnumerator Respawn(bool savePoint = true, TransitionType transition = TransitionType.Iris) {
         PlayerPrefs.Save();
         yield return sceneTransition?.RespawnTransition();
     }
