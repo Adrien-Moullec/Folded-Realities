@@ -45,7 +45,7 @@ public class NPCDialogue : MonoBehaviour {
             dialogueUI.SetActive(false);
         }
 
-        originalScale = Vector3.one;
+        originalScale = dialogueUI.transform.localScale;
         dialogueUI.transform.localScale = Vector3.zero;
 
         if (continuePrompt != null) {
