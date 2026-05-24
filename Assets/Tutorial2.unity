@@ -21523,6 +21523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e47b39d66fc2d3f4eb04ae1d63e207ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneTransition: {fileID: 0}
 --- !u!4 &826716546
 Transform:
   m_ObjectHideFlags: 0
@@ -59643,6 +59644,10 @@ PrefabInstance:
       propertyPath: m_Center.x
       value: -1.1402483
       objectReference: {fileID: 0}
+    - target: {fileID: 3461196330897223503, guid: 45bf32d727e88c54b9492989a2a8d965, type: 3}
+      propertyPath: m_ProvidesContacts
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8161507701981401443, guid: 45bf32d727e88c54b9492989a2a8d965, type: 3}
       propertyPath: nextSceneName
       value: Bedroom
@@ -59650,6 +59655,18 @@ PrefabInstance:
     - target: {fileID: 8161507701981401443, guid: 45bf32d727e88c54b9492989a2a8d965, type: 3}
       propertyPath: targetSpawnID
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161507701981401443, guid: 45bf32d727e88c54b9492989a2a8d965, type: 3}
+      propertyPath: targetLevel.targetId
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161507701981401443, guid: 45bf32d727e88c54b9492989a2a8d965, type: 3}
+      propertyPath: targetLevel.targetScene
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8161507701981401443, guid: 45bf32d727e88c54b9492989a2a8d965, type: 3}
+      propertyPath: activatedByWalkingIntoArea
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8976877100084669585, guid: 45bf32d727e88c54b9492989a2a8d965, type: 3}
       propertyPath: m_LocalPosition.x

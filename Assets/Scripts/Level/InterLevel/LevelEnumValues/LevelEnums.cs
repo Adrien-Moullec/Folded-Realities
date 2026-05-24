@@ -5,6 +5,7 @@ public enum GameplayScenes {
     Tutorial2
 }
 public enum BedroomSpawnPoints {
-    TrashBin,
-    Bed,
+    TrashBin = 0,
+    Bed = 1,
+    Bed2 = 2
 }

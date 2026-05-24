@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Checkpoint : MonoBehaviour {
     public int checkpointIndex;
@@ -39,7 +40,7 @@ public class Checkpoint : MonoBehaviour {
         if (!other.CompareTag("Player")) {
             return;
         }
-
+        GameplaySystem.SetSceneSavePoint(SceneManager.GetActiveScene().name, transform.position);
         if (activated) {
             return;
         }

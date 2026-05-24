@@ -16,13 +16,13 @@ public class SceneTransition : MonoBehaviour {
         irisMaterial.SetFloat("_Radius", 1f);
     }
 
-    public void TransitionToScene(string targetLevel) {
+    public void TransitionToScene(string targetLevel, int spawnLocId) {
         if (transitioning)
             return;
-        StartCoroutine(TransitionRoutine(targetLevel));
+        StartCoroutine(TransitionRoutine(targetLevel, spawnLocId));
     }
 
-    public IEnumerator RespawnTransition(GameObject player) {
+    public IEnumerator RespawnTransition() {
 
         if (transitioning)
             yield break;
@@ -32,7 +32,7 @@ public class SceneTransition : MonoBehaviour {
         yield return null;
 
         if (CheckpointManager.Instance != null)
-            CheckpointManager.Instance.RespawnPlayer(player);
+            CheckpointManager.Instance.RespawnPlayer();
 
         yield return null;
         yield return null;
@@ -49,7 +49,7 @@ public class SceneTransition : MonoBehaviour {
 
         transitioning = false;
     }
-    IEnumerator TransitionRoutine(string sceneName) {
+    IEnumerator TransitionRoutine(string sceneName, int spawnLocId) {
 
         transitioning = true;
         float radius = 1f;
@@ -69,6 +69,7 @@ public class SceneTransition : MonoBehaviour {
         yield return null;
         yield return new WaitForEndOfFrame();
 
+        CheckpointManager.Instance?.RespawnPlayerIntoLevel(spawnLocId);
         irisMaterial = irisImage.material;
 
         yield return new WaitForSeconds(0.8f);

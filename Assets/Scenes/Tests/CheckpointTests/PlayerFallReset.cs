@@ -1,12 +1,11 @@
-using UnityEngine;
+
+/*using UnityEngine;
+
 using System.Collections;
 
 public class PlayerFallReset : MonoBehaviour {
 
-    public float fallYLimit = -10f;
-    public Transform startSpawnPoint;
 
-    private bool respawning = false;
 
     void Update() {
         if (!respawning && transform.position.y < fallYLimit) {
@@ -30,7 +29,7 @@ public class PlayerFallReset : MonoBehaviour {
         yield return new WaitForSeconds(0.05f);
 
         if (CheckpointManager.Instance != null && CheckpointManager.Instance.HasCheckpoint()) {
-            CheckpointManager.Instance.RespawnPlayer(gameObject);
+            CheckpointManager.Instance.RespawnPlayer();
         } else {
             if (startSpawnPoint != null) {
 
@@ -51,4 +50,4 @@ public class PlayerFallReset : MonoBehaviour {
 
         respawning = false;
     }
-}
+}*/

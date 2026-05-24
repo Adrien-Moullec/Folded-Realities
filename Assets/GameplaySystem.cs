@@ -23,15 +23,19 @@ public class GameplaySystem : MonoBehaviour {
     }
 
     #region Scene Management
-    public void LoadScene(GameplayScenes scene, TransitionType transition) {
+    public void LoadScene(TargetLevel scene, TransitionType transition = TransitionType.Iris) {
         PlayerPrefs.Save();
-        sceneTransition?.TransitionToScene(scene.ToString());
+        sceneTransition?.TransitionToScene(scene.targetScene.ToString(), scene.targetId);
     }
-    public IEnumerator Respawn(GameObject player, TransitionType transition) {
+    public void LoadScene(GameplayScenes scene, TransitionType transition = TransitionType.Iris) {
         PlayerPrefs.Save();
-        yield return sceneTransition?.RespawnTransition(player);
+        sceneTransition?.TransitionToScene(scene.ToString(), -1);
     }
-    public IEnumerator BossTransition(GameplayScenes scene, TransitionType transition) {
+    public IEnumerator Respawn(TransitionType transition = TransitionType.Iris) {
+        PlayerPrefs.Save();
+        yield return sceneTransition?.RespawnTransition();
+    }
+    public IEnumerator BossTransition(GameplayScenes scene, TransitionType transition = TransitionType.Iris) {
         PlayerPrefs.Save();
         yield return sceneTransition?.BossDeathTransition();
         SceneManager.LoadScene(scene.ToString());
@@ -40,7 +44,7 @@ public class GameplaySystem : MonoBehaviour {
     public void StartGame(int slotId) {
         slot = slotId;
         PlayerPrefs.Save();
-        sceneTransition?.TransitionToScene(GetString(PrefString.SavedScene, GameplayScenes.IntroCutscene.ToString()));
+        sceneTransition?.TransitionToScene(GetString(PrefString.SavedScene, GameplayScenes.IntroCutscene.ToString()), -1);
     }
     public void SetCurrentSaveScene(GameplayScenes gameplayScenes) {
         SetString(PrefString.SavedScene, gameplayScenes.ToString());
@@ -64,6 +68,7 @@ public class GameplaySystem : MonoBehaviour {
         }
         SaveSettings();
     }
+
 
     /// FLOAT
     public static void SetFloat(PrefFloat key, float value, bool isSlotInfo = true) =>
@@ -94,6 +99,17 @@ public class GameplaySystem : MonoBehaviour {
             PlayerPrefs.GetFloat((isSlotInfo ? currentSlotId : "") + key.ToString() + "-X", def.x),
             PlayerPrefs.GetFloat((isSlotInfo ? currentSlotId : "") + key.ToString() + "-Y", def.y),
             PlayerPrefs.GetFloat((isSlotInfo ? currentSlotId : "") + key.ToString() + "-Z", def.z)
+        );
+    public static void SetSceneSavePoint(string scene, Vector3 value) {
+        PlayerPrefs.SetFloat(currentSlotId + scene + "-X", value.x);
+        PlayerPrefs.SetFloat(currentSlotId + scene + "-Y", value.y);
+        PlayerPrefs.SetFloat(currentSlotId + scene + "-Z", value.z);
+    }
+    public static Vector3 GetSceneSavePoint(string scene, Vector3 def)
+        => new Vector3(
+            PlayerPrefs.GetFloat(currentSlotId + scene + "-X", def.x),
+            PlayerPrefs.GetFloat(currentSlotId + scene + "-Y", def.y),
+            PlayerPrefs.GetFloat(currentSlotId + scene + "-Z", def.z)
         );
     #endregion
 }

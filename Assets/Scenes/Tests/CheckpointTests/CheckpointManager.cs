@@ -1,13 +1,19 @@
 using UnityEngine;
 
 using AbilitySystem;
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class CheckpointManager : MonoBehaviour {
 
     public static CheckpointManager Instance;
+    [SerializeField] PlayerAbilityController Player;
+    [SerializeField] List<LevelExit> levelExits;
     public Transform levelStartSpawn;
     private Vector3 lastCheckpointPosition;
     private int currentCheckpointIndex = -1;
+    private bool respawning = false;
+    public float fallYLimit = -10f;
 
     private void Awake() {
         Instance = this;
@@ -15,6 +21,11 @@ public class CheckpointManager : MonoBehaviour {
             lastCheckpointPosition = levelStartSpawn.position;
     }
 
+    void Update() {
+        if (!respawning && Player.transform.position.y < fallYLimit) {
+            GameplaySystem.instance.Respawn();
+        }
+    }
     public void SetCheckpoint(Vector3 position, int checkpointIndex, GameObject player = null) {
 
         if (checkpointIndex <= currentCheckpointIndex)
@@ -36,26 +47,36 @@ public class CheckpointManager : MonoBehaviour {
         return Vector3.zero;
     }
 
-    public void RespawnPlayer(GameObject playerRoot) {
-
-        if (PlayerPrefs.GetInt("UseDoorSpawn", 0) == 1)
+    public void RespawnPlayerIntoLevel(int spawnId = -1) {
+        if (spawnId == -1) {
+            RespawnPlayer();
             return;
+        }
+        if (spawnId >= 0 && spawnId < levelExits.Count) {
+            SpawnPlayerAtLocation(levelExits[spawnId].SpawnPos + Vector3.up * 2f);
+        } else {
+            RespawnPlayer();
+        }
+    }
+    public void RespawnPlayer() {
+        Vector3 spawnPos = Vector3.zero;
+        if (levelStartSpawn != null) {
+            spawnPos = GameplaySystem.GetSceneSavePoint(SceneManager.GetActiveScene().name, levelStartSpawn.position + Vector3.up * 2f);
+            SpawnPlayerAtLocation(spawnPos);
+        }
+    }
+    void SpawnPlayerAtLocation(Vector3 pos) {
+        if (Player.TryGetComponent(out Rigidbody rb)) {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+        Player.characterController.enabled = false;
 
-        if (playerRoot.TryGetComponent(out CharacterController cc))
-            cc.enabled = false;
+        RaycastHit hit;
+        if (Physics.Raycast(pos, Vector3.down, out hit, 10f))
+            pos.y = hit.point.y + 1f;
+        Player.transform.position = pos;
 
-        Vector3 spawnPos;
-
-        if (HasCheckpoint())
-            spawnPos = lastCheckpointPosition;
-        else if (levelStartSpawn != null)
-            spawnPos = levelStartSpawn.position;
-        else
-            return;
-
-        spawnPos += Vector3.up * 1f;
-        playerRoot.transform.position = spawnPos;
-
-        if (cc != null) cc.enabled = true;
+        Player.characterController.enabled = true;
     }
 }

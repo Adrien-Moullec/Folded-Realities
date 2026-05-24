@@ -511,7 +511,7 @@ Transform:
   m_GameObject: {fileID: 2969896672581243912}
   serializedVersion: 2
   m_LocalRotation: {x: 0.25340134, y: 0.000000014454841, z: -0.000000003786462, w: 0.9673613}
-  m_LocalPosition: {x: -2.608937, y: 2.9667444, z: -5.0902967}
+  m_LocalPosition: {x: -0.17656589, y: 1.8057445, z: -4.575636}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1172,7 +1172,6 @@ GameObject:
   - component: {fileID: 3061592385069726717}
   - component: {fileID: 4601957020910338640}
   - component: {fileID: 3937765037085289841}
-  - component: {fileID: 8493529438444136099}
   - component: {fileID: 2727441906488567744}
   - component: {fileID: 5074179921747160703}
   m_Layer: 7
@@ -1371,6 +1370,7 @@ MonoBehaviour:
       tertiary:
         abilitySO: {fileID: 0}
   BodyHolder: {fileID: 7211196813232357869}
+  characterController: {fileID: 0}
   playerHealthCanvas: {fileID: 1937478605033926611}
   startPoint: {fileID: 0}
   invincibilityTime: 1
@@ -1452,20 +1452,6 @@ MonoBehaviour:
   - {fileID: 0}
   pickupSound: {fileID: 8300000, guid: ee6fe97111ab06e45861282689f4e37d, type: 3}
   healAmount: 20
---- !u!114 &8493529438444136099
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5710287258573495793}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7baa4feac5434de4da08fa417c6a67c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fallYLimit: -10
-  startSpawnPoint: {fileID: 0}
 --- !u!23 &2727441906488567744
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1564,7 +1550,7 @@ Transform:
   m_GameObject: {fileID: 5875144431828711502}
   serializedVersion: 2
   m_LocalRotation: {x: 0.25340134, y: 0.000000014454841, z: -0.000000003786462, w: 0.9673613}
-  m_LocalPosition: {x: -2.4323711, y: 3.411, z: -4.514661}
+  m_LocalPosition: {x: 0, y: 2.25, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

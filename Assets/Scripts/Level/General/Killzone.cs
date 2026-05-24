@@ -17,7 +17,7 @@ public class KillZone : MonoBehaviour {
     }
 
     IEnumerator KillRoutine(GameObject player, CharacterController controller) {
-        yield return GameplaySystem.instance.Respawn(player, TransitionType.Iris);
+        yield return GameplaySystem.instance.Respawn(TransitionType.Iris);
         yield return new WaitForSeconds(0.05f);
         if (controller != null)
             controller.enabled = true;

@@ -1,11 +1,15 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelExit : MonoBehaviour, IInteractable {
     public TargetLevel targetLevel;
-    public string targetSpawnID = "1";
     public bool activatedByWalkingIntoArea = false;
+    public Vector3 spawnPos;
+    [SerializeField] float gizmos = 1;
+
 
     [HideInInspector] public bool locked;
+    [HideInInspector] public Vector3 SpawnPos => transform.position + spawnPos;
 
     bool triggered = false;
 
@@ -13,12 +17,14 @@ public class LevelExit : MonoBehaviour, IInteractable {
         if (locked || !other.CompareTag("Player") || triggered || !activatedByWalkingIntoArea)
             return;
         NextScene();
+        GameplaySystem.SetSceneSavePoint(SceneManager.GetActiveScene().name, transform.position + spawnPos);
     }
 
     public void OnInteract() {
         if (locked || triggered)
             return;
         NextScene();
+        GameplaySystem.SetSceneSavePoint(SceneManager.GetActiveScene().name, transform.position + spawnPos);
     }
 
     public void OnCancelInteract() {
@@ -27,7 +33,10 @@ public class LevelExit : MonoBehaviour, IInteractable {
 
     void NextScene() {
         triggered = true;
-        SpawnData.spawnID = targetSpawnID;
-        //GameplaySystem.instance.LoadScene(targetLevel, TransitionType.Iris);
+        GameplaySystem.instance.LoadScene(targetLevel, TransitionType.Iris);
+    }
+
+    void OnDrawGizmos() {
+        Gizmos.DrawWireSphere(transform.position + spawnPos, gizmos);
     }
 }

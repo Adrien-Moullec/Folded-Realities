@@ -21,7 +21,7 @@ namespace AbilitySystem {
         [SerializeField] List<PlayerSetSummary> playerSetsList;
         [HideInInspector] public PlayerSetSummary currentAbilitySet;
         public GameObject BodyHolder;
-        private CharacterController characterController;
+        [HideInInspector] public CharacterController characterController;
         [SerializeField] PlayerHealthCanvas playerHealthCanvas;
 
         [Space]
@@ -197,9 +197,8 @@ namespace AbilitySystem {
                             StartCoroutine(BossFightRestartRoutine());
                             return;
                         }
-                        StartCoroutine(GameplaySystem.instance.Respawn(gameObject, TransitionType.Iris));
+                        StartCoroutine(GameplaySystem.instance.Respawn());
                         GetComponent<CharacterController>().enabled = true;
-                        CheckpointManager.Instance?.RespawnPlayer(gameObject);
                         currentAbilitySet
                             .abilitySetSO
                             .healthSettings

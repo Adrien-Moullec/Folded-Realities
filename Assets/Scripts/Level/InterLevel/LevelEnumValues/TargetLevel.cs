@@ -7,9 +7,9 @@ using UnityEditor;
 [Serializable]
 public class TargetLevel {
     public GameplayScenes targetScene;
-    public BedroomSpawnPoints bedroomSpawnPoint;
+    [Min(-1)] public int targetId;
 }
-
+/*
 [CustomPropertyDrawer(typeof(TargetLevel))]
 public class TargetLevelDrawer : PropertyDrawer {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
@@ -52,4 +52,4 @@ public class TargetLevelDrawer : PropertyDrawer {
 
         return 4 * (EditorGUIUtility.singleLineHeight + 2);
     }
-}
+}*/
