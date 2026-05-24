@@ -22,7 +22,7 @@ public class CheckpointManager : MonoBehaviour {
     }
 
     void Update() {
-        if (!respawning && Player.transform.position.y < fallYLimit) {
+        if (!respawning && Player?.transform.position.y < fallYLimit) {
             StartCoroutine(GameplaySystem.instance.Respawn());
         }
     }
@@ -48,6 +48,7 @@ public class CheckpointManager : MonoBehaviour {
     }
 
     public void RespawnPlayerIntoLevel(int spawnId = -1) {
+        if (Player == null) return;
         if (spawnId == -1) {
             RespawnPlayer(false);
             return;
@@ -59,6 +60,7 @@ public class CheckpointManager : MonoBehaviour {
         }
     }
     void SpawnPlayer() {
+        if (Player == null) return;
         Vector3 spawnPos = Vector3.zero;
         if (levelStartSpawn != null) {
             spawnPos = levelStartSpawn.position + Vector3.up * 2f;
@@ -66,6 +68,7 @@ public class CheckpointManager : MonoBehaviour {
         }
     }
     public void RespawnPlayer(bool savePoint = true) {
+        if (Player == null) return;
         Vector3 spawnPos = Vector3.zero;
         if (levelStartSpawn != null) {
             spawnPos = levelStartSpawn.position + Vector3.up * 2f;
@@ -74,6 +77,7 @@ public class CheckpointManager : MonoBehaviour {
         }
     }
     void SpawnPlayerAtLocation(Vector3 pos) {
+        if (Player == null) return;
         if (Player.TryGetComponent(out Rigidbody rb)) {
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;

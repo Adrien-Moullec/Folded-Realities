@@ -31,7 +31,7 @@ public class LevelExit : MonoBehaviour, IInteractable {
 
     }
 
-    void NextScene() {
+    public void NextScene() {
         triggered = true;
         GameplaySystem.instance.LoadScene(targetLevel, TransitionType.Iris);
     }

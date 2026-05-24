@@ -129,9 +129,6 @@ public class PlayerManager : MonoBehaviour {
         int amount = interactionArea.GetColliders(body).Invoke(hits);
         for (int i = 0; i < amount; i++) {
             if (hits[i] == null) continue;
-            if (hits[i].TryGetComponent(out LevelExit exit))
-                Debug.Log(exit.gameObject.name);
-            Debug.Log(hits[i].gameObject.name + ": " + i + "/" + amount);
             if (hits[i].TryGetComponent(out IInteractable iinteract))
                 iinteract.OnInteract();
         }
