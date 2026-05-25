@@ -1,4 +1,7 @@
 
+using System;
+using System.Collections;
+
 using UnityEngine;
 
 namespace AbilitySystem {
@@ -15,10 +18,32 @@ namespace AbilitySystem {
             animator = GetComponent<Animator>();
         }
 
-        protected bool CanStartAnimation((int hashCode, int layer) info) {
+        protected virtual bool CanStartAnimation((int hashCode, int layer) info) {
             if (layers[info.layer].state.currentState != "")
                 return false;
             return true;
+        }
+        public IEnumerator InitiateOneOffAnimation(
+            Action startF,
+            Action<float> updateF,
+            Action<AbilityAnimationEventData> eventF,
+            Action endF,
+            string animType,
+            bool overrideState = true
+        ) {
+            (int stateHashCode, int layer) info = (Animator.StringToHash(animType), GetLayerInfo(animType));
+
+            if (!CanStartAnimation(info) && !overrideState)
+                yield break;
+
+            // If already playing, stop it first
+            if (layers[info.layer].state.currentState != "") {
+                OnEndAnim(info.stateHashCode, 0);
+                yield return null;
+            }
+
+            layers[info.layer].state = new AnimatorFunctions(animType.ToString(), startF, updateF, eventF, endF);
+            if (animator.gameObject.activeSelf) animator.CrossFade(animType.ToString(), 0);
         }
         protected abstract int GetLayerInfo(string input);
 
@@ -35,7 +60,6 @@ namespace AbilitySystem {
             layers[layerIndex].state = new AnimatorFunctions("", null, null, null, null);
         }
         public void ReceiveEvent(AnimationEvent animationEvent) {
-
             for (int i = 0; i < animator.layerCount; i++) {
                 AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(i);
 

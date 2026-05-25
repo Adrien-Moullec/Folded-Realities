@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AbilitySystem {
     [RequireComponent(typeof(Animator))]
-    public class AnimatorManager : BaseAnimatorManager {
+    public class CharacterAnimatorManager : BaseAnimatorManager {
 
         #region Parameters
         public const string deltaSpeed = "deltaSpeed";
@@ -21,30 +21,6 @@ namespace AbilitySystem {
         }
         public void SetMovementState() {
             animator.CrossFade("Grounded", 0);
-        }
-
-        public IEnumerator InitiateOneOffAnimation(
-            Action startF,
-            Action<float> updateF,
-            Action<AbilityAnimationEventData> eventF,
-            Action endF,
-            string animType,
-            bool overrideState
-        ) {
-
-            (int stateHashCode, int layer) info = (Animator.StringToHash(animType), GetLayerInfo(animType));
-
-            if (!CanStartAnimation(info) && !overrideState)
-                yield break;
-
-            // If already playing, stop it first
-            if (layers[info.layer].state.currentState != "") {
-                OnEndAnim(info.stateHashCode, 0);
-                yield return null;
-            }
-
-            layers[info.layer].state = new AnimatorFunctions(animType.ToString(), startF, updateF, eventF, endF);
-            if (animator.gameObject.activeSelf) animator.CrossFade(animType.ToString(), 0);
         }
 
         protected override int GetLayerInfo(string input) {

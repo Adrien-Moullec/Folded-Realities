@@ -26,6 +26,7 @@ public class NPCDialogue : MonoBehaviour {
     public float minPitch = 0.8f;
     public float maxPitch = 1.0f;
 
+    public UnityEvent onDialogueStart;
     public UnityEvent onDialogueFinished;
     public bool preventAutoClose = false;
 

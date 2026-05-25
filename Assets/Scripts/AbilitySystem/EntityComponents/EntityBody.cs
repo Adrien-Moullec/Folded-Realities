@@ -11,7 +11,7 @@ namespace AbilitySystem {
         [Tooltip("Gameobject that parents the body prefab.")]
         public GameObject bodyHolder;
         [Tooltip("Animator Manager.")]
-        public AnimatorManager animatorManager;
+        public CharacterAnimatorManager animatorManager;
         public Transform prefab;
         public List<Renderer> entityShader;
 

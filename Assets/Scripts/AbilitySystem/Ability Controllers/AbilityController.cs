@@ -64,7 +64,7 @@ namespace AbilitySystem {
                 n.SetFloat("_Health01", (float)CurrentHealth / MaxHealth);
         }
         public abstract void Die();
-        protected IEnumerator PlayerDeath(AnimatorManager animatorManager, Action onDeathAnimationEnd) {
+        protected IEnumerator PlayerDeath(CharacterAnimatorManager animatorManager, Action onDeathAnimationEnd) {
 
             bool hasFinishedAnim = false;
             yield return animatorManager?.InitiateOneOffAnimation(
