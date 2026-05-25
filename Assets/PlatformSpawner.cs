@@ -1,106 +1,64 @@
 using System.Collections;
+using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class PlatformSpawner : MonoBehaviour {
 
-    public GameObject platformPrefab;
+    [Header("Managers")]
+    public MovingPlatformDown platformPrefab;
 
-    public float spawnRate = 1f;
+    [Space]
+    [Header("Spawn Points")]
+    [SerializeField] Vector3 point1;
+    [SerializeField] Vector3 point2;
 
-    public int maxPlatforms = 20;
-
-    int currentPlatforms = 0;
-
+    // Private
+    public ObjectPool<MovingPlatformDown> pooledPlatforms;
     BoxCollider spawnArea;
 
-    void Start() {
-
-        spawnArea =
-            GetComponent<BoxCollider>();
-
-        StartCoroutine(
-            SpawnRoutine()
+    void Awake() {
+        platformPrefab.gameObject.SetActive(false);
+        pooledPlatforms = new ObjectPool<MovingPlatformDown>(
+            createFunc: () => Instantiate(platformPrefab, transform),
+            actionOnGet: platform => SpawnPlatform(platform),
+            actionOnRelease: platform => Despawn(platform),
+            actionOnDestroy: platform => Destroy(platform),
+            collectionCheck: true,
+            defaultCapacity: 10,
+            maxSize: 100
         );
     }
 
-    IEnumerator SpawnRoutine() {
+    void Start() {
+        spawnArea = GetComponent<BoxCollider>();
+    }
 
-        while (true) {
-
-            if (
-                currentPlatforms <
-                maxPlatforms
-            ) {
-
-                SpawnPlatform();
-            }
-
-            yield return new WaitForSeconds(
-                spawnRate
-            );
+    public IEnumerator SpawnRoutine(float rate, float speed, int maxPlatforms) {
+        int spawnedPlatforms = 0;
+        while (spawnedPlatforms++ < maxPlatforms) {
+            pooledPlatforms.Get().OnSpawnPlatform(this, speed);
+            yield return new WaitForSeconds(rate);
+        }
+        while (pooledPlatforms.CountActive > 0) {
+            yield return null;
         }
     }
 
-    void SpawnPlatform() {
+    Vector3 GetRandomPos() => Vector3.Lerp(point1 + transform.position, point2 + transform.position, Random.Range(0f, 1f));
 
-        Vector3 center =
-            spawnArea.bounds.center;
-
-        Vector3 size =
-            spawnArea.bounds.size;
-
-        Vector3 randomPos =
-            new Vector3(
-
-                Random.Range(
-                    center.x - size.x / 2,
-                    center.x + size.x / 2
-                ),
-
-                Random.Range(
-                    center.y - size.y / 2,
-                    center.y + size.y / 2
-                ),
-
-                center.z +
-                Random.Range(
-                    -1f,
-                    1f
-                )
-            );
-
-        GameObject platform =
-            Instantiate(
-                platformPrefab,
-                randomPos,
-                platformPrefab.transform.rotation
-            );
-
-        currentPlatforms++;
-
-        MovingPlatformDown mp =
-            platform.GetComponent<
-                MovingPlatformDown
-            >();
-
-        if (mp != null) {
-
-            mp.spawner = this;
-
-            BossFightManager manager =
-                BossFightManager.Instance;
-
-            if (manager != null) {
-
-                mp.bossTarget =
-                    manager.boss.transform;
-            }
-        }
+    void SpawnPlatform(MovingPlatformDown platform) {
+        platform.gameObject.SetActive(true);
+        platform.transform.position = GetRandomPos();
     }
 
-    public void PlatformDestroyed() {
+    void Despawn(MovingPlatformDown platform) {
+        platform.gameObject.SetActive(false);
+    }
 
-        currentPlatforms--;
+    void OnDrawGizmos() {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(point1 + transform.position, point2 + transform.position);
     }
 }

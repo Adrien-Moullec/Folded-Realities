@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AbilitySystem {
     public class AnimationTracker : StateMachineBehaviour {
-        private CharacterAnimatorManager animatorManager;
+        private BaseAnimatorManager animatorManager;
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
             if (animatorManager == null)
                 animator.TryGetComponent(out animatorManager);

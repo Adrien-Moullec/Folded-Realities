@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class LockYPosition : MonoBehaviour {
     private float lockedY;
@@ -12,4 +12,4 @@ public class LockYPosition : MonoBehaviour {
         pos.y = lockedY;
         transform.position = pos;
     }
-}
+}*/

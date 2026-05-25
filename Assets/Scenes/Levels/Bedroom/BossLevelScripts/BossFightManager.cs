@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 
 using UnityEngine;
@@ -8,241 +9,124 @@ public class BossFightManager : MonoBehaviour {
 
     [Header("Boss")]
     public BossEnemy boss;
+    [SerializeField] ShredderAnimatorManager animationManager;
 
-    [Header("Projectile Settings")]
-    public float phase1ProjectileRate = 1f;
-    public float phase1ProjectileSpeed = 8f;
-
-    public float phase3ProjectileRate = 0.4f;
-    public float phase3ProjectileSpeed = 14f;
-
-    public float phase4ProjectileRate = 0.25f;
-    public float phase4ProjectileSpeed = 18f;
+    [SerializeField] BossFightSection[] bossFight;
 
     [Header("Platform Settings")]
     public PlatformSpawner platformSpawner;
 
-    public float phase2SpawnRate = 1.5f;
-    public int phase2MaxPlatforms = 5;
-    public float phase2PlatformSpeed = 4f;
-    public float phase2SuctionForce = 10f;
+    float phaseIntervalLength = 0.5f;
+    bool isFin = false;
 
-    public float phase4SpawnRate = 0.5f;
-    public int phase4MaxPlatforms = 10;
-    public float phase4PlatformSpeed = 8f;
-    public float phase4SuctionForce = 18f;
-
-    [Header("Phase Lengths")]
-    public float phase1Length = 10f;
-    public float phase2Length = 12f;
-    public float phase3Length = 10f;
-
-    [Header("Flash")]
-    public Color phase2FlashColor = Color.red;
-    public Color phase3FlashColor = Color.magenta;
-    public Color phase4FlashColor = Color.yellow;
-
-    Coroutine projectileRoutine;
-
-    void Awake() {
-
+    void Awake() =>
         Instance = this;
-    }
 
-    void Start() {
 
-        StartCoroutine(
-            BossRoutine()
-        );
-    }
+    void Start() =>
+        StartCoroutine(BossRoutine());
+
 
     IEnumerator BossRoutine() {
-
-        // PHASE 1
-        StartProjectilePhase(
-            phase1ProjectileRate,
-            phase1ProjectileSpeed
+        isFin = false;
+        yield return animationManager.InitiateOneOffAnimation(
+            null,
+            null,
+            null,
+            () => isFin = true,
+            ShredderAnim.WakeUp.ToString()
         );
+        while (!isFin) yield return null;
 
-        yield return new WaitForSeconds(
-            phase1Length
-        );
+        foreach (var n in bossFight) {
+            if (n.skipPhase) continue;
 
-        // FLASH
-        boss.angryColor =
-            phase2FlashColor;
+            yield return ProjectileRoutine(n.spitPhase.rate, n.spitPhase.speed, n.spitPhase.maxSpawn);
+            yield return new WaitForSeconds(phaseIntervalLength);
+            animationManager.SetState(ShredderAnim.SpinAttack.ToString(), 0.2f);
+            yield return platformSpawner.SpawnRoutine(n.suckPhase.rate, n.suckPhase.speed, n.suckPhase.maxSpawn);
+            yield return new WaitForSeconds(phaseIntervalLength);
+            animationManager.SetState(ShredderAnim.Idle.ToString(), 0.2f);
 
-        yield return StartCoroutine(
-            boss.FlashAngry()
-        );
 
-        // PHASE 2
-        StopProjectileRoutine();
-
-        StartPlatformPhase(
-            phase2SpawnRate,
-            phase2MaxPlatforms,
-            phase2PlatformSpeed,
-            phase2SuctionForce
-        );
-
-        yield return new WaitForSeconds(
-            phase2Length
-        );
-
-        // FLASH
-        boss.angryColor =
-            phase3FlashColor;
-
-        yield return StartCoroutine(
-            boss.FlashAngry()
-        );
-
-        // PHASE 3
-        StopPlatformPhase();
-
-        StartProjectilePhase(
-            phase3ProjectileRate,
-            phase3ProjectileSpeed
-        );
-
-        yield return new WaitForSeconds(
-            phase3Length
-        );
-
-        // FLASH
-        boss.angryColor =
-            phase4FlashColor;
-
-        yield return StartCoroutine(
-            boss.FlashAngry()
-        );
-
-        // PHASE 4
-        StartPlatformPhase(
-            phase4SpawnRate,
-            phase4MaxPlatforms,
-            phase4PlatformSpeed,
-            phase4SuctionForce
-        );
-
-        StartProjectilePhase(
-            phase4ProjectileRate,
-            phase4ProjectileSpeed
-        );
-    }
-
-    void StartProjectilePhase(
-        float rate,
-        float speed
-    ) {
-
-        StopProjectileRoutine();
-
-        projectileRoutine =
-            StartCoroutine(
-                ProjectileRoutine(
-                    rate,
-                    speed
-                )
+            yield return StartCoroutine(boss.FlashAngry(n.color));
+            isFin = false;
+            yield return animationManager.InitiateOneOffAnimation(
+                null,
+                null,
+                null,
+                () => isFin = true,
+                ShredderAnim.Hit.ToString(),
+                crossFade: 0.05f
             );
-    }
-
-    void StopProjectileRoutine() {
-
-        if (
-            projectileRoutine != null
-        ) {
-
-            StopCoroutine(
-                projectileRoutine
-            );
-
-            projectileRoutine = null;
+            while (!isFin) yield return null;
         }
-    }
-
-    IEnumerator ProjectileRoutine(
-        float rate,
-        float speed
-    ) {
-
-        while (true) {
-
-            boss.Shoot(
-                speed
-            );
-
-            yield return new WaitForSeconds(
-                rate
-            );
-        }
-    }
-
-    void StartPlatformPhase(
-        float spawnRate,
-        int maxPlatforms,
-        float platformSpeed,
-        float suctionForce
-    ) {
-
-        if (
-            platformSpawner == null
-        ) {
-            return;
-        }
-
-        platformSpawner.gameObject.SetActive(
-            true
+        isFin = false;
+        yield return animationManager.InitiateOneOffAnimation(
+            null,
+            null,
+            null,
+            () => isFin = true,
+            ShredderAnim.Death.ToString(),
+            crossFade: 0.05f
         );
-
-        platformSpawner.spawnRate =
-            spawnRate;
-
-        platformSpawner.maxPlatforms =
-            maxPlatforms;
-
-        UpdatePlatforms(
-            platformSpeed,
-            suctionForce
-        );
+        while (!isFin) yield return null;
+        GameplaySystem.instance.LoadScene(GameplayScenes.Bedroom);
     }
-
-    void StopPlatformPhase() {
-
-        if (
-            platformSpawner != null
-        ) {
-
-            platformSpawner.gameObject.SetActive(
-                false
+    IEnumerator ProjectileRoutine(float rate, float speed, int spawnCount) {
+        int shootCount = 0;
+        boss.isMove = true;
+        while (shootCount < spawnCount) {
+            isFin = false;
+            yield return animationManager.InitiateOneOffAnimation(
+                null,
+                null,
+                (x) => { boss.Shoot(speed); Debug.Log("Shoot"); },
+                () => isFin = true,
+                ShredderAnim.Spit.ToString(),
+                crossFade: 0.05f
             );
+            while (!isFin) yield return null;
+
+            shootCount++;
+            yield return new WaitForSeconds(rate);
         }
-    }
-
-    void UpdatePlatforms(
-        float speed,
-        float suction
-    ) {
-
-        MovingPlatformDown[] platforms =
-            FindObjectsByType<MovingPlatformDown>(
-                FindObjectsSortMode.None
-            );
-
-        foreach (
-            MovingPlatformDown p
-            in platforms
-        ) {
-
-            p.fallSpeed =
-                speed;
-
-            p.suctionForce =
-                suction;
-
-            p.bossTarget =
-                boss.transform;
-        }
+        boss.isMove = false;
+        yield return boss.MoveToCentre();
     }
 }
+
+[Serializable]
+public struct BossFightSection {
+    public Color color;
+    public bool skipPhase;
+    public SpitPhase spitPhase;
+    public SuckPhase suckPhase;
+}
+[Serializable]
+public struct SpitPhase {
+    public float rate;
+    public float speed;
+    public int maxSpawn;
+}
+[Serializable]
+public struct SuckPhase {
+    public float rate;
+    public float speed;
+    public int maxSpawn;
+    public float suction;
+}
+/// flash Colour
+/// 
+/// --- Spit ---
+/// rate
+/// speed
+/// amount
+/// 
+/// 
+/// --- Suck ---
+/// rate
+/// speed
+/// amount
+/// suction
+/// 

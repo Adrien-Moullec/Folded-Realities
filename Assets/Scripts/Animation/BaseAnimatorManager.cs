@@ -23,13 +23,18 @@ namespace AbilitySystem {
                 return false;
             return true;
         }
+
+        public void SetState(string stateName, float crossfade) {
+            animator?.CrossFade(stateName, crossfade);
+        }
         public IEnumerator InitiateOneOffAnimation(
             Action startF,
             Action<float> updateF,
             Action<AbilityAnimationEventData> eventF,
             Action endF,
             string animType,
-            bool overrideState = true
+            bool overrideState = true,
+            float crossFade = 0
         ) {
             (int stateHashCode, int layer) info = (Animator.StringToHash(animType), GetLayerInfo(animType));
 
@@ -43,7 +48,7 @@ namespace AbilitySystem {
             }
 
             layers[info.layer].state = new AnimatorFunctions(animType.ToString(), startF, updateF, eventF, endF);
-            if (animator.gameObject.activeSelf) animator.CrossFade(animType.ToString(), 0);
+            if (animator.gameObject.activeSelf) animator.CrossFade(animType.ToString(), crossFade);
         }
         protected abstract int GetLayerInfo(string input);
 
@@ -64,7 +69,7 @@ namespace AbilitySystem {
                 AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(i);
 
                 if (Animator.StringToHash(layers[i].state.currentState) == stateInfo.shortNameHash)
-                    layers[i].state.eventFunction?.Invoke(new AbilityAnimationEventData(animationEvent));
+                    layers[i].state.eventFunction?.Invoke(new AbilityAnimationEventData(animationEvent, stateInfo.normalizedTime % 1));
             }
         }
     }

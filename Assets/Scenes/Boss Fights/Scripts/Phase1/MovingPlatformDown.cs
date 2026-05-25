@@ -1,166 +1,77 @@
 using UnityEngine;
+
 using AbilitySystem;
+
+using System;
+using System.Collections;
 
 public class MovingPlatformDown : MonoBehaviour {
 
-    [Header("Movement")]
-    public float fallSpeed = 3f;
+    [Header("Boss References")]
+    [SerializeField] PlatformSpawner spawner;
+    [SerializeField] ShredderAnimatorManager shredderAnimatorManager;
+    [SerializeField] Transform bossTarget;
+    [SerializeField, Range(0, 1)] float suckInSpeed = 0.2f;
+    [SerializeField] AnimationCurve suckInYEase;
+    [SerializeField] AnimationCurve suckInPlanePositionEase;
+    [SerializeField, Range(0, 1)] float targetSize = 0.2f;
 
-    [Header("Respawn")]
-    public float despawnOffset = 15f;
-
-    [Header("Damage")]
-    public int damageAmount = 10;
-
-    public float damageCooldown = 1f;
-
-    [Header("Boss Suction")]
-    public Transform bossTarget;
-
-    public float suctionForce = 8f;
-
-    public float suctionStartDistanceBelowPlayer = 3f;
-
-    [Header("Fake Thickness")]
-    public float visualHitPadding = 1.5f;
-
-    [HideInInspector]
-    public PlatformSpawner spawner;
-
-    Transform player;
-
-    float damageTimer;
-
+    // Private
+    public float yDistanceToBossSuck = 4;
+    float fallSpeed = 3f;
     bool suctionActive = false;
+    Vector3 originalSize;
 
-    void Start() {
-
-        GameObject playerObj =
-            GameObject.FindGameObjectWithTag(
-                "Player"
-            );
-
-        if (playerObj != null) {
-
-            player =
-                playerObj.transform;
-        }
+    void Awake() {
+        originalSize = transform.localScale;
     }
+
 
     void Update() {
-
-        if (player == null) {
-            return;
-        }
+        if (suctionActive) return;
 
         // normal falling
-        transform.position +=
-            Vector3.down *
-            fallSpeed *
-            Time.deltaTime;
+        transform.position += Vector3.down * fallSpeed * Time.deltaTime;
 
         // only start suction AFTER passing player
-        if (
-            !suctionActive &&
-            transform.position.y <
-            player.position.y -
-            suctionStartDistanceBelowPlayer
-        ) {
-
+        if (!suctionActive && ((transform.position.y - bossTarget.position.y) < yDistanceToBossSuck))
             suctionActive = true;
-        }
 
         // suck toward boss
-        if (
-            suctionActive &&
-            bossTarget != null
-        ) {
-
-            Vector3 dir =
-                (
-                    bossTarget.position -
-                    transform.position
-                ).normalized;
-
-            transform.position +=
-                dir *
-                suctionForce *
-                Time.deltaTime;
-        }
-
-        // fake damage zone
-        if (
-            IsPlayerUnderPlatform()
-        ) {
-
-            PlayerAbilityController health =
-                player.GetComponent<PlayerAbilityController>();
-
-            if (
-                health != null &&
-                Time.time > damageTimer
-            ) {
-
-                EntityDamage damage =
-                    new EntityDamage();
-
-                damage.amount =
-                    damageAmount;
-
-                health.Damage(
-                    damage
-                );
-
-                damageTimer =
-                    Time.time +
-                    damageCooldown;
-            }
-        }
-
-        // cleanup
-        if (
-            transform.position.y <
-            player.position.y -
-            despawnOffset
-        ) {
-
-            if (
-                spawner != null
-            ) {
-
-                spawner.PlatformDestroyed();
-            }
-
-            Destroy(
-                gameObject
-            );
-        }
+        if (suctionActive && bossTarget != null)
+            StartCoroutine(SuckAnim());
     }
 
-    bool IsPlayerUnderPlatform() {
+    IEnumerator SuckAnim() {
+        Vector3 startPos = transform.position;
+        Vector3 endPos = bossTarget.position;
+        float delta = 0;
+        Vector3 pos;
+        while (delta < 1) {
+            delta += Time.deltaTime * suckInSpeed;
+            pos = Vector3.Lerp(startPos, endPos, suckInYEase.Evaluate(delta));
+            pos.y = Mathf.Lerp(startPos.y, endPos.y, suckInYEase.Evaluate(delta));
+            transform.position = pos;
+            transform.localScale = Vector3.Lerp(originalSize, originalSize * targetSize, suckInYEase.Evaluate(delta));
+            yield return null;
+        }
+        spawner.pooledPlatforms.Release(this);
+    }
 
-        float horizontalDistance =
-            Mathf.Abs(
-                player.position.x -
-                transform.position.x
-            );
+    void OnTriggerEnter(Collider other) {
+        if (!other.TryGetComponent(out IHealth iHealth)) return;
+        iHealth.Damage(new EntityDamage(10, null));
+        spawner.pooledPlatforms.Release(this);
+    }
 
-        bool closeHorizontally =
-            horizontalDistance < 2.2f;
+    public void OnSpawnPlatform(PlatformSpawner spawner, float speed) {
+        suctionActive = false;
+        this.spawner = spawner;
+        fallSpeed = speed;
+        transform.localScale = originalSize;
+    }
 
-        bool playerBelow =
-            player.position.y <
-            transform.position.y;
-
-        bool closeVertically =
-            transform.position.y -
-            player.position.y <
-            2.5f +
-            visualHitPadding;
-
-        return
-            closeHorizontally &&
-            playerBelow &&
-            closeVertically;
+    void OnDrawGizmos() {
+        Gizmos.DrawLine(bossTarget.transform.position, bossTarget.transform.position + Vector3.up * yDistanceToBossSuck);
     }
 }
