@@ -81,9 +81,9 @@ public class BossFightManager : MonoBehaviour {
             yield return animationManager.InitiateOneOffAnimation(
                 null,
                 null,
-                (x) => { boss.Shoot(speed); Debug.Log("Shoot"); },
+                (x) => { Debug.Log("Function received"); boss.Shoot(speed); isFin = true; },
                 () => isFin = true,
-                ShredderAnim.Spit.ToString(),
+                ShredderAnim.SpitCharge.ToString(),
                 crossFade: 0.05f
             );
             while (!isFin) yield return null;

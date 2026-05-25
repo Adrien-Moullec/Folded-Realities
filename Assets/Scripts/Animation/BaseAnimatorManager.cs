@@ -7,6 +7,7 @@ using UnityEngine;
 namespace AbilitySystem {
     public abstract class BaseAnimatorManager : MonoBehaviour {
 
+        [SerializeField] protected bool debug = false;
         protected Animator animator;
 
         protected (int layer, AnimatorFunctions state)[] layers = new (int layer, AnimatorFunctions)[] {
@@ -17,7 +18,9 @@ namespace AbilitySystem {
         void Awake() {
             animator = GetComponent<Animator>();
         }
-
+        public virtual void CleanLayer(int layer) {
+            layers[layer].state = new AnimatorFunctions("", null, null, null, null);
+        }
         protected virtual bool CanStartAnimation((int hashCode, int layer) info) {
             if (layers[info.layer].state.currentState != "")
                 return false;
@@ -55,6 +58,7 @@ namespace AbilitySystem {
         public void OnStartAnim(int hashCode, int layerIndex) {
             layers[layerIndex].state.startFunction?.Invoke();
             layers[layerIndex].state.updateFunction?.Invoke(0);
+            if (debug) Debug.Log("START");
         }
         public void OnUpdateAnim(int hashCode, int layerIndex, float delta) {
             layers[layerIndex].state.updateFunction?.Invoke(delta);
@@ -62,15 +66,20 @@ namespace AbilitySystem {
         public void OnEndAnim(int hashCode, int layerIndex) {
             layers[layerIndex].state.updateFunction?.Invoke(1);
             layers[layerIndex].state.endFunction?.Invoke();
+            if (debug) Debug.Log("END");
+            OnEnd(layerIndex);
+        }
+        protected virtual void OnEnd(int layerIndex) {
             layers[layerIndex].state = new AnimatorFunctions("", null, null, null, null);
         }
         public void ReceiveEvent(AnimationEvent animationEvent) {
-            for (int i = 0; i < animator.layerCount; i++) {
-                AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(i);
-
-                if (Animator.StringToHash(layers[i].state.currentState) == stateInfo.shortNameHash)
-                    layers[i].state.eventFunction?.Invoke(new AbilityAnimationEventData(animationEvent, stateInfo.normalizedTime % 1));
-            }
+            if (debug) Debug.Log("RECEIVE EVENT");
+            for (int i = 0; i < animator.layerCount; i++)
+                ActOnAnimatorStateInfoReceiveEvent(animationEvent, animator.GetCurrentAnimatorStateInfo(i), i);
+        }
+        protected virtual void ActOnAnimatorStateInfoReceiveEvent(AnimationEvent animationEvent, AnimatorStateInfo stateInfo, int i) {
+            if (Animator.StringToHash(layers[i].state.currentState) == stateInfo.shortNameHash)
+                layers[i].state.eventFunction?.Invoke(new AbilityAnimationEventData(animationEvent, stateInfo.normalizedTime % 1));
         }
     }
 }
