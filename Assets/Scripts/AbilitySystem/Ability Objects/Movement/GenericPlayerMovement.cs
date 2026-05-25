@@ -127,7 +127,7 @@ namespace AbilitySystem {
             float maxSpeed = moveData.isJumpingButtonPressed ? glideHorizontalSpeed : inpVals.IsRunning ? runSpeed : walkSpeed;
 
             if (moveData.isJumpingButtonPressed)
-                CheckForWall(entityBody, entityBody.bodyHolder.transform.position, entityBody.bodyHolder.transform.forward, ref moveData.wallClimbObj, ref moveData.wallRaycastHits, wallCheckLayers, onClimb);
+                CheckForWall(entityBody, entityBody.bodyHolder.transform.position, entityBody.bodyHolder.transform.forward, ref moveData.wallClimbObj, ref moveData.wallRaycastHits, wallCheckLayers, onClimb, moveData);
 
             if (!moveData.isCrouching && inpVals.IsCrouching) {
                 moveData.isCrouching = true;
@@ -234,13 +234,12 @@ namespace AbilitySystem {
             pmd.fallSpeed = Mathf.Clamp(pmd.fallSpeed, -maxFallSpeed, jumpSpeed);
             pmd.velocity.y = pmd.fallSpeed;
         }
-        public static bool CheckForWall(EntityBody entityBody, Vector3 position, Vector3 direction, ref RaycastHit raycastObj, ref RaycastHit[] raycastHits, LayerMask layerMask, string climbEvent) {
+        public static bool CheckForWall(EntityBody entityBody, Vector3 position, Vector3 direction, ref RaycastHit raycastObj, ref RaycastHit[] raycastHits, LayerMask layerMask, string climbEvent, TransformingPlayerData transformingPlayerData = null) {
             int s = AreaColliderCheck.GetRayCastColliders(position, direction, layerMask).Invoke(raycastHits);
             if (s > 0) {
                 raycastObj = raycastHits[0];
-                // if (!pmd.isClimbing) 
+                if (transformingPlayerData != null) transformingPlayerData.velocity = Vector3.zero;
                 entityBody.iAbility.OnAbilityEvent(climbEvent);
-                // pmd.isClimbing = true;
                 return true;
             }
             return false;
@@ -257,7 +256,9 @@ namespace AbilitySystem {
             pmd.isJumpButtonRePressed = false;
             pmd.glideTime = 0;
             pmd.releasedOnJump = false;
-            if (pmd.isJumpingButtonPressed) OnJump(pmd);
+            if (pmd.isJumpingButtonPressed && !pmd.isHoldingInput) OnJump(pmd);
+            if (pmd.isJumpingButtonPressed) pmd.isHoldingInput = true;
+            else pmd.isHoldingInput = false;
         }
         private void OnArial(EntityBody entityBody, TransformingPlayerData pmd) {
             if (pmd.isJumpingButtonPressed)

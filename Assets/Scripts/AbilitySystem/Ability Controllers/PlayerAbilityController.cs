@@ -162,8 +162,8 @@ namespace AbilitySystem {
             invincible = false;
         }
         public override void OnRotateEntity(Vector3 direction) {
-            direction.y = 0;
             if (direction != Vector3.zero) currentAbilitySet.entityBody.bodyHolder.transform.forward = direction;
+            transform.rotation = Quaternion.Euler(0, transform.rotation.y, 0);
         }
         public override void OnEntityTrack(Vector3 location) {
             Debug.Log("TRACK");

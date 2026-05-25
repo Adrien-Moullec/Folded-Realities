@@ -8,6 +8,7 @@ namespace AbilitySystem {
         [SerializeField] LayerMask wallCheckLayers;
         [SerializeField] float turnSpeed = 1;
         [SerializeField] float speedMultiplier = 5;
+        [SerializeField] float wallJumpHeightMultiplier = 2;
 
         public override AbilityData AbilityDataSetup(EntityBody entityBody) => new TransformingPlayerData();
 
@@ -29,11 +30,13 @@ namespace AbilitySystem {
             moveData.isJumpingButtonPressed = inpVals.Direction.y > 0;
             moveData.chargeDirection = inpVals.Direction;
 
-            bool hasWall = GenericPlayerMovement.CheckForWall(entityBody, entityBody.bodyHolder.transform.position, -moveData.wallClimbObj.normal, ref moveData.wallClimbObj, ref moveData.wallRaycastHits, wallCheckLayers, "");
+            bool hasWall = GenericPlayerMovement.CheckForWall(entityBody, entityBody.bodyHolder.transform.position, -moveData.wallClimbObj.normal * 2, ref moveData.wallClimbObj, ref moveData.wallRaycastHits, wallCheckLayers, "");
 
             // Release climb
-            if (!hasWall || !moveData.isJumpingButtonPressed) {
-                Debug.Log(hasWall);
+            if (!hasWall || (moveData.isJumpingButtonPressed && !moveData.isHoldingInput)) {
+                moveData.velocity = moveData.wallClimbObj.normal + Vector3.up * wallJumpHeightMultiplier;
+                entityBody.iAbility.OnRotateEntity(moveData.wallClimbObj.normal);
+                entityBody.iAbility.OnMoveEntity(moveData.velocity);
                 moveData.isClimbing = false;
                 entityBody.iAbility.OnAbilityEvent("Kuhaku");
                 return true;
@@ -51,22 +54,26 @@ namespace AbilitySystem {
             Vector3 dir = wallRight * horizontal + wallUp * vertical;
             moveData.velocity = Vector3.MoveTowards(moveData.velocity, dir - wallNormal, turnSpeed);
             moveData.velocity.Normalize();
+            entityBody.iAbility.OnRotateEntity(
+                -wallNormal
+            );
 
             entityBody.iAbility.OnMoveEntity(
                 moveData.velocity * speedMultiplier * Time.deltaTime,
                 false
             );
-            if (dir != Vector3.zero) {
-                entityBody.prefab.transform.rotation = Quaternion.RotateTowards(entityBody.prefab.transform.rotation, Quaternion.LookRotation(-moveData.wallClimbObj.normal, moveData.velocity), 0.8f);
-            }
             entityBody.iAbility.OnRotateEntity(
                 -wallNormal
             );
+            if (dir != Vector3.zero) {
+                entityBody.prefab.transform.rotation = Quaternion.RotateTowards(entityBody.prefab.transform.rotation, Quaternion.LookRotation(-moveData.wallClimbObj.normal, moveData.velocity), 0.8f);
+            }
             if (entityBody.animatorManager.gameObject.activeSelf) {
                 entityBody.animatorManager?.SetMovement(moveData.velocity.magnitude / (dir - wallNormal).magnitude, 0, true);
                 entityBody.animatorManager?.SetMovementState();
             }
-            //entityBody.animatorManager?.InitiateOneOffAnimation(moveData.velocity.magnitude / (dir - wallNormal).magnitude, 0, true);
+            if (moveData.isJumpingButtonPressed) moveData.isHoldingInput = true;
+            else moveData.isHoldingInput = false;
 
             return false;
         }
