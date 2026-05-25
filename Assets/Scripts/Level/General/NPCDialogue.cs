@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 using TMPro;
+using UnityEngine.Events;
 
 public class NPCDialogue : MonoBehaviour {
 
@@ -25,7 +26,7 @@ public class NPCDialogue : MonoBehaviour {
     public float minPitch = 0.8f;
     public float maxPitch = 1.0f;
 
-    public System.Action onDialogueFinished;
+    public UnityEvent onDialogueFinished;
     public bool preventAutoClose = false;
 
     public bool autoAdvance = false;

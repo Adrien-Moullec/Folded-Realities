@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89498978a5163564984da6a9f23b4e81, type: 3}
   m_Name: CraneMovement
   m_EditorClassIdentifier: 
-  speedMultiplier: 1
+  speedMultiplier: 0.5
   changeDirectionSpeedMultiplier: 1
-  acceleration: 0.01
-  deceleration: 4
+  acceleration: 1.9
+  deceleration: 9.36
   runAccelerationMultiplier: 1
-  accelerationWhileFalling: 5
-  decelerationWhileFalling: 5
-  decelerationWhileGrounded: 5
-  turnSpeed: 5
+  accelerationWhileFalling: 1
+  decelerationWhileFalling: 1
+  decelerationWhileGrounded: 1
+  turnSpeed: 1
   runSpeedMultiplier: 1.5
   chargeSpeedMultiplier: 2
   canJump: 0
@@ -30,6 +30,8 @@ MonoBehaviour:
   groundedFallSpeed: 2
   canGlide: 1
   glideHorizontalSpeed: 28.7
+  glideAcceleration: 1
+  glideDeceleration: 1
   maxGlideTime: 1.2
   glideFallSpeed: 2.5
   glideFallSpeedOverTime:

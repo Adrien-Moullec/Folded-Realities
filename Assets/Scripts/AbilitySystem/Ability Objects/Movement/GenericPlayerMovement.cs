@@ -62,6 +62,10 @@ namespace AbilitySystem {
         [SerializeField] protected bool canGlide = false;
         [Tooltip("The horizontal speed while gliding.")]
         [SerializeField] protected float glideHorizontalSpeed = 1;
+        [Tooltip("The glide horizontal acceleration on input.")]
+        [SerializeField] protected float glideAcceleration = 1;
+        [Tooltip("The glide horizontal deceleration with no input.")]
+        [SerializeField] protected float glideDeceleration = 1;
         [Tooltip("Max Glide Time.")]
         [SerializeField, Min(0)] protected float maxGlideTime = 5;
         [Tooltip("The fall speed of gliding.")]
@@ -219,6 +223,7 @@ namespace AbilitySystem {
 
             // Grounded conditions
             if (hitGround) {
+                pmd.glideTime = 0;
                 OnGrounded(entityBody, pmd);
             } else {
                 pmd.isGrounded = hitGround;

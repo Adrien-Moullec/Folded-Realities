@@ -220,7 +220,7 @@ namespace AbilitySystem {
             playerHealthCanvas?.UpdateHearts(CurrentHealth);
         }
         public override void Damage(EntityDamage damage) {
-
+            Debug.Log(damage.damagingTeam);
             if (invincible)
                 return;
 

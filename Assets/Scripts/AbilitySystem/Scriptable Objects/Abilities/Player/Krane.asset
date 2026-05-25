@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6a768fdd966b554d87423267bc0f9ff, type: 3}
+  m_Name: Krane
+  m_EditorClassIdentifier: 
+  maxSpeed: 22.1
+  changeDirectionSpeedMultiplier: 2.04
+  acceleration: 14.54
+  deceleration: 21.47
+  maxGlideTime: 0
+  glideFallSpeed: 0
+  maxFallSpeed: 1
+  fallToGlideAcceleration: 5.1
+  glideFallSpeedOverTime:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.7234474
+      value: 1
+      inSlope: -0.010914915
+      outSlope: -0.010914915
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13862568
+      outWeight: 0.40221637
+    - serializedVersion: 3
+      time: 0.94920856
+      value: 0.5724764
+      inSlope: -5.409202
+      outSlope: -5.409202
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.10248587
+      outWeight: 1
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -7.1430817
+      outSlope: -7.1430817
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14490871
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

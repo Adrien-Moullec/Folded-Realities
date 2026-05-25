@@ -29,29 +29,23 @@ namespace AbilitySystem {
 
         public override bool NormalMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             TransformingPlayerData tpd = (TransformingPlayerData)data;
-            /*
-                        if (entityBody.isGrounded) {
-                            tpd.velocity = Vector3.zero;
-                            if (inpVals.Direction.y > 0.5f)
-                                OnJump(entityBody, tpd);
-                        }
 
-                        //Set fallspeed
-                        tpd.fallSpeed = Mathf.MoveTowards(tpd.fallSpeed, -jumpSpeed, gravity * Time.deltaTime);
-                        tpd.fallSpeed = Mathf.Clamp(tpd.fallSpeed, -jumpSpeed, jumpSpeed);
-                        tpd.velocity.y = tpd.fallSpeed;*/
+            if (entityBody.isGrounded && tpd.velocity.y <= 0.2f) {
+                tpd.velocity = Vector3.zero;
+                if (inpVals.Direction.y > 0.5f)
+                    OnJump(entityBody, tpd, inpVals.Direction);
+                if (!inpVals.IsCrouching) entityBody.iAbility.InputTransitionName("Kuhaku");
+            } else {
+                tpd.velocity.y -= gravity * Time.deltaTime;
+            }
 
-            if (!inpVals.IsCrouching)
-                entityBody.iAbility.InputTransitionName("Kuhaku");
+            entityBody.iAbility.OnMoveEntity(tpd.velocity * Time.deltaTime);
             return true;
         }
 
-        private void OnJump(EntityBody entityBody, TransformingPlayerData pmd) {
-            pmd.fallSpeed = jumpHeight * 100;
-            pmd.isGrounded = false;
-            pmd.remainingJumps--;
-
-            pmd.velocity = new Vector3(pmd.velocity.x, 0, pmd.velocity.z).normalized * jumpSpeed;
+        private void OnJump(EntityBody entityBody, TransformingPlayerData pmd, Vector3 dir) {
+            pmd.velocity = new Vector3(dir.x, 0, dir.z).normalized * jumpSpeed;
+            pmd.velocity.y = jumpHeight;
         }
 
         public override bool PassEvent(EntityBody entityBody, AbilityData data) {

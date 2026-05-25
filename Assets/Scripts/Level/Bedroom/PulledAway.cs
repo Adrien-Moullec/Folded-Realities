@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using System.Collections;
 
 public class PulledAway : MonoBehaviour {
@@ -90,4 +90,4 @@ public class PulledAway : MonoBehaviour {
             helpUI.SetActive(false);
         }
     }
-}
+}*/
