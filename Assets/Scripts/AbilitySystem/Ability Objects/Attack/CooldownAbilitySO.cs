@@ -76,7 +76,7 @@ namespace AbilitySystem {
                 null,
                 (AbilityAnimationEventData animationData) => AnimationEvent(animationData, entityBody, data),
                 () => animationPlaying = false,
-                attackAnimation,
+                attackAnimation.ToString(),
                 false
             );
             while (animationPlaying)

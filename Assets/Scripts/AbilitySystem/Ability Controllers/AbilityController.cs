@@ -72,7 +72,7 @@ namespace AbilitySystem {
                 null,
                 null,
                 () => hasFinishedAnim = true,
-                AnimationType.Death,
+                AnimationType.Death.ToString(),
                 true
             );
             while (!hasFinishedAnim)

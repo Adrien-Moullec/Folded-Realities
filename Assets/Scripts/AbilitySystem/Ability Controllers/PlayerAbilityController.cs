@@ -102,7 +102,7 @@ namespace AbilitySystem {
                 null,
                 () => {
                 },
-                AnimationType.TransformOut,
+                AnimationType.TransformOut.ToString(),
                 true
             );
             SetNewSummary(newSummary);
@@ -114,7 +114,7 @@ namespace AbilitySystem {
                 (f) => { paperParticleDelta?.UpdateDelta(1 - f); },
                 null,
                 () => { paperParticleDelta?.EndDelta(); },
-                AnimationType.TransformIn,
+                AnimationType.TransformIn.ToString(),
                 true
             );
         }
