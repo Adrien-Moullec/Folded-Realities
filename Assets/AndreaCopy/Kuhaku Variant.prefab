@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4739190994935297435}
-  m_Father: {fileID: 1161456613901738798}
+  m_Father: {fileID: 2527173696033989266}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3608450779522431667
 PrefabInstance:
@@ -672,16 +672,13 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 6599312756378024008, guid: a1e531976df10334380158e02a6889e7, type: 3}
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 2453785045015353757, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
-      insertIndex: 0
+    - targetCorrespondingSourceObject: {fileID: 1225429674322778145, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 7190412961762995966}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5710287258573495793, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5456851442313982351}
-    - targetCorrespondingSourceObject: {fileID: 5710287258573495793, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4429785672967900357}
     - targetCorrespondingSourceObject: {fileID: 5710287258573495793, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7129791252206264582}
@@ -692,11 +689,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 619169050107783908}
   m_SourcePrefab: {fileID: 100100000, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
---- !u!4 &1161456613901738798 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2453785045015353757, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
-  m_PrefabInstance: {fileID: 3608450779522431667}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1955964752504794811 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2969896672581243912, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
@@ -840,18 +832,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pushSpeed: 4
---- !u!114 &4429785672967900357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9019811599251941186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae05b6695203e8345873ccd3b7972f8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  rigidbodyPushForce: 5
 --- !u!136 &7129791252206264582
 CapsuleCollider:
   m_ObjectHideFlags: 0

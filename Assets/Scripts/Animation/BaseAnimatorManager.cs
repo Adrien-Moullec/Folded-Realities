@@ -66,14 +66,12 @@ namespace AbilitySystem {
         public void OnEndAnim(int hashCode, int layerIndex) {
             layers[layerIndex].state.updateFunction?.Invoke(1);
             layers[layerIndex].state.endFunction?.Invoke();
-            if (debug) Debug.Log("END");
             OnEnd(layerIndex);
         }
         protected virtual void OnEnd(int layerIndex) {
             layers[layerIndex].state = new AnimatorFunctions("", null, null, null, null);
         }
         public void ReceiveEvent(AnimationEvent animationEvent) {
-            if (debug) Debug.Log("RECEIVE EVENT");
             for (int i = 0; i < animator.layerCount; i++)
                 ActOnAnimatorStateInfoReceiveEvent(animationEvent, animator.GetCurrentAnimatorStateInfo(i), i);
         }

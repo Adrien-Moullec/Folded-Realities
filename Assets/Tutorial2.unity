@@ -7887,9 +7887,17 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 126.16
       objectReference: {fileID: 0}
+    - target: {fileID: 5464207122204112817, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5710287258573495793, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       propertyPath: m_Name
       value: Kuhaku
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710287258573495793, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6144309976011907066, guid: 955fd5c9e95c04e4b93b75a533a011f7, type: 3}
       propertyPath: m_RenderPostProcessing
@@ -11928,7 +11936,7 @@ PlayableDirector:
   - key: {fileID: 8877797355988939955, guid: d87d38567ebe79143a7d8ce005aa4f49, type: 2}
     value: {fileID: 702760558}
   - key: {fileID: -1761073688940988283, guid: d87d38567ebe79143a7d8ce005aa4f49, type: 2}
-    value: {fileID: 1593516397}
+    value: {fileID: 702760556}
   - key: {fileID: -7027812106178659740, guid: d87d38567ebe79143a7d8ce005aa4f49, type: 2}
     value: {fileID: 1658502849}
   - key: {fileID: -5514666422487393265, guid: d87d38567ebe79143a7d8ce005aa4f49, type: 2}
@@ -11936,7 +11944,8 @@ PlayableDirector:
   - key: {fileID: -8902362699185943466, guid: d87d38567ebe79143a7d8ce005aa4f49, type: 2}
     value: {fileID: 1658502849}
   m_ExposedReferences:
-    m_References: []
+    m_References:
+    - 9041f00f63a6d584b85538fa5ba59111: {fileID: 1254561918}
 --- !u!4 &382542194
 Transform:
   m_ObjectHideFlags: 0
@@ -12044,7 +12053,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!1 &383924664 stripped
 GameObject:
@@ -34891,6 +34900,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.99099016, y: 0.5892737, z: 1.6445346}
   m_Center: {x: 0.00000037252903, y: -0.00887683, z: 0.00000008940697}
+--- !u!114 &1254561918 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1479387197367121724, guid: 98ba98a9f1436754196d25f43830f232, type: 3}
+  m_PrefabInstance: {fileID: 921818231}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1258588395 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dc079dd6a5cf74a4c930a8426fc454e1, type: 3}
