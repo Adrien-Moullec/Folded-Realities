@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 public class KuhakuFallingGamemode : MonoBehaviour, IHealth {
 
     [SerializeField] PlayerHealthCanvas healthCanvas;
-    [SerializeField] Renderer[] shader;
+    [SerializeField] Material shader;
     [SerializeField] float speed = 1;
     [SerializeField] float acceleration = 1;
     [SerializeField] int health = 100;
@@ -25,9 +25,12 @@ public class KuhakuFallingGamemode : MonoBehaviour, IHealth {
 
     public void Damage(EntityDamage damage) {
         if (invincible) return;
+
         health -= (int)damage.amount;
         healthCanvas?.UpdateHearts(health);
+
         if (health <= 0) Die();
+        else StartCoroutine(InvincibilityFrames());
     }
 
     public void Die() {
@@ -44,6 +47,7 @@ public class KuhakuFallingGamemode : MonoBehaviour, IHealth {
     }
 
     void OnEnable() {
+        Cursor.lockState = CursorLockMode.Locked;
         characterController = GetComponent<CharacterController>();
         playerInput = GetComponent<PlayerInput>();
 
@@ -58,13 +62,12 @@ public class KuhakuFallingGamemode : MonoBehaviour, IHealth {
         float time = 0;
         while (time < invincibilityTime) {
             time += Time.deltaTime;
-            foreach (var n in shader)
-                n.material.SetFloat("_DamageFlash01", Mathf.Abs(Mathf.Sin(time * 8 / invincibilityTime)));
+            float f = Mathf.Abs(Mathf.Sin(time * 8 / invincibilityTime));
+            Debug.Log(f);
+            shader.SetFloat("_DamageFlash01", f);
             yield return null;
         }
-        Debug.Log("END");
-        foreach (var n in shader)
-            n.material.SetFloat("_DamageFlash01", 0);
+        shader.SetFloat("_DamageFlash01", 0);
         invincible = false;
     }
 
