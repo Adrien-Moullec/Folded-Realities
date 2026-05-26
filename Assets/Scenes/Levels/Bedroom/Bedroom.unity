@@ -4727,6 +4727,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 15.888048, y: 1.7468905, z: 15.059982}
   m_Center: {x: 2.2711277, y: 0.37344542, z: -2.75943}
+--- !u!1 &88937956
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 88937957}
+  m_Layer: 0
+  m_Name: ToyCar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &88937957
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88937956}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.1484795, y: 7.385602, z: -75.86273}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &89312165 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 880497637004899326, guid: 98ba98a9f1436754196d25f43830f232, type: 3}
@@ -26730,11 +26761,15 @@ PrefabInstance:
     - target: {fileID: -4683669308469848369, guid: 1e5e55d56319c8549ac284d1a5993e4d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 12d16cb4cb9f52549bfdc4ea61bf594b, type: 2}
+      objectReference: {fileID: 2100000, guid: 1de49e93c480c774eb36c771e06b9cd7, type: 2}
     - target: {fileID: 919132149155446097, guid: 1e5e55d56319c8549ac284d1a5993e4d, type: 3}
       propertyPath: m_Name
       value: ToyCar_GAMEPLAY
       objectReference: {fileID: 0}
+    - target: {fileID: 7202271454713460447, guid: 1e5e55d56319c8549ac284d1a5993e4d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 89b7ee1ffd206a248b01912c7f075b22, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -328978,3 +329013,4 @@ SceneRoots:
   - {fileID: 1805693188}
   - {fileID: 398666271}
   - {fileID: 2005245934}
+  - {fileID: 88937957}
