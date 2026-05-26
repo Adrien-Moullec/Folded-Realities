@@ -54,7 +54,5 @@ public class Checkpoint : MonoBehaviour {
         activated = true;
 
         SetColor(activeColor);
-
-        Debug.Log("Checkpoint " + checkpointIndex + " activated");
     }
 }

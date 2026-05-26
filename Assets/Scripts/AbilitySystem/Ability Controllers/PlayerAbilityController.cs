@@ -85,7 +85,6 @@ namespace AbilitySystem {
         #region Transitions
         public override void InputTransitionName(string name) {
             OnAbilityEvent(name);
-            Debug.Log(name);
         }
         public override void OnAbilityEvent(string eventMessage) {
             if (!TryGetSetSummary(eventMessage, out PlayerSetSummary playerSetSummary) || playerSetSummary == currentAbilitySet)
