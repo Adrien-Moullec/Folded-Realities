@@ -82,13 +82,13 @@ public class CheckpointManager : MonoBehaviour {
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }
-        Player.characterController.enabled = false;
+        if (Player.characterController != null) Player.characterController.enabled = false;
 
         RaycastHit hit;
         if (Physics.Raycast(pos, Vector3.down, out hit, 10f))
             pos.y = hit.point.y + 1f;
         Player.transform.position = pos;
 
-        Player.characterController.enabled = true;
+        if (Player.characterController != null) Player.characterController.enabled = true;
     }
 }

@@ -8,6 +8,7 @@ using UnityEngine.Video;
 
 [RequireComponent(typeof(VideoPlayer))]
 [RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(LevelExit))]
 public class VideoCutsceneManager : MonoBehaviour {
     private VideoPlayer videoPlayer;
     private PlayerInput playerInput;
@@ -34,6 +35,10 @@ public class VideoCutsceneManager : MonoBehaviour {
         videoPlayer.loopPointReached += input => OnEnd();
         skipButton.onClick.AddListener(() => OnEnd());
         StartCoroutine(PrepareVid());
+    }
+
+    void Start() {
+        Cursor.lockState = CursorLockMode.None;
     }
 
     void OnDisable() {
@@ -73,6 +78,6 @@ public class VideoCutsceneManager : MonoBehaviour {
     }
 
     private void OnEnd() {
-        GameplaySystem.instance.LoadScene(GameplayScenes.Tutorial2, TransitionType.Iris);
+        GetComponent<LevelExit>().NextScene();
     }
 }
