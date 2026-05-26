@@ -513,12 +513,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a92bcc57065d695428e111b91a7e23f4, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a92bcc57065d695428e111b91a7e23f4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1056446626}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a92bcc57065d695428e111b91a7e23f4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1056446627}
   m_SourcePrefab: {fileID: 100100000, guid: a92bcc57065d695428e111b91a7e23f4, type: 3}
 --- !u!4 &326018330 stripped
 Transform:
@@ -1006,7 +1012,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &871765207
 Transform:
   m_ObjectHideFlags: 0
@@ -1040,15 +1046,15 @@ PlayableDirector:
   - key: {fileID: -6142677179519507052, guid: 13926620ea5e4584caa893e8350d7ef6, type: 2}
     value: {fileID: 2018224458}
   - key: {fileID: -7919199903602539881, guid: 13926620ea5e4584caa893e8350d7ef6, type: 2}
-    value: {fileID: 879886460}
+    value: {fileID: 0}
   - key: {fileID: -7433342240443918130, guid: 13926620ea5e4584caa893e8350d7ef6, type: 2}
-    value: {fileID: 879886460}
+    value: {fileID: 0}
   - key: {fileID: 7525497074667616184, guid: 13926620ea5e4584caa893e8350d7ef6, type: 2}
-    value: {fileID: 879886460}
+    value: {fileID: 0}
   - key: {fileID: 8444837730341875792, guid: 13926620ea5e4584caa893e8350d7ef6, type: 2}
-    value: {fileID: 879886460}
+    value: {fileID: 0}
   - key: {fileID: -4781324236051279721, guid: 13926620ea5e4584caa893e8350d7ef6, type: 2}
-    value: {fileID: 879886460}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References: []
 --- !u!1 &879886458
@@ -1061,8 +1067,6 @@ GameObject:
   m_Component:
   - component: {fileID: 879886459}
   - component: {fileID: 879886461}
-  - component: {fileID: 879886460}
-  - component: {fileID: 879886462}
   - component: {fileID: 879886463}
   m_Layer: 0
   m_Name: Minigame
@@ -1090,39 +1094,6 @@ Transform:
   - {fileID: 871765207}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &879886460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 879886458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: f64af98e6036aa441b04b6c54695ed30, type: 2}
-    - {fileID: 11400000, guid: f4138f2485bc80540940d8f41a8a619b, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls: []
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 879886463}
-          m_TargetAssemblyTypeName: LevelExit, Assembly-CSharp
-          m_MethodName: NextScene
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &879886461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1137,38 +1108,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playableDirector: {fileID: 871765208}
   damageObjectParents: {fileID: 866090172}
-  damageObjects: {fileID: 1056446623}
+  damageObjects: {fileID: 1056446626}
+  barrages:
+  - minInterval: 0
+    maxInterval: 0
+    countMin: 0
+    countMax: 4
+    speedMin: 0
+    speedMax: 0
+    barrageGap: 0
+  - minInterval: 0.4
+    maxInterval: 0.8
+    countMin: 6
+    countMax: 7
+    speedMin: 0
+    speedMax: 0
+    barrageGap: 0
   point1: {x: 5, y: 20, z: -5}
   point2: {x: -5, y: 20, z: -5}
   DespawnHeight: 5
   Speed: 1
---- !u!114 &879886462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 879886458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90474cb223acfed4197d1b92a4479933, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FloatEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 879886461}
-        m_TargetAssemblyTypeName: FreefallGamemode, Assembly-CSharp
-        m_MethodName: FloatEvent
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &879886463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1229,6 +1188,40 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a92bcc57065d695428e111b91a7e23f4, type: 3}
   m_PrefabInstance: {fileID: 326018329}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1056446626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056446623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b6ae989c8da404188c5ce5764b4e93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 10
+--- !u!135 &1056446627
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056446623}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.009809973
+  m_Center: {x: -0.0003592032, y: 0.0005365518, z: 0.00009788671}
 --- !u!224 &1271474975 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5526325789257178933, guid: 0a2e6ce90f3fd7e4b9f455cea211de72, type: 3}

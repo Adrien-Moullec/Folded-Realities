@@ -1,3 +1,5 @@
+using System.Collections;
+
 using AbilitySystem;
 
 using UnityEngine;
@@ -7,6 +9,7 @@ using UnityEngine.InputSystem;
 public class KuhakuFallingGamemode : MonoBehaviour, IHealth {
 
     [SerializeField] PlayerHealthCanvas healthCanvas;
+    [SerializeField] Renderer[] shader;
     [SerializeField] float speed = 1;
     [SerializeField] float acceleration = 1;
     [SerializeField] int health = 100;
@@ -17,8 +20,11 @@ public class KuhakuFallingGamemode : MonoBehaviour, IHealth {
     Vector2 Movement;
 
     float velocity;
+    bool invincible = false;
+    float invincibilityTime = 1;
 
     public void Damage(EntityDamage damage) {
+        if (invincible) return;
         health -= (int)damage.amount;
         healthCanvas?.UpdateHearts(health);
         if (health <= 0) Die();
@@ -46,6 +52,22 @@ public class KuhakuFallingGamemode : MonoBehaviour, IHealth {
         moveAction.canceled += i => Movement = Vector2.zero;
         healthCanvas?.UpdateHearts(health);
     }
+    // Andrea's function
+    public IEnumerator InvincibilityFrames() {
+        invincible = true;
+        float time = 0;
+        while (time < invincibilityTime) {
+            time += Time.deltaTime;
+            foreach (var n in shader)
+                n.material.SetFloat("_DamageFlash01", Mathf.Abs(Mathf.Sin(time * 8 / invincibilityTime)));
+            yield return null;
+        }
+        Debug.Log("END");
+        foreach (var n in shader)
+            n.material.SetFloat("_DamageFlash01", 0);
+        invincible = false;
+    }
+
 
     void Update() {
         velocity = Mathf.MoveTowards(velocity, Movement.x, acceleration * Time.deltaTime);
