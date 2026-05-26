@@ -2,6 +2,7 @@ public enum GameplayScenes {
     MainMenu,
     Bedroom,
     IntroCutscene,
+    FreeFallGamemode,
     Tutorial2,
     Lobby
 }
