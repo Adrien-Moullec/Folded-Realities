@@ -28,15 +28,8 @@ public class BossFightManager : MonoBehaviour {
 
 
     IEnumerator BossRoutine() {
-        isFin = false;
-        yield return animationManager.InitiateOneOffAnimation(
-            null,
-            null,
-            null,
-            () => isFin = true,
-            ShredderAnim.WakeUp.ToString()
-        );
-        while (!isFin) yield return null;
+        animationManager.SetState(ShredderAnim.Idle.ToString(), 0.2f);
+        yield return new WaitForSeconds(2);
 
         foreach (var n in bossFight) {
             if (n.skipPhase) continue;

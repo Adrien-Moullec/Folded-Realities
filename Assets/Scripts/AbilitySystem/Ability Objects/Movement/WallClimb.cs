@@ -35,6 +35,7 @@ namespace AbilitySystem {
             // Release climb
             if (!hasWall || (moveData.isJumpingButtonPressed && !moveData.isHoldingInput)) {
                 moveData.velocity = moveData.wallClimbObj.normal + Vector3.up * wallJumpHeightMultiplier;
+                moveData.fallSpeed = moveData.velocity.y;
                 entityBody.iAbility.OnRotateEntity(moveData.wallClimbObj.normal);
                 entityBody.iAbility.OnMoveEntity(moveData.velocity);
                 moveData.isClimbing = false;

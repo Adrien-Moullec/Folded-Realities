@@ -53,7 +53,7 @@ public class CheckpointManager : MonoBehaviour {
             RespawnPlayer(false);
             return;
         }
-        if (spawnId >= 0 && spawnId < levelExits.Count) {
+        if (spawnId >= 0 && spawnId < levelExits.Count && levelExits[spawnId] != null) {
             SpawnPlayerAtLocation(levelExits[spawnId].SpawnPos + Vector3.up * 2f);
         } else {
             RespawnPlayer(false);

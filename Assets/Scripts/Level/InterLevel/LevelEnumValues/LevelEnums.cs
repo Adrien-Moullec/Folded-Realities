@@ -4,10 +4,7 @@ public enum GameplayScenes {
     IntroCutscene,
     FreeFallGamemode,
     Tutorial2,
+    BossFight,
+    BossCutscene,
     Lobby
-}
-public enum BedroomSpawnPoints {
-    TrashBin = 0,
-    Bed = 1,
-    Bed2 = 2
 }

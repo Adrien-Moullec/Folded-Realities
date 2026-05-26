@@ -7,20 +7,28 @@ public class FallGameplayTriggerDamage : MonoBehaviour {
     FreefallGamemode freefallGamemode;
     float speed;
     Vector3 randomLine;
+
+    float distance;
+    float totalDistance;
     void Update() {
-        transform.position += Vector3.up * Time.deltaTime * speed;
-        transform.Rotate(randomLine * speed * Time.deltaTime);
+        distance = Time.deltaTime * speed;
+        transform.position += Vector3.up * distance;
+        transform.Rotate(randomLine * speed * Time.deltaTime * 3);
+        totalDistance += distance;
+        if (totalDistance > 10) {
+            freefallGamemode?.pooledObjects.Release(this);
+        }
 
     }
     void OnTriggerEnter(Collider other) {
         if (!other.TryGetComponent(out IHealth ihealth)) return;
         ihealth.Damage(new AbilitySystem.EntityDamage(damage, null));
-        freefallGamemode?.Despawn(this);
+        freefallGamemode?.pooledObjects.Release(this);
     }
-    public void OnSpawn(FreefallGamemode freefallGamemode, Vector3 pos, float speed) {
-        transform.position = pos;
+    public void OnSpawn(FreefallGamemode freefallGamemode, float speed) {
         this.freefallGamemode = freefallGamemode;
         this.speed = speed;
         randomLine = UnityEngine.Random.onUnitSphere;
+        totalDistance = 0;
     }
 }
