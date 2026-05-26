@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+
 using AbilitySystem;
 
 public class RadialMenuManager : MonoBehaviour {
@@ -37,10 +38,6 @@ public class RadialMenuManager : MonoBehaviour {
 
     void Start() {
 
-        Debug.Log(
-            "RADIAL MENU START"
-        );
-
         segmentAngle =
             360f / segmentCount;
 
@@ -52,14 +49,6 @@ public class RadialMenuManager : MonoBehaviour {
                 false
             );
 
-            Debug.Log(
-                "RADIAL MENU ROOT DISABLED"
-            );
-        } else {
-
-            Debug.LogError(
-                "RADIAL MENU ROOT IS NULL"
-            );
         }
 
         ResetHighlights();
@@ -77,11 +66,6 @@ public class RadialMenuManager : MonoBehaviour {
                 KeyCode.M
             )
         ) {
-
-            Debug.Log(
-                "M KEY DOWN"
-            );
-
             OpenWheel();
         }
 
@@ -90,10 +74,6 @@ public class RadialMenuManager : MonoBehaviour {
                 KeyCode.M
             )
         ) {
-
-            Debug.Log(
-                "M KEY UP"
-            );
 
             CloseWheel();
         }
@@ -108,10 +88,6 @@ public class RadialMenuManager : MonoBehaviour {
 
     void OpenWheel() {
 
-        Debug.Log(
-            "OPENING WHEEL"
-        );
-
         wheelOpen = true;
 
         if (
@@ -120,10 +96,6 @@ public class RadialMenuManager : MonoBehaviour {
 
             radialMenuRoot.SetActive(
                 true
-            );
-
-            Debug.Log(
-                "RADIAL MENU ENABLED"
             );
         }
 
@@ -135,10 +107,6 @@ public class RadialMenuManager : MonoBehaviour {
 
     void CloseWheel() {
 
-        Debug.Log(
-            "CLOSING WHEEL"
-        );
-
         wheelOpen = false;
 
         if (
@@ -147,10 +115,6 @@ public class RadialMenuManager : MonoBehaviour {
 
             radialMenuRoot.SetActive(
                 false
-            );
-
-            Debug.Log(
-                "RADIAL MENU DISABLED"
             );
         }
 
@@ -286,20 +250,12 @@ public class RadialMenuManager : MonoBehaviour {
             == null
         ) {
 
-            Debug.LogError(
-                "PLAYER ABILITY CONTROLLER NOT ASSIGNED"
-            );
-
             return;
         }
 
         switch (currentIndex) {
 
             case 0:
-
-                Debug.Log(
-                    "TRANSFORMING TO BEARSET"
-                );
 
                 playerAbilityController
                     .InputTransitionName(
@@ -310,10 +266,6 @@ public class RadialMenuManager : MonoBehaviour {
 
             case 1:
 
-                Debug.Log(
-                    "TRANSFORMING TO SPIDERSET"
-                );
-
                 playerAbilityController
                     .InputTransitionName(
                         "Spider"
@@ -322,10 +274,6 @@ public class RadialMenuManager : MonoBehaviour {
                 break;
 
             case 2:
-
-                Debug.Log(
-                    "TRANSFORMING TO FROGSET"
-                );
 
                 playerAbilityController
                     .InputTransitionName(

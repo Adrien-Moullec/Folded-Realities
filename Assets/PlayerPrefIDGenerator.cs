@@ -17,10 +17,11 @@ public class PlayerPrefIDGenerator : MonoBehaviour {
     void Awake() {
         startPos = transform.position;
         if (!GameplaySystem.IsIdActive(IdGenerator)) {
-            Debug.Log("IdInactive");
+            if (isDebug) Debug.Log(gameObject.name + " IdInactive");
             gameObject.SetActive(false);
         } else {
-            if (isDebug) Debug.Log(GameplaySystem.IsIdActive(IdGenerator));
+            if (isDebug)
+                Debug.Log(gameObject.name + "Active");
         }
     }
     public void SetPlayerPrefIdActive(bool active) {

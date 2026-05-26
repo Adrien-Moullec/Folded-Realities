@@ -1,4 +1,5 @@
 using UnityEngine;
+
 using System.Collections;
 
 public class PianoKeyManager : MonoBehaviour {
@@ -49,10 +50,6 @@ public class PianoKeyManager : MonoBehaviour {
     );
 
         ResetAllKeys();
-
-        Debug.Log(
-            "Memory Puzzle Initialized"
-        );
     }
 
     public void StartMemoryPuzzle() {
@@ -73,10 +70,6 @@ public class PianoKeyManager : MonoBehaviour {
         introStarted = true;
 
         replayingMemory = true;
-
-        Debug.Log(
-            "START MEMORY INTRO"
-        );
 
         for (
             int i = 0;
@@ -120,10 +113,6 @@ public class PianoKeyManager : MonoBehaviour {
         }
 
         replayingMemory = false;
-
-        Debug.Log(
-            "MEMORY PUZZLE ACTIVE"
-        );
     }
 
     public bool PressKey(
@@ -152,12 +141,6 @@ public class PianoKeyManager : MonoBehaviour {
         ) {
             return false;
         }
-
-        Debug.Log(
-            "Pressed Key: "
-            + keyID
-        );
-
         ShowKeyPlatforms(
             keyID
         );
@@ -167,10 +150,6 @@ public class PianoKeyManager : MonoBehaviour {
             ==
             correctSequence[currentIndex]
         ) {
-
-            Debug.Log(
-                "Correct Key"
-            );
 
             currentIndex++;
 
@@ -183,10 +162,6 @@ public class PianoKeyManager : MonoBehaviour {
 
             return true;
         }
-
-        Debug.Log(
-            "WRONG KEY"
-        );
 
         StartCoroutine(
             WrongSequence()
@@ -239,10 +214,6 @@ public class PianoKeyManager : MonoBehaviour {
     IEnumerator ReplayMemorySequence() {
 
         replayingMemory = true;
-
-        Debug.Log(
-            "REPLAY MEMORY SEQUENCE"
-        );
 
         for (
             int i = 0;
@@ -326,10 +297,6 @@ public class PianoKeyManager : MonoBehaviour {
     void CompletePuzzle() {
 
         puzzleComplete = true;
-
-        Debug.Log(
-            "PUZZLE COMPLETE"
-        );
 
         for (
             int i = 0;
