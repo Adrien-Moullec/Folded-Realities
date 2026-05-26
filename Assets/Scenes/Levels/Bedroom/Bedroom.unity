@@ -9815,6 +9815,7 @@ MonoBehaviour:
   hoverHeight: 0.25
   hoverSpeed: 2
   rotationSpeed: 90
+  startPos: {x: 0, y: 0, z: 0}
 --- !u!212 &220168813
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -63319,6 +63320,7 @@ MonoBehaviour:
   hoverHeight: 0.7
   hoverSpeed: 3
   rotationSpeed: 1
+  startPos: {x: 0, y: 0, z: 0}
 --- !u!23 &966049722 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 5bc5b1f4c8954b44f8bfd73bc7520dc8, type: 3}
@@ -70606,6 +70608,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1142250810}
     m_Modifications:
+    - target: {fileID: 195892708451501610, guid: ae34d6d6c79b0104bb89fd0ae29ff87b, type: 3}
+      propertyPath: outlineColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 195892708451501610, guid: ae34d6d6c79b0104bb89fd0ae29ff87b, type: 3}
+      propertyPath: outlineColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 195892708451501610, guid: ae34d6d6c79b0104bb89fd0ae29ff87b, type: 3}
+      propertyPath: outlineColor.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 767969256684768850, guid: ae34d6d6c79b0104bb89fd0ae29ff87b, type: 3}
       propertyPath: m_Name
       value: STARLINE1
@@ -108447,6 +108461,7 @@ MonoBehaviour:
   hoverHeight: 0.25
   hoverSpeed: 2
   rotationSpeed: 90
+  startPos: {x: 0, y: 0, z: 0}
 --- !u!212 &1675597938
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -111999,7 +112014,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 5.9160004
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7972490177358387177, guid: c4db0909978d49045b3aad9f768d3a75, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -114225,6 +114241,7 @@ MonoBehaviour:
   hoverHeight: 0.25
   hoverSpeed: 2
   rotationSpeed: 90
+  startPos: {x: 0, y: 0, z: 0}
 --- !u!212 &1776451997
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -117934,6 +117951,10 @@ PrefabInstance:
       propertyPath: m_RenderingLayerMask
       value: 257
       objectReference: {fileID: 0}
+    - target: {fileID: 5509657505900586773, guid: ae34d6d6c79b0104bb89fd0ae29ff87b, type: 3}
+      propertyPath: isDebug
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6730122355796108904, guid: ae34d6d6c79b0104bb89fd0ae29ff87b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 207.49474
@@ -120065,6 +120086,18 @@ PrefabInstance:
     - target: {fileID: 6034650087604406846, guid: f43133602da8454439b007f8b3ea8b4f, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7019546638929050655, guid: f43133602da8454439b007f8b3ea8b4f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -9.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 7019546638929050655, guid: f43133602da8454439b007f8b3ea8b4f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 7019546638929050655, guid: f43133602da8454439b007f8b3ea8b4f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -52.23
       objectReference: {fileID: 0}
     - target: {fileID: 7092505742053027653, guid: f43133602da8454439b007f8b3ea8b4f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -125424,6 +125457,7 @@ MonoBehaviour:
   hoverHeight: 0.25
   hoverSpeed: 2
   rotationSpeed: 90
+  startPos: {x: 0, y: 0, z: 0}
 --- !u!212 &1920854219
 SpriteRenderer:
   m_ObjectHideFlags: 0

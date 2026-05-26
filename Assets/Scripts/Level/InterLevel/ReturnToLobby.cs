@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ReturnToLobby : MonoBehaviour {
@@ -10,9 +10,9 @@ public class ReturnToLobby : MonoBehaviour {
             return;
         }
 
-        PlayerPrefs.SetInt("LobbySpawnPoint", doorID);
-        PlayerPrefs.Save();
+        PlayersPrefs.SetInt("LobbySpawnPoint", doorID);
+        GameplaySystem.SaveSettings();
 
         SceneManager.LoadScene(lobbySceneName);
     }
-}
+}*/

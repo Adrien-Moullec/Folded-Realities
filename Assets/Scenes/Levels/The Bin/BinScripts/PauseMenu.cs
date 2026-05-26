@@ -29,7 +29,7 @@ public class PauseMenu : MonoBehaviour {
 
     public bool isPaused;
     public Vector3 lastCheckpoint;
-    public int coins;
+    public static int coins;
 
     int pendingSlot = -1;
 
@@ -228,7 +228,7 @@ public class PauseMenu : MonoBehaviour {
 
     public void SelectSlot(int slot) {
 
-        if (PlayerPrefs.GetInt("Slot" + slot + "_Exists", 0) == 1) {
+        if (GameplaySystem.GetInt(PrefInt.DoesSlotExist, 0) == 1) {
             pendingSlot = slot;
             overwritePanel.SetActive(true);
         } else {
@@ -248,43 +248,37 @@ public class PauseMenu : MonoBehaviour {
     }
     public void ClearSlot(int slot) {
         GameplaySystem.DeleteSettings(slot);
-        PlayerPrefs.DeleteKey("Slot" + slot + "_X");
-        PlayerPrefs.DeleteKey("Slot" + slot + "_Y");
-        PlayerPrefs.DeleteKey("Slot" + slot + "_Z");
         UpdateSlotUI(slot);
     }
     void SaveGame(int slot) {
 
         Vector3 pos = player != null ? player.position : lastCheckpoint;
-        PlayerPrefs.SetFloat("Slot" + slot + "_X", pos.x);
-        PlayerPrefs.SetFloat("Slot" + slot + "_Y", pos.y);
-        PlayerPrefs.SetFloat("Slot" + slot + "_Z", pos.z);
-        PlayerPrefs.SetInt("Slot" + slot + "_Coins", coins);
-        PlayerPrefs.SetString("Slot" + slot + "_Scene", SceneManager.GetActiveScene().name);
-        PlayerPrefs.SetInt("Slot" + slot + "_Exists", 1);
+        GameplaySystem.SetVector3(PrefVector3.SavedLocation, pos);
+        GameplaySystem.SetInt(PrefInt.Coins, coins);
+        GameplaySystem.SetString(PrefString.SavedScene, SceneManager.GetActiveScene().name);
+        GameplaySystem.SetInt(PrefInt.DoesSlotExist, 1);
+
         string time = System.DateTime.Now.ToString("dd/MM/yyyy HH:mm");
-        PlayerPrefs.SetString("Slot" + slot + "_Time", time);
-        PlayerPrefs.Save();
+        GameplaySystem.SetString(PrefString.Time, time);
+        GameplaySystem.SaveSettings();
         UpdateSlotUI(slot);
     }
 
     public void LoadGame(int slot) {
 
-        if (PlayerPrefs.GetInt("Slot" + slot + "_Exists", 0) != 1) return;
+        if (GameplaySystem.GetInt(PrefInt.DoesSlotExist, 0) != 1) return;
 
-        float x = PlayerPrefs.GetFloat("Slot" + slot + "_X", 0f);
-        float y = PlayerPrefs.GetFloat("Slot" + slot + "_Y", 0f);
-        float z = PlayerPrefs.GetFloat("Slot" + slot + "_Z", 0f);
-        coins = PlayerPrefs.GetInt("Slot" + slot + "_Coins", 0);
-        string scene = PlayerPrefs.GetString("Slot" + slot + "_Scene", "Unknown");
+        GameplaySystem.slot = slot;
+
+        coins = GameplaySystem.GetInt(PrefInt.Coins, 0);
+        string scene = GameplaySystem.GetString(PrefString.SavedScene, "Unknown");
 
         if (SceneManager.GetActiveScene().name != scene) {
             GameplaySystem.instance.StartGame(slot);
             return;
         }
 
-        Vector3 loadPos = new Vector3(x, y, z);
-
+        Vector3 loadPos = GameplaySystem.GetVector3(PrefVector3.SavedLocation, Vector3.zero);
         if (loadPos == Vector3.zero) {
             GameObject start = GameObject.FindGameObjectWithTag("PlayerStart");
             if (start != null) loadPos = start.transform.position;
@@ -307,10 +301,10 @@ public class PauseMenu : MonoBehaviour {
         if (slot == 3) text = slot3Text;
         if (text == null) return;
 
-        if (PlayerPrefs.GetInt("Slot" + slot + "_Exists", 0) == 1) {
-            string time = PlayerPrefs.GetString("Slot" + slot + "_Time", "No Time");
-            int savedCoins = PlayerPrefs.GetInt("Slot" + slot + "_Coins", 0);
-            string scene = PlayerPrefs.GetString("Slot" + slot + "_Scene", "Unknown");
+        if (GameplaySystem.GetInt(PrefInt.DoesSlotExist, 0) != 1) {
+            string time = GameplaySystem.GetString(PrefString.Time, "No Time");
+            int savedCoins = GameplaySystem.GetInt(PrefInt.Coins, 0);
+            string scene = GameplaySystem.GetString(PrefString.SavedScene, "Unknown");
             text.text = "Saved\n" + scene + "\n" + time + "\nCoins: " + savedCoins;
         } else {
             text.text = "Empty";

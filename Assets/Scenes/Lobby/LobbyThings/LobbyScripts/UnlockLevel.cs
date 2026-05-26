@@ -22,16 +22,7 @@ public class UnlockLevel : MonoBehaviour {
 
         triggered = true;
 
-        PlayerPrefs.SetInt(
-            unlockKey,
-            1
-        );
-
-        PlayerPrefs.Save();
-
-        Debug.Log(
-            unlockKey +
-            " unlocked!"
-        );
+        GameplaySystem.SetInt(PrefInt.UnlockKey, 1);
+        GameplaySystem.SaveSettings();
     }
 }

@@ -48,17 +48,9 @@ public class StageLock : MonoBehaviour {
 
     void CheckState() {
 
-        isUnlocked =
-            PlayerPrefs.GetInt(
-                requiredKey,
-                0
-            ) == 1;
-
-        if (isUnlocked) {
-
+        if (GameplaySystem.GetInt(PrefInt.OwnsKey, 0) == 1) {
             Unlock();
         } else {
-
             Lock();
         }
     }

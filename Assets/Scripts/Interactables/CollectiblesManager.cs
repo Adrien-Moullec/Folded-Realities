@@ -174,13 +174,8 @@ public class CollectiblesManager : MonoBehaviour {
 
     void OnPuzzleCompleted() {
 
-        PlayerPrefs.SetInt(
-            "PuzzleComplete_Level_"
-            + levelID,
-            1
-        );
-
-        PlayerPrefs.Save();
+        GameplaySystem.SetInt(PrefInt.PuzzleComplete, 1);
+        GameplaySystem.SaveSettings();
     }
 
     void UpdateNormalUI() {

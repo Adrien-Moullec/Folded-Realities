@@ -1,89 +1,52 @@
 using UnityEngine;
+
 using TMPro;
 
 public class VMInteract : MonoBehaviour {
 
     [Header("UI")]
     public GameObject shopUI;
-
     [Header("Player")]
     public GameObject playerVisuals;
-
     public MonoBehaviour playerController;
-
     [Header("Currency")]
     public int playerCoins = 0;
-
     [Header("Hat Costs")]
     public int crownCost = 30;
-
     public int boxHatCost = 15;
 
     [Header("Price Text")]
     public TMP_Text crownPriceText;
-
     public TMP_Text boxHatPriceText;
-
     [Header("Owned Hats")]
     public bool ownsCrown = false;
-
     public bool ownsBoxHat = false;
-
     [Header("Hats")]
     public Transform hatContainer;
-
     public GameObject crownHat;
-
     public GameObject boxHat;
-
     bool shopOpen = false;
 
     void Start() {
 
         // LOAD COINS
-        playerCoins =
-            PlayerPrefs.GetInt(
-                "Coins",
-                0
-            );
-
+        playerCoins = GameplaySystem.GetInt(PrefInt.Coins, 0);
         // LOAD PURCHASES
-        ownsCrown =
-            PlayerPrefs.GetInt(
-                "OwnsCrown",
-                0
-            ) == 1;
-
-        ownsBoxHat =
-            PlayerPrefs.GetInt(
-                "OwnsBoxHat",
-                0
-            ) == 1;
-
-        Debug.Log(
-            "Coins Loaded: "
-            + playerCoins
-        );
-
+        ownsCrown = GameplaySystem.GetInt(PrefInt.OwnsCrown, 0) == 1;
+        ownsBoxHat = GameplaySystem.GetInt(PrefInt.OwnsBoxHat, 0) == 1;
         // hide shop
-        if (shopUI != null)
-            shopUI.SetActive(false);
+        if (shopUI != null) shopUI.SetActive(false);
 
         // disable all hats
         if (hatContainer != null) {
-
             foreach (Transform h in hatContainer) {
-
                 h.gameObject.SetActive(false);
             }
         }
 
         // already owned = free
-        if (ownsCrown)
-            crownCost = 0;
-
-        if (ownsBoxHat)
-            boxHatCost = 0;
+        if (ownsCrown) crownCost = 0;
+        if (ownsBoxHat) boxHatCost = 0;
 
         // UPDATE UI
         UpdatePriceUI();
@@ -296,38 +259,16 @@ public class VMInteract : MonoBehaviour {
     // SAVE DATA
     void SaveData() {
 
-        PlayerPrefs.SetInt(
-            "Coins",
-            playerCoins
-        );
-
-        PlayerPrefs.SetInt(
-            "OwnsCrown",
-            ownsCrown ? 1 : 0
-        );
-
-        PlayerPrefs.SetInt(
-            "OwnsBoxHat",
-            ownsBoxHat ? 1 : 0
-        );
-
-        PlayerPrefs.Save();
-
-        Debug.Log(
-            "Shop Data Saved"
-        );
+        GameplaySystem.SetInt(PrefInt.Coins, playerCoins);
+        GameplaySystem.SetInt(PrefInt.OwnsCrown, ownsCrown ? 1 : 0);
+        GameplaySystem.SetInt(PrefInt.OwnsBoxHat, ownsBoxHat ? 1 : 0);
+        GameplaySystem.SaveSettings();
     }
 
     // DEBUG BUTTON
     [ContextMenu("Add 10 Coins")]
     void AddCoinsDebug() {
-
         playerCoins += 10;
-
         SaveData();
-
-        Debug.Log(
-            "Added Debug Coins"
-        );
     }
 }

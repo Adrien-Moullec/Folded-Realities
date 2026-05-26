@@ -89,7 +89,7 @@ public class MainMenu : MonoBehaviour {
         if (GameplaySystem.GetInt(PrefInt.DoesSlotExist, -1) == 1) {
             string time = GameplaySystem.GetString(PrefString.Time, "No Time");
             int coins = GameplaySystem.GetInt(PrefInt.Coins, 0);
-            string scene = GameplaySystem.GetString(PrefString.Scene, "Unknown");
+            string scene = GameplaySystem.GetString(PrefString.SavedScene, "Unknown");
 
             text.text = "Saved\n" + scene + "\n" + time + "\nCoins: " + coins;
 

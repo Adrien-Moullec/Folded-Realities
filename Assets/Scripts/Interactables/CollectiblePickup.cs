@@ -5,16 +5,39 @@ using UnityEngine;
 
 [RequireComponent(typeof(Outline))]
 public class CollectiblePickup : MonoBehaviour {
+
+    [Header("Pickup Options")]
     [SerializeField] AudioClip pickupSound;
     [SerializeField] float deactivateTime;
     [SerializeField] float pickupFloatSpeed = 2f;
     [SerializeField] float pickupRotationSpeed = 360f;
+
+    [Header("Collectible Idle")]
+    public float hoverHeight = 0.25f;
+    public float hoverSpeed = 2f;
+    public float rotationSpeed = 90f;
+
+    [Header("Player Pref")]
+    [SerializeField] PlayerPrefIDGenerator playerPrefIDGenerator;
+
     public bool isSpecial = false;
+    private Vector3 startPos;
+
+    void Awake() {
+        startPos = transform.position;
+    }
+    void Update() {
+        float newY = startPos.y + Mathf.Sin(Time.time * hoverSpeed) * hoverHeight;
+        transform.position = new Vector3(startPos.x, newY, startPos.z);
+
+        transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
+    }
 
     private void OnTriggerEnter(Collider other) {
         if (!other.CompareTag("Player")) {
             return;
         }
+        playerPrefIDGenerator.SetPlayerPrefIdActive(false);
 
         CollectiblesManager manager = other.GetComponent<CollectiblesManager>();
 
@@ -40,12 +63,6 @@ public class CollectiblePickup : MonoBehaviour {
         if (col != null) {
             col.enabled = false;
         }
-
-        CollectibleIdle idle = GetComponent<CollectibleIdle>();
-        if (idle != null) {
-            idle.enabled = false;
-        }
-
         float timer = 0f;
 
         Material mat = GetComponent<Renderer>().material;

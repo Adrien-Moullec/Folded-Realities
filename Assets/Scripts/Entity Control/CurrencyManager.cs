@@ -9,22 +9,18 @@ public class CurrencyManager : MonoBehaviour {
 
         Instance = this;
 
-        coins =
-            PlayerPrefs.GetInt(
-                "Coins",
-                0
-            );
+        coins = GameplaySystem.GetInt(PrefInt.Coins, 0);
     }
 
     public void AddCoins(int amount) {
         coins += amount;
-        PlayerPrefs.SetInt("Coins", coins);
+        GameplaySystem.SetInt(PrefInt.Coins, coins);
     }
 
     public bool SpendCoins(int amount) {
         if (coins >= amount) {
             coins -= amount;
-            PlayerPrefs.SetInt("Coins", coins);
+            GameplaySystem.SetInt(PrefInt.Coins, coins);
             return true;
         }
 
