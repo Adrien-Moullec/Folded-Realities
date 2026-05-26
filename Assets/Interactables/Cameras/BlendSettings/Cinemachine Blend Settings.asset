@@ -882,6 +882,28 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 4
+  - From: DoorsCamera
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 1
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: Shop
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 1
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
   - From: PianoAreaCamera
     To: '**ANY CAMERA**'
     Blend:
@@ -920,6 +942,50 @@ MonoBehaviour:
     Blend:
       Style: 1
       Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: CarCutsceneCamera
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 1
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: AI_IntroCamera
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 1
+      Time: 1
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: '**ANY CAMERA**'
+    To: EllieIntroCamera
+    Blend:
+      Style: 1
+      Time: 2
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 4
+  - From: EllieIntroCamera
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 1
+      Time: 3
       CustomCurve:
         serializedVersion: 2
         m_Curve: []

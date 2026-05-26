@@ -3,6 +3,9 @@ using System.Collections;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class GameplaySystem : MonoBehaviour {
 
@@ -56,8 +59,7 @@ public class GameplaySystem : MonoBehaviour {
     public static void SaveSettings() =>
         PlayerPrefs.Save();
     public static void DeleteSettings(int slotID) {
-        foreach (var n in Enum.GetNames(typeof(SettingsFloatPref)))
-            PlayerPrefs.DeleteKey(GetSlotID(slotID) + n.ToString());
+        string key = "";
         foreach (var n in Enum.GetNames(typeof(PrefInt)))
             PlayerPrefs.DeleteKey(GetSlotID(slotID) + n.ToString());
         foreach (var n in Enum.GetNames(typeof(PrefString)))
@@ -66,6 +68,17 @@ public class GameplaySystem : MonoBehaviour {
             PlayerPrefs.DeleteKey(GetSlotID(slotID) + n.ToString() + "-X");
             PlayerPrefs.DeleteKey(GetSlotID(slotID) + n.ToString() + "-Y");
             PlayerPrefs.DeleteKey(GetSlotID(slotID) + n.ToString() + "-Z");
+        }
+        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++) {
+            string path = SceneUtility.GetScenePathByBuildIndex(i);
+            string sceneName = System.IO.Path.GetFileNameWithoutExtension(path);
+            GetSlotID(slotID);
+
+            foreach (var obj in FindObjectsByType<PlayerPrefIDGenerator>(FindObjectsSortMode.None)) {
+                key = GetSlotID(slotID) + PlayerPrefIDGenerator.GetIdGeneration(obj.gameObject, sceneName);
+                if (PlayerPrefs.GetInt(key, -1) == 1) Debug.Log("Found one at " + sceneName);
+                PlayerPrefs.DeleteKey(key);
+            }
         }
         SaveSettings();
     }
@@ -112,5 +125,30 @@ public class GameplaySystem : MonoBehaviour {
             PlayerPrefs.GetFloat(currentSlotId + scene + "-Y", def.y),
             PlayerPrefs.GetFloat(currentSlotId + scene + "-Z", def.z)
         );
+
+    public static void SetIdActive(int id, bool active) =>
+        PlayerPrefs.SetInt(currentSlotId + id.ToString(), active ? 1 : 0);
+    public static bool IsIdActive(int id) =>
+        PlayerPrefs.GetInt(currentSlotId + id.ToString(), 1) == 1;
+
+    internal static void SetBool() {
+        throw new NotImplementedException();
+    }
     #endregion
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(GameplaySystem))]
+[CanEditMultipleObjects]
+public class GameplaySystemEditor : Editor {
+    public override void OnInspectorGUI() {
+        DrawDefaultInspector();
+        if (GUILayout.Button("ResetPlayerPrefs")) {
+            GameplaySystem.DeleteSettings(-1);
+            GameplaySystem.DeleteSettings(1);
+            GameplaySystem.DeleteSettings(2);
+            GameplaySystem.DeleteSettings(3);
+        }
+    }
+}
+#endif

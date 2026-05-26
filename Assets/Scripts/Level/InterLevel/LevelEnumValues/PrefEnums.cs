@@ -8,6 +8,11 @@ public enum PrefInt {
     Progress,
     DoesSlotExist,
     Coins,
+    OwnsCrown,
+    OwnsBoxHat,
+    OwnsKey,
+    UnlockKey,
+    PuzzleComplete,
 }
 public enum PrefString {
     Time,

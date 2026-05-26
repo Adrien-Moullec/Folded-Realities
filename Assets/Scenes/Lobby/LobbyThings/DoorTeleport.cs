@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class DoorTeleport : MonoBehaviour {
@@ -10,10 +10,10 @@ public class DoorTeleport : MonoBehaviour {
             return;
         }
 
-        PlayerPrefs.SetInt("SpawnDoorID", spawnID);
-        PlayerPrefs.SetInt("UseDoorSpawn", 1);
-        PlayerPrefs.Save();
+        PlayersPrefs.SetInt("SpawnDoorID", spawnID);
+        PlayersPrefs.SetInt("UseDoorSpawn", 1);
+        PlayersPrefs.Save();
 
         SceneManager.LoadScene(sceneToLoad);
     }
-}
+}*/

@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class CollectibleIdle : MonoBehaviour
 {
@@ -21,3 +21,4 @@ public class CollectibleIdle : MonoBehaviour
         transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
     }
 }
+*/
