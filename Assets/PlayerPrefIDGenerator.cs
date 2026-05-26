@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class PlayerPrefIDGenerator : MonoBehaviour {
     public int IdGenerator => GetIdGeneration(gameObject, SceneManager.GetActiveScene().name.ToString());
+    [SerializeField] public bool isDebug = false;
+    Vector3 startPos;
     public static int GetIdGeneration(GameObject gameObject, string scene) {
         return Animator.StringToHash(
             gameObject.name +
@@ -12,8 +14,6 @@ public class PlayerPrefIDGenerator : MonoBehaviour {
             scene.ToString()
         );
     }
-    [SerializeField] public bool isDebug = false;
-    Vector3 startPos;
     void Awake() {
         startPos = transform.position;
         if (!GameplaySystem.IsIdActive(IdGenerator)) {
