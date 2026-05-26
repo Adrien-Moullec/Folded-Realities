@@ -15,8 +15,17 @@ public class GameplaySystem : MonoBehaviour {
     [HideInInspector] public static int slot = -1;
     public static string currentSlotId => GetSlotID(slot);
     private static string GetSlotID(int id) => "Slot" + id + "_";
+    public bool ResetOnPlay = true;
 
     void Awake() {
+#if UNITY_EDITOR
+        if (ResetOnPlay) {
+            DeleteSettings(-1);
+            DeleteSettings(1);
+            DeleteSettings(2);
+            DeleteSettings(3);
+        }
+#endif
         sceneTransition.gameObject.SetActive(true);
         if (instance != null) {
             Destroy(gameObject);

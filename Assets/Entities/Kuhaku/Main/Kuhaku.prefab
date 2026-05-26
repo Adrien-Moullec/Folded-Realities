@@ -229,8 +229,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2969896672581243912}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.25340134, y: 0.000000014454841, z: -0.000000003786462, w: 0.9673613}
-  m_LocalPosition: {x: -0.17656589, y: 1.8057445, z: -4.575636}
+  m_LocalRotation: {x: 0.070384495, y: -0.9015743, z: 0.1604193, w: 0.39556983}
+  m_LocalPosition: {x: -7.6165686, y: 58.065742, z: -196.97565}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -269,7 +269,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 60.000004
+  field of view: 40
   orthographic: 0
   orthographic size: 10
   m_Depth: 0
@@ -540,6 +540,7 @@ Transform:
   - {fileID: 6261927822416402057}
   - {fileID: 6820946559904015299}
   - {fileID: 5028281752311962553}
+  - {fileID: 5324487144877645226}
   m_Father: {fileID: 1726812301455353388}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4214461246217570419
@@ -856,7 +857,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5324487144877645226}
   - {fileID: 1726812301455353388}
   - {fileID: 8498058697578699395}
   - {fileID: 547844563530938474}
@@ -1211,8 +1211,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5875144431828711502}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.25340134, y: 0.000000014454841, z: -0.000000003786462, w: 0.9673613}
-  m_LocalPosition: {x: 0, y: 2.25, z: -4}
+  m_LocalRotation: {x: 0.070384495, y: -0.9015743, z: 0.1604193, w: 0.39556983}
+  m_LocalPosition: {x: -7.4400024, y: 58.51, z: -196.40001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1888,6 +1888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5487b8afb1024d141a458dfdfbee8b9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
 --- !u!4 &2278785261134059506 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4dde48840890c3d4092c4f49f9543e40, type: 3}
@@ -2082,6 +2083,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5487b8afb1024d141a458dfdfbee8b9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
 --- !u!4 &3142790056312771440 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1600ca4ab8776dc4ebfc51104c80d2e2, type: 3}
@@ -2214,13 +2216,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5487b8afb1024d141a458dfdfbee8b9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
 --- !u!1001 &5651693882659682881
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1225429674322778145}
+    m_TransformParent: {fileID: 6316659452547938611}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 275f8dacfae310b4fa839983e8d88026, type: 3}
       propertyPath: m_LocalScale.x
@@ -2336,6 +2339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5487b8afb1024d141a458dfdfbee8b9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
 --- !u!4 &5324487144877645226 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 275f8dacfae310b4fa839983e8d88026, type: 3}
@@ -2770,6 +2774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5487b8afb1024d141a458dfdfbee8b9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
 --- !u!4 &8772100885410639817 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a06ae5b2bbbe1254e8edfad7eb344728, type: 3}
