@@ -67024,6 +67024,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7569687289468375124, guid: 98ba98a9f1436754196d25f43830f232, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1457215879}
+    - targetCorrespondingSourceObject: {fileID: 7569687289468375124, guid: 98ba98a9f1436754196d25f43830f232, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1457215881}
     - targetCorrespondingSourceObject: {fileID: 3238809560341441048, guid: 98ba98a9f1436754196d25f43830f232, type: 3}
       insertIndex: -1
       addedObject: {fileID: 245910757}
@@ -96568,7 +96571,19 @@ MonoBehaviour:
       m_Calls: []
   timelineEndEvents:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1457215881}
+        m_TargetAssemblyTypeName: PlayerPrefIDGenerator, Assembly-CSharp
+        m_MethodName: SetPlayerPrefIdActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!320 &1457215880
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -96594,6 +96609,19 @@ PlayableDirector:
     value: {fileID: 245910757}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &1457215881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457215877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef0451eb1495c9141a1f8eb13297d818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDebug: 0
 --- !u!1 &1457557383
 GameObject:
   m_ObjectHideFlags: 0
