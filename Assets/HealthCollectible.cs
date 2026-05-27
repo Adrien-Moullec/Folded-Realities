@@ -14,7 +14,11 @@ public class HealthCollectible : MonoBehaviour {
             return;
         }
 
-        if (
+        if (other.TryGetComponent(out IHealth ihealth)) {
+            ihealth.Heal(new AbilitySystem.EntityDamage(20, null));
+        }
+
+        /*if (
             CollectiblesManager.Instance
             != null
         ) {
@@ -23,6 +27,6 @@ public class HealthCollectible : MonoBehaviour {
                 gameObject,
                 other.gameObject
             );
-        }
+        }*/
     }
 }

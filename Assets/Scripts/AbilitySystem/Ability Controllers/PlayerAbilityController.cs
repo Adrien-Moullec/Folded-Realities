@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine.SceneManagement;
 using AbilitySystem;
 
@@ -76,7 +79,6 @@ namespace AbilitySystem {
             currentAbilitySet?.playerAbilitySet?.primary?.Activate(currentAbilitySet.entityBody, GetInputValues.isPrimaryAbility);
             currentAbilitySet?.playerAbilitySet?.secondary?.Activate(currentAbilitySet.entityBody, GetInputValues.isSecondaryAbility);
             currentAbilitySet?.playerAbilitySet?.tertiary?.Activate(currentAbilitySet.entityBody, GetInputValues.isTertiaryAbility);
-            Debug.Log(((TransformingPlayerData)playerSetsList[0].playerAbilitySet.movement.AbilityData) == (TransformingPlayerData)playerSetsList[2].playerAbilitySet.movement.AbilityData);
         }
         public void QuickSwitch() {
             if (currentAbilitySet.abilitySetSO?.abilitySetName == "Kuhaku") OnAbilityEvent("Bear");
@@ -182,7 +184,7 @@ namespace AbilitySystem {
         }
         IEnumerator OnDie() {
 
-            if (TryGetSetSummary("Kuhaku", out PlayerSetSummary playerSetSummary))
+            if (TryGetSetSummary("Kuhaku", out PlayerSetSummary playerSetSummary) && currentAbilitySet?.abilitySetSO.abilitySetName != "Kuhaku")
                 yield return Transition(playerSetSummary);
 
             currentAbilitySet.abilitySetSO.healthSettings?.Die(currentAbilitySet.entityBody, ref CurrentHealth);
@@ -194,20 +196,21 @@ namespace AbilitySystem {
                 (x) => {
                     foreach (var n in GetEntityBody().entityShader)
                         n.material.SetFloat("_DissolveValue", x);
+                    Debug.Log(x);
                 },
                 null,
-                null,
+                () => isFin = true,
                 AnimationType.Death.ToString(),
                 true,
                 0.2f
             );
-            while (isFin) yield return null;
+            while (!isFin) yield return null;
             StartCoroutine(GameplaySystem.instance.Respawn());
             GetComponent<CharacterController>().enabled = true;
-            currentAbilitySet
-                .abilitySetSO
+            currentAbilitySet?
+                .abilitySetSO?
                 .healthSettings
-                .MaxHealth(
+                ?.MaxHealth(
                     currentAbilitySet.entityBody,
                     ref CurrentHealth,
                     ref MaxHealth
@@ -217,22 +220,22 @@ namespace AbilitySystem {
             foreach (var n in GetEntityBody().entityShader)
                 n.material.SetFloat("_DissolveValue", 0);
         }
-        IEnumerator BossFightRestartRoutine() {
-            characterController.enabled = false;
-            yield return StartCoroutine(GameplaySystem.instance.BossTransition(GameplayScenes.Bedroom, TransitionType.Iris));
-            characterController.enabled = true;
-        }
         public override void Heal(EntityDamage heal) {
             base.Heal(heal);
+            foreach (var n in GetEntityBody().entityShader)
+                n.material.SetFloat("_Health01", CurrentHealth / MaxHealth);
             playerHealthCanvas?.UpdateHearts(CurrentHealth);
         }
         public override void Damage(EntityDamage damage) {
-            Debug.Log(damage.damagingTeam);
+            if (EntityTeamFunctions.HasCommonTeam(damage.damagingTeam, entityTeam)) return;
             if (invincible)
                 return;
 
             base.Damage(damage);
             playerHealthCanvas?.UpdateHearts(CurrentHealth);
+
+            foreach (var n in GetEntityBody().entityShader)
+                n.material.SetFloat("_Health01", CurrentHealth / MaxHealth);
 
             StartCoroutine(OnHitFrames());
             if (CurrentHealth <= 0)
@@ -249,6 +252,7 @@ namespace AbilitySystem {
         #endregion
     }
 }
+#if UNITY_EDITOR
 [CustomEditor(typeof(PlayerAbilityController))]
 [CanEditMultipleObjects]
 public class PlayerAbilityControllerEditor : Editor {
@@ -264,3 +268,4 @@ public class PlayerAbilityControllerEditor : Editor {
         }
     }
 }
+#endif

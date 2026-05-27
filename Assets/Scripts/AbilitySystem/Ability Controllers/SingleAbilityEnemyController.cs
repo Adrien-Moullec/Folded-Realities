@@ -11,11 +11,11 @@ namespace AbilitySystem {
             healthBar.value = MaxHealth;
         }*/
         public override void Damage(EntityDamage damage) {
-            //base.Damage(damage);
+            base.Damage(damage);
             UpdateHealth();
         }
         public override void Heal(EntityDamage heal) {
-            //base.Heal(heal);
+            base.Heal(heal);
             UpdateHealth();
         }
         private void UpdateHealth() {

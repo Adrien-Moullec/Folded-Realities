@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 
 using UnityEngine;
 using UnityEngine.AI;
@@ -28,6 +29,12 @@ namespace AbilitySystem {
         public override bool IsGrounded() => true;
         protected override void Awake() {
             base.Awake();
+            if (!navMeshAgent.isOnNavMesh)
+                if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 2.0f, NavMesh.AllAreas)) {
+                    navMeshAgent.enabled = false;
+                    navMeshAgent.Warp(hit.position);
+                    navMeshAgent.enabled = true;
+                }
             entityBody.iAbility = this;
             entityBody.iHealth = this;
             navMeshAgent = GetComponent<NavMeshAgent>();
@@ -48,7 +55,7 @@ namespace AbilitySystem {
         }
 
         public override void OnMoveEntity(Vector3 direction, bool rotate = true) {
-            navMeshAgent.SetDestination(direction);
+            if (navMeshAgent.isOnNavMesh) navMeshAgent.SetDestination(direction);
             direction.y = 0;
             //if (direction != Vector3.zero && rotate) entityBody.bodyHolder.transform.forward = direction;
         }
@@ -67,6 +74,21 @@ namespace AbilitySystem {
 
         public override void Die() {
             navMeshAgent.enabled = false;
+            StartCoroutine(OnDie());
+        }
+        IEnumerator OnDie() {
+            bool isFin = false;
+            yield return GetEntityBody().animatorManager.InitiateOneOffAnimation(
+                null,
+                null,
+                null,
+                () => isFin = true,
+                AnimationType.Death.ToString(),
+                true,
+                0.2f
+            );
+            while (!isFin) yield return null;
+
             //StartCoroutine(PlayerDeath(entityBody.animatorManager, () => Destroy(gameObject)));
             Destroy(gameObject);
         }

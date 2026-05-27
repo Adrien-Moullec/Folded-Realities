@@ -53,6 +53,7 @@ namespace AbilitySystem {
 
         #region Health
         public virtual void Damage(EntityDamage damage) {
+            if (EntityTeamFunctions.HasCommonTeam(entityTeam, damage.damagingTeam)) return;
             if (GetEntityBody().abilitySet?.healthSettings != null)
                 GetEntityBody().abilitySet?.healthSettings.DamageAmount(GetEntityBody(), ref CurrentHealth, ref MaxHealth, damage);
             else

@@ -1,17 +1,20 @@
 using UnityEngine;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
+
 using System;
 using System.Collections.Generic;
 
-public class Fluffy : MonoBehaviour
-{
+public class Fluffy : MonoBehaviour {
     [Header("Shell Info")]
     [SerializeField] private Renderer fluffyRenderer;
     [SerializeField] private List<FluffyInfo> layers = new List<FluffyInfo>();
 
     [Space]
     [Header("Shell Variables")]
-    [SerializeField, Range(1,100)] private int shellNumber = 16;
+    [SerializeField, Range(1, 100)] private int shellNumber = 16;
     [SerializeField] private float shellGap = 5f;
 
     [Space]
@@ -28,12 +31,11 @@ public class Fluffy : MonoBehaviour
     [SerializeField] private float swayAmount = 1;
     [SerializeField, Range(0, 50)] private float gravityPower = 0;
     [SerializeField, Range(0, 0.5f)] private float randomHairDisplacement = 0.5f;
-    
+
     private Material[] originalMaterials;
 
     //The main called upon function to create all the renderer materials/
-    public void MakeFluffy()
-    {
+    public void MakeFluffy() {
         if (fluffyRenderer == null) return;
 
         //Setup lists
@@ -43,8 +45,7 @@ public class Fluffy : MonoBehaviour
         layers = new List<FluffyInfo>(shellNumber);
 
         //Add new materials and property-blocks to each layer
-        for (int i = 0; i < shellNumber; i++)
-        {
+        for (int i = 0; i < shellNumber; i++) {
             Material mat = new Material(originalMaterials[0]);
             newMaterials[i] = mat;
             layers.Add(new FluffyInfo(mat, new MaterialPropertyBlock()));
@@ -55,14 +56,13 @@ public class Fluffy : MonoBehaviour
     }
 
     //Update each material using property-block
-    void UpdateShaderLayer(int i)
-    {
+    void UpdateShaderLayer(int i) {
         var layer = layers[i];
         if (layer.mpb == null) layer.mpb = new MaterialPropertyBlock();
 
         layer.mpb.SetFloat("_StrandHeight", (i * (shellGap + 1)) / 1000f);
         layer.mpb.SetFloat("_Cutoff", (float)i / shellNumber);
-        layer.mpb.SetFloat("_AlphaClip", i==0?0:1);
+        layer.mpb.SetFloat("_AlphaClip", i == 0 ? 0 : 1);
         layer.mpb.SetFloat("_StrandDensity", strandDensity);
         layer.mpb.SetFloat("_BaseThickness", baseThickness);
         layer.mpb.SetFloat("_TipThickness", tipThickness);
@@ -73,12 +73,11 @@ public class Fluffy : MonoBehaviour
         layer.mpb.SetFloat("_RandomHairDisplacement", randomHairDisplacement);
         layer.mpb.SetColor("_BaseColor", colorTint);
 
-        fluffyRenderer.SetPropertyBlock(layer.mpb,i);
+        fluffyRenderer.SetPropertyBlock(layer.mpb, i);
     }
 
     //Delete and redo the layers and property blocks
-    public void CleanSlate()
-    {
+    public void CleanSlate() {
         if (layers == null || layers.Count == 0) return;
         if (fluffyRenderer != null && originalMaterials != null)
             fluffyRenderer.sharedMaterials = originalMaterials;
@@ -86,8 +85,7 @@ public class Fluffy : MonoBehaviour
     }
 
     //Dynamically change each layer when the variables are changed
-    private void OnValidate()
-    {
+    private void OnValidate() {
         if (layers == null || layers.Count == 0) return;
 
         for (int i = 0; i < layers.Count; i++)
@@ -96,41 +94,35 @@ public class Fluffy : MonoBehaviour
 }
 
 [Serializable]
-public struct FluffyInfo
-{
+public struct FluffyInfo {
     public Material material;
     public MaterialPropertyBlock mpb;
 
-    public FluffyInfo(Material material, MaterialPropertyBlock mpb)
-    {
+    public FluffyInfo(Material material, MaterialPropertyBlock mpb) {
         this.material = material;
         this.mpb = mpb;
     }
 }
-
+#if UNITY_EDITOR
 [CustomEditor(typeof(Fluffy))]
 [CanEditMultipleObjects]
-public class LookAtPointEditor : Editor
-{
+public class LookAtPointEditor : Editor {
     private Fluffy fluffy;
 
-    private void OnEnable()
-    {
+    private void OnEnable() {
         fluffy = (Fluffy)target;
     }
 
-    public override void OnInspectorGUI()
-    {
+    public override void OnInspectorGUI() {
         DrawDefaultInspector();
 
-        if (GUILayout.Button("Make Layers"))
-        {
+        if (GUILayout.Button("Make Layers")) {
             fluffy.MakeFluffy();
         }
 
-        if (GUILayout.Button("Clean Slate"))
-        {
+        if (GUILayout.Button("Clean Slate")) {
             fluffy.CleanSlate();
         }
     }
 }
+#endif

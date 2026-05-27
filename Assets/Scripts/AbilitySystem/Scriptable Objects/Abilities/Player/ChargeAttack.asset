@@ -14,7 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cooldown: 0.1
   charges: 1
-  chargeDamage: 10
-  chargeUpDuration: 1
+  attackArea:
+    checkShape: 0
+    centerOffset: {x: 0, y: 0, z: 0}
+    size1: 1
+    halfExtents: {x: 1, y: 1, z: 1}
+    layers:
+      serializedVersion: 2
+      m_Bits: 1
+    doDrawGizmo: 1
+    wireFrame: 1
+  mustRePressToUse: 0
+  debug: 0
+  colliderCheck:
+    checkShape: 0
+    centerOffset: {x: 0, y: 0, z: 0}
+    size1: 1
+    halfExtents: {x: 1.87, y: 1.35, z: 1}
+    layers:
+      serializedVersion: 2
+      m_Bits: 1
+    doDrawGizmo: 1
+    wireFrame: 1
   maxChargeDuration: 0.529
-  chargeDownDuration: 2
+  damage: 20

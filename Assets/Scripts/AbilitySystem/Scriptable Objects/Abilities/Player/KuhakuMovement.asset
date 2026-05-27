@@ -30,6 +30,8 @@ MonoBehaviour:
   groundedFallSpeed: 2
   canGlide: 0
   glideHorizontalSpeed: 7
+  glideAcceleration: 1
+  glideDeceleration: 1
   maxGlideTime: 3
   glideFallSpeed: 0.1
   glideFallSpeedOverTime:
@@ -90,7 +92,7 @@ MonoBehaviour:
     m_Bits: 1024
   gravity: 60
   DEBUG: 0
-  DebugLog: 1
+  DebugLog: 0
   onHitGround: 
   onGlide: Crane
   onFreeFall: 

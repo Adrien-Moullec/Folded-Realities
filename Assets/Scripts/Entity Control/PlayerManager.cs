@@ -163,7 +163,9 @@ public class PlayerManager : MonoBehaviour {
     #endregion
     #endregion
 
+#if UNITY_EDITOR
     private void OnDrawGizmos() {
         interactionArea.Gizmo(body);
     }
+#endif
 }

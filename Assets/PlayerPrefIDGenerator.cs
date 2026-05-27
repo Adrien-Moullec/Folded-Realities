@@ -17,7 +17,7 @@ public class PlayerPrefIDGenerator : MonoBehaviour {
     void Awake() {
         startPos = transform.position;
         if (!GameplaySystem.IsIdActive(IdGenerator)) {
-            if (isDebug) Debug.Log(gameObject.name + " IdInactive");
+            Debug.Log(gameObject.name + " IdInactive");
             gameObject.SetActive(false);
         } else {
             if (isDebug)

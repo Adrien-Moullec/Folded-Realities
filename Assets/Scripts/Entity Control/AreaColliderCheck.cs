@@ -1,8 +1,9 @@
 using System;
 
 using UnityEngine;
-
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 [Serializable]
 public class AreaColliderCheck {
@@ -39,6 +40,8 @@ public class AreaColliderCheck {
         Ray ray = new Ray(location, direction);
         return (RaycastHit[] x) => Physics.RaycastNonAlloc(ray, x, 1, layerMask);
     }
+
+#if UNITY_EDITOR
     public void Gizmo(GameObject gameObject) => Gizmo(gameObject.transform);
     public void Gizmo(Transform trans) => Gizmo(trans.position, trans.forward);
     public void Gizmo(Vector3 location, Vector3 direction) {
@@ -60,8 +63,10 @@ public class AreaColliderCheck {
         }
         Gizmos.matrix = Matrix4x4.identity;
     }
+#endif
 }
 
+#if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(AreaColliderCheck))]
 public class AreaAffectsDrawer : PropertyDrawer {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
@@ -126,6 +131,7 @@ public class AreaAffectsDrawer : PropertyDrawer {
         return (lines + 1) * (EditorGUIUtility.singleLineHeight + 2);
     }
 }
+#endif
 
 public enum CheckShape {
     Cube,

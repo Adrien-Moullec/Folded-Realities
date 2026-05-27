@@ -34,7 +34,7 @@ namespace AbilitySystem {
 
             for (int i = 0; i < things; i++)
                 if (data.raycastHits[i].transform.TryGetComponent(out IHealth iHealth))
-                    if (iHealth != entityBody.iHealth)
+                    if (iHealth != entityBody.iHealth) {
                         iHealth.Damage(
                             new EntityDamage(
                                 damage,
@@ -43,11 +43,16 @@ namespace AbilitySystem {
                                 EntityDamageType.Melee
                             )
                         );
+                        Debug.Log(data.raycastHits[i].gameObject.name);
+                    }
 
 
         }
+
+#if UNITY_EDITOR
         public override void GizmoEvent(EntityBody entityBody) {
             attackArea.Gizmo(entityBody.bodyHolder);
         }
+#endif
     }
 }
