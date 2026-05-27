@@ -1,16 +1,24 @@
 using UnityEngine;
-
 using TMPro;
 
 public class VMInteract : MonoBehaviour {
 
+    #region References
+
     [Header("UI")]
     public GameObject shopUI;
+
     [Header("Player")]
     public GameObject playerVisuals;
     public MonoBehaviour playerController;
+
     [Header("Currency")]
     public int playerCoins = 0;
+
+    #endregion
+
+    #region Costs
+
     [Header("Hat Costs")]
     public int crownCost = 30;
     public int boxHatCost = 15;
@@ -18,139 +26,112 @@ public class VMInteract : MonoBehaviour {
     [Header("Price Text")]
     public TMP_Text crownPriceText;
     public TMP_Text boxHatPriceText;
+
+    #endregion
+
+    #region Hats
+
     [Header("Owned Hats")]
     public bool ownsCrown = false;
     public bool ownsBoxHat = false;
+
     [Header("Hats")]
     public Transform hatContainer;
     public GameObject crownHat;
     public GameObject boxHat;
+
+    #endregion
+
+    #region Shop Logic
     bool shopOpen = false;
 
     void Start() {
 
-        // LOAD COINS
+        // Load saved currency and purchases
         playerCoins = GameplaySystem.GetInt(PrefInt.Coins, 0);
-        // LOAD PURCHASES
-        ownsCrown = GameplaySystem.GetInt(PrefInt.OwnsCrown, 0) == 1;
-        ownsBoxHat = GameplaySystem.GetInt(PrefInt.OwnsBoxHat, 0) == 1;
-        // hide shop
-        if (shopUI != null) shopUI.SetActive(false);
 
-        // disable all hats
+        ownsCrown = GameplaySystem.GetInt(PrefInt.OwnsCrown, 0) == 1;
+
+        ownsBoxHat = GameplaySystem.GetInt(PrefInt.OwnsBoxHat, 0) == 1;
+
+        if (shopUI != null)
+            shopUI.SetActive(false);
+
+        // Disable all hats on startup
         if (hatContainer != null) {
-            foreach (Transform h in hatContainer) {
+
+            foreach (Transform h in hatContainer)
                 h.gameObject.SetActive(false);
-            }
         }
 
-        // already owned = free
-        if (ownsCrown) crownCost = 0;
-        if (ownsBoxHat) boxHatCost = 0;
+        // Owned hats become free
+        if (ownsCrown)
+            crownCost = 0;
 
-        // UPDATE UI
+        if (ownsBoxHat)
+            boxHatCost = 0;
+
         UpdatePriceUI();
     }
 
     void OnTriggerStay(Collider other) {
 
-        if (
-            !other.CompareTag("Player")
-        ) return;
+        if (!other.CompareTag("Player"))
+            return;
 
-        if (!shopOpen) {
-
-            Debug.Log(
-                "Opening Shop"
-            );
-
+        if (!shopOpen)
             OpenShop();
-        }
     }
 
     void OpenShop() {
 
         shopOpen = true;
 
-        // SHOW SHOP UI
+        // Opens shop and disables player control
         if (shopUI != null)
             shopUI.SetActive(true);
 
-        // FREEZE PLAYER
         if (playerController != null)
             playerController.enabled = false;
 
-        // HIDE PLAYER
         if (playerVisuals != null)
             playerVisuals.SetActive(false);
 
-        // UNLOCK CURSOR
-        Cursor.lockState =
-            CursorLockMode.None;
-
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
-        Debug.Log(
-            "Shop Opened"
-        );
     }
 
     public void CloseShop() {
 
         shopOpen = false;
 
-        // HIDE SHOP UI
+        // Restores gameplay controls
         if (shopUI != null)
             shopUI.SetActive(false);
 
-        // ENABLE PLAYER
         if (playerController != null)
             playerController.enabled = true;
 
-        // SHOW PLAYER
         if (playerVisuals != null)
             playerVisuals.SetActive(true);
 
-        // LOCK CURSOR
-        Cursor.lockState =
-            CursorLockMode.Locked;
-
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        Debug.Log(
-            "Shop Closed"
-        );
     }
 
-    // BUY / EQUIP CROWN
     public void BuyCrown() {
 
-        // already owned
+        // Equips already owned hat
         if (ownsCrown) {
-
-            Debug.Log(
-                "Crown Already Owned"
-            );
 
             EquipHat(crownHat);
 
             return;
         }
 
-        // check coins
-        if (
-            playerCoins <
-            crownCost
-        ) {
-
-            Debug.Log(
-                "Not Enough Coins"
-            );
-
+        if (playerCoins < crownCost)
             return;
-        }
 
-        // buy
         playerCoins -= crownCost;
 
         ownsCrown = true;
@@ -162,41 +143,21 @@ public class VMInteract : MonoBehaviour {
         UpdatePriceUI();
 
         EquipHat(crownHat);
-
-        Debug.Log(
-            "Bought Crown Hat"
-        );
     }
 
-    // BUY / EQUIP BOX HAT
     public void BuyBoxHat() {
 
-        // already owned
+        // Equips already owned hat
         if (ownsBoxHat) {
-
-            Debug.Log(
-                "Box Hat Already Owned"
-            );
 
             EquipHat(boxHat);
 
             return;
         }
 
-        // check coins
-        if (
-            playerCoins <
-            boxHatCost
-        ) {
-
-            Debug.Log(
-                "Not Enough Coins"
-            );
-
+        if (playerCoins < boxHatCost)
             return;
-        }
 
-        // buy
         playerCoins -= boxHatCost;
 
         ownsBoxHat = true;
@@ -208,67 +169,49 @@ public class VMInteract : MonoBehaviour {
         UpdatePriceUI();
 
         EquipHat(boxHat);
-
-        Debug.Log(
-            "Bought Box Hat"
-        );
     }
 
-    // EQUIP ONLY ONE HAT
     void EquipHat(GameObject hat) {
 
-        if (hat == null) {
-
-            Debug.LogError(
-                "HAT IS NULL"
-            );
-
+        if (hat == null)
             return;
-        }
 
-        // disable ALL hats
-        foreach (
-            Transform h
-            in hatContainer
-        ) {
-
+        // Ensures only one hat is active
+        foreach (Transform h in hatContainer)
             h.gameObject.SetActive(false);
-        }
 
-        // enable selected hat
         hat.SetActive(true);
-
-        Debug.Log(
-            "Equipped Hat: "
-            + hat.name
-        );
     }
 
-    // UPDATE UI TEXT
     void UpdatePriceUI() {
 
+        // Updates shop price text
         if (crownPriceText != null)
-            crownPriceText.text =
-                crownCost.ToString();
+            crownPriceText.text = crownCost.ToString();
 
         if (boxHatPriceText != null)
-            boxHatPriceText.text =
-                boxHatCost.ToString();
+            boxHatPriceText.text = boxHatCost.ToString();
     }
 
-    // SAVE DATA
     void SaveData() {
 
+        // Saves purchases and coin count
         GameplaySystem.SetInt(PrefInt.Coins, playerCoins);
+
         GameplaySystem.SetInt(PrefInt.OwnsCrown, ownsCrown ? 1 : 0);
+
         GameplaySystem.SetInt(PrefInt.OwnsBoxHat, ownsBoxHat ? 1 : 0);
+
         GameplaySystem.SaveSettings();
     }
+    #endregion
 
-    // DEBUG BUTTON
     [ContextMenu("Add 10 Coins")]
     void AddCoinsDebug() {
+
+        // Debug shortcut for testing purchases
         playerCoins += 10;
+
         SaveData();
     }
 }
