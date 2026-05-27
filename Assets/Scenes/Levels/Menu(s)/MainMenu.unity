@@ -1374,7 +1374,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &369250496
 Transform:
   m_ObjectHideFlags: 0
@@ -4215,14 +4215,14 @@ PrefabInstance:
     - target: {fileID: 1805525990353566618, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1221269516}
+      objectReference: {fileID: 1308225761}
     - target: {fileID: 1805525990353566618, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SaveSettings
+      value: OpenSavePanel
       objectReference: {fileID: 0}
     - target: {fileID: 1805525990353566618, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameplaySystem, Assembly-CSharp
+      value: PauseMenu, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1838349109926411569, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_AnchorMax.x
@@ -4371,14 +4371,14 @@ PrefabInstance:
     - target: {fileID: 3284351064525724368, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1221269516}
+      objectReference: {fileID: 1308225761}
     - target: {fileID: 3284351064525724368, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnPauseMenu
+      value: Resume
       objectReference: {fileID: 0}
     - target: {fileID: 3284351064525724368, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameplaySystem, Assembly-CSharp
+      value: PauseMenu, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3317008012845586666, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -4475,18 +4475,18 @@ PrefabInstance:
     - target: {fileID: 4753322112521149841, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1221269516}
+      objectReference: {fileID: 1308225761}
     - target: {fileID: 4753322112521149841, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Quit
+      value: QuitToMainMenuConfirmed
       objectReference: {fileID: 0}
     - target: {fileID: 4753322112521149841, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameplaySystem, Assembly-CSharp
+      value: PauseMenu, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4887781739195381171, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5054974401047228624, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_Enabled
@@ -4726,11 +4726,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8988566985546381854, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7933049550275639768, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
+    - {fileID: 8455016529955329603, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 8133305568442461575, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       insertIndex: -1
