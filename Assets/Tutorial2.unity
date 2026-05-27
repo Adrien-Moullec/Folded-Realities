@@ -28422,7 +28422,7 @@ PrefabInstance:
       addedObject: {fileID: 1002647006}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8c553698b23ecbb449dcacd1d59914a8, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1002647005}
+      addedObject: {fileID: 1002647008}
   m_SourcePrefab: {fileID: 100100000, guid: 8c553698b23ecbb449dcacd1d59914a8, type: 3}
 --- !u!4 &1002647003 stripped
 Transform:
@@ -28434,24 +28434,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8c553698b23ecbb449dcacd1d59914a8, type: 3}
   m_PrefabInstance: {fileID: 1002647002}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1002647005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1002647004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90759a501e942e64eb2489b8a4f1b62c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  starPrefabs: []
-  hitsToBreak: 3
-  starsToSpawn: 10
-  spawnDelay: 0.07
-  upwardForce: 7
-  outwardForce: 4
 --- !u!65 &1002647006
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -28495,6 +28477,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -7346044036102949886, guid: 8c553698b23ecbb449dcacd1d59914a8, type: 3}
+--- !u!114 &1002647008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002647004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc230800b5e2da04c875c066400d2381, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breakEffect: {fileID: 0}
+  breakSound: {fileID: 0}
 --- !u!1 &1009702864 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dc079dd6a5cf74a4c930a8426fc454e1, type: 3}
@@ -30736,7 +30732,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1115110256}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.593}
+  m_LocalPosition: {x: 0, y: 0, z: -3.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -30746,7 +30742,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -97.3709, y: 26.149}
+  m_AnchoredPosition: {x: -94.56, y: 29.58}
   m_SizeDelta: {x: 5.6674, y: 3.4921}
   m_Pivot: {x: 0.5000002, y: 0.50000024}
 --- !u!114 &1115110258
@@ -42004,7 +42000,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1491094952}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2.98}
+  m_LocalPosition: {x: 0, y: 0, z: 0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -42018,7 +42014,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -94.58, y: 26.4}
+  m_AnchoredPosition: {x: -94.04, y: 28.22}
   m_SizeDelta: {x: 3.432, y: 1.7091}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1491094954
@@ -55110,7 +55106,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -99.297, y: 24.266}
+  m_AnchoredPosition: {x: -99.297, y: 27.81}
   m_SizeDelta: {x: 3.4814, y: 2.5673}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1972174307

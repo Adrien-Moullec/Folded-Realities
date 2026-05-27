@@ -59,8 +59,11 @@ public class GameplaySystem : MonoBehaviour {
         }
         bool turnOnMenu = !pauseMenu.activeSelf;
         pauseMenu.SetActive(turnOnMenu);
-        if (turnOnMenu) EntityManager.instance?.DeactivateAllEntities();
-        else EntityManager.instance?.ActivateAllEntities();
+        if (turnOnMenu) {
+            Cursor.lockState = CursorLockMode.None;
+        } else {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
         Time.timeScale = turnOnMenu ? 0 : 1;
         Cursor.lockState = turnOnMenu ? CursorLockMode.None : CursorLockMode.Locked;
     }

@@ -4418,6 +4418,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8380869083647100334, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8550891953461993259, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.5
@@ -4440,13 +4444,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8988566985546381854, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7933049550275639768, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8988566985546381854, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1308225761}
   m_SourcePrefab: {fileID: 100100000, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
 --- !u!1 &1081932327 stripped
 GameObject:
@@ -5272,6 +5279,31 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8988566985546381854, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
   m_PrefabInstance: {fileID: 1081932326}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1308225761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308225760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 940cdbae89280184793f406eac999732, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseMenu: {fileID: 0}
+  buttonsContainer: {fileID: 0}
+  settingsPanel: {fileID: 0}
+  savePanel: {fileID: 0}
+  overwritePanel: {fileID: 0}
+  quitConfirmPanel: {fileID: 0}
+  backgroundPanel: {fileID: 0}
+  player: {fileID: 0}
+  slot1Text: {fileID: 0}
+  slot2Text: {fileID: 0}
+  slot3Text: {fileID: 0}
+  isPaused: 0
+  lastCheckpoint: {x: 0, y: 0, z: 0}
 --- !u!1 &1350971532
 GameObject:
   m_ObjectHideFlags: 0
