@@ -1,6 +1,8 @@
+using AbilitySystem;
+
 using UnityEngine;
 
-public class BreakableBlock : MonoBehaviour {
+public class BreakableBlock : MonoBehaviour, IHealth {
     public GameObject breakEffect;
 
     public AudioSource breakSound;
@@ -31,5 +33,21 @@ public class BreakableBlock : MonoBehaviour {
         }
 
         Destroy(gameObject);
+    }
+
+    public void Damage(EntityDamage damage) {
+        Break();
+    }
+
+    public void Die() {
+        throw new System.NotImplementedException();
+    }
+
+    public void Heal(EntityDamage heal) {
+        throw new System.NotImplementedException();
+    }
+
+    public void SetMaxHealth() {
+        throw new System.NotImplementedException();
     }
 }

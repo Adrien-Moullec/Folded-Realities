@@ -50,7 +50,7 @@ public class CollectiblePickup : MonoBehaviour {
             return;
         }
 
-        playerPrefIDGenerator.SetPlayerPrefIdActive(false);
+        //playerPrefIDGenerator.SetPlayerPrefIdActive(false);
 
         CollectiblesManager manager = other.GetComponent<CollectiblesManager>();
 

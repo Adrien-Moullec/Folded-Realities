@@ -76,7 +76,7 @@ public class PauseMenu : MonoBehaviour {
 
         savePanel.SetActive(false);
 
-        overwritePanel.SetActive(false);
+        overwritePanel?.SetActive(false);
 
         quitConfirmPanel.SetActive(false);
 
@@ -84,18 +84,18 @@ public class PauseMenu : MonoBehaviour {
 
         UpdateAllSlots();
     }
+    /*
+        void Update() {
 
-    void Update() {
+            // Toggle pause menu
+            if (Keyboard.current != null && Keyboard.current.pKey.wasPressedThisFrame) {
 
-        // Toggle pause menu
-        if (Keyboard.current != null && Keyboard.current.pKey.wasPressedThisFrame) {
-
-            if (isPaused)
-                Resume();
-            else
-                Pause();
-        }
-    }
+                if (isPaused)
+                    Resume();
+                else
+                    Pause();
+            }
+        }*/
 
     #region Scene Loading
 
@@ -108,7 +108,12 @@ public class PauseMenu : MonoBehaviour {
 
         StartCoroutine(LoadAfterDelay(GameplaySystem.slot));
     }
-
+    public void TogglePause() {
+        if (isPaused)
+            Resume();
+        else
+            Pause();
+    }
     IEnumerator LoadAfterDelay(int slot) {
 
         if (slot == -1)
@@ -191,7 +196,7 @@ public class PauseMenu : MonoBehaviour {
 
         savePanel.SetActive(false);
 
-        overwritePanel.SetActive(false);
+        overwritePanel?.SetActive(false);
 
         quitConfirmPanel.SetActive(false);
 
@@ -288,7 +293,7 @@ public class PauseMenu : MonoBehaviour {
 
         savePanel.SetActive(false);
 
-        overwritePanel.SetActive(false);
+        overwritePanel?.SetActive(false);
 
         quitConfirmPanel.SetActive(false);
     }
@@ -314,7 +319,7 @@ public class PauseMenu : MonoBehaviour {
 
             pendingSlot = slot;
 
-            overwritePanel.SetActive(true);
+            overwritePanel?.SetActive(true);
 
         } else {
 
@@ -326,14 +331,14 @@ public class PauseMenu : MonoBehaviour {
 
         SaveGame(pendingSlot);
 
-        overwritePanel.SetActive(false);
+        overwritePanel?.SetActive(false);
 
         pendingSlot = -1;
     }
 
     public void CancelOverwrite() {
 
-        overwritePanel.SetActive(false);
+        overwritePanel?.SetActive(false);
 
         pendingSlot = -1;
     }

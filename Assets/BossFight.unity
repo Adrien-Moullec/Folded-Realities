@@ -622,6 +622,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 31518191732987269, guid: f43133602da8454439b007f8b3ea8b4f, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: edbf50ea7361906439112d9660d42cc4, type: 3}
     - target: {fileID: 2151730408016323268, guid: f43133602da8454439b007f8b3ea8b4f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 45.4
@@ -837,8 +841,16 @@ PrefabInstance:
       value: -122.6
       objectReference: {fileID: 0}
     - target: {fileID: 2429698341210286478, guid: e900b53260322f34892875e6821206e2, type: 3}
+      propertyPath: targetLevel.targetId
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2429698341210286478, guid: e900b53260322f34892875e6821206e2, type: 3}
       propertyPath: targetLevel.targetScene
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2429698341210286478, guid: e900b53260322f34892875e6821206e2, type: 3}
+      propertyPath: activatedByWalkingIntoArea
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3487408696841071850, guid: e900b53260322f34892875e6821206e2, type: 3}
       propertyPath: m_LocalPosition.y
@@ -847,6 +859,14 @@ PrefabInstance:
     - target: {fileID: 4073404088461707214, guid: e900b53260322f34892875e6821206e2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 62.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4989821518656966548, guid: e900b53260322f34892875e6821206e2, type: 3}
+      propertyPath: bossFight.Array.data[1].skipPhase
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4989821518656966548, guid: e900b53260322f34892875e6821206e2, type: 3}
+      propertyPath: bossFight.Array.data[2].skipPhase
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6709027089318118019, guid: e900b53260322f34892875e6821206e2, type: 3}
       propertyPath: m_LocalPosition.x
