@@ -21,13 +21,14 @@ public class PulledAway : MonoBehaviour {
     private bool isBeingPulled = false;
     private Vector3 startRotation;
 
+ // Saves initial rotation for wobble effect
     void Start() {
         startRotation = transform.eulerAngles;
-
+ // Starts pull sequence when dialogue ends
         if (npcDialogue != null) {
             npcDialogue.onDialogueFinished += StartPullSequence;
         }
-
+ // Ensures help UI starts hidden
         if (helpUI != null) {
             helpUI.SetActive(false);
         }
@@ -40,7 +41,7 @@ public class PulledAway : MonoBehaviour {
                 targetPoint.position,
                 speed * Time.deltaTime
             );
-
+  // Creates wobble rotation effect
             float wobble = Mathf.Sin(Time.time * wobbleSpeed) * wobbleAmount;
 
             transform.rotation = Quaternion.Euler(
@@ -48,7 +49,7 @@ public class PulledAway : MonoBehaviour {
                 startRotation.y,
                 startRotation.z + wobble
             );
-
+    // Disables object once destination is reached
             if (Vector3.Distance(transform.position, targetPoint.position) < 0.01f) {
                 gameObject.SetActive(false);
             }
@@ -70,7 +71,7 @@ public class PulledAway : MonoBehaviour {
         if (cameraFocus != null) {
             cameraFocus.StopFocus();
         }
-
+  // Handles pull effects and UI timing
         StartCoroutine(PullRoutine());
     }
     IEnumerator PullRoutine() {
@@ -79,13 +80,14 @@ public class PulledAway : MonoBehaviour {
         if (audioSource != null && pullSound != null) {
             audioSource.PlayOneShot(pullSound);
         }
-
+     // Displays help UI
         if (helpUI != null) {
             helpUI.SetActive(true);
         }
 
         yield return new WaitForSeconds(helpDisplayTime);
 
+        // Hides help UI after delay
         if (helpUI != null) {
             helpUI.SetActive(false);
         }

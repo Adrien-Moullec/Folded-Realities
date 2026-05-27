@@ -12,7 +12,7 @@ public class NPCDialogue : MonoBehaviour {
     public GameObject dialogueUI;
     public TextMeshProUGUI dialogueText;
     public GameObject continuePrompt;
-
+    // Dialogue lines displayed in sequence
     [TextArea(2, 5)]
     public string[] lines;
     public float typingSpeed = 0.03f;
@@ -23,6 +23,7 @@ public class NPCDialogue : MonoBehaviour {
     public AudioSource audioSource;
     public AudioClip popSound;
     public AudioClip[] speechSounds;
+    // Random pitch variation for speech sounds
     public float minPitch = 0.8f;
     public float maxPitch = 1.0f;
 
@@ -46,7 +47,7 @@ public class NPCDialogue : MonoBehaviour {
         if (dialogueUI != null) {
             dialogueUI.SetActive(false);
         }
-
+        // Stores original scale for pop animation
         originalScale = dialogueUI.transform.localScale;
         dialogueUI.transform.localScale = Vector3.zero;
 
@@ -57,7 +58,7 @@ public class NPCDialogue : MonoBehaviour {
 
     void Update() {
         if (!playerNearby || autoAdvance) return;
-
+        // Prevents manual input during auto advance
         if (dialogueActive && Input.GetKeyDown(KeyCode.X)) {
             if (isTyping) {
                 StopAllCoroutines();
@@ -74,6 +75,7 @@ public class NPCDialogue : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
+        // Starts dialogue when player enters trigger
         if (!other.CompareTag("Player")) return;
 
         playerNearby = true;
@@ -82,7 +84,7 @@ public class NPCDialogue : MonoBehaviour {
 
         StartDialogue();
     }
-
+    // Tracks when player leaves dialogue area
     void OnTriggerExit(Collider other) {
         if (!other.CompareTag("Player")) return;
 
@@ -107,6 +109,7 @@ public class NPCDialogue : MonoBehaviour {
     }
 
     void EndDialogue() {
+        // Ends active dialogue session
         dialogueActive = false;
         StopAllCoroutines();
         StartCoroutine(PopOut());
@@ -124,7 +127,7 @@ public class NPCDialogue : MonoBehaviour {
     IEnumerator TypeLine() {
         isTyping = true;
         dialogueText.text = "";
-
+        // Hides continue prompt while typing
         if (continuePrompt != null) {
             continuePrompt.SetActive(false);
         }
@@ -162,7 +165,7 @@ public class NPCDialogue : MonoBehaviour {
             if (!preventAutoClose) {
                 EndDialogue();
             }
-
+            // Invokes dialogue finished event
             if (onDialogueFinished != null) {
                 onDialogueFinished.Invoke();
             }
@@ -187,6 +190,7 @@ public class NPCDialogue : MonoBehaviour {
     }
 
     IEnumerator PopIn() {
+        // Pop-in UI animation
         float t = 0;
         Vector3 start = Vector3.zero;
         Vector3 overshoot = originalScale * popScale;
@@ -214,7 +218,7 @@ public class NPCDialogue : MonoBehaviour {
             dialogueUI.transform.localScale = Vector3.Lerp(start, Vector3.zero, t);
             yield return null;
         }
-
+        // Hides UI after animation completes
         dialogueUI.SetActive(false);
     }
 }

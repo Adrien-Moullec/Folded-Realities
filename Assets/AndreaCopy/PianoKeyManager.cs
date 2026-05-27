@@ -8,16 +8,16 @@ public class PianoKeyManager : MonoBehaviour {
 
     [Header("Correct Sequence")]
     public int[] correctSequence;
-
+    // Correct key sequence for puzzle completion
     [Header("Memory Reveal Platforms")]
     public PlatformGroup[] memoryRevealPlatforms;
 
     PianoKey[] keys;
 
     int currentIndex = 0;
-
+    // Tracks puzzle completion state
     bool puzzleComplete = false;
-
+    // Prevents intro replaying multiple times
     bool introStarted = false;
 
     bool replayingMemory = false;
@@ -26,7 +26,7 @@ public class PianoKeyManager : MonoBehaviour {
     public AudioSource audioSource;
 
     public AudioClip wrongSound;
-
+    // Melody played after puzzle completion
     [Header("Victory Melody")]
     public AudioClip[] victoryMelody;
 
@@ -51,6 +51,7 @@ public class PianoKeyManager : MonoBehaviour {
 
         ResetAllKeys();
     }
+    #region Start Puzzle & Intro Sequence
 
     public void StartMemoryPuzzle() {
 
@@ -59,7 +60,7 @@ public class PianoKeyManager : MonoBehaviour {
         ) {
             return;
         }
-
+        // Starts memory reveal sequence
         StartCoroutine(
             IntroSequence()
         );
@@ -94,7 +95,7 @@ public class PianoKeyManager : MonoBehaviour {
                 );
             }
         }
-
+        // Holds completed reveal briefly
         yield return new WaitForSeconds(
             introVisibleTime
         );
@@ -144,7 +145,7 @@ public class PianoKeyManager : MonoBehaviour {
         ShowKeyPlatforms(
             keyID
         );
-
+        // Checks if correct key was pressed
         if (
             keyID
             ==
@@ -162,14 +163,16 @@ public class PianoKeyManager : MonoBehaviour {
 
             return true;
         }
-
+        // Starts incorrect sequence reset
         StartCoroutine(
             WrongSequence()
         );
 
         return false;
     }
+    #endregion
 
+    #region Wrong Sequence & Reset 
     IEnumerator WrongSequence() {
 
         if (
@@ -184,7 +187,7 @@ public class PianoKeyManager : MonoBehaviour {
         yield return new WaitForSeconds(
             0.6f
         );
-
+        // Resets player progress
         currentIndex = 0;
 
         for (
@@ -214,7 +217,7 @@ public class PianoKeyManager : MonoBehaviour {
     IEnumerator ReplayMemorySequence() {
 
         replayingMemory = true;
-
+        // Replays memory reveal sequence
         for (
             int i = 0;
             i < memoryRevealPlatforms.Length;
@@ -260,7 +263,7 @@ public class PianoKeyManager : MonoBehaviour {
     }
 
     void ResetAllKeys() {
-
+        // Resets all piano key states
         for (
             int i = 0;
             i < keys.Length;
@@ -274,11 +277,11 @@ public class PianoKeyManager : MonoBehaviour {
             }
         }
     }
-
+    
     void ShowKeyPlatforms(
         int keyID
     ) {
-
+        // Shows platforms linked to selected key
         for (
             int i = 0;
             i < keyGroups.Length;
@@ -293,7 +296,9 @@ public class PianoKeyManager : MonoBehaviour {
             }
         }
     }
+    #endregion
 
+    #region Completed Puzzle
     void CompletePuzzle() {
 
         puzzleComplete = true;
@@ -323,7 +328,7 @@ public class PianoKeyManager : MonoBehaviour {
     }
 
     IEnumerator PlayVictoryMelody() {
-
+        // Prevents playback without audio source
         if (
             audioSource == null
         ) {
@@ -351,3 +356,4 @@ public class PianoKeyManager : MonoBehaviour {
         }
     }
 }
+#endregion

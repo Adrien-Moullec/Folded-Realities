@@ -5,7 +5,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(LevelExit))]
 public class BossFightManager : MonoBehaviour {
-
+    //Adrienne updated with animations
     public static BossFightManager Instance;
 
     [Header("Boss")]
@@ -13,7 +13,7 @@ public class BossFightManager : MonoBehaviour {
     [SerializeField] ShredderAnimatorManager animationManager;
 
     [SerializeField] BossFightSection[] bossFight;
-
+    // Platform spawning controller
     [Header("Platform Settings")]
     public PlatformSpawner platformSpawner;
 
@@ -25,18 +25,22 @@ public class BossFightManager : MonoBehaviour {
 
 
     void Start() =>
+        // Starts full boss fight sequence
         StartCoroutine(BossRoutine());
 
 
     IEnumerator BossRoutine() {
+        // Starts boss in idle animation
         animationManager.SetState(ShredderAnim.Idle.ToString(), 0.2f);
+        // Loops through boss fight phases
         yield return new WaitForSeconds(2);
 
         foreach (var n in bossFight) {
             if (n.skipPhase) continue;
-
+            // Projectile Attack Phase
             yield return ProjectileRoutine(n.spitPhase.rate, n.spitPhase.speed, n.spitPhase.maxSpawn);
             yield return new WaitForSeconds(phaseIntervalLength);
+            // Platform Suction Phase
             animationManager.SetState(ShredderAnim.SpinAttack.ToString(), 0.2f);
             yield return platformSpawner.SpawnRoutine(n.suckPhase.rate, n.suckPhase.speed, n.suckPhase.maxSpawn);
             yield return new WaitForSeconds(phaseIntervalLength);
@@ -55,6 +59,7 @@ public class BossFightManager : MonoBehaviour {
             );
             while (!isFin) yield return null;
         }
+        // Boss Death Sequence
         isFin = false;
         yield return animationManager.InitiateOneOffAnimation(
             null,
@@ -68,6 +73,7 @@ public class BossFightManager : MonoBehaviour {
         GetComponent<LevelExit>().NextScene();
     }
     IEnumerator ProjectileRoutine(float rate, float speed, int spawnCount) {
+        // Tracks number of projectiles fired
         int shootCount = 0;
         boss.isMove = true;
         while (shootCount < spawnCount) {
@@ -75,6 +81,7 @@ public class BossFightManager : MonoBehaviour {
             yield return animationManager.InitiateOneOffAnimation(
                 null,
                 null,
+                // Fires projectile during animation event
                 (x) => { Debug.Log("Function received"); boss.Shoot(speed); isFin = true; },
                 () => isFin = true,
                 ShredderAnim.SpitCharge.ToString(),
@@ -89,20 +96,20 @@ public class BossFightManager : MonoBehaviour {
         yield return boss.MoveToCentre();
     }
 }
-
+// BossFightSection
 [Serializable]
 public struct BossFightSection {
     public Color color;
     public bool skipPhase;
     public SpitPhase spitPhase;
     public SuckPhase suckPhase;
-}
+}// SpitPhase
 [Serializable]
 public struct SpitPhase {
     public float rate;
     public float speed;
     public int maxSpawn;
-}
+}// SuckPhase
 [Serializable]
 public struct SuckPhase {
     public float rate;

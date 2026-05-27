@@ -13,7 +13,7 @@ public class HealthCollectible : MonoBehaviour {
         ) {
             return;
         }
-
+        // Restores player health
         if (other.TryGetComponent(out IHealth ihealth)) {
             ihealth.Heal(new AbilitySystem.EntityDamage(20, null));
         }
