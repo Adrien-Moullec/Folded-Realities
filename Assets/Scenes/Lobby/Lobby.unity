@@ -3061,63 +3061,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &648431345
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 648431347}
-  - component: {fileID: 648431346}
-  m_Layer: 0
-  m_Name: Interact
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &648431346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 648431345}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66bb06119087e2d428845bf41de8df90, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shopUI: {fileID: 632832487}
-  playerVisuals: {fileID: 823165174}
-  playerController: {fileID: 823165183}
-  playerCoins: 0
-  crownCost: 30
-  boxHatCost: 30
-  crownPriceText: {fileID: 1566620290}
-  boxHatPriceText: {fileID: 1196279493}
-  ownsCrown: 0
-  ownsBoxHat: 0
-  hatContainer: {fileID: 468385389}
-  crownHat: {fileID: 78755830}
-  boxHat: {fileID: 1731469356}
---- !u!4 &648431347
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 648431345}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 122.50926, y: 18.304316, z: -65.073395}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &695291208 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2450949012097558404, guid: 142e3785c099c80488b41a78febeef73, type: 3}
@@ -3710,17 +3653,12 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.002093668, y: 0.019576054, z: 0.01787822}
   m_Center: {x: -0.0004967084, y: 0.009788025, z: 0.00893911}
---- !u!1 &823165174 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3553589570504455217, guid: f43133602da8454439b007f8b3ea8b4f, type: 3}
-  m_PrefabInstance: {fileID: 696498728}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &823165183 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4345128059420924457, guid: f43133602da8454439b007f8b3ea8b4f, type: 3}
   m_PrefabInstance: {fileID: 696498728}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 823165174}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 404e4c537b6cc3441a44ee27130107ae, type: 3}
@@ -7875,7 +7813,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shopUI: {fileID: 632832487}
   playerVisuals: {fileID: 887528911}
-  playerController: {fileID: 0}
+  playerController: {fileID: 823165183}
   playerCoins: 0
   crownCost: 30
   boxHatCost: 30
@@ -7883,9 +7821,9 @@ MonoBehaviour:
   boxHatPriceText: {fileID: 1196279493}
   ownsCrown: 0
   ownsBoxHat: 0
-  hatContainer: {fileID: 0}
-  crownHat: {fileID: 0}
-  boxHat: {fileID: 0}
+  hatContainer: {fileID: 468385389}
+  crownHat: {fileID: 78755830}
+  boxHat: {fileID: 1731469356}
 --- !u!65 &1936024116
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10704,4 +10642,3 @@ SceneRoots:
   - {fileID: 1871325511}
   - {fileID: 2057607288}
   - {fileID: 812193153}
-  - {fileID: 648431347}
