@@ -126,8 +126,17 @@ namespace AbilitySystem {
 
             float maxSpeed = moveData.isJumpingButtonPressed ? glideHorizontalSpeed : inpVals.IsRunning ? runSpeed : walkSpeed;
 
-            if (moveData.isJumpingButtonPressed)
+            if (moveData.isJumpButtonRePressed) {
                 CheckForWall(entityBody, entityBody.bodyHolder.transform.position, entityBody.bodyHolder.transform.forward, ref moveData.wallClimbObj, ref moveData.wallRaycastHits, wallCheckLayers, onClimb, moveData);
+                moveData.velocity = Vector3.zero;
+                moveData.fallSpeed = 0;
+                moveData.isJumpButtonRePressed = false;
+                moveData.isJumpingButtonPressed = true;
+                moveData.releasedOnJump = false;
+                entityBody.iAbility.OnMoveEntity(moveData.velocity);
+                Debug.Log(moveData.velocity);
+                return false;
+            }
 
             if (!moveData.isCrouching && inpVals.IsCrouching) {
                 moveData.isCrouching = true;
@@ -256,9 +265,10 @@ namespace AbilitySystem {
             pmd.isJumpButtonRePressed = false;
             pmd.glideTime = 0;
             pmd.releasedOnJump = false;
-            if (pmd.isJumpingButtonPressed && !pmd.isHoldingInput) OnJump(pmd);
-            if (pmd.isJumpingButtonPressed) pmd.isHoldingInput = true;
-            else pmd.isHoldingInput = false;
+            if (pmd.isJumpingButtonPressed && !pmd.isHoldingInput) {
+                OnJump(pmd);
+                pmd.isHoldingInput = true;
+            } else pmd.isHoldingInput = false;
         }
         private void OnArial(EntityBody entityBody, TransformingPlayerData pmd) {
             if (pmd.isJumpingButtonPressed)

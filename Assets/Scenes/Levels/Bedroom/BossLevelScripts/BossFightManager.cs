@@ -3,6 +3,7 @@ using System.Collections;
 
 using UnityEngine;
 
+[RequireComponent(typeof(LevelExit))]
 public class BossFightManager : MonoBehaviour {
 
     public static BossFightManager Instance;
@@ -64,7 +65,7 @@ public class BossFightManager : MonoBehaviour {
             crossFade: 0.05f
         );
         while (!isFin) yield return null;
-        GameplaySystem.instance.LoadScene(GameplayScenes.Bedroom);
+        GetComponent<LevelExit>().NextScene();
     }
     IEnumerator ProjectileRoutine(float rate, float speed, int spawnCount) {
         int shootCount = 0;
@@ -109,17 +110,3 @@ public struct SuckPhase {
     public int maxSpawn;
     public float suction;
 }
-/// flash Colour
-/// 
-/// --- Spit ---
-/// rate
-/// speed
-/// amount
-/// 
-/// 
-/// --- Suck ---
-/// rate
-/// speed
-/// amount
-/// suction
-/// 

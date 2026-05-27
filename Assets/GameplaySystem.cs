@@ -3,21 +3,30 @@ using System.Collections;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
+[RequireComponent(typeof(PlayerInput))]
 public class GameplaySystem : MonoBehaviour {
 
     public static GameplaySystem instance;
     [SerializeField] SceneTransition sceneTransition;
+    [SerializeField] GameObject pauseMenu;
+    [SerializeField] GraphicsSettings graphicsSettings;
     [HideInInspector] TargetLevel targetLevel;
     [HideInInspector] public static int slot = -1;
     public static string currentSlotId => GetSlotID(slot);
     private static string GetSlotID(int id) => "Slot" + id + "_";
     public bool ResetOnPlay = true;
+    private bool pauseMenuActive = false;
+    PlayerInput playerInput;
+    InputAction pauseButton;
 
     void Awake() {
+        pauseMenu.SetActive(false);
 #if UNITY_EDITOR
         if (ResetOnPlay) {
             DeleteSettings(-1);
@@ -34,6 +43,32 @@ public class GameplaySystem : MonoBehaviour {
         instance = this;
         DontDestroyOnLoad(gameObject);
     }
+    void OnEnable() {
+        playerInput = GetComponent<PlayerInput>();
+
+        pauseButton = playerInput.actions["Pause"];
+        pauseButton.performed += input => OnPauseMenu();
+    }
+
+    public void OnPauseMenu() {
+        switch (SceneManager.GetActiveScene().name) {
+            case nameof(GameplayScenes.BossCutscene): return;
+            case nameof(GameplayScenes.END): return;
+            case nameof(GameplayScenes.IntroCutscene): return;
+            case nameof(GameplayScenes.MainMenu): return;
+        }
+        bool turnOnMenu = !pauseMenu.activeSelf;
+        pauseMenu.SetActive(turnOnMenu);
+        if (turnOnMenu) EntityManager.instance?.DeactivateAllEntities();
+        else EntityManager.instance?.ActivateAllEntities();
+        Time.timeScale = turnOnMenu ? 0 : 1;
+    }
+
+    #region Settings
+    public void SetVolume(float value) => SetSettingsFloat(SettingsFloatPref.GameVolume, value);
+    public void SetBrightness(float value) => SetSettingsFloat(SettingsFloatPref.Brightness, value);
+    public void SetSaturation(float value) => SetSettingsFloat(SettingsFloatPref.Saturation, value);
+    #endregion
 
     #region Scene Management
     public void LoadScene(TargetLevel scene, TransitionType transition = TransitionType.Iris) {
@@ -53,7 +88,7 @@ public class GameplaySystem : MonoBehaviour {
         yield return sceneTransition?.BossDeathTransition();
         SceneManager.LoadScene(scene.ToString());
     }
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     public void StartGame(int slotId) {
         slot = slotId;
         PlayerPrefs.Save();
@@ -61,6 +96,14 @@ public class GameplaySystem : MonoBehaviour {
     }
     public void SetCurrentSaveScene(GameplayScenes gameplayScenes) {
         SetString(PrefString.SavedScene, gameplayScenes.ToString());
+    }
+    public void Quit() {
+        if (SceneManager.GetActiveScene().name == GameplayScenes.MainMenu.ToString()) {
+            SaveSettings();
+            Application.Quit();//
+        } else {
+            LoadScene(GameplayScenes.MainMenu, TransitionType.Iris);
+        }
     }
     #endregion
 
@@ -94,8 +137,14 @@ public class GameplaySystem : MonoBehaviour {
 
 
     /// FLOAT
-    public static void SetSettingsFloat(SettingsFloatPref key, float value) =>
+    public static void SetSettingsFloat(SettingsFloatPref key, float value) {
         PlayerPrefs.SetFloat(key.ToString(), value);
+        switch (key) {
+            case SettingsFloatPref.Brightness: return;
+            case SettingsFloatPref.GameVolume: return;
+            case SettingsFloatPref.Saturation: return;
+        }
+    }
     public static float GetSettingsFloat(SettingsFloatPref key, float def = 0) =>
         PlayerPrefs.GetFloat(key.ToString(), def);
 

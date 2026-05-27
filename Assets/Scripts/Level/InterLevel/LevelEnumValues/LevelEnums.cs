@@ -6,5 +6,6 @@ public enum GameplayScenes {
     Tutorial2,
     BossFight,
     BossCutscene,
+    END,
     Lobby
 }

@@ -75,6 +75,7 @@ namespace AbilitySystem {
             currentAbilitySet?.playerAbilitySet?.primary?.Activate(currentAbilitySet.entityBody, GetInputValues.isPrimaryAbility);
             currentAbilitySet?.playerAbilitySet?.secondary?.Activate(currentAbilitySet.entityBody, GetInputValues.isSecondaryAbility);
             currentAbilitySet?.playerAbilitySet?.tertiary?.Activate(currentAbilitySet.entityBody, GetInputValues.isTertiaryAbility);
+            Debug.Log(((TransformingPlayerData)playerSetsList[0].playerAbilitySet.movement.AbilityData) == (TransformingPlayerData)playerSetsList[2].playerAbilitySet.movement.AbilityData);
         }
         public void QuickSwitch() {
             if (currentAbilitySet.abilitySetSO?.abilitySetName == "Kuhaku") OnAbilityEvent("Bear");

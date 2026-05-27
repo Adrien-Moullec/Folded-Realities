@@ -72,6 +72,8 @@ public class SceneTransition : MonoBehaviour {
         irisMaterial = irisImage.material;
 
         yield return new WaitForSeconds(0.8f);
+        if (sceneName == GameplayScenes.MainMenu.ToString())
+            GameplaySystem.slot = -1;
 
         radius = 0f;
         irisMaterial.SetFloat("_Radius", radius);

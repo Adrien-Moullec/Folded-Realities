@@ -29,6 +29,7 @@ public class MainMenu : MonoBehaviour {
         UpdateSlotUI(1);
         UpdateSlotUI(2);
         UpdateSlotUI(3);
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void OpenLoadGame() {

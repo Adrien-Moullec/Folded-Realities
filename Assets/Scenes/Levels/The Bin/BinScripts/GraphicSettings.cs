@@ -25,8 +25,7 @@ public class GraphicsSettings : MonoBehaviour {
 
     void Awake() {
         Instance = this;
-        SceneManager.sceneLoaded +=
-            OnSceneLoaded;
+        //SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
 
