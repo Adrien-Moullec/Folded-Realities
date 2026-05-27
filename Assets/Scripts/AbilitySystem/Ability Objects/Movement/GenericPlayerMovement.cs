@@ -1,7 +1,10 @@
 using UnityEngine;
-using UnityEngine.InputSystem.Interactions;
 
 namespace AbilitySystem {
+
+    /// <summary>
+    /// Advanced movement script for most ground characters/ai 
+    /// </summary>
     [CreateAssetMenu(fileName = "GeneralMovement", menuName = MenuAssetNames.MovementAbility + "/General Movement", order = -1)]
     public class GenericPlayerMovement : MovementSO {
 
@@ -38,9 +41,7 @@ namespace AbilitySystem {
 
         [Space]
         [Header("Speed References")]
-
         protected static float baseSpeed = 5f;
-
         protected float walkSpeed => baseSpeed * speedMultiplier;
         protected float runSpeed => baseSpeed * speedMultiplier * runSpeedMultiplier;
         protected float chargeSpeed => baseSpeed * speedMultiplier * chargeSpeedMultiplier;
@@ -92,7 +93,7 @@ namespace AbilitySystem {
         public bool DEBUG = false;
 
         [Space]
-        [Header("Movement Events")]
+        [Header("Movement Events")] // Events that get pinged to iAbility when certain conditions are met
         [SerializeField] protected bool DebugLog = false;
         [SerializeField] protected string onHitGround;
         [SerializeField] protected string onGlide;
@@ -104,28 +105,53 @@ namespace AbilitySystem {
         [SerializeField] protected string onClimbRelease;
         #region Setup
 
+        /// <summary>
+        /// The data that is used in generic movement scriptable ability
+        /// </summary>
+        /// <param name="eb"></param>
+        /// <returns></returns>
         public override AbilityData AbilityDataSetup(EntityBody eb) {
             return new TransformingPlayerData();
         }
         #endregion
 
         #region Movement Logic
+        /// <summary>
+        /// Logic called to setup ability 
+        /// </summary>
+        /// <param name="entityBody"></param>
+        /// <param name="data"></param>
         public override void Startup(EntityBody entityBody, AbilityData data) {
             TransformingPlayerData pmd = (TransformingPlayerData)data;
             if (pmd.isGrounded) entityBody.iAbility.OnAbilityEvent(onHitGround);
             if (!pmd.isGrounded && !pmd.isJumpButtonRePressed) entityBody.iAbility.OnAbilityEvent(onFreeFall);
         }
+        /// <summary>
+        /// Older code for providing a buffer period for player next jump
+        /// </summary>
+        /// <param name="entityBody"></param>
+        /// <param name="data"></param>
         public override void FrameEvent(EntityBody entityBody, AbilityData data) {
             TransformingPlayerData pmd = (TransformingPlayerData)data;
             pmd.queueJump = Mathf.Clamp(Time.deltaTime, 0, 0.2f);
         }
+
+        /// <summary>
+        /// Base logic for ai/player movement
+        /// </summary>
+        /// <param name="entityBody"></param>
+        /// <param name="data"></param>
+        /// <param name="inpVals"></param>
+        /// <returns></returns>
         public override bool NormalMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
+
+            /// Prepare movement data
             TransformingPlayerData moveData = (TransformingPlayerData)data;
             moveData.isJumpingButtonPressed = inpVals.Direction.y > 0;
             moveData.chargeDirection = inpVals.Direction;
-
             float maxSpeed = moveData.isJumpingButtonPressed ? glideHorizontalSpeed : inpVals.IsRunning ? runSpeed : walkSpeed;
 
+            /// Prepare for spider model on wall climb
             if (moveData.isJumpButtonRePressed) {
                 CheckForWall(entityBody, entityBody.bodyHolder.transform.position, entityBody.bodyHolder.transform.forward, ref moveData.wallClimbObj, ref moveData.wallRaycastHits, wallCheckLayers, onClimb, moveData);
                 moveData.velocity = Vector3.zero;
@@ -138,6 +164,7 @@ namespace AbilitySystem {
                 return false;
             }
 
+            /// Check for crouching - frog ability
             if (!moveData.isCrouching && inpVals.IsCrouching) {
                 moveData.isCrouching = true;
                 entityBody.iAbility.OnAbilityEvent(onCrouch);
@@ -145,6 +172,8 @@ namespace AbilitySystem {
                 moveData.isCrouching = false;
                 entityBody.iAbility.OnAbilityEvent(onUncrouch);
             }
+
+            /// Main entity movement
             moveData.velocity = AccelerationMovement(
                 inpVals.Direction,
                 inpVals.IsCrouching && moveData.isGrounded ? moveData.velocity * 0.3f : moveData.velocity,
@@ -158,6 +187,14 @@ namespace AbilitySystem {
             entityBody.iAbility.OnMoveEntity(moveData.velocity * Time.deltaTime);
             return true;
         }
+
+        /// <summary>
+        /// Charge movement used for the bear, has main directional drive with leeway for player input
+        /// </summary>
+        /// <param name="entityBody"></param>
+        /// <param name="data"></param>
+        /// <param name="inpVals"></param>
+        /// <returns></returns>
         public override bool ChargeMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             TransformingPlayerData moveData = (TransformingPlayerData)data;
             if (moveData.chargeDirection == Vector3.zero) {
@@ -170,16 +207,42 @@ namespace AbilitySystem {
             entityBody.iAbility.OnMoveEntity(moveData.velocity * Time.deltaTime);
             return true;
         }
+
+        /// <summary>
+        /// For AI, send the AI directly to a location
+        /// </summary>
+        /// <param name="entityBody"></param>
+        /// <param name="data"></param>
+        /// <param name="inpVals"></param>
+        /// <returns></returns>
         public override bool AutoTrackMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             entityBody.iAbility.OnEntityTrack(inpVals.Destination);
             AnimateAbility(entityBody, Vector3.forward * walkSpeed, 0, true);
             return true;
         }
+
+        /// <summary>
+        /// Old code, was supposed to be switchable to a crane but instead made a separate SO
+        /// </summary>
+        /// <param name="entityBody"></param>
+        /// <param name="data"></param>
+        /// <param name="inpVals"></param>
+        /// <returns></returns>
+        /// <exception cref="System.NotImplementedException"></exception>
         public override bool FlightMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             throw new System.NotImplementedException();
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputDir"> Player/AI input </param>
+        /// <param name="currentVelocity"> current travel velocity </param>
+        /// <param name="maxSpeed"> capped speed of entity </param>
+        /// <param name="runInput"> whether entity is running </param>
+        /// <param name="isGrounded"> whether entity is grounded </param>
+        /// <returns></returns>
         private Vector3 AccelerationMovement(Vector3 inputDir, Vector3 currentVelocity, float maxSpeed, bool runInput, bool isGrounded) {
             Vector3 horizontalVelocity = new Vector3(currentVelocity.x, 0, currentVelocity.z);
 
@@ -225,11 +288,6 @@ namespace AbilitySystem {
             // Grounded and jump logic
             bool hitGround = entityBody.isGrounded && pmd.fallSpeed <= 0;
 
-            //if (DebugLog) {
-            //Collider[] colliders = Physics.OverlapSphere(feetPos, entityBody.feetSphereArea.radius, groundLayers);
-            //foreach (var c in colliders) Debug.Log(c.name);
-            //}
-
             // Grounded conditions
             if (hitGround) {
                 pmd.glideTime = 0;
@@ -243,6 +301,19 @@ namespace AbilitySystem {
             pmd.fallSpeed = Mathf.Clamp(pmd.fallSpeed, -maxFallSpeed, jumpSpeed);
             pmd.velocity.y = pmd.fallSpeed;
         }
+
+        /// <summary>
+        /// Wallcheck using AreaColliderCheck to see whether a surface is climbable
+        /// </summary>
+        /// <param name="entityBody"> main body </param>
+        /// <param name="position"> check from position </param>
+        /// <param name="direction"> check in direction </param>
+        /// <param name="raycastObj"> return value of closest surface </param>
+        /// <param name="raycastHits"> return value of all surfaces </param>
+        /// <param name="layerMask"> layers to check for in surfaces </param>
+        /// <param name="climbEvent"> IAbility event on successful check </param>
+        /// <param name="transformingPlayerData"> base player data </param>
+        /// <returns></returns>
         public static bool CheckForWall(EntityBody entityBody, Vector3 position, Vector3 direction, ref RaycastHit raycastObj, ref RaycastHit[] raycastHits, LayerMask layerMask, string climbEvent, TransformingPlayerData transformingPlayerData = null) {
             int s = AreaColliderCheck.GetRayCastColliders(position, direction, layerMask).Invoke(raycastHits);
             if (s > 0) {
@@ -253,6 +324,12 @@ namespace AbilitySystem {
             }
             return false;
         }
+
+        /// <summary>
+        /// Jump options and IAbility event on grounded
+        /// </summary>
+        /// <param name="entityBody"></param>
+        /// <param name="pmd"></param>
         private void OnGrounded(EntityBody entityBody, TransformingPlayerData pmd) {
             if (!pmd.isGrounded) {
                 entityBody.iAbility.OnAbilityEvent(onHitGround);
@@ -270,9 +347,19 @@ namespace AbilitySystem {
                 pmd.isHoldingInput = true;
             } else pmd.isHoldingInput = false;
         }
+
+        /// <summary>
+        /// Non-grounded movement logic
+        /// </summary>
+        /// <param name="entityBody"></param>
+        /// <param name="pmd"></param>
         private void OnArial(EntityBody entityBody, TransformingPlayerData pmd) {
+
+            /// Arial event on jump button
             if (pmd.isJumpingButtonPressed)
                 JumpInputArial(entityBody, pmd);
+
+            /// On free-fall
             else {
                 pmd.releasedOnJump = true;
                 if (pmd.isJumpButtonRePressed) {
