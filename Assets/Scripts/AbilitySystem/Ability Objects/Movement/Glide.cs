@@ -44,7 +44,7 @@ namespace AbilitySystem {
 
             tpd.velocity = AccelerationMovement(inpVals.Direction, tpd.velocity);
             GlideEvent(entityBody, tpd);
-            entityBody.iAbility.OnMoveEntity(tpd.velocity * Time.deltaTime);
+            entityBody.iAbility.OnMoveEntity(tpd.velocity * speedMult * Time.deltaTime);
 
             return true;
         }

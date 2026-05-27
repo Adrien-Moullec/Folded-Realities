@@ -369,6 +369,7 @@ namespace AbilitySystem {
                 pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, -maxFallSpeed, gravity * Time.deltaTime);
             }
         }
+
         private void JumpInputArial(EntityBody entityBody, TransformingPlayerData pmd) {
             // If glide is activated
             if (pmd.releasedOnJump) OnJump(pmd);
