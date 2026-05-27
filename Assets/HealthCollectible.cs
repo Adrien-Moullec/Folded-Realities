@@ -2,31 +2,24 @@ using UnityEngine;
 
 public class HealthCollectible : MonoBehaviour {
 
-    void OnTriggerEnter(
-        Collider other
-    ) {
+    void OnTriggerEnter(Collider other) {
 
-        if (
-            !other.CompareTag(
-                "Player"
-            )
-        ) {
+        if (!other.CompareTag("Player")) {
             return;
         }
-        // Restores player health
-        if (other.TryGetComponent(out IHealth ihealth)) {
-            ihealth.Heal(new AbilitySystem.EntityDamage(20, null));
-        }
 
-        /*if (
-            CollectiblesManager.Instance
-            != null
-        ) {
+        IHealth ihealth =
+            other.GetComponentInChildren<IHealth>();
 
-            CollectiblesManager.Instance.CollectHealth(
-                gameObject,
-                other.gameObject
+        if (ihealth != null) {
+
+            ihealth.Heal(
+                new AbilitySystem.EntityDamage(20, null)
             );
-        }*/
+
+            Destroy(gameObject);
+        } else {
+            Debug.LogWarning("No IHealth found on player");
+        }
     }
 }
