@@ -8,8 +8,10 @@ public class HealthCollectible : MonoBehaviour {
             return;
         }
 
-        if (other.TryGetComponent(out IHealth ihealth))
+        if (other.TryGetComponent(out IHealth ihealth)) {
             ihealth.SetMaxHealth();
+            Destroy(gameObject);
+        }
         /*
                 IHealth ihealth =
                     other.GetComponentInChildren<IHealth>();
@@ -20,7 +22,6 @@ public class HealthCollectible : MonoBehaviour {
                         new AbilitySystem.EntityDamage(20, null)
                     );
 
-                    Destroy(gameObject);
                 } else {
                     Debug.LogWarning("No IHealth found on player");
                 }*/
