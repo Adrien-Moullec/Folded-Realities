@@ -14,11 +14,22 @@ public class ProgressDoor : MonoBehaviour {
 
         levelExit =
             GetComponent<LevelExit>();
+
+        UpdateDoor();
     }
 
     void Update() {
 
-        int progress = GameplaySystem.GetInt(PrefInt.Progress, 0);
+        UpdateDoor();
+    }
+
+    void UpdateDoor() {
+
+        if (GameProgress.Instance == null)
+            return;
+
+        int progress =
+            GameProgress.Instance.progress;
 
         bool unlocked =
             (
