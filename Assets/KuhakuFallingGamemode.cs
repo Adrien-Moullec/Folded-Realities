@@ -58,16 +58,20 @@ public class KuhakuFallingGamemode : MonoBehaviour, IHealth {
     }
     // Andrea's function
     public IEnumerator InvincibilityFrames() {
+        // Enables invulnerability state
         invincible = true;
         float time = 0;
         while (time < invincibilityTime) {
             time += Time.deltaTime;
+            // Creates flashing sine wave effect
             float f = Mathf.Abs(Mathf.Sin(time * 8 / invincibilityTime));
             Debug.Log(f);
             shader.SetFloat("_DamageFlash01", f);
             yield return null;
         }
+        // Resets shader flash effect
         shader.SetFloat("_DamageFlash01", 0);
+        // Disables invulnerability state
         invincible = false;
     }
 

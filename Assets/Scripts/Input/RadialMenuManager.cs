@@ -5,6 +5,7 @@ using AbilitySystem;
 
 public class RadialMenuManager : MonoBehaviour {
 
+    // UI center point used for angle calculations
     [Header("UI References")]
     public RectTransform center;
 
@@ -25,11 +26,11 @@ public class RadialMenuManager : MonoBehaviour {
 
     [Header("Player")]
     public PlayerAbilityController playerAbilityController;
-
+    // Total radial menu segments
     [Header("Settings")]
     [SerializeField]
     private int segmentCount = 3;
-
+    // Angle size for each segment
     private float segmentAngle;
 
     private int currentIndex = 0;
@@ -37,7 +38,7 @@ public class RadialMenuManager : MonoBehaviour {
     private bool wheelOpen = false;
 
     void Start() {
-
+        // Calculates angle size for segments
         segmentAngle =
             360f / segmentCount;
 
@@ -52,7 +53,7 @@ public class RadialMenuManager : MonoBehaviour {
         }
 
         ResetHighlights();
-
+        // Locks and hides cursor during gameplay
         Cursor.lockState =
             CursorLockMode.Locked;
 
@@ -77,7 +78,7 @@ public class RadialMenuManager : MonoBehaviour {
 
             CloseWheel();
         }
-
+        // Updates selection while menu is open
         if (
             wheelOpen
         ) {
@@ -127,7 +128,7 @@ public class RadialMenuManager : MonoBehaviour {
 
         ResetHighlights();
     }
-
+    // Gets radial menu center position
     void UpdateSelection() {
 
         Vector2 centerScreenPosition =
@@ -136,14 +137,14 @@ public class RadialMenuManager : MonoBehaviour {
                 null,
                 center.position
             );
-
+        // Gets mouse position
         Vector2 mousePos =
             Input.mousePosition;
-
+        // Calculates mouse offset from center
         Vector2 delta =
             mousePos
             - centerScreenPosition;
-
+        // Converts mouse direction into angle
         float angle =
             Mathf.Atan2(
                 delta.y,
@@ -163,7 +164,7 @@ public class RadialMenuManager : MonoBehaviour {
 
             angle -= 360f;
         }
-
+        // Determines active segment
         currentIndex =
             Mathf.FloorToInt(
                 angle / segmentAngle
@@ -244,7 +245,7 @@ public class RadialMenuManager : MonoBehaviour {
     }
 
     void TriggerSelectedForm() {
-
+        // Prevents errors if controller missing
         if (
             playerAbilityController
             == null

@@ -9,14 +9,18 @@ public class SceneTransition : MonoBehaviour {
     Material irisMaterial;
     public float speed = 1.5f;
     public float respawnSpeed = 0.7f;
+    // Prevents overlapping transitions
     bool transitioning = false;
 
     void Start() {
+        // Gets iris material reference
         irisMaterial = irisImage.material;
+        // Starts transition fully open
         irisMaterial.SetFloat("_Radius", 1f);
     }
 
     public void TransitionToScene(string targetLevel, int spawnLocId) {
+        // Prevents duplicate transitions
         if (transitioning)
             return;
         StartCoroutine(TransitionRoutine(targetLevel, spawnLocId));
@@ -30,7 +34,7 @@ public class SceneTransition : MonoBehaviour {
         transitioning = true;
         irisMaterial.SetFloat("_Radius", 0f);
         yield return null;
-
+        // Respawns player at checkpoint
         if (CheckpointManager.Instance != null)
             CheckpointManager.Instance.RespawnPlayer();
 
@@ -76,6 +80,7 @@ public class SceneTransition : MonoBehaviour {
             GameplaySystem.slot = -1;
 
         radius = 0f;
+        // Respawns player at correct spawn location
         irisMaterial.SetFloat("_Radius", radius);
         CheckpointManager.Instance?.RespawnPlayerIntoLevel(spawnLocId);
 
@@ -93,7 +98,7 @@ public class SceneTransition : MonoBehaviour {
 
         if (transitioning)
             yield break;
-
+        // Closes iris during boss death
         transitioning = true;
         float radius = 1f;
         while (radius > 0f) {
@@ -102,7 +107,7 @@ public class SceneTransition : MonoBehaviour {
             yield return null;
         }
 
-        // hold black
+        // Holds black screen after transition
         yield return new WaitForSeconds(1f);
     }
 }

@@ -22,7 +22,7 @@ public class CollectiblesManager : MonoBehaviour {
     private int specialCount = 0;
 
     public AudioClip pickupSound;
-
+    // Health Pickup
     [Header("Health Pickup")]
     public int healAmount = 20;
 
@@ -48,7 +48,8 @@ public class CollectiblesManager : MonoBehaviour {
             );
         }
     }
-
+    #region Normal Collectibles
+    // Awards player coins
     public void CollectNormal(
         GameObject obj
     ) {
@@ -75,11 +76,13 @@ public class CollectiblesManager : MonoBehaviour {
             obj
         );
     }
+    #endregion
 
+    #region Special Collect
     public void CollectSpecial(
         GameObject obj
     ) {
-
+        // Prevents overflow errors
         if (
             specialCount
             >=
@@ -94,7 +97,7 @@ public class CollectiblesManager : MonoBehaviour {
         ) {
             return;
         }
-
+        // Checks whether puzzle is complete
         puzzlePieces[specialCount]
             .gameObject
             .SetActive(
@@ -131,6 +134,10 @@ public class CollectiblesManager : MonoBehaviour {
         );
     }
 
+    #endregion
+
+    #region Health Collectible
+    // Gets player health controller
     public void CollectHealth(
         GameObject obj,
         GameObject player
@@ -140,7 +147,7 @@ public class CollectiblesManager : MonoBehaviour {
             player.GetComponent<
                 PlayerAbilityController
             >();
-
+        // Restores player health
         if (
             health != null
         ) {
@@ -171,7 +178,7 @@ public class CollectiblesManager : MonoBehaviour {
             );
         }
     }
-
+    #endregion
     void OnPuzzleCompleted() {
 
         GameplaySystem.SetInt(PrefInt.PuzzleComplete, 1);
@@ -190,7 +197,7 @@ public class CollectiblesManager : MonoBehaviour {
     }
 
     void ResetPuzzleUI() {
-
+        // Hides all puzzle piece UI elements
         for (
             int i = 0;
             i < puzzlePieces.Length;
@@ -211,7 +218,7 @@ public class CollectiblesManager : MonoBehaviour {
 
         specialCount = 0;
     }
-
+    // Returns collected normal coin total
     public int GetCoinCount() {
 
         return normalCount;

@@ -40,7 +40,7 @@ public class MainMenu : MonoBehaviour {
     public void CloseLoadGame() {
         loadGamePanel.SetActive(false);
     }
-
+    // Tracks selected loading behaviour
     public void LoadSlot(int slot) {
         switch (loadStyle) {
             case LoadStyle.NewGame: GameplaySystem.DeleteSettings(slot); break;
@@ -78,7 +78,7 @@ public class MainMenu : MonoBehaviour {
     }
 
     void UpdateSlotUI(int slot) {
-
+        // Updates save slot UI text
         TextMeshProUGUI text = null;
 
         if (slot == 1) text = slot1Text;

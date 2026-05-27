@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class GraphicsSettings : MonoBehaviour {
 
     public static GraphicsSettings Instance;
-
+    // Global URP volume reference
     [Header("Graphics")]
     public Volume globalVolume;
     public Slider brightnessSlider;
@@ -19,6 +19,7 @@ public class GraphicsSettings : MonoBehaviour {
     [Header("Audio")]
     public Slider volumeSlider;
     float volume;
+    // Cached values used for reverting changes
     float cachedBrightness;
     float cachedSaturation;
     float cachedVolume;
@@ -28,10 +29,10 @@ public class GraphicsSettings : MonoBehaviour {
         //SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-
+    #region Volume & Colour Adjustments 
 
     void Start() {
-
+        // Finds volume and colour adjustment settings
         SetupVolume();
         brightness = GameplaySystem.GetSettingsFloat(SettingsFloatPref.Brightness, 0);
         saturation = GameplaySystem.GetSettingsFloat(SettingsFloatPref.Saturation, 0);
@@ -45,7 +46,7 @@ public class GraphicsSettings : MonoBehaviour {
         Scene scene,
         LoadSceneMode mode
     ) {
-
+        // Reconnects volume references after scene load
         SetupVolume();
 
         brightnessSlider = GameObject.Find("Brightness")?.GetComponent<Slider>();
@@ -58,6 +59,7 @@ public class GraphicsSettings : MonoBehaviour {
     }
 
     void SetupVolume() {
+        // Finds active global volume in scene
         globalVolume = FindFirstObjectByType<Volume>();
 
         if (globalVolume == null)
@@ -75,13 +77,16 @@ public class GraphicsSettings : MonoBehaviour {
 
         if (volumeSlider != null) {
             volumeSlider.value = volume;
+            // Clears old listeners
             volumeSlider.onValueChanged.RemoveAllListeners();
             volumeSlider.onValueChanged.AddListener(SetVolume);
         }
     }
+    #endregion
 
+    #region Cached Settings
     public void CacheCurrentSettings() {
-
+        // Stores current settings for revert button
         cachedBrightness = brightness;
         cachedSaturation = saturation;
         cachedVolume = volume;
@@ -93,16 +98,19 @@ public class GraphicsSettings : MonoBehaviour {
         saturation = cachedSaturation;
         volume = cachedVolume;
         AudioListener.volume = volume;
-
+        // Reapplies reverted settings
         ApplySettings();
         UpdateSliders();
     }
+    #endregion
 
+    #region Save Settings & Update
     public void SaveSettings() {
 
         GameplaySystem.SetSettingsFloat(SettingsFloatPref.Brightness, brightness);
         GameplaySystem.SetSettingsFloat(SettingsFloatPref.Saturation, saturation);
         GameplaySystem.SetSettingsFloat(SettingsFloatPref.GameVolume, volume);
+        // Writes settings to save file
         GameplaySystem.SaveSettings();
     }
 
@@ -139,3 +147,4 @@ public class GraphicsSettings : MonoBehaviour {
             volumeSlider.value = volume;
     }
 }
+#endregion

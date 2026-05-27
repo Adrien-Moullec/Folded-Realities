@@ -15,13 +15,12 @@ public class Checkpoint : MonoBehaviour {
 
     void Start() {
         if (checkpointRenderer != null) {
-            // Create unique material instance
             checkpointMaterial = checkpointRenderer.material;
 
             SetColor(inactiveColor);
         }
     }
-
+    // Prevents missing material errors
     void SetColor(Color c) {
         if (checkpointMaterial == null) {
             return;
@@ -35,11 +34,12 @@ public class Checkpoint : MonoBehaviour {
             checkpointMaterial.SetColor("_Color", c);
         }
     }
-
+    // Only activates for player
     private void OnTriggerEnter(Collider other) {
         if (!other.CompareTag("Player")) {
             return;
         }
+        // Saves current scene checkpoint position
         GameplaySystem.SetSceneSavePoint(SceneManager.GetActiveScene().name, transform.position);
         if (activated) {
             return;
@@ -49,10 +49,10 @@ public class Checkpoint : MonoBehaviour {
 
         ActivateCheckpoint();
     }
-
+    // Marks checkpoint as activated
     void ActivateCheckpoint() {
         activated = true;
-
+        // Updates checkpoint colour
         SetColor(activeColor);
     }
 }

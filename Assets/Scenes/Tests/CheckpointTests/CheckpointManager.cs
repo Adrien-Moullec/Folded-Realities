@@ -8,20 +8,25 @@ public class CheckpointManager : MonoBehaviour {
 
     public static CheckpointManager Instance;
     [SerializeField] PlayerAbilityController Player;
+    // List of level exits used for spawn locations
     [SerializeField] List<LevelExit> levelExits;
+    // Default level start spawn point
     public Transform levelStartSpawn;
     private Vector3 lastCheckpointPosition;
     private int currentCheckpointIndex = -1;
     private bool respawning = false;
+    // Y position that triggers fall death
     public float fallYLimit = -10f;
 
     private void Awake() {
+        // Sets singleton instance
         Instance = this;
         if (levelStartSpawn != null)
             lastCheckpointPosition = levelStartSpawn.position;
     }
-
+    #region Respawn Player & Checks for checkpoints
     void Update() {
+        // Respawns player if they fall below limit
         if (!respawning && Player?.transform.position.y < fallYLimit) {
             StartCoroutine(GameplaySystem.instance.Respawn());
         }
@@ -30,17 +35,17 @@ public class CheckpointManager : MonoBehaviour {
 
         if (checkpointIndex <= currentCheckpointIndex)
             return;
-
+        // Prevents older checkpoints replacing newer ones
         currentCheckpointIndex = checkpointIndex;
         lastCheckpointPosition = position;
-
+        // Restores player health at checkpoint
         if (player != null)
             if (player.TryGetComponent(out PlayerAbilityController abilityController))
                 abilityController.SetMaxHealth();
     }
 
     public bool HasCheckpoint() => currentCheckpointIndex != -1;
-
+    // Returns latest checkpoint position
     public Vector3 GetCheckpointPosition() {
         if (HasCheckpoint()) return lastCheckpointPosition;
         if (levelStartSpawn != null) return levelStartSpawn.position;
@@ -53,20 +58,25 @@ public class CheckpointManager : MonoBehaviour {
             RespawnPlayer(false);
             return;
         }
+        // Respawns using specific level exit position
         if (spawnId >= 0 && spawnId < levelExits.Count && levelExits[spawnId] != null) {
             SpawnPlayerAtLocation(levelExits[spawnId].SpawnPos + Vector3.up * 2f);
         } else {
             RespawnPlayer(false);
         }
     }
+    #endregion
+
+    #region Spawn Player @ Location
     void SpawnPlayer() {
+        // Prevents errors if player missing
         if (Player == null) return;
         Vector3 spawnPos = Vector3.zero;
         if (levelStartSpawn != null) {
             spawnPos = levelStartSpawn.position + Vector3.up * 2f;
             SpawnPlayerAtLocation(spawnPos);
         }
-    }
+    }  // Loads saved checkpoint position
     public void RespawnPlayer(bool savePoint = true) {
         if (Player == null) return;
         Vector3 spawnPos = Vector3.zero;
@@ -82,6 +92,8 @@ public class CheckpointManager : MonoBehaviour {
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }
+
+        // Disables character controller before moving
         if (Player.characterController != null) Player.characterController.enabled = false;
 
         RaycastHit hit;
@@ -92,3 +104,4 @@ public class CheckpointManager : MonoBehaviour {
         if (Player.characterController != null) Player.characterController.enabled = true;
     }
 }
+#endregion

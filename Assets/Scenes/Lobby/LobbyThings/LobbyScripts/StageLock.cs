@@ -5,7 +5,6 @@ public class StageLock : MonoBehaviour {
     public string requiredKey;
 
     public GameObject lockVisual;
-
     public GameObject lockedUI;
 
     bool isUnlocked = false;
@@ -14,76 +13,56 @@ public class StageLock : MonoBehaviour {
 
     void Start() {
 
-        levelExit =
-            GetComponent<LevelExit>();
+        levelExit = GetComponent<LevelExit>();
 
         CheckState();
     }
 
-    void OnTriggerEnter(
-        Collider other
-    ) {
+    void OnTriggerEnter(Collider other) {
 
-        if (
-            !other.CompareTag(
-                "Player"
-            )
-        ) {
+        // Only checks player collisions
+        if (!other.CompareTag("Player"))
             return;
-        }
 
         CheckState();
 
-        if (
-            !isUnlocked
-            &&
-            lockedUI != null
-        ) {
-
-            lockedUI.SetActive(
-                true
-            );
-        }
+        // Shows locked UI if stage is unavailable
+        if (!isUnlocked && lockedUI != null)
+            lockedUI.SetActive(true);
     }
 
     void CheckState() {
 
-        if (GameplaySystem.GetInt(PrefInt.OwnsKey, 0) == 1) {
+        // Checks whether player owns required key
+        if (GameplaySystem.GetInt(PrefInt.OwnsKey, 0) == 1)
             Unlock();
-        } else {
+        else
             Lock();
-        }
     }
 
     void Unlock() {
 
-        if (lockVisual != null) {
+        isUnlocked = true;
 
-            lockVisual.SetActive(
-                false
-            );
-        }
+        // Hides lock visuals
+        if (lockVisual != null)
+            lockVisual.SetActive(false);
 
-        if (levelExit != null) {
-
-            levelExit.enabled =
-                true;
-        }
+        // Enables level transition
+        if (levelExit != null)
+            levelExit.enabled = true;
     }
 
     void Lock() {
 
-        if (lockVisual != null) {
+        isUnlocked = false;
 
-            lockVisual.SetActive(
-                true
-            );
-        }
+        // Shows lock visuals
+        if (lockVisual != null)
+            lockVisual.SetActive(true);
 
-        if (levelExit != null) {
-
-            levelExit.enabled =
-                false;
-        }
+        // Disables level transition
+        if (levelExit != null)
+            levelExit.enabled = false;
     }
 }
