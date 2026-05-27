@@ -1,107 +1,274 @@
 using UnityEngine;
-
 using AbilitySystem;
 using UnityEngine.SceneManagement;
+using System.Collections;
 using System.Collections.Generic;
 
 public class CheckpointManager : MonoBehaviour {
 
     public static CheckpointManager Instance;
-    [SerializeField] PlayerAbilityController Player;
-    // List of level exits used for spawn locations
-    [SerializeField] List<LevelExit> levelExits;
-    // Default level start spawn point
+
+    [SerializeField]
+    PlayerAbilityController Player;
+
+    [Header("Level Exits")]
+    [SerializeField]
+    List<LevelExit> levelExits;
+
+    [Header("Spawn")]
     public Transform levelStartSpawn;
-    private Vector3 lastCheckpointPosition;
-    private int currentCheckpointIndex = -1;
-    private bool respawning = false;
-    // Y position that triggers fall death
+
+    [Header("Fall Death")]
     public float fallYLimit = -10f;
 
-    private void Awake() {
-        // Sets singleton instance
+    Vector3 lastCheckpointPosition;
+
+    int currentCheckpointIndex = -1;
+
+    bool respawning = false;
+
+    void Awake() {
+
         Instance = this;
-        if (levelStartSpawn != null)
-            lastCheckpointPosition = levelStartSpawn.position;
-    }
-    #region Respawn Player & Checks for checkpoints
-    void Update() {
-        // Respawns player if they fall below limit
-        if (!respawning && Player?.transform.position.y < fallYLimit) {
-            StartCoroutine(GameplaySystem.instance.Respawn());
+
+        if (Player == null) {
+            Player =
+                FindFirstObjectByType<PlayerAbilityController>();
+        }
+
+        if (levelStartSpawn != null) {
+            lastCheckpointPosition =
+                levelStartSpawn.position;
         }
     }
-    public void SetCheckpoint(Vector3 position, int checkpointIndex, GameObject player = null) {
 
-        if (checkpointIndex <= currentCheckpointIndex)
+    void Update() {
+
+        if (Player == null) {
+
+            Player =
+                FindFirstObjectByType<PlayerAbilityController>();
+
             return;
-        // Prevents older checkpoints replacing newer ones
-        currentCheckpointIndex = checkpointIndex;
-        lastCheckpointPosition = position;
-        // Restores player health at checkpoint
-        if (player != null)
-            if (player.TryGetComponent(out PlayerAbilityController abilityController))
-                abilityController.SetMaxHealth();
+        }
+
+        if (
+            !respawning &&
+            Player.transform.position.y < fallYLimit
+        ) {
+
+            StartCoroutine(
+                RespawnRoutine()
+            );
+        }
     }
 
-    public bool HasCheckpoint() => currentCheckpointIndex != -1;
-    // Returns latest checkpoint position
+    IEnumerator RespawnRoutine() {
+
+        respawning = true;
+
+        yield return GameplaySystem.instance.Respawn();
+
+        respawning = false;
+    }
+
+    public void SetCheckpoint(
+        Vector3 position,
+        int checkpointIndex,
+        GameObject player = null
+    ) {
+
+        if (
+            checkpointIndex <=
+            currentCheckpointIndex
+        ) {
+            return;
+        }
+
+        currentCheckpointIndex =
+            checkpointIndex;
+
+        lastCheckpointPosition =
+            position;
+
+        if (player != null) {
+
+            IHealth ihealth =
+                player.GetComponentInChildren<IHealth>();
+
+            if (ihealth != null) {
+
+                ihealth.Heal(
+                    new EntityDamage(
+                        9999,
+                        null
+                    )
+                );
+
+                Debug.Log(
+                    "Player health restored"
+                );
+            } else {
+
+                Debug.LogWarning(
+                    "No IHealth found on player"
+                );
+            }
+        }
+    }
+
+    public bool HasCheckpoint() {
+
+        return currentCheckpointIndex != -1;
+    }
+
     public Vector3 GetCheckpointPosition() {
-        if (HasCheckpoint()) return lastCheckpointPosition;
-        if (levelStartSpawn != null) return levelStartSpawn.position;
+
+        if (HasCheckpoint()) {
+            return lastCheckpointPosition;
+        }
+
+        if (levelStartSpawn != null) {
+            return levelStartSpawn.position;
+        }
+
         return Vector3.zero;
     }
 
-    public void RespawnPlayerIntoLevel(int spawnId = -1) {
-        if (Player == null) return;
-        if (spawnId == -1) {
-            RespawnPlayer(false);
+    public void RespawnPlayerIntoLevel(
+        int spawnId = -1
+    ) {
+
+        if (Player == null) {
             return;
         }
-        // Respawns using specific level exit position
-        if (spawnId >= 0 && spawnId < levelExits.Count && levelExits[spawnId] != null) {
-            SpawnPlayerAtLocation(levelExits[spawnId].SpawnPos + Vector3.up * 2f);
+
+        if (spawnId == -1) {
+
+            RespawnPlayer(false);
+
+            return;
+        }
+
+        if (
+            spawnId >= 0 &&
+            spawnId < levelExits.Count &&
+            levelExits[spawnId] != null
+        ) {
+
+            SpawnPlayerAtLocation(
+                levelExits[spawnId].SpawnPos +
+                Vector3.up * 2f
+            );
         } else {
+
             RespawnPlayer(false);
         }
     }
-    #endregion
 
-    #region Spawn Player @ Location
     void SpawnPlayer() {
-        // Prevents errors if player missing
-        if (Player == null) return;
-        Vector3 spawnPos = Vector3.zero;
-        if (levelStartSpawn != null) {
-            spawnPos = levelStartSpawn.position + Vector3.up * 2f;
-            SpawnPlayerAtLocation(spawnPos);
+
+        if (Player == null) {
+            return;
         }
-    }  // Loads saved checkpoint position
-    public void RespawnPlayer(bool savePoint = true) {
-        if (Player == null) return;
+
         Vector3 spawnPos = Vector3.zero;
+
         if (levelStartSpawn != null) {
-            spawnPos = levelStartSpawn.position + Vector3.up * 2f;
-            spawnPos = savePoint ? GameplaySystem.GetSceneSavePoint(SceneManager.GetActiveScene().name, spawnPos) : spawnPos;
-            SpawnPlayerAtLocation(spawnPos);
+
+            spawnPos =
+                levelStartSpawn.position +
+                Vector3.up * 2f;
+
+            SpawnPlayerAtLocation(
+                spawnPos
+            );
         }
     }
-    void SpawnPlayerAtLocation(Vector3 pos) {
-        if (Player == null) return;
-        if (Player.TryGetComponent(out Rigidbody rb)) {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+
+    public void RespawnPlayer(
+        bool savePoint = true
+    ) {
+
+        if (Player == null) {
+            return;
         }
 
-        // Disables character controller before moving
-        if (Player.characterController != null) Player.characterController.enabled = false;
+        Vector3 spawnPos = Vector3.zero;
+
+        if (levelStartSpawn != null) {
+
+            spawnPos =
+                levelStartSpawn.position +
+                Vector3.up * 2f;
+
+            spawnPos =
+                savePoint
+                ? GameplaySystem.GetSceneSavePoint(
+                    SceneManager.GetActiveScene().name,
+                    spawnPos
+                )
+                : spawnPos;
+
+            SpawnPlayerAtLocation(
+                spawnPos
+            );
+        }
+    }
+
+    void SpawnPlayerAtLocation(
+        Vector3 pos
+    ) {
+
+        if (Player == null) {
+            return;
+        }
+
+        if (
+            Player.TryGetComponent(
+                out Rigidbody rb
+            )
+        ) {
+
+            rb.linearVelocity =
+                Vector3.zero;
+
+            rb.angularVelocity =
+                Vector3.zero;
+        }
+
+        if (
+            Player.characterController != null
+        ) {
+
+            Player.characterController.enabled =
+                false;
+        }
 
         RaycastHit hit;
-        if (Physics.Raycast(pos, Vector3.down, out hit, 10f))
-            pos.y = hit.point.y + 1f;
-        Player.transform.position = pos;
 
-        if (Player.characterController != null) Player.characterController.enabled = true;
+        if (
+            Physics.Raycast(
+                pos,
+                Vector3.down,
+                out hit,
+                10f
+            )
+        ) {
+
+            pos.y =
+                hit.point.y + 1f;
+        }
+
+        Player.transform.position =
+            pos;
+
+        if (
+            Player.characterController != null
+        ) {
+
+            Player.characterController.enabled =
+                true;
+        }
     }
 }
-#endregion
