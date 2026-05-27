@@ -7,6 +7,7 @@ namespace AbilitySystem {
     public class Glide : MovementSO {
 
         [Header("Horizontal Velocity")]
+        [SerializeField, Min(0)] float speedMult;
         [SerializeField, Min(0)] float maxSpeed;
         [SerializeField, Min(0)] float changeDirectionSpeedMultiplier;
         [SerializeField, Min(0)] float acceleration;
