@@ -1374,7 +1374,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &369250496
 Transform:
   m_ObjectHideFlags: 0
@@ -4258,19 +4258,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1987266293690256400, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1987266293690256400, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1221269516}
+      objectReference: {fileID: 1308225768}
     - target: {fileID: 1987266293690256400, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: DeleteSettings
+      value: RevertCachedSettings
       objectReference: {fileID: 0}
     - target: {fileID: 1987266293690256400, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameplaySystem, Assembly-CSharp
+      value: GraphicsSettings, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2011879299495112288, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_Enabled
@@ -4319,14 +4319,14 @@ PrefabInstance:
     - target: {fileID: 2676617049740053363, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1221269516}
+      objectReference: {fileID: 1308225768}
     - target: {fileID: 2676617049740053363, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SetBrightness
       objectReference: {fileID: 0}
     - target: {fileID: 2676617049740053363, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameplaySystem, Assembly-CSharp
+      value: GraphicsSettings, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2762274226766806187, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_fontAsset
@@ -4429,6 +4429,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4087718499074752281, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
+      propertyPath: m_Name
+      value: revert
+      objectReference: {fileID: 0}
+    - target: {fileID: 4087718499074752281, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -4527,14 +4531,14 @@ PrefabInstance:
     - target: {fileID: 5851660183263740331, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1221269516}
+      objectReference: {fileID: 1308225768}
     - target: {fileID: 5851660183263740331, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SetSaturation
       objectReference: {fileID: 0}
     - target: {fileID: 5851660183263740331, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameplaySystem, Assembly-CSharp
+      value: GraphicsSettings, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6203946306143194246, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_Enabled
@@ -4599,14 +4603,14 @@ PrefabInstance:
     - target: {fileID: 6954495479235378887, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1221269516}
+      objectReference: {fileID: 1308225768}
     - target: {fileID: 6954495479235378887, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: SetVolume
       objectReference: {fileID: 0}
     - target: {fileID: 6954495479235378887, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GameplaySystem, Assembly-CSharp
+      value: GraphicsSettings, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7014791435963824568, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       propertyPath: m_AnchorMax.x
@@ -4749,6 +4753,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8988566985546381854, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1308225761}
+    - targetCorrespondingSourceObject: {fileID: 8988566985546381854, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1308225768}
   m_SourcePrefab: {fileID: 100100000, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
 --- !u!1 &1081932327 stripped
 GameObject:
@@ -5568,6 +5575,22 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8133305568442461575, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
   m_PrefabInstance: {fileID: 1081932326}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1308225768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1308225760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22872c40f22240f4eacdb0aea8c5f139, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globalVolume: {fileID: 0}
+  brightnessSlider: {fileID: 0}
+  saturationSlider: {fileID: 0}
+  volumeSlider: {fileID: 0}
 --- !u!1 &1350971532
 GameObject:
   m_ObjectHideFlags: 0

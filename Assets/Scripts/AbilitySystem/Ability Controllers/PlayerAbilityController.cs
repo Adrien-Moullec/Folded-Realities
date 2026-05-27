@@ -220,6 +220,10 @@ namespace AbilitySystem {
             foreach (var n in GetEntityBody().entityShader)
                 n.material.SetFloat("_DissolveValue", 0);
         }
+        public override void SetMaxHealth() {
+            base.SetMaxHealth();
+            playerHealthCanvas?.UpdateHearts(CurrentHealth);
+        }
         public override void Heal(EntityDamage heal) {
             base.Heal(heal);
             foreach (var n in GetEntityBody().entityShader)

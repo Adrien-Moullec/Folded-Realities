@@ -20,14 +20,9 @@ namespace AbilitySystem {
         public bool isControllerActive = true;
         float hitFrameTime = 1;
 
-        [ContextMenu("Die")]
-        public void ActivateDie() {
-            Die();
-        }
-
 
         protected virtual void Awake() {
-
+            CurrentHealth = MaxHealth;
         }
         protected virtual void Update() {
             if (!isControllerActive) return;
@@ -91,8 +86,10 @@ namespace AbilitySystem {
         public abstract void OnDrawGizmos();
         public abstract bool IsGrounded();
 
-        public void SetMaxHealth() {
+        public virtual void SetMaxHealth() {
             CurrentHealth = MaxHealth;
+            foreach (var n in GetEntityBody().entityShader)
+                n.material.SetFloat("_Health01", 1);
         }
     }
 }

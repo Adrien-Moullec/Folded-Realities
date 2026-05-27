@@ -8,18 +8,21 @@ public class HealthCollectible : MonoBehaviour {
             return;
         }
 
-        IHealth ihealth =
-            other.GetComponentInChildren<IHealth>();
+        if (other.TryGetComponent(out IHealth ihealth))
+            ihealth.SetMaxHealth();
+        /*
+                IHealth ihealth =
+                    other.GetComponentInChildren<IHealth>();
 
-        if (ihealth != null) {
+                if (ihealth != null) {
 
-            ihealth.Heal(
-                new AbilitySystem.EntityDamage(20, null)
-            );
+                    ihealth.Heal(
+                        new AbilitySystem.EntityDamage(20, null)
+                    );
 
-            Destroy(gameObject);
-        } else {
-            Debug.LogWarning("No IHealth found on player");
-        }
+                    Destroy(gameObject);
+                } else {
+                    Debug.LogWarning("No IHealth found on player");
+                }*/
     }
 }

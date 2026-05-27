@@ -1,4 +1,4 @@
-/*using UnityEngine;
+using UnityEngine;
 
 public class GameProgress : MonoBehaviour {
 
@@ -11,7 +11,7 @@ public class GameProgress : MonoBehaviour {
         Instance = this;
 
         progress =
-            PlayersPrefs.GetInt(
+            PlayerPrefs.GetInt(
                 "Progress",
                 0
             );
@@ -23,16 +23,16 @@ public class GameProgress : MonoBehaviour {
 
         progress = value;
 
-        PlayersPrefs.SetInt(
+        PlayerPrefs.SetInt(
             "Progress",
             progress
         );
 
-        PlayersPrefs.Save();
+        PlayerPrefs.Save();
 
         Debug.Log(
             "PROGRESS = "
             + progress
         );
     }
-}*/
+}

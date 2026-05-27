@@ -39,11 +39,15 @@ public class Checkpoint : MonoBehaviour {
         if (!other.CompareTag("Player")) {
             return;
         }
+        Debug.Log("Given player health checkpoint!");
         // Saves current scene checkpoint position
         GameplaySystem.SetSceneSavePoint(SceneManager.GetActiveScene().name, transform.position);
         if (activated) {
             return;
         }
+
+        if (other.TryGetComponent(out IHealth ihealth))
+            ihealth.SetMaxHealth();
 
         CheckpointManager.Instance.SetCheckpoint(transform.position + Vector3.up * 1f, checkpointIndex);
 

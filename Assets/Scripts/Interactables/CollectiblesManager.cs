@@ -33,7 +33,7 @@ public class CollectiblesManager : MonoBehaviour {
 
     void Start() {
 
-        normalCount = 0;
+        normalCount = GameplaySystem.GetInt(PrefInt.Coins, 0);
 
         UpdateNormalUI();
 
@@ -54,8 +54,7 @@ public class CollectiblesManager : MonoBehaviour {
         GameObject obj
     ) {
 
-        normalCount++;
-
+        GameplaySystem.SetInt(PrefInt.Coins, ++normalCount);
         UpdateNormalUI();
 
         if (
