@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class DebrisSpawnerAndWind : MonoBehaviour {
+public class DebrisSpawner : MonoBehaviour {
+
     [Header("Debris")]
     public GameObject[] debrisPrefabs;
 
@@ -15,8 +16,7 @@ public class DebrisSpawnerAndWind : MonoBehaviour {
     [Header("Spawn Settings")]
     public int totalDebris = 10;
 
-    public Vector3 areaSize =
-        new Vector3(20, 50, 10);
+    public Vector3 areaSize = new Vector3(20, 50, 10);
 
     [Header("Movement")]
     public float debrisMoveSpeed = 6f;
@@ -27,223 +27,151 @@ public class DebrisSpawnerAndWind : MonoBehaviour {
     GameObject[] spawnedDebris;
 
     void Start() {
-        spawnedDebris =
-            new GameObject[totalDebris];
 
-        int bottomCount =
-            totalDebris / 2;
+        // Splits debris between top and bottom spawn areas
+        spawnedDebris = new GameObject[totalDebris];
 
-        int topCount =
-            totalDebris - bottomCount;
+        int bottomCount = totalDebris / 2;
+
+        int topCount = totalDebris - bottomCount;
 
         int currentIndex = 0;
 
-        for (
-            int i = 0;
-            i < topCount;
-            i++
-        ) {
-            spawnedDebris[currentIndex] =
-                SpawnDebris(false);
+        for (int i = 0; i < topCount; i++) {
+
+            spawnedDebris[currentIndex] = SpawnDebris(false);
 
             currentIndex++;
         }
 
-        for (
-            int i = 0;
-            i < bottomCount;
-            i++
-        ) {
-            spawnedDebris[currentIndex] =
-                SpawnDebris(true);
+        for (int i = 0; i < bottomCount; i++) {
+
+            spawnedDebris[currentIndex] = SpawnDebris(true);
 
             currentIndex++;
         }
 
-        for (
-            int i = 0;
-            i < windCount;
-            i++
-        ) {
+        // Spawns wind visual effects
+        for (int i = 0; i < windCount; i++)
             SpawnWind();
-        }
     }
 
     void Update() {
+
         MoveDebris();
     }
 
-    GameObject SpawnDebris(
-        bool bottomLayer
-    ) {
-        Vector3 randomPos =
-            transform.position;
+    GameObject SpawnDebris(bool bottomLayer) {
 
-        for (
-            int i = 0;
-            i < 10;
-            i++
-        ) {
-            float yMin =
-                bottomLayer
-                ? -areaSize.y / 2f
-                : -areaSize.y / 4f;
+        Vector3 randomPos = transform.position;
 
-            float yMax =
-                bottomLayer
-                ? -areaSize.y / 4f
-                : areaSize.y / 2f;
+        // Finds safe spawn position away from NPC
+        for (int i = 0; i < 10; i++) {
 
-            Vector3 testPos =
-                transform.position
-                + new Vector3(
-                    Random.Range(
-                        -areaSize.x / 2f,
-                        areaSize.x / 2f
-                    ),
-                    Random.Range(
-                        yMin,
-                        yMax
-                    ),
-                    Random.Range(
-                        -areaSize.z / 2f,
-                        areaSize.z / 2f
-                    )
-                );
+            float yMin = bottomLayer ? -areaSize.y / 2f : -areaSize.y / 4f;
+
+            float yMax = bottomLayer ? -areaSize.y / 4f : areaSize.y / 2f;
+
+            Vector3 testPos = transform.position + new Vector3(
+                Random.Range(-areaSize.x / 2f, areaSize.x / 2f),
+                Random.Range(yMin, yMax),
+                Random.Range(-areaSize.z / 2f, areaSize.z / 2f)
+            );
 
             bool tooCloseToNPC =
-                npc != null
-                &&
-                Vector3.Distance(
-                    testPos,
-                    npc.position
-                ) < npcSafeRadius;
+                npc != null &&
+                Vector3.Distance(testPos, npc.position) < npcSafeRadius;
 
             if (!tooCloseToNPC) {
+
                 randomPos = testPos;
 
                 break;
             }
         }
 
-        GameObject prefab =
-            debrisPrefabs[
-                Random.Range(
-                    0,
-                    debrisPrefabs.Length
-                )
-            ];
+        GameObject prefab = debrisPrefabs[
+            Random.Range(0, debrisPrefabs.Length)
+        ];
 
-        GameObject obj =
-            Instantiate(
-                prefab,
-                randomPos,
-                Random.rotation
-            );
+        GameObject obj = Instantiate(
+            prefab,
+            randomPos,
+            Random.rotation
+        );
 
-        float scale =
-            Random.Range(2f, 3.5f);
+        // Randomises debris scale
+        float scale = Random.Range(2f, 3.5f);
 
-        obj.transform.localScale =
-            Vector3.one * scale;
+        obj.transform.localScale = Vector3.one * scale;
 
         return obj;
     }
 
     void MoveDebris() {
-        if (spawnedDebris == null) {
+
+        if (spawnedDebris == null)
             return;
-        }
 
-        foreach (
-            GameObject debris
-            in spawnedDebris
-        ) {
-            if (debris == null) {
+        foreach (GameObject debris in spawnedDebris) {
+
+            if (debris == null)
                 continue;
-            }
 
+            // Moves debris upward
             debris.transform.position +=
-                Vector3.up
-                * debrisMoveSpeed
-                * Time.deltaTime;
+                Vector3.up * debrisMoveSpeed * Time.deltaTime;
 
-            float topLimit =
-                transform.position.y
-                + areaSize.y / 2f;
+            float topLimit = transform.position.y + areaSize.y / 2f;
 
-            float bottomLimit =
-                transform.position.y
-                - areaSize.y / 2f;
+            float bottomLimit = transform.position.y - areaSize.y / 2f;
 
-            if (
-                debris.transform.position.y
-                > topLimit
-            ) {
-                Vector3 pos =
-                    debris.transform.position;
+            // Repositions debris when leaving bounds
+            if (debris.transform.position.y > topLimit) {
+
+                Vector3 pos = debris.transform.position;
 
                 pos.y = bottomLimit;
 
-                pos.x =
-                    transform.position.x
-                    + Random.Range(
-                        -areaSize.x / 2f,
-                        areaSize.x / 2f
-                    );
+                pos.x = transform.position.x + Random.Range(
+                    -areaSize.x / 2f,
+                    areaSize.x / 2f
+                );
 
-                pos.z =
-                    transform.position.z
-                    + Random.Range(
-                        -areaSize.z / 2f,
-                        areaSize.z / 2f
-                    );
+                pos.z = transform.position.z + Random.Range(
+                    -areaSize.z / 2f,
+                    areaSize.z / 2f
+                );
 
-                debris.transform.position =
-                    pos;
+                debris.transform.position = pos;
             }
         }
     }
 
     void SpawnWind() {
-        if (windPrefab == null) {
+
+        if (windPrefab == null)
             return;
-        }
 
-        float halfWidth =
-            areaSize.x / 2f;
+        float halfWidth = areaSize.x / 2f;
 
-        float side =
-            Random.value > 0.5f
-            ? -1f
-            : 1f;
+        float side = Random.value > 0.5f ? -1f : 1f;
 
-        float x =
-            transform.position.x
-            + side
-            * (halfWidth - 1f);
+        float x = transform.position.x + side * (halfWidth - 1f);
 
-        float y =
-            transform.position.y
-            + Random.Range(
-                -areaSize.y / 2f,
-                areaSize.y / 2f
-            );
+        float y = transform.position.y + Random.Range(
+            -areaSize.y / 2f,
+            areaSize.y / 2f
+        );
 
-        float z =
-            transform.position.z
-            + Random.Range(
-                -areaSize.z / 2f,
-                areaSize.z / 2f
-            );
+        float z = transform.position.z + Random.Range(
+            -areaSize.z / 2f,
+            areaSize.z / 2f
+        );
 
-        Vector3 pos =
-            new Vector3(
-                x,
-                y,
-                z
-            );
+        Vector3 pos = new Vector3(x, y, z);
 
+        // Spawns wind visual effect
         Instantiate(
             windPrefab,
             pos,
