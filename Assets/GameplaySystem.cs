@@ -14,7 +14,7 @@ public class GameplaySystem : MonoBehaviour {
 
     public static GameplaySystem instance;
     [SerializeField] SceneTransition sceneTransition;
-    [SerializeField] GameObject pauseMenu;
+    [SerializeField] PauseMenu pauseMenu;
     [SerializeField] GraphicsSettings graphicsSettings;
     [HideInInspector] TargetLevel targetLevel;
     [HideInInspector] public static int slot = -1;
@@ -32,7 +32,7 @@ public class GameplaySystem : MonoBehaviour {
         }
         instance = this;
         DontDestroyOnLoad(gameObject);
-        pauseMenu.SetActive(false);
+        pauseMenu.gameObject.SetActive(false);
 #if UNITY_EDITOR
         if (ResetOnPlay) {
             DeleteSettings(-1);
@@ -43,12 +43,18 @@ public class GameplaySystem : MonoBehaviour {
 #endif
         sceneTransition.gameObject.SetActive(true);
     }
+
     void OnEnable() {
         playerInput = GetComponent<PlayerInput>();
 
         pauseButton = playerInput.actions["Pause"];
-        pauseButton.performed += input => OnPauseMenu();
+        pauseButton.performed += input => pauseMenu.TogglePause();
     }
+    private void OnDisable() {
+        pauseButton.performed -= input => pauseMenu.TogglePause();
+    }
+
+    /*
 
     public void OnPauseMenu() {
         switch (SceneManager.GetActiveScene().name) {
@@ -66,7 +72,7 @@ public class GameplaySystem : MonoBehaviour {
         }
         Time.timeScale = turnOnMenu ? 0 : 1;
         Cursor.lockState = turnOnMenu ? CursorLockMode.None : CursorLockMode.Locked;
-    }
+    }*/
 
     #region Settings
     public void SetVolume(float value) => SetSettingsFloat(SettingsFloatPref.GameVolume, value);
