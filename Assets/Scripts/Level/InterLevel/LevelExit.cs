@@ -7,6 +7,7 @@ public class LevelExit : MonoBehaviour, IInteractable {
     public bool activatedByWalkingIntoArea = false;
     public Vector3 spawnPos;
     [SerializeField] float gizmos = 1;
+    [SerializeField, Min(-1)] int progressSet = -1;
 
 
     public bool locked;
@@ -34,6 +35,7 @@ public class LevelExit : MonoBehaviour, IInteractable {
     }
 
     public void NextScene() {
+        if (progressSet > GameProgress.Instance.progress) GameProgress.Instance.progress = progressSet;
         triggered = true;
         Debug.Log(targetLevel.targetScene.ToString());
         // Loads next scene with iris transition
