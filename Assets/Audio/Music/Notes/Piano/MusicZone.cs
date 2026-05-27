@@ -12,6 +12,7 @@ public class MusicZone : MonoBehaviour {
     [Range(0f, 1f)]
     public float normalVolume = 1f;
 
+    // Speed of music fade
     public float fadeSpeed = 2f;
 
     [Header("UI")]
@@ -19,99 +20,53 @@ public class MusicZone : MonoBehaviour {
 
     Coroutine fadeRoutine;
 
-    void OnTriggerEnter(
-        Collider other
-    ) {
+    void OnTriggerEnter(Collider other) {
 
-        if (
-            !other.CompareTag(
-                "Player"
-            )
-        ) {
+        // Lowers music volume when player enters
+        if (!other.CompareTag("Player"))
             return;
-        }
 
-        StartFade(
-            quietVolume
-        );
+        StartFade(quietVolume);
 
-        if (
-            heartsCanvas != null
-        ) {
-            heartsCanvas.SetActive(
-                false
-            );
-        }
+        if (heartsCanvas != null)
+            heartsCanvas.SetActive(false);
     }
 
-    void OnTriggerExit(
-        Collider other
-    ) {
+    void OnTriggerExit(Collider other) {
 
-        if (
-            !other.CompareTag(
-                "Player"
-            )
-        ) {
+        // Restores music volume when player leaves
+        if (!other.CompareTag("Player"))
             return;
-        }
 
-        StartFade(
-            normalVolume
-        );
+        StartFade(normalVolume);
 
-        if (
-            heartsCanvas != null
-        ) {
-            heartsCanvas.SetActive(
-                true
-            );
-        }
+        if (heartsCanvas != null)
+            heartsCanvas.SetActive(true);
     }
 
-    void StartFade(
-        float target
-    ) {
+    void StartFade(float target) {
 
-        if (
-            fadeRoutine != null
-        ) {
-            StopCoroutine(
-                fadeRoutine
-            );
-        }
+        // Stops previous fade before starting new one
+        if (fadeRoutine != null)
+            StopCoroutine(fadeRoutine);
 
-        fadeRoutine =
-            StartCoroutine(
-                FadeVolume(
-                    target
-                )
-            );
+        fadeRoutine = StartCoroutine(FadeVolume(target));
     }
 
-    IEnumerator FadeVolume(
-        float target
-    ) {
+    IEnumerator FadeVolume(float target) {
 
-        while (
-            Mathf.Abs(
-                musicSource.volume
-                - target
-            ) > 0.01f
-        ) {
+        // Smoothly fades audio volume
+        while (Mathf.Abs(musicSource.volume - target) > 0.01f) {
 
-            musicSource.volume =
-                Mathf.Lerp(
-                    musicSource.volume,
-                    target,
-                    Time.deltaTime
-                    * fadeSpeed
-                );
+            musicSource.volume = Mathf.Lerp(
+                musicSource.volume,
+                target,
+                Time.deltaTime * fadeSpeed
+            );
 
             yield return null;
         }
 
-        musicSource.volume =
-            target;
+        musicSource.volume = target;
     }
 }

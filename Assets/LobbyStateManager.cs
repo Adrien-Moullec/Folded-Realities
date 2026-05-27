@@ -3,44 +3,33 @@ using UnityEngine;
 public class LobbyStateManager : MonoBehaviour {
 
     [Header("Doors")]
-
     public GameObject bedDoor;
-
     public GameObject chairDoor;
-
     public GameObject deskDoor;
 
     [Header("Locks")]
-
     public GameObject bedLock;
-
     public GameObject chairLock;
-
     public GameObject deskLock;
 
     void Start() {
 
+        // Checks player progression state
         int progress = GameplaySystem.GetInt(PrefInt.Progress, 0);
 
-        Debug.Log(
-            "LOBBY PROGRESS: "
-            + progress
-        );
-
-        if (progress == 1) {
-
+        if (progress == 1)
             SetupFirstLobby();
-        } else if (progress == 2) {
 
+        else if (progress == 2)
             SetupSecondLobby();
-        } else if (progress >= 3) {
 
+        else if (progress >= 3)
             SetupFinalLobby();
-        }
     }
 
     void SetupFirstLobby() {
 
+        // First lobby state
         bedDoor.SetActive(true);
 
         chairDoor.SetActive(false);
@@ -59,6 +48,7 @@ public class LobbyStateManager : MonoBehaviour {
 
     void SetupSecondLobby() {
 
+        // Second lobby progression state
         bedDoor.SetActive(true);
 
         chairDoor.SetActive(true);
@@ -77,6 +67,7 @@ public class LobbyStateManager : MonoBehaviour {
 
     void SetupFinalLobby() {
 
+        // Final lobby unlock state
         bedDoor.SetActive(true);
 
         chairDoor.SetActive(true);
