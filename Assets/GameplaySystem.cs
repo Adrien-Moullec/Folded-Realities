@@ -26,6 +26,12 @@ public class GameplaySystem : MonoBehaviour {
     InputAction pauseButton;
 
     void Awake() {
+        if (instance != null) {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
         pauseMenu.SetActive(false);
 #if UNITY_EDITOR
         if (ResetOnPlay) {
@@ -36,12 +42,6 @@ public class GameplaySystem : MonoBehaviour {
         }
 #endif
         sceneTransition.gameObject.SetActive(true);
-        if (instance != null) {
-            Destroy(gameObject);
-            return;
-        }
-        instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     void OnEnable() {
         playerInput = GetComponent<PlayerInput>();
@@ -62,6 +62,7 @@ public class GameplaySystem : MonoBehaviour {
         if (turnOnMenu) EntityManager.instance?.DeactivateAllEntities();
         else EntityManager.instance?.ActivateAllEntities();
         Time.timeScale = turnOnMenu ? 0 : 1;
+        Cursor.lockState = turnOnMenu ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
     #region Settings

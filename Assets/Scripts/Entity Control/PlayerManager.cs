@@ -6,6 +6,9 @@ using Unity.Cinemachine;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerAbilityController))]
@@ -102,19 +105,25 @@ public class PlayerManager : MonoBehaviour {
     }
     public void OnDisable() {
         iAbility.GetInputValues.SetDefaultValues();
+
         lookInput.performed -= input => deltaLook = input.ReadValue<Vector2>();
         lookInput.canceled -= input => deltaLook = input.ReadValue<Vector2>();
         runInput.performed -= input => iAbility.GetInputValues.SetRunToggle(true);
         runInput.canceled -= input => iAbility.GetInputValues.SetRunToggle(false);
+        crouchInput.performed -= input => iAbility.GetInputValues.SetCrouchToggle(true);
+        crouchInput.canceled -= input => iAbility.GetInputValues.SetCrouchToggle(false);
+        switchAction.performed -= input => playerAbilityController.QuickSwitch();
         interact.performed -= Input => OnInteract();
         radialWheel.performed -= input => {
             _RadialMenuManager?.SetWheelActive(true);
             wheelActive = true;
+            Cursor.lockState = CursorLockMode.None;
         };
         radialWheel.canceled -= input => {
             _RadialMenuManager?.SetWheelActive(false);
             wheelActive = false;
             iAbility.InputTransitionName(_RadialMenuManager?.OnSegmentClicked());
+            Cursor.lockState = CursorLockMode.Locked;
         };
         ability1Input.performed -= input => iAbility.GetInputValues.isPrimaryAbility = true;
         ability1Input.canceled -= input => iAbility.GetInputValues.isPrimaryAbility = false;

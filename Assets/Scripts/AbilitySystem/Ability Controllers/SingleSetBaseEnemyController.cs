@@ -67,7 +67,8 @@ namespace AbilitySystem {
 
         public override void Die() {
             navMeshAgent.enabled = false;
-            StartCoroutine(PlayerDeath(entityBody.animatorManager, () => Destroy(gameObject)));
+            //StartCoroutine(PlayerDeath(entityBody.animatorManager, () => Destroy(gameObject)));
+            Destroy(gameObject);
         }
         protected void AnimateAbility() {
             float delta = Mathf.Clamp01(navMeshAgent.velocity.magnitude / navMeshAgent.speed);

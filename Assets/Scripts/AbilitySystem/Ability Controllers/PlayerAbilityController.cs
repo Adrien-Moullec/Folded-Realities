@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.SceneManagement;
+using AbilitySystem;
 
 namespace AbilitySystem {
     [RequireComponent(typeof(CharacterController))]
@@ -148,18 +149,9 @@ namespace AbilitySystem {
             if (direction != Vector3.zero && rotate) currentAbilitySet.entityBody.bodyHolder.transform.forward = direction;
         }
         // Andrea's function
-        IEnumerator InvincibilityFrames() {
+        public override IEnumerator OnHitFrames() {
             invincible = true;
-            float time = 0;
-            while (time < invincibilityTime) {
-                time += Time.deltaTime;
-                foreach (var n in GetEntityBody().entityShader)
-                    n.material.SetFloat("_DamageFlash01", Mathf.Abs(Mathf.Sin(time * 8 / invincibilityTime)));
-                yield return null;
-            }
-            Debug.Log("END");
-            foreach (var n in GetEntityBody().entityShader)
-                n.material.SetFloat("_DamageFlash01", 0);
+            yield return base.OnHitFrames();
             invincible = false;
         }
         public override void OnRotateEntity(Vector3 direction) {
@@ -186,30 +178,44 @@ namespace AbilitySystem {
         }
         //andrea updated death
         public override void Die() {
+            StartCoroutine(OnDie());
+        }
+        IEnumerator OnDie() {
+
+            if (TryGetSetSummary("Kuhaku", out PlayerSetSummary playerSetSummary))
+                yield return Transition(playerSetSummary);
+
             currentAbilitySet.abilitySetSO.healthSettings?.Die(currentAbilitySet.entityBody, ref CurrentHealth);
 
             GetComponent<CharacterController>().enabled = false;
-            StartCoroutine(PlayerDeath(currentAbilitySet.entityBody.animatorManager,
-                    () => {
-                        if (reloadSceneOnDeath) {
-                            StartCoroutine(BossFightRestartRoutine());
-                            return;
-                        }
-                        StartCoroutine(GameplaySystem.instance.Respawn());
-                        GetComponent<CharacterController>().enabled = true;
-                        currentAbilitySet
-                            .abilitySetSO
-                            .healthSettings
-                            .MaxHealth(
-                                currentAbilitySet.entityBody,
-                                ref CurrentHealth,
-                                ref MaxHealth
-                            );
-
-                        SetMaxHealth();
-                    }
-                )
+            bool isFin = false;
+            yield return GetEntityBody().animatorManager.InitiateOneOffAnimation(
+                null,
+                (x) => {
+                    foreach (var n in GetEntityBody().entityShader)
+                        n.material.SetFloat("_DissolveValue", x);
+                },
+                null,
+                null,
+                AnimationType.Death.ToString(),
+                true,
+                0.2f
             );
+            while (isFin) yield return null;
+            StartCoroutine(GameplaySystem.instance.Respawn());
+            GetComponent<CharacterController>().enabled = true;
+            currentAbilitySet
+                .abilitySetSO
+                .healthSettings
+                .MaxHealth(
+                    currentAbilitySet.entityBody,
+                    ref CurrentHealth,
+                    ref MaxHealth
+                );
+
+            SetMaxHealth();
+            foreach (var n in GetEntityBody().entityShader)
+                n.material.SetFloat("_DissolveValue", 0);
         }
         IEnumerator BossFightRestartRoutine() {
             characterController.enabled = false;
@@ -228,7 +234,7 @@ namespace AbilitySystem {
             base.Damage(damage);
             playerHealthCanvas?.UpdateHearts(CurrentHealth);
 
-            StartCoroutine(InvincibilityFrames());
+            StartCoroutine(OnHitFrames());
             if (CurrentHealth <= 0)
                 Die();
         }
@@ -241,5 +247,20 @@ namespace AbilitySystem {
             [HideInInspector] public PlayerAbilitySet playerAbilitySet;
         }
         #endregion
+    }
+}
+[CustomEditor(typeof(PlayerAbilityController))]
+[CanEditMultipleObjects]
+public class PlayerAbilityControllerEditor : Editor {
+    public override void OnInspectorGUI() {
+        DrawDefaultInspector();
+        if (GUILayout.Button("Die")) {
+            PlayerAbilityController s = (PlayerAbilityController)target;
+            s.Die();
+        }
+        if (GUILayout.Button("Hurt")) {
+            PlayerAbilityController s = (PlayerAbilityController)target;
+            s.StartCoroutine(s.OnHitFrames());
+        }
     }
 }

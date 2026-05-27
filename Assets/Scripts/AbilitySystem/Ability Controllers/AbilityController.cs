@@ -18,6 +18,13 @@ namespace AbilitySystem {
         protected FrameEvents frameEvents;
         public AbilityController GetAbilityController { get => this; }
         public bool isControllerActive = true;
+        float hitFrameTime = 1;
+
+        [ContextMenu("Die")]
+        public void ActivateDie() {
+            Die();
+        }
+
 
         protected virtual void Awake() {
 
@@ -51,8 +58,21 @@ namespace AbilitySystem {
             else
                 HealthSO.DefaultDamage(GetEntityBody(), ref CurrentHealth, ref MaxHealth, damage);
             if (CurrentHealth <= 0) Die();
-            foreach (var n in GetEntityBody().entityShader.Select(x => x.material))
+            foreach (var n in GetEntityBody().entityShader.Select(x => x.material)) {
                 n.SetFloat("_Health01", (float)CurrentHealth / MaxHealth);
+            }
+        }
+        public virtual IEnumerator OnHitFrames() {
+            float time = 0;
+            while (time < hitFrameTime) {
+                time += Time.deltaTime;
+                foreach (var n in GetEntityBody().entityShader)
+                    n.material.SetFloat("_DamageFlash01", Mathf.Abs(Mathf.Sin(time * 8 / hitFrameTime)));
+                yield return null;
+            }
+            Debug.Log("END");
+            foreach (var n in GetEntityBody().entityShader)
+                n.material.SetFloat("_DamageFlash01", 0);
         }
 
         public virtual void Heal(EntityDamage heal) {
@@ -64,22 +84,6 @@ namespace AbilitySystem {
                 n.SetFloat("_Health01", (float)CurrentHealth / MaxHealth);
         }
         public abstract void Die();
-        protected IEnumerator PlayerDeath(CharacterAnimatorManager animatorManager, Action onDeathAnimationEnd) {
-
-            bool hasFinishedAnim = false;
-            yield return animatorManager?.InitiateOneOffAnimation(
-                null,
-                null,
-                null,
-                () => hasFinishedAnim = true,
-                AnimationType.Death.ToString(),
-                true
-            );
-            while (!hasFinishedAnim)
-                yield return null;
-
-            onDeathAnimationEnd();
-        }
         public virtual void InputTransitionName(string name) { }
         #endregion
 
