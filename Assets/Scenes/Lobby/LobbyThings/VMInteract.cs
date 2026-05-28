@@ -9,7 +9,7 @@ public class VMInteract : MonoBehaviour {
     public GameObject shopUI;
 
     [Header("Player")]
-    public GameObject playerVisuals;
+    public Renderer[] playerRenderers;
     public MonoBehaviour playerController;
 
     [Header("Currency")]
@@ -21,7 +21,7 @@ public class VMInteract : MonoBehaviour {
 
     [Header("Hat Costs")]
     public int crownCost = 30;
-    public int boxHatCost = 15;
+    public int boxHatCost = 30;
 
     [Header("Price Text")]
     public TMP_Text crownPriceText;
@@ -40,64 +40,118 @@ public class VMInteract : MonoBehaviour {
     public GameObject crownHat;
     public GameObject boxHat;
 
+    GameObject equippedHat;
+
     #endregion
 
     #region Shop Logic
+
     bool shopOpen = false;
+
+    bool playerWasInside = false;
 
     void Start() {
 
-        // Load saved currency and purchases
-        playerCoins = GameplaySystem.GetInt(PrefInt.Coins, 0);
+        // RESET HAT OWNERSHIP
+        // Coins still carry over
+        GameplaySystem.SetInt(
+            PrefInt.OwnsCrown,
+            0
+        );
 
-        ownsCrown = GameplaySystem.GetInt(PrefInt.OwnsCrown, 0) == 1;
+        GameplaySystem.SetInt(
+            PrefInt.OwnsBoxHat,
+            0
+        );
 
-        ownsBoxHat = GameplaySystem.GetInt(PrefInt.OwnsBoxHat, 0) == 1;
+        GameplaySystem.SaveSettings();
+
+        // Load coins only
+        playerCoins =
+            GameplaySystem.GetInt(
+                PrefInt.Coins,
+                0
+            );
+
+        ownsCrown = false;
+
+        ownsBoxHat = false;
 
         if (shopUI != null)
             shopUI.SetActive(false);
 
-        // Disable all hats on startup
+        // Disable all hats
         if (hatContainer != null) {
 
-            foreach (Transform h in hatContainer)
+            foreach (Transform h in hatContainer) {
                 h.gameObject.SetActive(false);
+            }
         }
 
-        // Owned hats become free
-        if (ownsCrown)
-            crownCost = 0;
-
-        if (ownsBoxHat)
-            boxHatCost = 0;
+        // Reset prices
+        crownCost = 30;
+        boxHatCost = 30;
 
         UpdatePriceUI();
     }
 
-    void OnTriggerStay(Collider other) {
+    void Update() {
 
-        if (!other.CompareTag("Player"))
-            return;
+        Collider[] hits =
+            Physics.OverlapBox(
+                transform.position,
+                transform.localScale / 2
+            );
 
-        if (!shopOpen)
+        bool playerInside = false;
+
+        foreach (Collider c in hits) {
+
+            if (c.CompareTag("Player")) {
+
+                playerInside = true;
+                break;
+            }
+        }
+
+        // Player entered area
+        if (
+            playerInside &&
+            !playerWasInside &&
+            !shopOpen
+        ) {
             OpenShop();
+        }
+
+        // Reset when player leaves
+        if (!playerInside) {
+
+            playerWasInside = false;
+        } else {
+
+            playerWasInside = true;
+        }
     }
 
     void OpenShop() {
 
         shopOpen = true;
 
-        // Opens shop and disables player control
         if (shopUI != null)
             shopUI.SetActive(true);
 
         if (playerController != null)
             playerController.enabled = false;
 
-        if (playerVisuals != null)
-            playerVisuals.SetActive(false);
+        foreach (Renderer r in playerRenderers) {
 
-        Cursor.lockState = CursorLockMode.None;
+            if (r != null)
+                r.enabled = false;
+        }
+
+        Cursor.lockState =
+            CursorLockMode.None;
+
         Cursor.visible = true;
     }
 
@@ -105,23 +159,34 @@ public class VMInteract : MonoBehaviour {
 
         shopOpen = false;
 
-        // Restores gameplay controls
         if (shopUI != null)
             shopUI.SetActive(false);
 
         if (playerController != null)
             playerController.enabled = true;
 
-        if (playerVisuals != null)
-            playerVisuals.SetActive(true);
+        foreach (Renderer r in playerRenderers) {
 
-        Cursor.lockState = CursorLockMode.Locked;
+            if (r != null)
+                r.enabled = true;
+        }
+
+        // Re-enable equipped hat
+        if (equippedHat != null)
+            equippedHat.SetActive(true);
+
+        Cursor.lockState =
+            CursorLockMode.Locked;
+
         Cursor.visible = false;
     }
 
+    #endregion
+
+    #region Purchases
+
     public void BuyCrown() {
 
-        // Equips already owned hat
         if (ownsCrown) {
 
             EquipHat(crownHat);
@@ -147,7 +212,6 @@ public class VMInteract : MonoBehaviour {
 
     public void BuyBoxHat() {
 
-        // Equips already owned hat
         if (ownsBoxHat) {
 
             EquipHat(boxHat);
@@ -176,40 +240,59 @@ public class VMInteract : MonoBehaviour {
         if (hat == null)
             return;
 
-        // Ensures only one hat is active
-        foreach (Transform h in hatContainer)
+        foreach (Transform h in hatContainer) {
             h.gameObject.SetActive(false);
+        }
 
         hat.SetActive(true);
+
+        equippedHat = hat;
     }
+
+    #endregion
+
+    #region UI
 
     void UpdatePriceUI() {
 
-        // Updates shop price text
         if (crownPriceText != null)
-            crownPriceText.text = crownCost.ToString();
+            crownPriceText.text =
+                crownCost.ToString();
 
         if (boxHatPriceText != null)
-            boxHatPriceText.text = boxHatCost.ToString();
+            boxHatPriceText.text =
+                boxHatCost.ToString();
     }
+
+    #endregion
+
+    #region Save
 
     void SaveData() {
 
-        // Saves purchases and coin count
-        GameplaySystem.SetInt(PrefInt.Coins, playerCoins);
+        GameplaySystem.SetInt(
+            PrefInt.Coins,
+            playerCoins
+        );
 
-        GameplaySystem.SetInt(PrefInt.OwnsCrown, ownsCrown ? 1 : 0);
+        GameplaySystem.SetInt(
+            PrefInt.OwnsCrown,
+            ownsCrown ? 1 : 0
+        );
 
-        GameplaySystem.SetInt(PrefInt.OwnsBoxHat, ownsBoxHat ? 1 : 0);
+        GameplaySystem.SetInt(
+            PrefInt.OwnsBoxHat,
+            ownsBoxHat ? 1 : 0
+        );
 
         GameplaySystem.SaveSettings();
     }
+
     #endregion
 
     [ContextMenu("Add 10 Coins")]
     void AddCoinsDebug() {
 
-        // Debug shortcut for testing purchases
         playerCoins += 10;
 
         SaveData();
