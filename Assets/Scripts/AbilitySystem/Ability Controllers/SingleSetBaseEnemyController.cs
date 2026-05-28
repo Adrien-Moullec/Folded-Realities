@@ -16,7 +16,6 @@ namespace AbilitySystem {
         [SerializeField] private NavMeshAgent navMeshAgent;
 
         public object EnemyAbilitySetSOmovement { get; private set; }
-
         public override void OnEnable() {
             navMeshAgent.enabled = true;
         }
