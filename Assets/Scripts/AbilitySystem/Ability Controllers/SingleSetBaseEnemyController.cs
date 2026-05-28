@@ -16,7 +16,6 @@ namespace AbilitySystem {
         [SerializeField] private NavMeshAgent navMeshAgent;
 
         public object EnemyAbilitySetSOmovement { get; private set; }
-
         public override void OnEnable() {
             navMeshAgent.enabled = true;
         }
@@ -45,12 +44,15 @@ namespace AbilitySystem {
                 frameEvents += () => { abilitySet?.movement?.FrameEvent(entityBody); };
             if (abilitySet?.attack?.abilitySO != null)
                 frameEvents += () => { abilitySet?.attack?.FrameEvent(entityBody); };
+            if (abilitySet?.attack2?.abilitySO != null)
+                frameEvents += () => { abilitySet?.attack2?.FrameEvent(entityBody); };
         }
         protected override void Update() {
             base.Update();
             if (!navMeshAgent.enabled) return;
             //abilitySet?.movement?.Activate(entityBody, true);
             abilitySet?.attack?.Activate(entityBody, GetInputValues.isPrimaryAbility);
+            abilitySet?.attack2?.Activate(entityBody, GetInputValues.isSecondaryAbility);
             AnimateAbility();
         }
 
