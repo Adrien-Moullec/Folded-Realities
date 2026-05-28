@@ -3,12 +3,7 @@ using AbilitySystem;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHealthCanvas : MonoBehaviour {//, IHealth {
-    /*[Header("Health")]
-    [SerializeField] int maxHealth = 100;
-
-    int currentHealth;*/
-
+public class PlayerHealthCanvas : MonoBehaviour {
     [Header("Heart UI")]
     [SerializeField] Image[] hearts;
     [SerializeField] Sprite fullHeart;

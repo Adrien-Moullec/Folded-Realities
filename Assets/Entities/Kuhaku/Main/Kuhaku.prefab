@@ -908,7 +908,6 @@ MonoBehaviour:
   CurrentHealth: 0
   isControllerActive: 1
   paperParticleDelta: {fileID: 0}
-  reloadSceneOnDeath: 0
   playerSetsList:
   - isUnlocked: 1
     abilitySetSO: {fileID: 11400000, guid: 2e417aba74ec54441b9b591a31db43e0, type: 2}
@@ -918,6 +917,15 @@ MonoBehaviour:
       prefab: {fileID: 0}
       entityShader:
       - {fileID: 8454792638349034289}
+      - {fileID: 5832132185387869602}
+      - {fileID: 5450480334020150121}
+      - {fileID: 8631042719423894927}
+      - {fileID: 3020280939310357192}
+      - {fileID: 1546297216025004002}
+      - {fileID: 8050964476481878605}
+      - {fileID: 7411276408050677807}
+      - {fileID: 8527277514793733972}
+      - {fileID: 7872057175480725211}
       UsingAbility: 0
       MoveOverride: 0
     playerAbilitySet:
@@ -1032,7 +1040,6 @@ MonoBehaviour:
         abilitySO: {fileID: 0}
       tertiary:
         abilitySO: {fileID: 0}
-  BodyHolder: {fileID: 7211196813232357869}
   characterController: {fileID: 0}
   playerHealthCanvas: {fileID: 1937478605033926611}
   invincibilityTime: 1
@@ -1889,14 +1896,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 0
+--- !u!137 &1546297216025004002 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -8259343045989795845, guid: 4dde48840890c3d4092c4f49f9543e40, type: 3}
+  m_PrefabInstance: {fileID: 1735405804258324505}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2278785261134059506 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4dde48840890c3d4092c4f49f9543e40, type: 3}
   m_PrefabInstance: {fileID: 1735405804258324505}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &3020280939310357192 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -5620677183999710511, guid: 4dde48840890c3d4092c4f49f9543e40, type: 3}
+  m_PrefabInstance: {fileID: 1735405804258324505}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &5450480334020150121 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3191195481515363472, guid: 4dde48840890c3d4092c4f49f9543e40, type: 3}
+  m_PrefabInstance: {fileID: 1735405804258324505}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &5832132185387869602 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3964712275488713285, guid: 4dde48840890c3d4092c4f49f9543e40, type: 3}
+  m_PrefabInstance: {fileID: 1735405804258324505}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &7411276408050677807 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 9137595570047682614, guid: 4dde48840890c3d4092c4f49f9543e40, type: 3}
+  m_PrefabInstance: {fileID: 1735405804258324505}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &7872057175480725211 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -780727844608139582, guid: 4dde48840890c3d4092c4f49f9543e40, type: 3}
+  m_PrefabInstance: {fileID: 1735405804258324505}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &8050964476481878605 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -599079993824621996, guid: 4dde48840890c3d4092c4f49f9543e40, type: 3}
+  m_PrefabInstance: {fileID: 1735405804258324505}
+  m_PrefabAsset: {fileID: 0}
 --- !u!137 &8454792638349034289 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: -1351058475289529560, guid: 4dde48840890c3d4092c4f49f9543e40, type: 3}
+  m_PrefabInstance: {fileID: 1735405804258324505}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &8527277514793733972 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1278002110498914483, guid: 4dde48840890c3d4092c4f49f9543e40, type: 3}
+  m_PrefabInstance: {fileID: 1735405804258324505}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8631042719423894927 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1165594485769607786, guid: 4dde48840890c3d4092c4f49f9543e40, type: 3}
   m_PrefabInstance: {fileID: 1735405804258324505}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2575177946562892945

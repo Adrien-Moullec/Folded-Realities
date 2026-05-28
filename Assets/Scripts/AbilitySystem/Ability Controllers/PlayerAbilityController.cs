@@ -371,7 +371,7 @@ namespace AbilitySystem {
 }
 #if UNITY_EDITOR
 /// <summary>
-/// 
+/// Editor window for player to test death
 /// </summary>
 [CustomEditor(typeof(PlayerAbilityController))]
 [CanEditMultipleObjects]
