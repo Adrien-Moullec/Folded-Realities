@@ -14,6 +14,7 @@ public class OrigamiTimeline : MonoBehaviour, IHealth, IInteractable {
     [SerializeField] public bool playOnTrigger = false;
     [SerializeField] public bool playOnInteract = false;
     [SerializeField] public bool playOnDamage = false;
+    [SerializeField] public EntityDamageType damageActivateType = EntityDamageType.Normal;
 
     [Space]
     [Header("Play Options")]
@@ -61,7 +62,7 @@ public class OrigamiTimeline : MonoBehaviour, IHealth, IInteractable {
     }
 
     public void Damage(EntityDamage damage) {
-        if (damage.damagingTeam == EntityTeam.Player && playOnDamage) {
+        if (damage.damagingTeam == EntityTeam.Player && playOnDamage && damageActivateType == damage.type) {
             playableDirector.Play();
         }
     }
