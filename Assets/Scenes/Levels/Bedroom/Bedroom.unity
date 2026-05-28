@@ -8592,6 +8592,72 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d64ceca9187357c4b8add7abe2595a3e, type: 3}
   m_PrefabInstance: {fileID: 164165138}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &164885111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 164885112}
+  - component: {fileID: 164885114}
+  - component: {fileID: 164885113}
+  m_Layer: 0
+  m_Name: PencilCaseKillzone (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &164885112
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 164885111}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.35967106, z: 0, w: 0.9330792}
+  m_LocalPosition: {x: 88.58, y: -11.8, z: -94.36}
+  m_LocalScale: {x: 1.56, y: 3.05, z: 1.45}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 682980240}
+  m_LocalEulerAnglesHint: {x: 0, y: 42.16, z: 0}
+--- !u!114 &164885113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 164885111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea40339f0b603a04f87db3ad0b13aa57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &164885114
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 164885111}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 17.8, y: 1.3, z: 21.99}
+  m_Center: {x: 0.34, y: 0, z: 0}
 --- !u!1001 &166866513
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11500,6 +11566,72 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98ba98a9f1436754196d25f43830f232, type: 3}
+--- !u!1 &236747882
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 236747883}
+  - component: {fileID: 236747885}
+  - component: {fileID: 236747884}
+  m_Layer: 0
+  m_Name: PencilCaseKillzone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &236747883
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236747882}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 29.36, y: 1.11, z: -97.45}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 682980240}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &236747884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236747882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea40339f0b603a04f87db3ad0b13aa57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &236747885
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236747882}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 16.5, y: 1.3, z: 21.99}
+  m_Center: {x: 0.34, y: 0, z: 0}
 --- !u!1001 &242800230
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -48885,6 +49017,8 @@ Transform:
   - {fileID: 1943918291}
   - {fileID: 915076343}
   - {fileID: 1238587540}
+  - {fileID: 236747883}
+  - {fileID: 164885112}
   - {fileID: 52931923}
   - {fileID: 1795235586}
   - {fileID: 1281120393}
