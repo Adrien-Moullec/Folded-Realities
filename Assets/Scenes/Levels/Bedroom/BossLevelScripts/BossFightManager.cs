@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 
 using UnityEngine;
 
@@ -35,8 +36,13 @@ public class BossFightManager : MonoBehaviour {
         // Loops through boss fight phases
         yield return new WaitForSeconds(2);
 
+        int count = 0;
         foreach (var n in bossFight) {
-            if (n.skipPhase) continue;
+            if (n.skipPhase) {
+                count++;
+                continue;
+            }
+            count++;
             // Projectile Attack Phase
             yield return ProjectileRoutine(n.spitPhase.rate, n.spitPhase.speed, n.spitPhase.maxSpawn);
             yield return new WaitForSeconds(phaseIntervalLength);
@@ -48,16 +54,18 @@ public class BossFightManager : MonoBehaviour {
 
 
             yield return StartCoroutine(boss.FlashAngry(n.color));
-            isFin = false;
-            yield return animationManager.InitiateOneOffAnimation(
-                null,
-                null,
-                null,
-                () => isFin = true,
-                ShredderAnim.Hit.ToString(),
-                crossFade: 0.05f
-            );
-            while (!isFin) yield return null;
+            if (count < bossFight.Count(x => !x.skipPhase)) {
+                isFin = false;
+                yield return animationManager.InitiateOneOffAnimation(
+                    null,
+                    null,
+                    null,
+                    () => isFin = true,
+                    ShredderAnim.Hit.ToString(),
+                    crossFade: 0.05f
+                );
+                while (!isFin) yield return null;
+            }
         }
         // Boss Death Sequence
         isFin = false;
@@ -70,6 +78,7 @@ public class BossFightManager : MonoBehaviour {
             crossFade: 0.05f
         );
         while (!isFin) yield return null;
+        yield return new WaitForSeconds(2);
         GetComponent<LevelExit>().NextScene();
     }
     IEnumerator ProjectileRoutine(float rate, float speed, int spawnCount) {
