@@ -16,15 +16,18 @@ public class BaseEnemyController : MonoBehaviour {
     [Header("Settings")]
     [SerializeField] float playerStopDistance = 1;
     [SerializeField] float playerAttackDistance = 2;
+    [SerializeField] float playerAttack2Distance = 8;
     [SerializeField] float playerChaseDistance = 10;
     List<AbilityController> opposingTeam = new();
     private Vector3 location;
+    Vector3 startPos = Vector3.zero;
     private float distanceToEntity {
         get => Vector3.Distance(transform.position, EntityManager.instance != null ? location : PlayerManager.player.transform.position);
     }
 
     void Awake() {
         AbilityController = GetComponent<SingleAbilityEnemyController>();
+        startPos = transform.position;
     }
 
     void Start() {
@@ -44,17 +47,27 @@ public class BaseEnemyController : MonoBehaviour {
 
         if (distanceToEntity > playerChaseDistance) {
             if (DebugEnemy) Debug.Log("TOO FAR AWAY");
+            AbilityController.OnMoveEntity(startPos);
+            AbilityController.GetInputValues.isSecondaryAbility = false;
+            AbilityController.GetInputValues.isPrimaryAbility = false;
             return;
         }
         if (distanceToEntity > playerStopDistance) {
             if (DebugEnemy) Debug.Log("RUN AT PLAYER");
             //AbilityController.GetInputValues.SetDestination(EntityManager.instance != null ? location : PlayerManager.player.transform.position);
             AbilityController.OnMoveEntity(EntityManager.instance != null ? location : PlayerManager.player.transform.position);
-            AbilityController.GetInputValues.isPrimaryAbility = false;
+            AbilityController.GetInputValues.isPrimaryAbility = true;
+            AbilityController.GetInputValues.isSecondaryAbility = false;
         }
         if (distanceToEntity <= playerAttackDistance) {
             if (DebugEnemy) Debug.Log("ATTTACK");
             AbilityController.GetInputValues.isPrimaryAbility = true;
+        }
+        if (distanceToEntity < playerChaseDistance && distanceToEntity > playerAttack2Distance) {
+            if (DebugEnemy) Debug.Log("Attack 2");
+            AbilityController.OnMoveEntity(EntityManager.instance != null ? location : PlayerManager.player.transform.position);
+            AbilityController.GetInputValues.isSecondaryAbility = true;
+            AbilityController.GetInputValues.isPrimaryAbility = false;
         }
 
     }

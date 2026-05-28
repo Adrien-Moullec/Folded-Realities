@@ -150,9 +150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b9f912a105febe4694996794375b1f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverHeight: 0.25
-  hoverSpeed: 2
-  rotationSpeed: 90
 --- !u!4 &114605258
 Transform:
   m_ObjectHideFlags: 0
@@ -376,7 +373,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2809749376360977081, guid: b24cbe7b0ea7b474a98dfaf380c03fb7, type: 3}
       propertyPath: m_InitialState
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2809749376360977081, guid: b24cbe7b0ea7b474a98dfaf380c03fb7, type: 3}
       propertyPath: m_PlayableAsset
@@ -2283,7 +2280,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 0
-  m_NavMeshData: {fileID: 23800000, guid: af9a99a0b96085a4294c09a1efe38883, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 330b2cb57e8ae674ea578efcf3cad547, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &1583095407
 Transform:
@@ -2831,7 +2828,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: ff932ca38c277e845997ab69df0bd95f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.217
+      value: 1.081
       objectReference: {fileID: 0}
     - target: {fileID: 1225429674322778145, guid: ff932ca38c277e845997ab69df0bd95f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2865,16 +2862,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3565204841693643985, guid: ff932ca38c277e845997ab69df0bd95f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cd4bb8f06a7aa3549a7baf1d9c14b60b, type: 2}
+    - target: {fileID: 5252813673611915041, guid: ff932ca38c277e845997ab69df0bd95f, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5252813673611915041, guid: ff932ca38c277e845997ab69df0bd95f, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5252813673611915041, guid: ff932ca38c277e845997ab69df0bd95f, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5710287258573495793, guid: ff932ca38c277e845997ab69df0bd95f, type: 3}
       propertyPath: m_Name
       value: FollowStapler
       objectReference: {fileID: 0}
     - target: {fileID: 5710287258573495793, guid: ff932ca38c277e845997ab69df0bd95f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6448486696289942170, guid: ff932ca38c277e845997ab69df0bd95f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bec2b57c1e297bf46a3ca09875ca6a6b, type: 2}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5163329239143604341, guid: ff932ca38c277e845997ab69df0bd95f, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff932ca38c277e845997ab69df0bd95f, type: 3}
@@ -3882,6 +3900,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playOnAwake: 0
+  playOnTrigger: 0
+  playOnInteract: 0
+  playOnDamage: 0
   onStart:
     m_PersistentCalls:
       m_Calls: []
