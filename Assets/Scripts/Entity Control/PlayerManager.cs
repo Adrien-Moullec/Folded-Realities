@@ -83,7 +83,7 @@ public class PlayerManager : MonoBehaviour {
         runInput.canceled += input => iAbility.GetInputValues.SetRunToggle(false);
         crouchInput.performed += input => iAbility.GetInputValues.SetCrouchToggle(true);
         crouchInput.canceled += input => iAbility.GetInputValues.SetCrouchToggle(false);
-        switchAction.performed += input => playerAbilityController.QuickSwitch();
+        switchAction.performed += input => playerAbilityController.BearSwitch();
         interact.performed += Input => OnInteract();
         radialWheel.performed += input => {
             _RadialMenuManager?.SetWheelActive(true);
@@ -112,7 +112,7 @@ public class PlayerManager : MonoBehaviour {
         runInput.canceled -= input => iAbility.GetInputValues.SetRunToggle(false);
         crouchInput.performed -= input => iAbility.GetInputValues.SetCrouchToggle(true);
         crouchInput.canceled -= input => iAbility.GetInputValues.SetCrouchToggle(false);
-        switchAction.performed -= input => playerAbilityController.QuickSwitch();
+        switchAction.performed -= input => playerAbilityController.BearSwitch();
         interact.performed -= Input => OnInteract();
         radialWheel.performed -= input => {
             _RadialMenuManager?.SetWheelActive(true);

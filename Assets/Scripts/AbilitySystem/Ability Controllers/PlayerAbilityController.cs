@@ -15,42 +15,52 @@ namespace AbilitySystem {
     [RequireComponent(typeof(CharacterController))]
     public class PlayerAbilityController : AbilityController {
 
-        [Space]
         [Header("Transition Animation")]
+        [Tooltip("Paper particles vfx for cooler transition between entities.")]
         [SerializeField] private PaperParticles paperParticleDelta;
-        [Header("Boss Fight")]
-        [SerializeField] bool reloadSceneOnDeath = false;
 
         [Space]
         [Header("Abilities")]
+        [Tooltip("List of player set abilities for each model.")]
         [SerializeField] List<PlayerSetSummary> playerSetsList;
+        [Tooltip("Current ability set being played.")]
         [HideInInspector] public PlayerSetSummary currentAbilitySet;
-        public GameObject BodyHolder;
+        [Tooltip("Character controller for the entity.")]
         [HideInInspector] public CharacterController characterController;
+        [Tooltip("Player canvas reference.")]
         [SerializeField] PlayerHealthCanvas playerHealthCanvas;
 
         [Header("Damage Settings")]
+        [Tooltip("Invincibility time after being hit.")]
         [SerializeField] float invincibilityTime = 1f;
+        [Tooltip("Invincibility status of player.")]
         private bool invincible = false;
 
         #region OnStart
+        /// <summary>
+        /// Setup player abilities, health and controller
+        /// </summary>
         protected override void Awake() {
             base.Awake();
 
             currentAbilitySet = null;
             characterController = GetComponent<CharacterController>();
 
+            /// Loop through each player set
             foreach (var i in playerSetsList) {
                 if (i.abilitySetSO == null)
                     continue;
 
+                /// Setup managers and interfaces
                 i.entityBody.iAbility = this;
                 i.entityBody.iHealth = this;
                 i.entityBody.animatorManager?.gameObject.SetActive(false);
 
+                /// Setup ability sets
                 i.playerAbilitySet = new PlayerAbilitySet(i.abilitySetSO, i.entityBody);
                 i.playerAbilitySet.movement.AbilityData = playerSetsList[0].playerAbilitySet.movement.AbilityData;
 
+                /// Setup frame logic
                 if (i.playerAbilitySet.movement?.movementSO != null)
                     frameEvents += () => { i.playerAbilitySet.movement.FrameEvent(i.entityBody); };
                 if (i.playerAbilitySet.primary?.abilitySO != null)
@@ -63,15 +73,28 @@ namespace AbilitySystem {
             SetNewSummary(playerSetsList[0]);
             CurrentHealth = MaxHealth;
         }
+
+        /// <summary>
+        /// Enable player controls
+        /// </summary>
         public override void OnEnable() {
             GetComponent<PlayerManager>().OnEnable();
         }
+        /// <summary>
+        /// Disable player controls
+        /// </summary>
         public override void OnDisable() {
             GetComponent<PlayerManager>().OnDisable();
         }
+        /// <summary>
+        /// Gets the status of player ground state for Entity body
+        /// </summary>
         public override bool IsGrounded() =>
             characterController.isGrounded;
 
+        /// <summary>
+        /// Continuously activate abilities based on player input
+        /// </summary>
         protected override void Update() {
             if (!characterController.enabled) return;
             base.Update();
@@ -80,16 +103,27 @@ namespace AbilitySystem {
             currentAbilitySet?.playerAbilitySet?.secondary?.Activate(currentAbilitySet.entityBody, GetInputValues.isSecondaryAbility);
             currentAbilitySet?.playerAbilitySet?.tertiary?.Activate(currentAbilitySet.entityBody, GetInputValues.isTertiaryAbility);
         }
-        public void QuickSwitch() {
+        /// <summary>
+        /// Quickly switch between the bear and Kuhaku
+        /// </summary>
+        public void BearSwitch() {
             if (currentAbilitySet.abilitySetSO?.abilitySetName == "Kuhaku") OnAbilityEvent("Bear");
             else if (currentAbilitySet.abilitySetSO?.abilitySetName == "Bear") OnAbilityEvent("Kuhaku");
         }
         #endregion
 
         #region Transitions
+        /// <summary>
+        /// Search for ability set to transition to
+        /// </summary>
+        /// <param name="name"> target transition goal </param>
         public override void InputTransitionName(string name) {
             OnAbilityEvent(name);
         }
+        /// <summary>
+        /// Custom events for player to transition under conditions
+        /// </summary>
+        /// <param name="eventMessage"> event message </param>
         public override void OnAbilityEvent(string eventMessage) {
             if (!TryGetSetSummary(eventMessage, out PlayerSetSummary playerSetSummary) || playerSetSummary == currentAbilitySet)
                 return;

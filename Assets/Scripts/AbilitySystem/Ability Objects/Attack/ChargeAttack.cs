@@ -30,7 +30,7 @@ namespace AbilitySystem {
                 count = colliderCheck.GetColliders(entityBody.bodyHolder).Invoke(cad.raycastHits);
                 for (int i = 0; i < count; i++) {
                     if (cad.raycastHits[i].TryGetComponent(out ihealth) && !cad.iHealth.Contains(ihealth)) {
-                        ihealth.Damage(new EntityDamage(20, entityBody));
+                        ihealth.Damage(new EntityDamage(20, entityBody, entityBody.iAbility.GetEntityTeam, EntityDamageType.Heavy));
                     }
                 }
                 yield return null;
