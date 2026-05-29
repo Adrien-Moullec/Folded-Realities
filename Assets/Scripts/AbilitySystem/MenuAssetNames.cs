@@ -1,6 +1,9 @@
 using UnityEngine;
 
 namespace AbilitySystem {
+    /// <summary>
+    /// String references to building a menu for all ability system scritpable object creations for future ease of editability.
+    /// </summary>
     public static class MenuAssetNames {
         public const string Root = "Origami";
         public const string Health = Root + "/Health";

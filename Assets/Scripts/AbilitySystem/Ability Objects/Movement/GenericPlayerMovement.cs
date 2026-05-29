@@ -13,19 +13,14 @@ namespace AbilitySystem {
 
         [Tooltip("Adjust the overall speed.")]
         [SerializeField] protected float speedMultiplier = 1;
-
         [Tooltip("If the entity is travelling a different direction to the input movement, this value controls how quickly the entity moves back on themselves.")]
         [SerializeField, Min(1)] protected float changeDirectionSpeedMultiplier = 3;
-
         [Tooltip("Acceleration from stopped to walk/run speed.")]
         [SerializeField, Min(0.01f)] protected float acceleration = 1;
-
         [Tooltip("Deceleration when stopping.")]
         [SerializeField, Min(0.01f)] protected float deceleration = 8f;
-
         [Tooltip("Run acceleration multiplier.")]
         [SerializeField] protected float runAccelerationMultiplier = 1;
-
         [Tooltip("Acceleration while falling.")]
         [SerializeField, Min(0.01f)] protected float accelerationWhileFalling = 0.5f;
         [Tooltip("Deceleration while falling.")]
@@ -41,9 +36,13 @@ namespace AbilitySystem {
 
         [Space]
         [Header("Speed References")]
+        [Tooltip("Base speed multiplier.")]
         protected static float baseSpeed = 5f;
+        [Tooltip("Walkspeed calculation.")]
         protected float walkSpeed => baseSpeed * speedMultiplier;
+        [Tooltip("Runspeed calculation.")]
         protected float runSpeed => baseSpeed * speedMultiplier * runSpeedMultiplier;
+        [Tooltip("Charge speed calculation.")]
         protected float chargeSpeed => baseSpeed * speedMultiplier * chargeSpeedMultiplier;
 
         [Header("Jump Settings")]
@@ -78,22 +77,26 @@ namespace AbilitySystem {
 
         [Space]
         [Header("Wall Climbing")]
-        [SerializeField] protected AreaColliderCheck wallCheckArea;
+        [Tooltip("Wall layers to check.")]
         [SerializeField] protected LayerMask wallCheckLayers;
 
         [Space]
         [Header("Physics")]
-
         [Tooltip("Gravity acceleration.")]
         [SerializeField, Min(0)] protected float gravity = 60f;
 
         [Space]
         [Header("Charge")]
+        [Tooltip("How much the entity can change direction while charging.")]
         protected float chargeChangeDirectionAmount = 1;
+        [Space]
+        [Header("Debug")]
+        [Tooltip("How much the entity can change direction while charging.")]
         public bool DEBUG = false;
 
+        #region Events that get pinged to iAbility when certain conditions are met
         [Space]
-        [Header("Movement Events")] // Events that get pinged to iAbility when certain conditions are met
+        [Header("Movement Events")]
         [SerializeField] protected bool DebugLog = false;
         [SerializeField] protected string onHitGround;
         [SerializeField] protected string onGlide;
@@ -103,24 +106,19 @@ namespace AbilitySystem {
         [SerializeField] protected string onUncrouch;
         [SerializeField] protected string onClimb;
         [SerializeField] protected string onClimbRelease;
-        #region Setup
+        #endregion
 
+        #region Setup
         /// <summary>
         /// The data that is used in generic movement scriptable ability
         /// </summary>
-        /// <param name="eb"></param>
-        /// <returns></returns>
-        public override AbilityData AbilityDataSetup(EntityBody eb) {
-            return new TransformingPlayerData();
-        }
+        public override AbilityData AbilityDataSetup(EntityBody eb) => new TransformingPlayerData();
         #endregion
 
         #region Movement Logic
         /// <summary>
-        /// Logic called to setup ability 
+        /// Logic called to setup ability .
         /// </summary>
-        /// <param name="entityBody"></param>
-        /// <param name="data"></param>
         public override void Startup(EntityBody entityBody, AbilityData data) {
             TransformingPlayerData pmd = (TransformingPlayerData)data;
             if (pmd.isGrounded) entityBody.iAbility.OnAbilityEvent(onHitGround);
@@ -129,8 +127,6 @@ namespace AbilitySystem {
         /// <summary>
         /// Older code for providing a buffer period for player next jump
         /// </summary>
-        /// <param name="entityBody"></param>
-        /// <param name="data"></param>
         public override void FrameEvent(EntityBody entityBody, AbilityData data) {
             TransformingPlayerData pmd = (TransformingPlayerData)data;
             pmd.queueJump = Mathf.Clamp(Time.deltaTime, 0, 0.2f);
@@ -139,10 +135,6 @@ namespace AbilitySystem {
         /// <summary>
         /// Base logic for ai/player movement
         /// </summary>
-        /// <param name="entityBody"></param>
-        /// <param name="data"></param>
-        /// <param name="inpVals"></param>
-        /// <returns></returns>
         public override bool NormalMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
 
             /// Prepare movement data
@@ -191,16 +183,16 @@ namespace AbilitySystem {
         /// <summary>
         /// Charge movement used for the bear, has main directional drive with leeway for player input
         /// </summary>
-        /// <param name="entityBody"></param>
-        /// <param name="data"></param>
-        /// <param name="inpVals"></param>
-        /// <returns></returns>
         public override bool ChargeMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             TransformingPlayerData moveData = (TransformingPlayerData)data;
+
+            /// Set automatic charge direction.
             if (moveData.chargeDirection == Vector3.zero) {
                 moveData.chargeDirection = entityBody.animatorManager.transform.forward;
                 moveData.chargeDirection.y = 0;
             }
+
+            /// Charge in direction.
             moveData.chargeDirection = Vector3.MoveTowards(moveData.chargeDirection, inpVals.inputAbilityValues.direction, chargeChangeDirectionAmount * Time.deltaTime);
             moveData.velocity = moveData.chargeDirection.normalized * chargeSpeed;
             Gravity(moveData, entityBody);
@@ -211,27 +203,12 @@ namespace AbilitySystem {
         /// <summary>
         /// For AI, send the AI directly to a location
         /// </summary>
-        /// <param name="entityBody"></param>
-        /// <param name="data"></param>
-        /// <param name="inpVals"></param>
-        /// <returns></returns>
         public override bool AutoTrackMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             entityBody.iAbility.OnEntityTrack(inpVals.Destination);
             AnimateAbility(entityBody, Vector3.forward * walkSpeed, 0, true);
             return true;
         }
 
-        /// <summary>
-        /// Old code, was supposed to be switchable to a crane but instead made a separate SO
-        /// </summary>
-        /// <param name="entityBody"></param>
-        /// <param name="data"></param>
-        /// <param name="inpVals"></param>
-        /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public override bool FlightMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
-            throw new System.NotImplementedException();
-        }
 
 
         /// <summary>
@@ -283,6 +260,9 @@ namespace AbilitySystem {
             return new Vector3(horizontalVelocity.x, 0, horizontalVelocity.z);
         }
 
+        /// <summary>
+        /// Basic gravity acceleration based on normal or glide state.
+        /// </summary>
         protected virtual void Gravity(TransformingPlayerData pmd, EntityBody entityBody) {
 
             // Grounded and jump logic
@@ -328,8 +308,6 @@ namespace AbilitySystem {
         /// <summary>
         /// Jump options and IAbility event on grounded
         /// </summary>
-        /// <param name="entityBody"></param>
-        /// <param name="pmd"></param>
         private void OnGrounded(EntityBody entityBody, TransformingPlayerData pmd) {
             if (!pmd.isGrounded) {
                 entityBody.iAbility.OnAbilityEvent(onHitGround);
@@ -351,8 +329,6 @@ namespace AbilitySystem {
         /// <summary>
         /// Non-grounded movement logic
         /// </summary>
-        /// <param name="entityBody"></param>
-        /// <param name="pmd"></param>
         private void OnArial(EntityBody entityBody, TransformingPlayerData pmd) {
 
             /// Arial event on jump button
@@ -370,6 +346,9 @@ namespace AbilitySystem {
             }
         }
 
+        /// <summary>
+        /// Arial logic when jump input is pressed.
+        /// </summary>
         private void JumpInputArial(EntityBody entityBody, TransformingPlayerData pmd) {
             // If glide is activated
             if (pmd.releasedOnJump) OnJump(pmd);
@@ -380,12 +359,18 @@ namespace AbilitySystem {
             }
         }
 
+        /// <summary>
+        /// Older code for when generic movement allowed flight
+        /// </summary>
         private void GlideEvent(EntityBody entityBody, TransformingPlayerData pmd, bool canGlide) {
+
+            /// Glide when jump is re-pressed
             if (!pmd.isJumpButtonRePressed) {
                 entityBody.iAbility.OnAbilityEvent(onGlide);
                 pmd.isJumpButtonRePressed = true;
             }
 
+            /// Glide if can glide
             if (canGlide) {
                 pmd.glideTime += Time.deltaTime;
                 pmd.fallSpeed = Mathf.MoveTowards(
@@ -397,6 +382,10 @@ namespace AbilitySystem {
                 pmd.fallSpeed = Mathf.MoveTowards(pmd.fallSpeed, -maxFallSpeed, gravity * Time.deltaTime);
             }
         }
+
+        /// <summary>
+        /// Set jump speed when jump input is pressed.
+        /// </summary>
         protected virtual void OnJump(TransformingPlayerData pmd) {
             if (!(canJump && pmd.canJump)) return;
 
@@ -404,15 +393,18 @@ namespace AbilitySystem {
             pmd.isGrounded = false;
             pmd.remainingJumps--;
         }
-
+        /// <summary>
+        /// Animate walking based on player speed out of how fast running is.
+        /// </summary>
         protected void AnimateAbility(EntityBody entityBody, Vector3 movement, float fallSpeed, bool isGrounded) {
+
+            /// Delta is used for the animator blend tree.
             float delta = Mathf.Clamp01(new Vector3(movement.x, 0, movement.z).magnitude / runSpeed);
 
             if (DEBUG) Debug.Log(movement);
-            entityBody.
-            animatorManager?.
-            SetMovement(
-                delta,
+
+            /// Set movement animation based on delta.
+            entityBody.animatorManager?.SetMovement(delta,
                 Mathf.Lerp(
                     maxFallSpeed,
                     -maxFallSpeed,
@@ -421,41 +413,70 @@ namespace AbilitySystem {
             );
         }
 
-        public override bool PassEvent(EntityBody entityBody, AbilityData data) {
-            throw new System.NotImplementedException();
-        }
+        #region Unused
+        public override bool PassEvent(EntityBody entityBody, AbilityData data) => throw new System.NotImplementedException();
+        /// <summary>
+        /// Old code, was supposed to be switchable to a crane but instead made a separate SO
+        /// </summary>
+        public override bool FlightMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) => throw new System.NotImplementedException();
+        #endregion
         #endregion
     }
+
+    /// <summary>
+    /// Transforming player data is specifically for the player to carry information between all playable characters with their own movement abilities.
+    /// </summary>
     public class TransformingPlayerData : AbilityData {
-        //Velocity Values
+
+        [Header("Speed Settings")]
+        [Tooltip("Velocity of the entity.")]
         [HideInInspector] public Vector3 velocity;
+        [Tooltip("Fallspeed of the entity that will influence velocity.")]
         [HideInInspector] public float fallSpeed;
+        [Tooltip("Charge direction of the entity when activated.")]
         [HideInInspector] public Vector3 chargeDirection;
 
-        //Jumping
+        [Header("Jump Variables")]
+        [Tooltip("Store whether jump is pressed.")]
         [HideInInspector] public bool isJumpingButtonPressed;
+        [Tooltip("Store whether jump is released while jumping.")]
         [HideInInspector] public bool releasedOnJump;
+        [Tooltip("Is jump button pressed while airborne.")]
+        [HideInInspector] public bool isJumpButtonRePressed;
+        [Tooltip("Store remaining jumps left.")]
         [HideInInspector] public int remainingJumps;
-        [HideInInspector] public float queueJump;//!!!!!!!!!!!!!
-        [HideInInspector] public float glideTime;
+        [Tooltip("Old code for makig buffer time for queueing a jump.")]
+        [HideInInspector] public float queueJump;
+        [Tooltip("Check whether entity can jump.")]
+        public bool canJump { get => !releasedOnJump && (isGrounded || remainingJumps > 0); }
 
-        //States
+        [Header("Glide Variables")]
+        [Tooltip("Current glide time.")]
+        [HideInInspector] public float glideTime;
+        [Tooltip("Check if the entity can glide.")]
+        [HideInInspector] public bool canGlide { get => isJumpingButtonPressed && fallSpeed < 0 && releasedOnJump; }
+        [Tooltip("Current delta flight, 0 is max horizontal distance, 1 is max fallspeed.")]
+        [HideInInspector] public float glideDeltaActivate = 0;
+
+        [Header("Current movement states.")]
+        [Tooltip("Whether the entity is grounded.")]
         [HideInInspector] public bool isGrounded;
+        [Tooltip("Whether the entity is running.")]
         [HideInInspector] public bool isRunning;
+        [Tooltip("Whether the entity is crouching.")]
         [HideInInspector] public bool isCrouching;
+        [Tooltip("Whether the entity is climbing.")]
         [HideInInspector] public bool isClimbing;
 
-        [HideInInspector] public bool isJumpButtonRePressed;
-
-        [HideInInspector] public float glideDeltaActivate = 0;
-        [HideInInspector] public bool canGlide { get => isJumpingButtonPressed && fallSpeed < 0 && releasedOnJump; }
+        [Header("Wallclimbing Collected Information")]
+        [Tooltip("Found colliders while checking for walls.")]
         [HideInInspector] public RaycastHit[] wallRaycastHits = new RaycastHit[1];
+        [Tooltip("First wall information found.")]
         [HideInInspector] public RaycastHit wallClimbObj;
 
-        public bool canJump {
-            get => !releasedOnJump && (isGrounded || remainingJumps > 0);
-        }
-
+        /// <summary>
+        /// Setup transforming player data.
+        /// </summary>
         public TransformingPlayerData() {
             velocity = Vector3.zero;
             fallSpeed = 0;

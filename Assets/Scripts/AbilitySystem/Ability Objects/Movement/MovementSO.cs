@@ -5,6 +5,10 @@ using UnityEngine;
 
 namespace AbilitySystem {
     public abstract class MovementSO : FrameAbilitySO {
+
+        /// <summary>
+        /// Execute specific functions where the AbilityControllerValues call for it.
+        /// </summary>
         public override bool Execute(EntityBody entityBody, AbilityData data) {
             AbilityControllerValues inpVals = entityBody.iAbility.GetInputValues;
 
@@ -17,15 +21,19 @@ namespace AbilitySystem {
                 default: Debug.LogError("No correct movement types"); return false;
             }
         }
-        public override void Startup(EntityBody entityBody, AbilityData data) {
-        }
+        #region All movement types that can be set in AbilityControllerValues.
+        public override void Startup(EntityBody entityBody, AbilityData data) { }
         public override void FrameEvent(EntityBody entityBody, AbilityData data) { }
         public abstract bool NormalMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals);
         public abstract bool ChargeMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals);
         public abstract bool AutoTrackMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals);
         public abstract bool FlightMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals);
+        #endregion
     }
 
+    /// <summary>
+    /// Types of movement for AbilitySystem
+    /// </summary>
     public enum MovementType {
         Normal,
         Charge,
@@ -34,21 +42,20 @@ namespace AbilitySystem {
         None
     }
 
+    /// <summary>
+    /// Movement ability summary holder for AbilitySet objects to hold movement types.
+    /// </summary>
     [Serializable]
     public class MovementAbilitySummary : FrameAbilitySummary {
         [SerializeField] public MovementSO movementSO;
-        public override void Activate(EntityBody entityBody, bool isPressed) =>
-            movementSO?.Execute(entityBody, AbilityData);
+        public override void Activate(EntityBody entityBody, bool isPressed) => movementSO?.Execute(entityBody, AbilityData);
+        public override void FrameEvent(EntityBody entityBody) => movementSO?.FrameEvent(entityBody, AbilityData);
+        public override void StartUp(EntityBody entityBody) => movementSO?.Startup(entityBody, AbilityData);
+        public override void OnDrawGizmos(EntityBody entityBody) => movementSO?.GizmoEvent(entityBody);
 
-        public override void FrameEvent(EntityBody entityBody) =>
-            movementSO?.FrameEvent(entityBody, AbilityData);
-
-        public override void StartUp(EntityBody entityBody) =>
-            movementSO?.Startup(entityBody, AbilityData);
-        public override void OnDrawGizmos(EntityBody entityBody) =>
-            movementSO?.GizmoEvent(entityBody);
-
-
+        /// <summary>
+        /// Setup movement ability data and summary.
+        /// </summary>
         public MovementAbilitySummary(MovementSO m, EntityBody eb) {
             movementSO = m;
             AbilityData = m.AbilityDataSetup(eb);

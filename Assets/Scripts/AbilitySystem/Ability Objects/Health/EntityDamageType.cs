@@ -1,6 +1,9 @@
 using System;
 
 namespace AbilitySystem {
+    /// <summary>
+    /// Entity damage type for damage between entities, allows for different types of afflictions
+    /// </summary>
     [Flags]
     public enum EntityDamageType {
         Normal = 0,

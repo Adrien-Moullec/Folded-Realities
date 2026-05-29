@@ -1,31 +1,36 @@
 using UnityEngine;
 
 namespace AbilitySystem {
+
+    /// <summary>
+    /// Wall climbing ability for transformable entities encountering a wall of a certain layer.
+    /// </summary>
     [CreateAssetMenu(fileName = "WallClimbMovement", menuName = MenuAssetNames.MovementAbility + "/Wall Climb")]
     public class WallClimb : MovementSO {
 
         [Header("Wall Climb")]
+        [Tooltip("Which layer objects are climable.")]
         [SerializeField] LayerMask wallCheckLayers;
+        [Tooltip("Turning ability upon a wall.")]
         [SerializeField] float turnSpeed = 1;
+        [Tooltip("Speed multiplier of an entity on the wall.")]
         [SerializeField] float speedMultiplier = 5;
+        [Tooltip("Jump height coming off the wall.")]
         [SerializeField] float wallJumpHeightMultiplier = 2;
 
+        /// <summary>
+        /// The ability is designed for transforming entities so returns TransformingPlayerData.
+        /// </summary>
         public override AbilityData AbilityDataSetup(EntityBody entityBody) => new TransformingPlayerData();
 
-        #region Alternate movement methods
-        public override bool AutoTrackMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
-            throw new System.NotImplementedException();
-        }
 
-        public override bool ChargeMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
-            throw new System.NotImplementedException();
-        }
-
-        public override bool FlightMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
-            throw new System.NotImplementedException();
-        }
-        #endregion
-
+        /// <summary>
+        /// Base logic for wall climbing, where travelling into or away from the wall affects up/down movement.
+        /// </summary>
+        /// <param name="entityBody"></param>
+        /// <param name="data"></param>
+        /// <param name="inpVals"></param>
+        /// <returns></returns>
         public override bool NormalMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             TransformingPlayerData moveData = (TransformingPlayerData)data;
 
@@ -51,7 +56,7 @@ namespace AbilitySystem {
             }
             #endregion
 
-            #region Direction Math
+            #region Direction Math Based on travel into/away from wall
             Vector3 wallNormal = moveData.wallClimbObj.normal.normalized;
             Vector3 wallRight = Vector3.Cross(Vector3.up, wallNormal).normalized;
             Vector3 wallUp = Vector3.Cross(wallNormal, wallRight).normalized; //Vector3.up
@@ -70,7 +75,7 @@ namespace AbilitySystem {
             entityBody.iAbility.OnRotateEntity(-wallNormal);
             #endregion
 
-            #region Model Settings
+            #region Model rotation and movement settings
             if (dir != Vector3.zero) {
                 entityBody.prefab.transform.rotation = Quaternion.RotateTowards(entityBody.prefab.transform.rotation, Quaternion.LookRotation(-moveData.wallClimbObj.normal, moveData.velocity), 0.8f);
             }
@@ -83,8 +88,11 @@ namespace AbilitySystem {
             return false;
         }
 
-        public override bool PassEvent(EntityBody entityBody, AbilityData data) {
-            throw new System.NotImplementedException();
-        }
+        #region Unused movement methods
+        public override bool PassEvent(EntityBody entityBody, AbilityData data) => throw new System.NotImplementedException();
+        public override bool AutoTrackMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) => throw new System.NotImplementedException();
+        public override bool ChargeMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) => throw new System.NotImplementedException();
+        public override bool FlightMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) => throw new System.NotImplementedException();
+        #endregion
     }
 }
