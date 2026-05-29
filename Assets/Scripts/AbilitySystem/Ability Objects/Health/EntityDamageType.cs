@@ -8,5 +8,6 @@ namespace AbilitySystem {
         Fire = 1 << 1,
         Ice = 1 << 2,
         Water = 1 << 3,
+        Heavy = 1 << 4,
     }
 }
