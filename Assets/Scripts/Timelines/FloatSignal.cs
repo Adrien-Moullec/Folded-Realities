@@ -1,6 +1,9 @@
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Timeline;
+
+/// <summary>
+/// Experimental script for setting timeline events that pass through float values, the original concept for setting predetermined falling gamemode gameplay.
+/// </summary>
 
 /*
 [CreateAssetMenu(menuName = "Signals/Float Signal")]

@@ -1,7 +1,10 @@
 using NUnit.Framework;
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
+/// <summary>
+/// Unused playerpref script that can be activated and record the current object id so it doesn't reactivate the next scene visit.
+/// </summary>
 public class PlayerPrefIDGenerator : MonoBehaviour {
     public static int GetIdGeneration(GameObject gameObject, string scene) {
         return Animator.StringToHash(

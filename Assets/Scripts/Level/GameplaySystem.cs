@@ -9,22 +9,34 @@ using UnityEngine.InputSystem;
 using UnityEditor;
 #endif
 
+/// <summary>
+/// Base object for data and scene transitioning that carries over across the game from Main Menu.
+/// </summary>
 [RequireComponent(typeof(PlayerInput))]
 public class GameplaySystem : MonoBehaviour {
 
+    [Tooltip("GameplaySystem instance to be called from any scene.")]
     public static GameplaySystem instance;
+    [Tooltip("Scene transition shader object.")]
     [SerializeField] SceneTransition sceneTransition;
+    [Tooltip("Pause menu reference.")]
     [SerializeField] PauseMenu pauseMenu;
-    [SerializeField] GraphicsSettings graphicsSettings;
-    [HideInInspector] TargetLevel targetLevel;
+    [Tooltip("Current slot id data.")]
     [HideInInspector] public static int slot = -1;
+    [Tooltip("Get current slot ID string for player pref.")]
     public static string currentSlotId => GetSlotID(slot);
+    [Tooltip("Get current slot ID string for player pref.")]
     private static string GetSlotID(int id) => "Slot" + id + "_";
+
+    [Tooltip("Reset values when playing through level.")]
     public bool ResetOnPlay = true;
-    private bool pauseMenuActive = false;
+
+    [Tooltip("Player Input for activating menus.")]
     PlayerInput playerInput;
+    [Tooltip("Player action for activating pause menu.")]
     InputAction pauseButton;
 
+    [Tooltip("Setup singleton and reset playerprefs in editor mode.")]
     void Awake() {
         if (instance != null) {
             Destroy(gameObject);
@@ -44,42 +56,25 @@ public class GameplaySystem : MonoBehaviour {
         sceneTransition.gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Setup player input.
+    /// </summary>
     void OnEnable() {
         playerInput = GetComponent<PlayerInput>();
 
         pauseButton = playerInput.actions["Pause"];
         pauseButton.performed += input => pauseMenu.TogglePause();
     }
+    /// <summary>
+    /// Disable player inputs
+    /// </summary>
     private void OnDisable() {
         pauseButton.performed -= input => pauseMenu.TogglePause();
     }
 
-    /*
-
-    public void OnPauseMenu() {
-        switch (SceneManager.GetActiveScene().name) {
-            case nameof(GameplayScenes.BossCutscene): return;
-            case nameof(GameplayScenes.END): return;
-            case nameof(GameplayScenes.IntroCutscene): return;
-            case nameof(GameplayScenes.MainMenu): return;
-        }
-        bool turnOnMenu = !pauseMenu.activeSelf;
-        pauseMenu.SetActive(turnOnMenu);
-        if (turnOnMenu) {
-            Cursor.lockState = CursorLockMode.None;
-        } else {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-        Time.timeScale = turnOnMenu ? 0 : 1;
-        Cursor.lockState = turnOnMenu ? CursorLockMode.None : CursorLockMode.Locked;
-    }*/
-
-    #region Settings
-    public void SetVolume(float value) => SetSettingsFloat(SettingsFloatPref.GameVolume, value);
-    public void SetBrightness(float value) => SetSettingsFloat(SettingsFloatPref.Brightness, value);
-    public void SetSaturation(float value) => SetSettingsFloat(SettingsFloatPref.Saturation, value);
-    #endregion
-
+    /// <summary>
+    /// Load scenes based on transition types, scene enum input, current scene options and player situation.
+    /// </summary>
     #region Scene Management
     public void LoadScene(TargetLevel scene, TransitionType transition = TransitionType.Iris) {
         PlayerPrefs.Save();
@@ -98,7 +93,6 @@ public class GameplaySystem : MonoBehaviour {
         yield return sceneTransition?.BossDeathTransition();
         SceneManager.LoadScene(scene.ToString());
     }
-
     public void StartGame(int slotId) {
         slot = slotId;
         PlayerPrefs.Save();
@@ -118,8 +112,15 @@ public class GameplaySystem : MonoBehaviour {
     #endregion
 
     #region Player Pref Data Management
-    public static void SaveSettings() =>
-        PlayerPrefs.Save();
+    /// <summary>
+    /// Save data.
+    /// </summary>
+    public static void SaveSettings() => PlayerPrefs.Save();
+
+    /// <summary>
+    /// Delete data in slot by looping through enums and deleting available data.
+    /// </summary>
+    /// <param name="slotID"> Slot ID to target. </param>
     public static void DeleteSettings(int slotID) {
         string key = "";
         foreach (var n in Enum.GetNames(typeof(PrefInt)))
@@ -182,6 +183,8 @@ public class GameplaySystem : MonoBehaviour {
             PlayerPrefs.GetFloat((isSlotInfo ? currentSlotId : "") + key.ToString() + "-Y", def.y),
             PlayerPrefs.GetFloat((isSlotInfo ? currentSlotId : "") + key.ToString() + "-Z", def.z)
         );
+
+    /// SCENE SAVE POINT
     public static void SetSceneSavePoint(string scene, Vector3 value) {
         PlayerPrefs.SetFloat(currentSlotId + scene + "-X", value.x);
         PlayerPrefs.SetFloat(currentSlotId + scene + "-Y", value.y);
@@ -194,18 +197,18 @@ public class GameplaySystem : MonoBehaviour {
             PlayerPrefs.GetFloat(currentSlotId + scene + "-Z", def.z)
         );
 
+    /// INDIVIDUAL OBJECT ID VISITED CHECK - collect stars or objectives only once
     public static void SetIdActive(int id, bool active) =>
         PlayerPrefs.SetInt(currentSlotId + id.ToString(), active ? 1 : 0);
     public static bool IsIdActive(int id) =>
         PlayerPrefs.GetInt(currentSlotId + id.ToString(), 1) == 1;
-
-    internal static void SetBool() {
-        throw new NotImplementedException();
-    }
     #endregion
 }
 
 #if UNITY_EDITOR
+/// <summary>
+/// Tests for editor mode.
+/// </summary>
 [CustomEditor(typeof(GameplaySystem))]
 [CanEditMultipleObjects]
 public class GameplaySystemEditor : Editor {

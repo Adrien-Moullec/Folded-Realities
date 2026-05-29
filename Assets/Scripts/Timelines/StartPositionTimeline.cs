@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
+/// <summary>
+/// Attempt at making custom timeline scripts for Falling-Gamemode
+/// </summary>
 public class StartPositionBehaviour : PlayableBehaviour {
     public List<TimelineStartObject> Objects;
 

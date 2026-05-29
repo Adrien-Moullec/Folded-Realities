@@ -3,6 +3,9 @@ using System;
 using UnityEngine;
 using UnityEngine.VFX;
 
+/// <summary>
+/// Visual effect for paper particles to control how it looks over time
+/// </summary>
 public class PaperParticles : MonoBehaviour, IDelta {
     VisualEffect visualEffect;
     void Awake() {

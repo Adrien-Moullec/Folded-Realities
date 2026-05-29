@@ -3,6 +3,9 @@
 using UnityEngine;
 using UnityEngine.Pool;
 
+/// <summary>
+/// Unfinished pencil case boss
+/// </summary>
 public class PencilCase : MonoBehaviour {
     [SerializeField] PencilCaseObject pencilCaseObject;
     public ObjectPool<PencilCaseObject> pencilPool;

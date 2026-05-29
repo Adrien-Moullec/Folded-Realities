@@ -1,8 +1,4 @@
-using System.Threading;
-
 using AbilitySystem;
-
-using Unity.Cinemachine;
 
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,32 +6,43 @@ using UnityEngine.InputSystem;
 using UnityEditor;
 #endif
 
+/// <summary>
+/// Player manager for receiving player inputs and communicating with canvases, interactables and abilities.
+/// </summary>
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(PlayerAbilityController))]
 public class PlayerManager : MonoBehaviour {
+    [Tooltip("Player Manager instance")]
     public static PlayerManager player;
     #region Variables
     [Space]
     [Header("Camera Settings")]
+    [Tooltip("Gameplay camera reference for player movement direction adjustment.")]
     [SerializeField] Camera gameplayCamera;
-    //private Vector3 GetCameraPosition {
-    //get => camArea != null ?
-    //camArea.GetCameraPosition(gameplayCamera, cameraHolder.position) + camArea.transform.position : cameraHolder.position;
-    //}
+    [Tooltip("Current direction from camera direction.")]
     private Vector3 camDir;
 
     [Space]
     [Header("Script Managers")]
+    [Tooltip("IAbility reference for ability controller.")]
     [SerializeField] IAbility iAbility;
+    [Tooltip("Radial manager for transitions reference.")]
     [SerializeField] RadialMenuManager _RadialMenuManager;
+    [Tooltip("Player ability reference for setting ability controls.")]
     [SerializeField] PlayerAbilityController playerAbilityController;
+    [Tooltip("Player input reference.")]
     private PlayerInput _PlayerInput;
 
     [Space]
     [Header("Interaction")]
+    [Tooltip("Gameobject body reference.")]
     [SerializeField] GameObject body;
+    [Tooltip("Interaction area settings.")]
     [SerializeField] AreaColliderCheck interactionArea;
+    [Tooltip("Interaction objects found during runtime.")]
+    Collider[] hits = new Collider[10];
 
+    #region Input actions and values
     [Space]
     [Header("Inputs")]
     InputAction moveInput;
@@ -52,13 +59,20 @@ public class PlayerManager : MonoBehaviour {
     InputAction switchAction;
     bool wheelActive = false;
     #endregion
+    #endregion
 
-    Collider[] hits = new Collider[10];
+
+    /// <summary>
+    /// Setup components
+    /// </summary>
     void Awake() {
         player = this;
         iAbility = GetComponent<IAbility>();
     }
     #region On Start
+    /// <summary>
+    /// Setup player inputs and cursor settings.
+    /// </summary>
     public void OnEnable() {
         playerAbilityController = GetComponent<PlayerAbilityController>();
         iAbility = playerAbilityController;
@@ -103,6 +117,10 @@ public class PlayerManager : MonoBehaviour {
         ability3Input.performed += input => iAbility.GetInputValues.isTertiaryAbility = true;
         ability3Input.canceled += input => iAbility.GetInputValues.isTertiaryAbility = false;
     }
+
+    /// <summary>
+    /// Disable player inputs and reset input values.
+    /// </summary>
     public void OnDisable() {
         iAbility.GetInputValues.SetDefaultValues();
 
@@ -134,6 +152,9 @@ public class PlayerManager : MonoBehaviour {
     }
     #endregion
 
+    /// <summary>
+    /// On interact by checking area.
+    /// </summary>
     void OnInteract() {
         int amount = interactionArea.GetColliders(body).Invoke(hits);
         for (int i = 0; i < amount; i++) {
@@ -144,11 +165,17 @@ public class PlayerManager : MonoBehaviour {
     }
 
     #region Update Functions
+    /// <summary>
+    /// Constantly update movement
+    /// </summary>
     private void Update() {
         Movement();
     }
 
     #region Camera
+    /// <summary>
+    /// Movement based on camera location and direction.
+    /// </summary>
     void Movement() {
 
         if (wheelActive) return;
@@ -164,6 +191,9 @@ public class PlayerManager : MonoBehaviour {
     #endregion
 
 #if UNITY_EDITOR
+    /// <summary>
+    /// Draw interaction area.
+    /// </summary>
     private void OnDrawGizmos() {
         interactionArea.Gizmo(body);
     }

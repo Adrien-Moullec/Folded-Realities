@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Unfinished pencil attack object.
+/// </summary>
 [RequireComponent(typeof(Animator))]
 public class PencilCaseObject : MonoBehaviour {
 

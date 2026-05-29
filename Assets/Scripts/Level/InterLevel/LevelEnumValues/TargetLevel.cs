@@ -2,13 +2,18 @@ using System;
 
 using UnityEngine;
 
-using UnityEditor;
+/// <summary>
+/// A variable type that calls a scene by GameplayScene enum and by id of the spawn point of that particular level.
+/// </summary>
 
 [Serializable]
 public class TargetLevel {
     public GameplayScenes targetScene;
     [Min(-1)] public int targetId;
 }
+/// <summary>
+/// Unused property drawer for TargetLevel
+/// </summary>
 /*
 [CustomPropertyDrawer(typeof(TargetLevel))]
 public class TargetLevelDrawer : PropertyDrawer {

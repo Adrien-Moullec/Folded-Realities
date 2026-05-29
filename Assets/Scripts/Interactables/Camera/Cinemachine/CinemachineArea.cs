@@ -2,14 +2,23 @@ using UnityEngine;
 
 using Unity.Cinemachine;
 
+/// <summary>
+/// Cinemamachine automatic area triggers to allow for specific camera adjustments.
+/// </summary>
 public class CinemachineArea : CinemachineOrigami {
 
+    /// <summary>
+    /// Set camera high priority on enter area.
+    /// </summary>
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
             SetCameraHighPriority();
         }
     }
 
+    /// <summary>
+    /// Set camera low priority on exit area.
+    /// </summary>
     private void OnTriggerExit(Collider other) {
         if (other.CompareTag("Player")) {
             SetCameraDefaultPriority();

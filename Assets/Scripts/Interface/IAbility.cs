@@ -3,6 +3,9 @@ using System.Collections;
 using UnityEngine;
 
 namespace AbilitySystem {
+    /// <summary>
+    /// IAbility interface works with the ability system to reference important data from the Entity Body.
+    /// </summary>
     public interface IAbility {
         #region Inputs
         public void InputTransitionName(string name);

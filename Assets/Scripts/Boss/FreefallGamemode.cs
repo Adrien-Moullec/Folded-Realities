@@ -89,13 +89,19 @@ public class FreefallGamemode : MonoBehaviour {
     /// </summary>
     [Serializable]
     public struct Barrage {
-        [Tooltip("")]
+        [Tooltip("Minimum interval between spawned objects.")]
         public float minInterval;
+        [Tooltip("Maximum interval between spawned objects.")]
         public float maxInterval;
+        [Tooltip("Minimum number of barrage items spawned.")]
         public int countMin;
+        [Tooltip("Maximum number of barrage items spawned.")]
         public int countMax;
+        [Tooltip("Minimum speed of the object.")]
         public float speedMin;
+        [Tooltip("Maximum speed of the object.")]
         public float speedMax;
+        [Tooltip("Time to next barrage.")]
         public float barrageGap;
     }
 }

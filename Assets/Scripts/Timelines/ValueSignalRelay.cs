@@ -5,6 +5,9 @@ using UnityEngine.Events;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 
+/// <summary>
+/// Attempt at making signal receiver for custom timeline signals for Falling-Gamemode
+/// </summary>
 [RequireComponent(typeof(SignalReceiver))]
 public class ValueSignalRelay : MonoBehaviour, INotificationReceiver {
     [SerializeField] UnityEvent<float> FloatEvent;
