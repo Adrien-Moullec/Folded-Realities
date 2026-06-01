@@ -20,6 +20,12 @@ public class MainMenu : MonoBehaviour {
     public void SetNewGame() => loadStyle = LoadStyle.NewGame;
     public void SetLoadGame() => loadStyle = LoadStyle.LoadGame;
 
+    public void StartNewGame() {
+
+        GameplaySystem.DeleteSettings(1);
+
+        GameplaySystem.instance.StartGame(1);
+    }
     void Start() {
         menuContainer.SetActive(true);
         loadGamePanel.SetActive(false);

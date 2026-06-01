@@ -7,6 +7,7 @@ public enum PrefInt {
     Coins,
     OwnsCrown,
     OwnsBoxHat,
+    EquippedHat,
     OwnsKey,
     UnlockKey,
     PuzzleComplete,

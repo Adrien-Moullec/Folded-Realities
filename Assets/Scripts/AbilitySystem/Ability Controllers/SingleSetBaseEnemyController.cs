@@ -119,9 +119,21 @@ namespace AbilitySystem {
         /// Draw Gizmos from attack and movement options
         /// </summary>
         public override void OnDrawGizmos() {
-            abilitySetSO?.movement?.GizmoEvent(entityBody);
-            abilitySetSO?.attack.GizmoEvent(entityBody);
-            abilitySetSO?.attack2.GizmoEvent(entityBody);
+
+            if (entityBody == null)
+                return;
+
+            if (abilitySetSO == null)
+                return;
+
+            if (abilitySetSO.movement != null)
+                abilitySetSO.movement.GizmoEvent(entityBody);
+
+            if (abilitySetSO.attack != null)
+                abilitySetSO.attack.GizmoEvent(entityBody);
+
+            if (abilitySetSO.attack2 != null)
+                abilitySetSO.attack2.GizmoEvent(entityBody);
         }
         #endregion
 

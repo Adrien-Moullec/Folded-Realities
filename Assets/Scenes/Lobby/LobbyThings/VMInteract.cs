@@ -32,8 +32,8 @@ public class VMInteract : MonoBehaviour {
     #region Hats
 
     [Header("Owned Hats")]
-    public bool ownsCrown = false;
-    public bool ownsBoxHat = false;
+    public bool ownsCrown;
+    public bool ownsBoxHat;
 
     [Header("Hats")]
     public Transform hatContainer;
@@ -47,50 +47,40 @@ public class VMInteract : MonoBehaviour {
     #region Shop Logic
 
     bool shopOpen = false;
-
     bool playerWasInside = false;
 
     void Start() {
 
-        // RESET HAT OWNERSHIP
-        // Coins still carry over
-        GameplaySystem.SetInt(
-            PrefInt.OwnsCrown,
-            0
-        );
-
-        GameplaySystem.SetInt(
-            PrefInt.OwnsBoxHat,
-            0
-        );
-
-        GameplaySystem.SaveSettings();
-
-        // Load coins only
         playerCoins =
             GameplaySystem.GetInt(
                 PrefInt.Coins,
                 0
             );
 
-        ownsCrown = false;
+        ownsCrown =
+            GameplaySystem.GetInt(
+                PrefInt.OwnsCrown,
+                0
+            ) == 1;
 
-        ownsBoxHat = false;
+        ownsBoxHat =
+            GameplaySystem.GetInt(
+                PrefInt.OwnsBoxHat,
+                0
+            ) == 1;
 
         if (shopUI != null)
             shopUI.SetActive(false);
 
-        // Disable all hats
-        if (hatContainer != null) {
+        DisableAllHats();
 
-            foreach (Transform h in hatContainer) {
-                h.gameObject.SetActive(false);
-            }
-        }
+        if (ownsCrown)
+            crownCost = 0;
 
-        // Reset prices
-        crownCost = 30;
-        boxHatCost = 30;
+        if (ownsBoxHat)
+            boxHatCost = 0;
+
+        LoadEquippedHat();
 
         UpdatePriceUI();
     }
@@ -114,7 +104,6 @@ public class VMInteract : MonoBehaviour {
             }
         }
 
-        // Player entered area
         if (
             playerInside &&
             !playerWasInside &&
@@ -123,7 +112,6 @@ public class VMInteract : MonoBehaviour {
             OpenShop();
         }
 
-        // Reset when player leaves
         if (!playerInside) {
 
             playerWasInside = false;
@@ -171,7 +159,6 @@ public class VMInteract : MonoBehaviour {
                 r.enabled = true;
         }
 
-        // Re-enable equipped hat
         if (equippedHat != null)
             equippedHat.SetActive(true);
 
@@ -189,8 +176,7 @@ public class VMInteract : MonoBehaviour {
 
         if (ownsCrown) {
 
-            EquipHat(crownHat);
-
+            EquipHat(crownHat, 1);
             return;
         }
 
@@ -207,15 +193,14 @@ public class VMInteract : MonoBehaviour {
 
         UpdatePriceUI();
 
-        EquipHat(crownHat);
+        EquipHat(crownHat, 1);
     }
 
     public void BuyBoxHat() {
 
         if (ownsBoxHat) {
 
-            EquipHat(boxHat);
-
+            EquipHat(boxHat, 2);
             return;
         }
 
@@ -232,21 +217,72 @@ public class VMInteract : MonoBehaviour {
 
         UpdatePriceUI();
 
-        EquipHat(boxHat);
+        EquipHat(boxHat, 2);
     }
 
-    void EquipHat(GameObject hat) {
+    void EquipHat(
+        GameObject hat,
+        int hatID
+    ) {
 
         if (hat == null)
             return;
 
-        foreach (Transform h in hatContainer) {
-            h.gameObject.SetActive(false);
-        }
+        DisableAllHats();
 
         hat.SetActive(true);
 
         equippedHat = hat;
+
+        GameplaySystem.SetInt(
+            PrefInt.EquippedHat,
+            hatID
+        );
+
+        GameplaySystem.SaveSettings();
+    }
+
+    void DisableAllHats() {
+
+        if (hatContainer == null)
+            return;
+
+        foreach (Transform h in hatContainer) {
+
+            h.gameObject.SetActive(false);
+        }
+    }
+
+    void LoadEquippedHat() {
+
+        int equippedID =
+            GameplaySystem.GetInt(
+                PrefInt.EquippedHat,
+                0
+            );
+
+        switch (equippedID) {
+
+            case 1:
+
+                if (ownsCrown)
+                    EquipHat(
+                        crownHat,
+                        1
+                    );
+
+                break;
+
+            case 2:
+
+                if (ownsBoxHat)
+                    EquipHat(
+                        boxHat,
+                        2
+                    );
+
+                break;
+        }
     }
 
     #endregion
