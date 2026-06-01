@@ -11,4 +11,5 @@ public enum PrefInt {
     OwnsKey,
     UnlockKey,
     PuzzleComplete,
+    PuzzlePiecesCollected,
 }

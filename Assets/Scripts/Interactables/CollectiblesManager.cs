@@ -39,6 +39,29 @@ public class CollectiblesManager : MonoBehaviour {
 
         ResetPuzzleUI();
 
+        specialCount =
+            GameplaySystem.GetInt(
+                PrefInt.PuzzlePiecesCollected,
+                0
+            );
+
+        for (
+            int i = 0;
+            i < specialCount &&
+            i < puzzlePieces.Length;
+            i++
+        ) {
+
+            if (
+                puzzlePieces[i] != null
+            ) {
+
+                puzzlePieces[i]
+                    .gameObject
+                    .SetActive(true);
+            }
+        }
+
         if (
             specialCanvas != null
         ) {
@@ -55,17 +78,14 @@ public class CollectiblesManager : MonoBehaviour {
     ) {
 
         GameplaySystem.SetInt(PrefInt.Coins, ++normalCount);
-        UpdateNormalUI();
-
-        if (
-            CurrencyManager.Instance
-            != null
-        ) {
+        if (CurrencyManager.Instance != null) {
 
             CurrencyManager.Instance.AddCoins(
                 1
             );
         }
+
+        UpdateNormalUI();
 
         PlayPickupSound(
             obj.transform.position
