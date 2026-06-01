@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class CurrencyManager : MonoBehaviour {
 
@@ -7,12 +8,20 @@ public class CurrencyManager : MonoBehaviour {
     // Tracks total player coins
     public int coins = 0;
 
+    [Header("UI")]
+    public TMP_Text coinText;
+
     void Awake() {
 
         Instance = this;
 
         // Loads saved coin count
-        coins = GameplaySystem.GetInt(PrefInt.Coins, 0);
+        coins = GameplaySystem.GetInt(
+            PrefInt.Coins,
+            0
+        );
+
+        UpdateCoinUI();
     }
 
     public void AddCoins(int amount) {
@@ -20,7 +29,14 @@ public class CurrencyManager : MonoBehaviour {
         // Adds coins and updates save data
         coins += amount;
 
-        GameplaySystem.SetInt(PrefInt.Coins, coins);
+        GameplaySystem.SetInt(
+            PrefInt.Coins,
+            coins
+        );
+
+        GameplaySystem.SaveSettings();
+
+        UpdateCoinUI();
     }
 
     public bool SpendCoins(int amount) {
@@ -30,11 +46,27 @@ public class CurrencyManager : MonoBehaviour {
 
             coins -= amount;
 
-            GameplaySystem.SetInt(PrefInt.Coins, coins);
+            GameplaySystem.SetInt(
+                PrefInt.Coins,
+                coins
+            );
+
+            GameplaySystem.SaveSettings();
+
+            UpdateCoinUI();
 
             return true;
         }
 
         return false;
+    }
+
+    public void UpdateCoinUI() {
+
+        if (coinText != null) {
+
+            coinText.text =
+                coins.ToString();
+        }
     }
 }
