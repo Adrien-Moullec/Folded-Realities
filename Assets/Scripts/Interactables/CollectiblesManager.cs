@@ -78,6 +78,7 @@ public class CollectiblesManager : MonoBehaviour {
     ) {
 
         GameplaySystem.SetInt(PrefInt.Coins, ++normalCount);
+
         if (CurrencyManager.Instance != null) {
 
             CurrencyManager.Instance.AddCoins(
@@ -90,6 +91,16 @@ public class CollectiblesManager : MonoBehaviour {
         PlayPickupSound(
             obj.transform.position
         );
+
+        PlayerPrefIDGenerator id =
+            obj.GetComponent<
+                PlayerPrefIDGenerator
+            >();
+
+        if (id != null) {
+
+            id.SetCollected();
+        }
 
         Destroy(
             obj
@@ -124,6 +135,12 @@ public class CollectiblesManager : MonoBehaviour {
             );
 
         specialCount++;
+        GameplaySystem.SetInt(
+    PrefInt.PuzzlePiecesCollected,
+    specialCount
+);
+
+        GameplaySystem.SaveSettings();
 
         if (
             CurrencyManager.Instance
@@ -147,7 +164,15 @@ public class CollectiblesManager : MonoBehaviour {
         PlayPickupSound(
             obj.transform.position
         );
+        PlayerPrefIDGenerator id =
+    obj.GetComponent<
+        PlayerPrefIDGenerator
+    >();
 
+        if (id != null) {
+
+            id.SetCollected();
+        }
         Destroy(
             obj
         );
