@@ -644,6 +644,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameplaySystem
       objectReference: {fileID: 0}
+    - target: {fileID: 8380869083647100334, guid: 0c65ffd5b0c6f9947875f59389bc287a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -826,6 +830,7 @@ MonoBehaviour:
   activatedByWalkingIntoArea: 0
   spawnPos: {x: 0, y: 0, z: 0}
   gizmos: 1
+  progressSet: -1
   locked: 0
 --- !u!1 &1923751786
 GameObject:
@@ -976,9 +981,9 @@ RectTransform:
   - {fileID: 626930323}
   m_Father: {fileID: 1923751787}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -223.4, y: -76.15}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 288.6, y: -76.15}
   m_SizeDelta: {x: 398.8, y: 100.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2059264217
