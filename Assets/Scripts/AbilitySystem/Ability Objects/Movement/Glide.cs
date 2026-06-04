@@ -33,6 +33,13 @@ namespace AbilitySystem {
         [SerializeField] float fallToGlideAcceleration;
         [Tooltip("The fall speed of gliding over time, 0->1 on and x and y being the difference between fallspeed and glidefallspeed, and that value changing over time between start and end.")]
         [SerializeField] protected AnimationCurve glideFallSpeedOverTime;
+        [Space]
+        [Header("Wall Climbing")]
+        [Tooltip("Wall layers to check.")]
+        [SerializeField] protected LayerMask wallCheckLayers;
+        [Tooltip("Wall climb event.")]
+        [SerializeField] protected string onClimb;
+
 
         /// <summary>
         /// Setup data.
@@ -43,16 +50,26 @@ namespace AbilitySystem {
         /// Base movement that controls gliding.
         /// </summary>
         public override bool NormalMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
-            TransformingPlayerData tpd = (TransformingPlayerData)data;
+            TransformingPlayerData moveData = (TransformingPlayerData)data;
             if (inpVals.Direction.y < 0.5f || entityBody.isGrounded) {
-                if (entityBody.isGrounded) tpd.glideTime = 0;
+                if (entityBody.isGrounded) moveData.glideTime = 0;
                 entityBody.iAbility.InputTransitionName("Kuhaku");
                 return true;
             }
-
-            tpd.velocity = AccelerationMovement(inpVals.Direction, tpd.velocity);
-            GlideEvent(entityBody, tpd);
-            entityBody.iAbility.OnMoveEntity(tpd.velocity * speedMult * Time.deltaTime);
+            /// Prepare for spider model on wall climb
+            if (moveData.isJumpButtonRePressed && GenericPlayerMovement.CheckForWall(entityBody, entityBody.bodyHolder.transform.position, entityBody.bodyHolder.transform.forward.normalized * 0.05f, ref moveData.wallClimbObj, ref moveData.wallRaycastHits, wallCheckLayers, onClimb, moveData)) {
+                moveData.velocity = Vector3.zero;
+                moveData.fallSpeed = 0;
+                moveData.isJumpButtonRePressed = false;
+                moveData.isJumpingButtonPressed = true;
+                moveData.releasedOnJump = false;
+                entityBody.iAbility.OnMoveEntity(moveData.wallClimbObj.point - entityBody.bodyHolder.transform.position);
+                Debug.Log(moveData.velocity);
+                return false;
+            }
+            moveData.velocity = AccelerationMovement(inpVals.Direction, moveData.velocity);
+            GlideEvent(entityBody, moveData);
+            entityBody.iAbility.OnMoveEntity(moveData.velocity * speedMult * Time.deltaTime);
 
             return true;
         }

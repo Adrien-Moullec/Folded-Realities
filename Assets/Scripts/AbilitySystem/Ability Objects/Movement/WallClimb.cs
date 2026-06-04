@@ -33,6 +33,7 @@ namespace AbilitySystem {
         /// <returns></returns>
         public override bool NormalMovement(EntityBody entityBody, AbilityData data, AbilityControllerValues inpVals) {
             TransformingPlayerData moveData = (TransformingPlayerData)data;
+            moveData.glideTime = 0;
 
             #region Wall and jump checks
             moveData.isJumpingButtonPressed = inpVals.Direction.y > 0.5f;

@@ -144,8 +144,7 @@ namespace AbilitySystem {
             float maxSpeed = moveData.isJumpingButtonPressed ? glideHorizontalSpeed : inpVals.IsRunning ? runSpeed : walkSpeed;
 
             /// Prepare for spider model on wall climb
-            if (moveData.isJumpButtonRePressed) {
-                CheckForWall(entityBody, entityBody.bodyHolder.transform.position, entityBody.bodyHolder.transform.forward, ref moveData.wallClimbObj, ref moveData.wallRaycastHits, wallCheckLayers, onClimb, moveData);
+            if (moveData.isJumpButtonRePressed && CheckForWall(entityBody, entityBody.bodyHolder.transform.position, entityBody.bodyHolder.transform.forward, ref moveData.wallClimbObj, ref moveData.wallRaycastHits, wallCheckLayers, onClimb, moveData)) {
                 moveData.velocity = Vector3.zero;
                 moveData.fallSpeed = 0;
                 moveData.isJumpButtonRePressed = false;

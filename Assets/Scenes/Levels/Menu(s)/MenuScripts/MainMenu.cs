@@ -23,7 +23,6 @@ public class MainMenu : MonoBehaviour {
     public void StartNewGame() {
 
         GameplaySystem.DeleteSettings(1);
-
         GameplaySystem.instance.StartGame(1);
     }
     void Start() {
@@ -48,10 +47,12 @@ public class MainMenu : MonoBehaviour {
     }
     // Tracks selected loading behaviour
     public void LoadSlot(int slot) {
+        Debug.Log("Load slot " + slot);
         switch (loadStyle) {
             case LoadStyle.NewGame: GameplaySystem.DeleteSettings(slot); break;
             case LoadStyle.LoadGame: break;
         }
+        Debug.Log("PLay");
         GameplaySystem.instance.StartGame(slot);
     }
 

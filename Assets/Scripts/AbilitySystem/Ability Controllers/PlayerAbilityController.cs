@@ -125,9 +125,11 @@ namespace AbilitySystem {
         /// </summary>
         /// <param name="eventMessage"> event message </param>
         public override void OnAbilityEvent(string eventMessage) {
+            Debug.Log(eventMessage);
             if (!TryGetSetSummary(eventMessage, out PlayerSetSummary playerSetSummary) || playerSetSummary == currentAbilitySet)
                 return;
 
+            Debug.Log(eventMessage + ": transform success!");
             StartCoroutine(Transition(playerSetSummary));
         }
 
@@ -141,6 +143,13 @@ namespace AbilitySystem {
             /// Only transition if unlocked
             if (!newSummary.isUnlocked) yield break;
             paperParticleDelta?.StartDelta();
+
+            CooldownAbilitySummary s = currentAbilitySet.playerAbilitySet.primary;
+            if (s != null) s.AbilityData.usingAbility = false;
+            s = currentAbilitySet.playerAbilitySet.secondary;
+            if (s != null) s.AbilityData.usingAbility = false;
+            s = currentAbilitySet.playerAbilitySet.tertiary;
+            if (s != null) s.AbilityData.usingAbility = false;
 
             /// Call transform animation
             yield return currentAbilitySet.entityBody.animatorManager.InitiateOneOffAnimation(
