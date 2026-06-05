@@ -32,6 +32,7 @@ public class EntityManager : MonoBehaviour {
     /// Activate all ability controllers.
     /// </summary>
     public void ActivateAllEntities() {
+        Awake();
         foreach (var n in entities)
             n.OnEnable();
     }
@@ -39,6 +40,7 @@ public class EntityManager : MonoBehaviour {
     /// Deactivate all ability controllers.
     /// </summary>
     public void DeactivateAllEntities() {
+        Awake();
         foreach (var n in entities)
             n.OnDisable();
     }

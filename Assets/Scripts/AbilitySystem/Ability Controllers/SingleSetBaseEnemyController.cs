@@ -34,7 +34,7 @@ namespace AbilitySystem {
         /// </summary>
         public override void OnDisable() {
             try {
-                navMeshAgent.isStopped = true;
+                if (navMeshAgent.isOnNavMesh) navMeshAgent.isStopped = true;
             } catch { Debug.LogError("Issue Stoppiung agent"); }
             navMeshAgent.enabled = false;
         }
